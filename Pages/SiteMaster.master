@@ -1,0 +1,282 @@
+﻿<%@ Master Language="VB" CodeFile="SiteMaster.master.vb" Inherits="Pages_SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <asp:ContentPlaceHolder id="head" runat="server">
+        <script src="../Scripts/jquery-1.10.2.js"></script>
+        <script src="../Scripts/jquery-ui.js"></script>
+        <script src="../Scripts/bootstrap.min.js"></script>
+        <script src="../Scripts/jquery.maskedinput.js"></script>
+        <script src="../Scripts/jquery.tablePagination.0.1.js"></script>
+        <script src="../Scripts/Master.js"></script>
+        
+    </asp:ContentPlaceHolder>
+</head>
+
+<body>
+    <form id="frmMaster" runat="server">
+        <asp:ScriptManager runat="server" ID="ScrManagerMaster">
+        </asp:ScriptManager>
+
+        <asp:UpdateProgress ID="prgLoadingStatus" runat="server" DynamicLayout="true">
+            <ProgressTemplate>
+                <div class="over-lay">
+                    <div class="modal-progress" style="width:150px; height:95px">
+                            <img src="../Images/loading.gif" />
+                            Procesando.....
+                    </div>
+                </div>
+            </ProgressTemplate>
+        </asp:UpdateProgress>  
+        
+        <div id="div_Estilos">
+            <link href="../Content/General.css" rel="stylesheet" />
+            <link href="../Content/jquery-ui.css" rel="stylesheet" />
+            <link href="../Content/jquery-ui.min.css" rel="stylesheet" />
+            <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+        </div>
+        
+        <div id="div_Scripts">
+            <script src="../Scripts/FechaCortaHora.js"></script>
+            <script src="../Scripts/PiePagina.js"></script>
+        </div>
+        
+        <script type="text/javascript"> 
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(PageLoadMaster);
+        </script> 
+
+        <div id="Principal">
+
+            <%--ZONA DE ENCABEZADO--%>
+            <div id="menu_contenedor" >
+		        <div id="header" class="panel-encabezado">
+			        <div id="logo">
+                        <img src="../Images/menu_fondo_logo_gmx.png" height="75" width="130" />
+			        </div>
+
+                    <div id="titulo" >
+                        <asp:Label runat="server" ID="lbl_Titulo" Text="REASEGURO" CssClass="titulo-pagina"></asp:Label>
+                    </div>
+
+                    
+                    <div id="menu_principal" >
+
+                            <ul id="menu">
+                                <li><div id="casita">
+                                        <a href="Inicio.aspx" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('home','','../Images/menu_home-over.png',1)" onmousedown="MM_swapImage('home','','../Images/menu_home-down.png',1)">
+                                        <img src="../Images/menu_home-up.png" alt="Inicio" width="26" height="22" border="0" id="home" /></a>
+                                    </div>
+                                </li>            
+                                <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
+                                <li>Ordenes de Pago
+                                    <ul>
+                                        <li><a href="OrdenPago.aspx">Facultativos</a></li> 
+                                        <li><a href="Login.aspx">Saldos</a></li>
+                                    </ul>       
+                                </li>
+                                <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
+                                <li><a href="FirmasElectronicas.aspx">Firmas Electrónicas</a></li>
+                                <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
+                                <li><a href="NotasCobertura.aspx">Notas de Cobertura</a></li>
+                                <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
+                                <li><a href="DistReaseguro.aspx">Distribución de Reaseguro</a></li>
+                                <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
+                                <li><a href="AjusteReaseguro.aspx">Ajustes</a></li>
+                                <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
+                                <li>Reportes
+                                    <ul>
+                                        <li><a>Reporteador</a></li>
+                                        <li><a>Garantias de Pago</a></li>
+                                        <li><a>Temporarios</a></li>
+                                   </ul>
+                                </li>
+                                <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
+                                <li>Recordatorios
+                                    <ul>
+                                        <li><a>Siniestros</a>
+                                            <ul>
+                                                <li>
+                                                    <a>Administración</a>
+                                                </li>
+                                                <li>
+                                                    <a>Configuración</a>
+                                                </li>
+                                                <li>
+                                                    <a>Consulta de Facultativos</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                   </ul>
+                                </li>
+                             </ul>
+
+                    </div>
+
+
+                    <div id="menu_superior" class="etiqueta-control">
+                            <asp:HiddenField runat="server" ID="hid_codUsuario" Value="" />
+                            <asp:HiddenField runat="server" ID="hid_codSuc" Value="0" />
+                            <asp:HiddenField runat="server" ID="hid_codSector" Value="0" />
+                            <asp:HiddenField runat="server" ID="hid_HostName" Value="" />
+                            <img src="../Images/user-icon.png" />
+                            <asp:Label runat="server" ID="lbl_Usuario" Text="Inicia Sesión"></asp:Label>
+                            |
+                            <asp:Label runat="server" ID="lbl_Sucursal" Text="Ciudad de México"></asp:Label>
+                            | 
+                            <asp:LinkButton runat="server" ForeColor="White" ID="lnk_CerrarSesion" text="Cerrar Sesión"></asp:LinkButton>
+                    </div>        
+		        </div>
+            </div>   
+        
+             
+            <%--CONTENDOR PRINCIPAL--%>
+            <div class="principal-contenido">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="zona-logo">
+                                <img  class="profile-img" src ="../Images/reaseguro_ico_page.png" alt=""/> 
+                                <div class="clear padding30"></div>
+
+                                <asp:Label runat="server" ID="lbl_TituloSeccion" CssClass="titulo-seccion" Text="Indicadores"></asp:Label>
+                                
+                                <div class="clear padding5"></div>
+                                <div id="cuadro_fecha">
+                                    <table>
+                                        <tr>
+                                            <td><asp:label runat="server" class="etiqueta-control" Width="60px">Fecha:</asp:label></td>
+                                            <td><asp:label runat="server" ID="lbl_fecha" Width="60px" CssClass="etiqueta-simple" ></asp:label></td>
+                                        </tr>
+                                        <tr>
+                                            <td><asp:label runat="server" class="etiqueta-control" Width="60px">Hora:</asp:label></td>
+                                            <td><asp:label runat="server" ID="lbl_hora" Width="60px" CssClass="etiqueta-simple" ></asp:label></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="zona-form">
+                                <asp:ContentPlaceHolder id="cph_principal" runat="server">
+                                </asp:ContentPlaceHolder>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <%--PIE DE PAGINA--%>
+            <div id="pie_contenedor">
+                <div id="pie">
+                    <table style="width:100%;  min-width:1366px; height:50px; border:0px;">
+                        <tr>
+                            <td>
+                                <div class="pie_esquina"></div>
+                            </td>
+                            <td>
+                                <div id="pie_menu">
+                                    <ul>
+                                        <li><a href="aviso_legal.html" onclick="return popup(this)">Aviso Legal</a></li>
+
+                                        <li><a href="aviso_de_privacidad.html" onclick="return popup(this)">Aviso de Privacidad</a></li>
+
+                                        <li><a href="http://www.twitter.com/#!/@GMXSeguros" class="pie_twitter" target="_blank" onmouseover="MM_swapImage('twitter','','../Images/pie_logo_twitter_over.png',1)" onmouseout="MM_swapImgRestore()"><img src="../Images/pie_logo_twitter_up.png" alt="Síguenos en Twitter - GMX Seguros" width="38" height="40" border="0" id="twitter" /><div class="pie_twitter_ventana">Síguenos en Twitter</div></a></li>
+
+                                        <li><a href="https://www.facebook.com/pages/GMX-Seguros/212294618921704?fref=ts" class="pie_facebook" target="_blank" onmouseover="MM_swapImage('facebook','','../Images/pie_logo_facebook_over.png',1)" onmouseout="MM_swapImgRestore()"><img src="../Images/pie_logo_facebook_up.png" alt="Síguenos en Facebook - GMX Seguros"  width="38" height="40" border="0" id="facebook" /><div class="pie_facebook_ventana">Síguenos en Facebook</div></a></li>
+
+                                        <li><a href="http://www.buro.gob.mx/" class="pie_buro" target="_blank" onmouseover="MM_swapImage('buro','','../Images/pie_logo_buro_over.png',1)" onmouseout="MM_swapImgRestore()"><img src="../Images/pie_logo_buro_up.png" alt="Buró Financiero"  width="38" height="40" border="0" id="buro" /><div class="pie_buro_ventana">Buró Financiero</div></a></li>
+
+                                        <li><a href="http://www.condusef.gob.mx/" target="_blank" class="pie_condusef" onmousedown="MM_swapImage('condusef','','../Images/imagen.gif',1)" onmouseover="MM_swapImage('condusef','','../Images/pie_logo_condusef_over.png',1)" onmouseout="MM_swapImgRestore()"><img src="../Images/pie_logo_condusef_up.png" alt="CONDUSEF" width="74" height="40" border="0" id="condusef" oncontextmenu="return false" /><div class="pie_condusef_ventana">CONDUSEF</div></a></li>
+
+                                        <li><a href="esr.html" class="pie_esr" onmousedown="MM_swapImage('esr','','../Images/imagen.gif',1)" onmouseover="MM_swapImage('esr','','../Images/pie_logo_esr_over.png',1)" onmouseout="MM_swapImgRestore()" onclick="return popup(this)"><img src="../Images/pie_logo_esr_up.png" alt="Somos una Empresa Socialmente Responsable"  width="74" height="40" border="0" id="esr" oncontextmenu="return false"  /><div class="pie_esr_ventana">Somos una Empresa Socialmente Responsable</div></a></li>
+                                    </ul>
+                                </div>
+                            </td>
+
+                            <td><div class="pie_esquina"></div></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="EsperaModal" style="width:150px; height:95px"  class="modal-espera">
+            <img src="../Images/gmx_mini.png" />
+            Procesando.....
+        </div>
+
+        <div id="Mensajes" style="width:400px; height:185px"  class="modal-mensaje">
+            <div class="cuadro-titulo" style="height:30px">
+                <asp:label ID="lbl_TituloMensaje" runat="server" Text="TITULO" CssClass="titulo-modal" Height="30px"></asp:label>
+                <button type="button" style="color:white;" class="close"  data-dismiss="modal">&times;</button>
+                <asp:HiddenField runat="server" ID="hid_ControlASP" Value="" />
+            </div>
+            <div class="modal-body" style="height:155px">
+                <div class="row">
+                     <div class="col-md-2">
+                         <img id="img_advertencia"  src="../Images/advertencia_mini.png"/>
+                         <img id="img_confirma"  src="../Images/confirma_mini.png" />
+                         <img id="img_error"   src="../Images/error_mini.png" />
+                         <img id="img_pregunta"  src="../Images/pregunta_mini.png" />
+                     </div>
+                     <div class="col-md-10">
+                         <asp:label ID="lbl_Mensaje" runat="server" Text="Texto Prueba" BorderStyle="None" CssClass="texto-mensaje" Height="100px" Width="300px" TextMode="MultiLine"></asp:label>
+                     </div>
+                </div>
+
+                <div style="width:100%; text-align:right;">
+                    <button id="btn_Si"  type="button" class="btn botones" onclick="fn_Repuesta();">
+                        <span>Si</span>
+                    </button> 
+
+                    <button id="btn_No" type="button" class="btn botones" data-dismiss="modal">
+                        <span>No</span>
+                    </button> 
+                </div>
+                
+            </div>
+        </div> 
+        
+        <!-- Modal -->
+        <div id="Catalogo" style="width:350px; height:440px" class="modal-catalogo" >
+            <div class="cuadro-titulo" style="height:30px">
+                <button type="button" style="color:white;" class="close"  data-dismiss="modal">&times;</button>
+                <div class="titulo-modal"><label id="lbl_Catalogo">Catálogo</label></div>
+            </div>
+
+            <div class="modal-body" style="height:420px">
+                <asp:UpdatePanel runat="server" ID="upCatalogo">
+                    <ContentTemplate>
+                        <asp:HiddenField runat="server" ID="hid_Control" Value="" />
+                        <asp:HiddenField runat="server" ID="hid_Seleccion" Value="" />
+                        <asp:HiddenField runat="server" ID="hid_Prefijo" Value="" />
+                        <asp:Panel runat="server" ID="pnlCatalogo" Width="320px" Height="350px" ScrollBars="Vertical">
+                            <asp:GridView runat="server"  ID="gvd_Catalogo" AutoGenerateColumns="false" 
+                                          GridLines="Horizontal"  ShowHeaderWhenEmpty="true"
+                                          HeaderStyle-CssClass="header">
+                                <Columns>
+                                    <asp:TemplateField HeaderText="">
+                                        <ItemTemplate> 
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:BoundField   DataField="Clave" HeaderText="Clave"  />
+                                    <asp:BoundField   DataField="Descripcion" HeaderText="Descripcion"   />
+                                </Columns>
+                            </asp:GridView>
+                        </asp:Panel>
+
+                        <div style="width:100%; text-align:right;">
+                             <asp:Button runat="server" id="btn_Aceptar_Catalogo" class="btn botones" Text="Aceptar"  />
+                             <button type="button" id="btn_Cancelar_Catalogo" class="btn botones" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
+        </div>   
+
+    </form>
+</body>
+</html>
