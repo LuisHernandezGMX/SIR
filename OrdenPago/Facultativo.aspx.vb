@@ -1,5 +1,5 @@
 ﻿
-Partial Class OrdenPago_Facultativos
+Partial Class OrdenPago_Facultativo
     Inherits System.Web.UI.Page
 
 End Class
