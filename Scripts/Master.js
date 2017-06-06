@@ -93,7 +93,7 @@ function fn_CargaCatalogo(Consulta, Tipo , Control, Prefijo, Titulo) {
     $.ajax({
         type: 'POST',
         contentType: "application/json; charset=utf-8",
-        url: 'Login.aspx/ObtieneDatos',
+        url: '../Pages/Inicio.aspx/ObtieneDatos',
         data: "{ 'Consulta': '" + Consulta + "'}",
         dataType: 'JSON',
         success: function (response) {
