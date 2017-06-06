@@ -5,8 +5,15 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="cph_principal" Runat="Server">
     <script src="../Scripts/Inicio.js"></script>
 
-    <asp:UpdatePanel runat="server" ID="up">
-    <ContentTemplate>
+
+       
+
+        <asp:UpdatePanel runat="server" ID="up">
+        <ContentTemplate>
+
+
+       
+
         <asp:HiddenField runat="server" ID="hid_Ventanas" Value="0|0|0|1|" />
 
 

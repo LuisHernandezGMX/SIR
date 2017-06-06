@@ -4,14 +4,17 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+
     <asp:ContentPlaceHolder id="head" runat="server">
         <script src="../Scripts/jquery-1.10.2.js"></script>
         <script src="../Scripts/jquery-ui.js"></script>
         <script src="../Scripts/bootstrap.min.js"></script>
+        <script src="../Scripts/jquery.numeric.js"></script>
         <script src="../Scripts/jquery.maskedinput.js"></script>
         <script src="../Scripts/jquery.tablePagination.0.1.js"></script>
         <script src="../Scripts/Master.js"></script>
-        
     </asp:ContentPlaceHolder>
 </head>
 
@@ -65,15 +68,15 @@
 
                             <ul id="menu">
                                 <li><div id="casita">
-                                        <a href="Inicio.aspx" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('home','','../Images/menu_home-over.png',1)" onmousedown="MM_swapImage('home','','../Images/menu_home-down.png',1)">
+                                        <a href="../Pages/Inicio.aspx" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('home','','../Images/menu_home-over.png',1)" onmousedown="MM_swapImage('home','','../Images/menu_home-down.png',1)">
                                         <img src="../Images/menu_home-up.png" alt="Inicio" width="26" height="22" border="0" id="home" /></a>
                                     </div>
                                 </li>            
                                 <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
                                 <li>Ordenes de Pago
                                     <ul>
-                                        <li><a href="OrdenPago.aspx">Facultativos</a></li> 
-                                        <li><a href="Login.aspx">Saldos</a></li>
+                                        <li><a href="../OrdenPago/Facultativos.aspx">Registro Facultativo</a></li> 
+                                        <li><a href="Login.aspx">Registro Saldos</a></li>
                                     </ul>       
                                 </li>
                                 <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
