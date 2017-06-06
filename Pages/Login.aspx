@@ -24,7 +24,7 @@
                         <span class="input-group-addon">
                              <img src="../Images/user_text.png" height="15" width="15" />
                         </span>
-                        <asp:TextBox runat="server" ID="txt_usuario" Width="163px" CssClass="estandar-control" ></asp:TextBox>
+                        <asp:TextBox runat="server" ID="txt_usuario" Width="163px" CssClass="form-control" ></asp:TextBox>
                     </div>
      
                     <div class="clear padding10"></div>
@@ -34,7 +34,7 @@
                         <span class="input-group-addon">
                             <img src="../Images/pass_icon.png" height="15" width="15" />
                         </span>
-                        <asp:TextBox runat="server" ID="txt_contraseña" Width="163px" CssClass="estandar-control" TextMode="Password" ></asp:TextBox>
+                        <asp:TextBox runat="server" ID="txt_contraseña" Width="163px" CssClass="form-control" TextMode="Password" ></asp:TextBox>
                     </div>
 
                     <div class="clear padding10"></div>
