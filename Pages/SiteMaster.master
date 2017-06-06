@@ -75,7 +75,7 @@
                                 <li><img src="../Images/menu_sep-hz.png" width="2" height="23" /></li>
                                 <li>Ordenes de Pago
                                     <ul>
-                                        <li><a href="../OrdenPago/Facultativos.aspx">Registro Facultativo</a></li> 
+                                        <li><a href="../OrdenPago/Facultativo.aspx">Registro Facultativo</a></li> 
                                         <li><a href="Login.aspx">Registro Saldos</a></li>
                                     </ul>       
                                 </li>
