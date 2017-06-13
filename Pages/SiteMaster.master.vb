@@ -28,34 +28,58 @@ Partial Class Pages_SiteMaster
             Dim Seleccionados As String = hid_Seleccion.Value
 
             If Len(Seleccionados) > 0 Then
-                Dim gvd_Control As GridView = DirectCast(cph_principal.FindControl(hid_Control.Value), GridView)
-                Dim Prefijo As String = hid_Prefijo.Value
-                dt_Datos = New DataTable
 
+
+                Dim gvd_Control As GridView = DirectCast(cph_principal.FindControl(hid_Control.Value), GridView)
+
+                Dim Prefijo As String = hid_Prefijo.Value
                 Datos = Split(Seleccionados.Substring(0, Seleccionados.Length - 1), "|")
 
-                dt_Datos.Columns.Add("Clave")
-                dt_Datos.Columns.Add("Descripcion")
+                If Not gvd_Control Is Nothing Then
 
-                For Each row As GridViewRow In gvd_Control.Rows
-                    Dim Elemento = DirectCast(row.FindControl("chk_Sel" & Prefijo), HiddenField)
-                    If Elemento.Value <> "true" Then
+                    dt_Datos = New DataTable
+                    dt_Datos.Columns.Add("Clave")
+                    dt_Datos.Columns.Add("Descripcion")
+
+                    For Each row As GridViewRow In gvd_Control.Rows
+                        Dim Elemento = DirectCast(row.FindControl("chk_Sel" & Prefijo), HiddenField)
+                        If Elemento.Value <> "true" Then
+                            Dim Fila As DataRow = dt_Datos.NewRow()
+                            Fila("Clave") = DirectCast(row.FindControl("lbl_Clave" & Prefijo), Label).Text
+                            Fila("Descripcion") = DirectCast(row.FindControl("lbl_Desc"), Label).Text
+                            dt_Datos.Rows.Add(Fila)
+                        End If
+                    Next
+
+                    For Each dato In Datos
                         Dim Fila As DataRow = dt_Datos.NewRow()
-                        Fila("Clave") = DirectCast(row.FindControl("lbl_Clave" & Prefijo), Label).Text
-                        Fila("Descripcion") = DirectCast(row.FindControl("lbl_Desc"), Label).Text
+                        Fila("Clave") = Split(dato, "~")(0)
+                        Fila("Descripcion") = Split(dato, "~")(1)
                         dt_Datos.Rows.Add(Fila)
+                    Next
+
+                    gvd_Control.DataSource = dt_Datos
+                    gvd_Control.DataBind()
+                Else
+                    If Len(hid_Control.Value) > 0 Then
+                        Dim Controles() As String = Split(hid_Control.Value, "|")
+                        If Controles.Count > 1 Then
+                            Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
+                            Dim txt_Descripcion As TextBox = DirectCast(cph_principal.FindControl(Controles(1)), TextBox)
+                            If Not txt_Clave Is Nothing And Not txt_Descripcion Is Nothing Then
+                                txt_Clave.Text = Split(Datos(0), "~")(0)
+                                txt_Descripcion.Text = Split(Datos(0), "~")(1)
+                            End If
+                        Else
+                            Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
+                            If Not txt_Clave Is Nothing Then
+                                txt_Clave.Text = Datos(0)
+                            End If
+                        End If
                     End If
-                Next
 
-                For Each dato In Datos
-                    Dim Fila As DataRow = dt_Datos.NewRow()
-                    Fila("Clave") = Split(dato, "~")(0)
-                    Fila("Descripcion") = Split(dato, "~")(1)
-                    dt_Datos.Rows.Add(Fila)
-                Next
+                End If
 
-                gvd_Control.DataSource = dt_Datos
-                gvd_Control.DataBind()
             Else
                 Mensaje.MuestraMensaje("Catálogo", "No seleccionó ningún elemento", TipoMsg.Advertencia)
             End If
