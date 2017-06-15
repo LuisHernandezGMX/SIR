@@ -63,19 +63,29 @@ Partial Class Pages_SiteMaster
                 Else
                     If Len(hid_Control.Value) > 0 Then
                         Dim Controles() As String = Split(hid_Control.Value, "|")
-                        If Controles.Count > 1 Then
-                            Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
-                            Dim txt_Descripcion As TextBox = DirectCast(cph_principal.FindControl(Controles(1)), TextBox)
-                            If Not txt_Clave Is Nothing And Not txt_Descripcion Is Nothing Then
-                                txt_Clave.Text = Split(Datos(0), "~")(0)
-                                txt_Descripcion.Text = Split(Datos(0), "~")(1)
-                            End If
-                        Else
-                            Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
-                            If Not txt_Clave Is Nothing Then
+
+                        Select Case Controles.Count
+                            Case 1
+                                Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
                                 txt_Clave.Text = Datos(0)
-                            End If
-                        End If
+                            Case 2
+                                Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
+                                Dim txt_Descripcion As TextBox = DirectCast(cph_principal.FindControl(Controles(1)), TextBox)
+                                If Not txt_Clave Is Nothing And Not txt_Descripcion Is Nothing Then
+                                    txt_Clave.Text = Split(Datos(0), "~")(0)
+                                    txt_Descripcion.Text = Split(Datos(0), "~")(1)
+                                End If
+                            Case 3
+                                Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
+                                Dim txt_Descripcion As TextBox = DirectCast(cph_principal.FindControl(Controles(1)), TextBox)
+                                Dim gvd_GridView As GridView = DirectCast(cph_principal.FindControl(Controles(2)), GridView)
+                                If Not txt_Clave Is Nothing And Not txt_Descripcion Is Nothing And Not gvd_GridView Is Nothing Then
+                                    txt_Clave.Text = Split(Datos(0), "~")(0)
+                                    txt_Descripcion.Text = Split(Datos(0), "~")(1)
+                                    gvd_GridView.DataSource = Nothing
+                                    gvd_GridView.DataBind()
+                                End If
+                        End Select
                     End If
 
                 End If
