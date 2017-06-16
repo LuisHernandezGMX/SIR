@@ -6,6 +6,7 @@ $("body").on("click", ".Confirmacion", function () {
         id = this.id;
         this.name = id.replace('cph_principal_', 'ctl00$cph_principal$');
     }
+    $(this).addClass('Quitar');
     fn_MuestraMensaje('Confirmación', '¿Esta seguro de continuar con la operación?', 3, this.name)
     return false;
 });
@@ -29,3 +30,8 @@ $("body").on("click", "#exVentana0", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
     fn_CambiaEstado("0", "0");
 });
+
+function fn_OcultaRenglon() {
+    var Row = $('.Quitar').closest('tr');
+    Row.hide;
+}
