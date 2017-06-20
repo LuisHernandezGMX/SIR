@@ -30,7 +30,10 @@ function PageLoadMaster() {
         for (i = 0; i <= Filas.length - 2; i++) {
             if ($('[id*=chk_Cat]')[i].checked == true) {
                 varSeleccion = varSeleccion + $('[id*=lbl_ClaveCat]')[i].innerText + '~' +
-                                                $('[id*=lbl_DesCat]')[i].innerText + '|';
+                                              $('[id*=lbl_DesCat]')[i].innerText + '~' +
+                                              $('[id*=lbl_Oculta1]')[i].innerText + '~' +
+                                              $('[id*=lbl_Oculta2]')[i].innerText + '~' +
+                                              $('[id*=lbl_Oculta3]')[i].innerText + '|';
             }
         }
 
@@ -109,6 +112,9 @@ function fn_CargaCatalogo(Consulta, Tipo , Control, Prefijo, Titulo) {
                                                         '<td><input type="checkbox" id="chk_Cat" class="Select" onclick="fn_CambioSeleccion(this,' + "'" + Tipo + "'" + ')" /></td>' +
                                                         '<td><label id="lbl_ClaveCat" class="texto-catalogo" style="Width:75px;">' + response.d[i].Clave + '</label></td>' +
                                                         '<td><label id="lbl_DesCat" class="texto-catalogo" style="Width:205px;">' + response.d[i].Descripcion + '</label></td>' +
+                                                        '<td><label id="lbl_Oculta1" style="display:none;">' + response.d[i].OcultaCampo1 + '</label></td>' +
+                                                        '<td><label id="lbl_Oculta2" style="display:none;">' + response.d[i].OcultaCampo2 + '</label></td>' +
+                                                        '<td><label id="lbl_Oculta3" style="display:none;">' + response.d[i].OcultaCampo3 + '</label></td>' +
                                                    '</tr>')
                 };
                 //Reference the GridView.

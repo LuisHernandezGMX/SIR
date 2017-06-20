@@ -26,9 +26,11 @@ Partial Class Pages_SiteMaster
             Dim dt_Datos As DataTable
             Dim Datos() As String
             Dim Seleccionados As String = hid_Seleccion.Value
+            Dim lbl_Oculta1 As Label
+            Dim lbl_Oculta2 As Label
+            Dim lbl_Oculta3 As Label
 
             If Len(Seleccionados) > 0 Then
-
 
                 Dim gvd_Control As GridView = DirectCast(cph_principal.FindControl(hid_Control.Value), GridView)
 
@@ -40,6 +42,9 @@ Partial Class Pages_SiteMaster
                     dt_Datos = New DataTable
                     dt_Datos.Columns.Add("Clave")
                     dt_Datos.Columns.Add("Descripcion")
+                    dt_Datos.Columns.Add("OcultaCampo1")
+                    dt_Datos.Columns.Add("OcultaCampo2")
+                    dt_Datos.Columns.Add("OcultaCampo3")
 
                     For Each row As GridViewRow In gvd_Control.Rows
                         Dim Elemento = DirectCast(row.FindControl("chk_Sel" & Prefijo), HiddenField)
@@ -47,6 +52,25 @@ Partial Class Pages_SiteMaster
                             Dim Fila As DataRow = dt_Datos.NewRow()
                             Fila("Clave") = DirectCast(row.FindControl("lbl_Clave" & Prefijo), Label).Text
                             Fila("Descripcion") = DirectCast(row.FindControl("lbl_Desc"), Label).Text
+                            Fila("OcultaCampo1") = ""
+                            Fila("OcultaCampo2") = ""
+                            Fila("OcultaCampo3") = ""
+
+                            lbl_Oculta1 = DirectCast(row.FindControl("lbl_Oculta1"), Label)
+                            If Not lbl_Oculta1 Is Nothing Then
+                                Fila("OcultaCampo1") = lbl_Oculta1.Text
+                            End If
+
+                            lbl_Oculta2 = DirectCast(row.FindControl("lbl_Oculta2"), Label)
+                            If Not lbl_Oculta2 Is Nothing Then
+                                Fila("OcultaCampo2") = lbl_Oculta2.Text
+                            End If
+
+                            lbl_Oculta3 = DirectCast(row.FindControl("lbl_Oculta3"), Label)
+                            If Not lbl_Oculta3 Is Nothing Then
+                                Fila("OcultaCampo3") = lbl_Oculta3.Text
+                            End If
+
                             dt_Datos.Rows.Add(Fila)
                         End If
                     Next
@@ -55,6 +79,9 @@ Partial Class Pages_SiteMaster
                         Dim Fila As DataRow = dt_Datos.NewRow()
                         Fila("Clave") = Split(dato, "~")(0)
                         Fila("Descripcion") = Split(dato, "~")(1)
+                        Fila("OcultaCampo1") = Split(dato, "~")(2)
+                        Fila("OcultaCampo2") = Split(dato, "~")(3)
+                        Fila("OcultaCampo3") = Split(dato, "~")(4)
                         dt_Datos.Rows.Add(Fila)
                     Next
 

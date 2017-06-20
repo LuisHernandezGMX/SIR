@@ -56,7 +56,7 @@ Partial Class Pages_Inicio
 
         For Each dr In dt.Rows
             varCatalogo = New Catalogo
-            varCatalogo.Catalogo(dr("Clave"), dr("Descripcion"))
+            varCatalogo.Catalogo(dr("Clave"), dr("Descripcion"), dr("OcultaCampo1"), dr("OcultaCampo2"), dr("OcultaCampo2"))
             Lista.Add(varCatalogo)
         Next
 
