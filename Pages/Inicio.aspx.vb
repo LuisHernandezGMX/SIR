@@ -1,4 +1,5 @@
 ﻿Imports Mensaje
+Imports Funciones
 Imports System.Data
 Imports System.Data.SqlClient
 
@@ -6,6 +7,7 @@ Partial Class Pages_Inicio
     Inherits System.Web.UI.Page
 
     Private Sub btn_Aceptar_Click(sender As Object, e As EventArgs) Handles btn_Aceptar.Click
+
         Mensaje.MuestraMensaje("Inicio", "Acción del botón Aceptar en CodeBehind", TipoMsg.Confirma)
     End Sub
 
@@ -39,6 +41,10 @@ Partial Class Pages_Inicio
     <System.Web.Services.WebMethod>
     Public Shared Function ObtieneDatos(ByVal Consulta As String) As List(Of Catalogo)
         Dim sCnn As String
+        Dim OcultaCampo1 As String
+        Dim OcultaCampo2 As String
+        Dim OcultaCampo3 As String
+
 
         Consulta = Replace(Consulta, "==", "'")
 
@@ -56,10 +62,12 @@ Partial Class Pages_Inicio
 
         For Each dr In dt.Rows
             varCatalogo = New Catalogo
-            varCatalogo.Catalogo(dr("Clave"), dr("Descripcion"), dr("OcultaCampo1"), dr("OcultaCampo2"), dr("OcultaCampo2"))
+            OcultaCampo1 = IIf(IsDBNull(dr("OcultaCampo1")), "", dr("OcultaCampo1"))
+            OcultaCampo2 = IIf(IsDBNull(dr("OcultaCampo2")), "", dr("OcultaCampo2"))
+            OcultaCampo3 = IIf(IsDBNull(dr("OcultaCampo3")), "", dr("OcultaCampo3"))
+            varCatalogo.Catalogo(dr("Clave"), dr("Descripcion"), OcultaCampo1, OcultaCampo2, OcultaCampo3)
             Lista.Add(varCatalogo)
         Next
-
         Return Lista
     End Function
 
