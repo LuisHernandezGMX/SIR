@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Data
+Imports Mensaje
 Imports Microsoft.VisualBasic
 
 Public Class Funciones
@@ -37,4 +38,38 @@ Public Class Funciones
         Next
         Return dataTable
     End Function
+
+    Public Shared Sub LlenaCatDDL(DDL As DropDownList, Prefijo As String, Optional Condicion As String = "", Optional Sel As String = "",
+                                  Optional DataValue As String = "Clave", Optional DataText As String = "Descrip", Optional SelCurrent As Integer = 0)
+        Dim Resultado As New DataTable
+        Try
+            Dim ws As New ws_Generales.GeneralesClient
+            Resultado = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo(Prefijo, Condicion, Sel).ToList)
+            If Not Resultado Is Nothing Then
+                DDL.DataValueField = DataValue
+                DDL.DataTextField = DataText
+                DDL.DataSource = Resultado
+                DDL.DataBind()
+                If SelCurrent <> 0 Then
+                    DDL.SelectedValue = SelCurrent
+                End If
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Carga DDL", "Ocurrio un Error llenar DDL", TipoMsg.Falla)
+        End Try
+    End Sub
+    Public Shared Sub LlenaCatGrid(ByRef Grid As GridView, Prefijo As String, Optional Condicion As String = "", Optional Sel As String = "")
+        Dim Resultado As IList = Nothing
+        Try
+            Dim ws As New ws_Generales.GeneralesClient
+            Resultado = ws.ObtieneCatalogo(Prefijo, Condicion, Sel).ToList
+            If Not Resultado Is Nothing Then
+                Grid.DataSource = Resultado
+                Grid.DataBind()
+
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Carga Grid", "Ocurrio un Error llenar Grid", TipoMsg.Falla)
+        End Try
+    End Sub
 End Class
