@@ -59,13 +59,13 @@ $("body").on("click", ".AgregaContrato", function () {
     if ($("input[id$='txt_FechaDe']")[0].value.length == 10) {
         var Fecha1 = $("input[id$='txt_FechaDe']")[0].value;
         FechaDe = Fecha1.substring(6, 10) + Fecha1.substring(3, 5) + Fecha1.substring(0, 2);
-        Condicion = " AND fecha_fac >= ==" + FechaDe + "==";
+        Condicion = " AND fecha_fac >= ====" + FechaDe + "====";
     }
 
     if ($("input[id$='txt_FechaA']")[0].value.length == 10) {
         var Fecha2 = $("input[id$='txt_FechaA']")[0].value;
         FechaA = Fecha2.substring(6, 10) + Fecha2.substring(3, 5) + Fecha2.substring(0, 2);
-        Condicion = Condicion + " AND fecha_fac <= ==" + FechaA + "==";
+        Condicion = Condicion + " AND fecha_fac <= ====" + FechaA + "====";
     }
 
 
@@ -161,6 +161,15 @@ $("body").on("click", "[id*=gvd_Estatus] .Delete", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
     var row = $(this).closest("tr");
     $('[id*=chk_SelEst]')[row[0].rowIndex - 1].value = "true";
+    row.hide();
+    return false;
+});
+
+//Delete event handler.
+$("body").on("click", "[id*=gvd_Contrato] .Delete", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    $('[id*=chk_SelFac]')[row[0].rowIndex - 1].value = "true";
     row.hide();
     return false;
 });
