@@ -15,6 +15,7 @@
         <script src="../Scripts/jquery.maskedinput.js"></script>
         <script src="../Scripts/jquery.tablePagination.0.1.js"></script>
         <script src="../Scripts/Master.js"></script>
+        <script src="../Scripts/jquery.mask.js"></script> 
     </asp:ContentPlaceHolder>
 </head>
 
@@ -212,35 +213,39 @@
         </div>
 
         <div id="Mensajes" style="width:400px; height:185px"  class="modal-mensaje">
-            <div class="cuadro-titulo" style="height:30px">
-                <asp:label ID="lbl_TituloMensaje" runat="server" Text="TITULO" CssClass="titulo-modal" Height="30px"></asp:label>
-                <button type="button" style="color:white;" class="close"  data-dismiss="modal">&times;</button>
-                <asp:HiddenField runat="server" ID="hid_ControlASP" Value="" />
-            </div>
-            <div class="modal-body" style="height:155px">
-                <div class="row">
-                     <div class="col-md-2">
-                         <img id="img_advertencia"  src="../Images/advertencia_mini.png"/>
-                         <img id="img_confirma"  src="../Images/confirma_mini.png" />
-                         <img id="img_error"   src="../Images/error_mini.png" />
-                         <img id="img_pregunta"  src="../Images/pregunta_mini.png" />
-                     </div>
-                     <div class="col-md-10">
-                         <asp:label ID="lbl_Mensaje" runat="server" Text="Texto Prueba" BorderStyle="None" CssClass="texto-mensaje" Height="100px" Width="300px" TextMode="MultiLine"></asp:label>
-                     </div>
-                </div>
+             <asp:UpdatePanel runat="server" ID="upMensajes">
+                    <ContentTemplate>
+                        <div class="cuadro-titulo" style="height:30px">
+                            <asp:label ID="lbl_TituloMensaje" runat="server" Text="TITULO" CssClass="titulo-modal" Height="30px"></asp:label>
+                            <button type="button" style="color:white;" class="close"  data-dismiss="modal">&times;</button>
+                            <asp:HiddenField runat="server" ID="hid_ControlASP" Value="" />
+                        </div>
+                        <div class="modal-body" style="height:155px">
+                            <div class="row">
+                                 <div class="col-md-2">
+                                     <img id="img_advertencia"  src="../Images/advertencia_mini.png"/>
+                                     <img id="img_confirma"  src="../Images/confirma_mini.png" />
+                                     <img id="img_error"   src="../Images/error_mini.png" />
+                                     <img id="img_pregunta"  src="../Images/pregunta_mini.png" />
+                                 </div>
+                                 <div class="col-md-10">
+                                     <asp:label ID="lbl_Mensaje" runat="server" Text="Texto Prueba" BorderStyle="None" CssClass="texto-mensaje" Height="100px" Width="300px" TextMode="MultiLine"></asp:label>
+                                 </div>
+                            </div>
 
-                <div style="width:100%; text-align:right;">
-                    <button id="btn_Si"  type="button" class="btn botones" onclick="fn_Repuesta();">
-                        <span>Si</span>
-                    </button> 
+                            <div style="width:100%; text-align:right;">
+                                <button id="btn_Si"  type="button" class="btn botones" onclick="fn_Repuesta();">
+                                    <span>Si</span>
+                                </button> 
 
-                    <button id="btn_No" type="button" class="btn botones" data-dismiss="modal">
-                        <span>No</span>
-                    </button> 
-                </div>
+                                <button id="btn_No" type="button" class="btn botones" data-dismiss="modal">
+                                    <span>No</span>
+                                </button> 
+                            </div>
                 
-            </div>
+                        </div>
+                    </ContentTemplate>
+              </asp:UpdatePanel>
         </div> 
         
         <!-- Modal -->

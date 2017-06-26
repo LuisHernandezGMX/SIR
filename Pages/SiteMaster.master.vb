@@ -127,17 +127,7 @@ Partial Class Pages_SiteMaster
         End Try
     End Sub
 
-    Public Sub CargaDropDown(ByRef ddl_Control As DropDownList, ByVal dtDatos As DataTable,
-                             Optional ByVal DataValue As String = "Clave", Optional ByVal DataText As String = "Descripcion")
-        Try
-            ddl_Control.DataValueField = DataValue
-            ddl_Control.DataTextField = DataText
-            ddl_Control.DataSource = dtDatos
-            ddl_Control.DataBind()
-        Catch ex As Exception
-            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
-        End Try
-    End Sub
+
 
 
 End Class
