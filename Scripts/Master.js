@@ -20,7 +20,6 @@ function PageLoadMaster() {
                             'Sep', 'Oct', 'Nov', 'Dic']
     });
 
-    $(".Fecha").mask("99/99/9999");
 
     //Botón Aceptar en Catalogo
     $("[id*=btn_Aceptar_Catalogo]").click(function () {
@@ -40,6 +39,41 @@ function PageLoadMaster() {
         $("input[id$='hid_Seleccion']")[0].value = varSeleccion
         __doPostBack(this.name, '');
     });
+
+    //ToolTip para cualquier control
+    //Establecer la propiedad title
+    $('.masterTooltip').click(function () {
+        // Hover over code
+        var title = $(this).attr('title');
+        $(this).data('tipText', title).removeAttr('title');
+        $('<p class="tooltip"></p>')
+        .text(title)
+        .appendTo('body')
+        .fadeIn('slow');
+    }, function () {
+        // Hover out code
+        $(this).attr('title', $(this).data('tipText'));
+        $('.tooltip').remove();
+    }).mousemove(function (e) {
+        var mousex = e.pageX + 20; //Get X coordinates
+        var mousey = e.pageY + 10; //Get Y coordinates
+        $('.tooltip')
+        .css({ top: mousey, left: mousex })
+    });
+
+    //FORMATEO DE CAMPOS EN LA VISTA
+    $(".Fecha").mask("99/99/9999");
+
+    $(".cod").numeric({ decimal: false, negative: true, min: 0, max: 9999 });
+    $(".cod").attr({ maxLength: 4 });
+    $(".cod").css('text-align', 'center');
+
+    $(".nro_pol").numeric({ decimal: false, negative: false, min: 0, max: 9999999 });
+    $(".nro_pol").attr({ maxLength: 7 });
+    $(".nro_pol").css('text-align', 'center');
+
+    $(".cantidad").mask("#,##0.00", { reverse: true });
+    $(".cantidad").css('text-align', 'right');
 }
 
 
@@ -274,3 +308,4 @@ function fn_ElementosSeleccionados(Gread, Control, Seleccion, blnTexto) {
 
     return strSel;
 }
+
