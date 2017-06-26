@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="5c6942cc-dc10-47e9-b0a8-b923a4d61c03" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Generales3.xsd" MetadataType="Schema" ID="39c043b6-27d1-46a5-91a5-6f31732563f0" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?xsd=xsd2" />
+    <MetadataFile FileName="Generales1.wsdl" MetadataType="Wsdl" ID="8786bf09-9941-4203-9cc9-336ce3348377" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?wsdl" />
+    <MetadataFile FileName="Generales32.xsd" MetadataType="Schema" ID="76da0858-48e5-4fc8-bb44-8a9517a5c906" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?xsd=xsd1" />
+    <MetadataFile FileName="Generales33.xsd" MetadataType="Schema" ID="a99522d4-a83f-43c4-bd52-f94f48db850a" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?xsd=xsd0" />
+    <MetadataFile FileName="Generales1.disco" MetadataType="Disco" ID="75c1fc20-ea2a-4e60-b95d-27c94a020af3" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
