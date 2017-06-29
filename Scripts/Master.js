@@ -75,6 +75,7 @@ function PageLoadMaster() {
 
     //Botón Busqueda de Endoso
     $("[id*=btn_Busca_Endoso]").click(function () {
+        alert('entro');
         $("input[id$='hid_Polizas']")[0].value = fn_ElementosSeleccionados($("[id*=gvd_Poliza]"), $('[id*=lbl_ClavePol]'), $('[id*=chk_SelPol]'), true);
     });
 
