@@ -47,5 +47,21 @@ Public Class ConsultaBD
         Return Salida
     End Function
 
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function GetProducto(ByVal Id As Integer) As String
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim dtResult As New DataTable
+        Dim Salida As String = vbNullString
+        Try
+            dtResult = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo("RamU", "AND cod_ramo=" & Id.ToString(), "").ToList)
+            If Not dtResult Is Nothing Then
+                Salida = dtResult.Rows(0).ItemArray(2).ToString
+            End If
+        Catch ex As Exception
+            Salida = vbNullString
+        End Try
+        Return Salida
+    End Function
 
 End Class

@@ -72,8 +72,41 @@ function PageLoadMaster() {
     $(".nro_pol").attr({ maxLength: 7 });
     $(".nro_pol").css('text-align', 'center');
 
-    $(".cantidad").mask("#,##0.00", { reverse: true });
-    $(".cantidad").css('text-align', 'right');
+
+    //Botón Busqueda de Endoso
+    $("[id*=btn_Busca_Endoso]").click(function () {
+        $("input[id$='hid_Polizas']")[0].value = fn_ElementosSeleccionados($("[id*=gvd_Poliza]"), $('[id*=lbl_ClavePol]'), $('[id*=chk_SelPol]'), true);
+    });
+
+    //Busqueda de Producto por Catalogo
+    $("#btn_SelRam").click(function () {
+        var strSel = '';
+        fn_CargaCatalogo("spS_CatalogosOP ==RamU==,====" + strSel, "Unica", "txtClaveRam|txtSearchRam", "RamU", "Productos");
+    });
+
+    //Busqueda de Producto por Clave
+    $("input[id$='txtClaveRam']").focusout(function () {
+        var Id = $("input[id$='txtClaveRam']")[0].value;
+        if (Id == "") {
+            Id = 10000; //Coloca un número inexistente
+        }
+        $.ajax({
+            url: "../LocalServices/ConsultaBD.asmx/GetProducto",
+            data: "{ 'Id': " + Id + "}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("input[id$='txtSearchRam']")[0].value = data.d;
+                $(".nro_pol").select();
+            },
+            error: function (response) {
+                fn_MuestraMensaje('JSON', response.responseText, 2);
+            },
+        });
+    });
+
+
 }
 
 
@@ -309,3 +342,14 @@ function fn_ElementosSeleccionados(Gread, Control, Seleccion, blnTexto) {
     return strSel;
 }
 
+//Busqueda de Endosos
+function fn_BuscaEndoso() {
+    $("input[id$='hid_Polizas']")[0].value = fn_ElementosSeleccionados($("[id*=gvd_Poliza]"), $('[id*=lbl_ClavePol]'), $('[id*=chk_SelPol]'), true);
+    __doPostBack($('[id*=btn_axuliar]')[0].name, '');
+}
+
+function fn_Seleccion(Control) {
+    $(Control).focus(function () {
+        this.select();
+    });
+}

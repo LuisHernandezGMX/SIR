@@ -40,7 +40,7 @@ Public Class Funciones
     End Function
 
     Public Shared Sub LlenaCatDDL(DDL As DropDownList, Prefijo As String, Optional Condicion As String = "", Optional Sel As String = "",
-                                  Optional DataValue As String = "Clave", Optional DataText As String = "Descrip", Optional SelCurrent As Integer = 0)
+                                  Optional DataValue As String = "Clave", Optional DataText As String = "Descripcion", Optional SelCurrent As Integer = 0)
         Dim Resultado As New DataTable
         Try
             Dim ws As New ws_Generales.GeneralesClient
@@ -72,4 +72,15 @@ Public Class Funciones
             Mensaje.MuestraMensaje("Carga Grid", "Ocurrio un Error llenar Grid", TipoMsg.Falla)
         End Try
     End Sub
+
+    Public Shared Sub LlenaGrid(ByRef gvd_Control As GridView, ByRef dtDatos As DataTable)
+        gvd_Control.DataSource = dtDatos
+        gvd_Control.DataBind()
+    End Sub
+
+    Public Shared Function BuscaEndoso() As Boolean
+        Dim page As Page = HttpContext.Current.CurrentHandler
+        ScriptManager.RegisterClientScriptBlock(page, GetType(Page), "Endoso", "fn_BuscaEndoso();", True)
+        Return True
+    End Function
 End Class

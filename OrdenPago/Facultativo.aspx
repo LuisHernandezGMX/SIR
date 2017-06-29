@@ -200,7 +200,6 @@
                         <div class="panel-subcontenido">
                                 <asp:UpdatePanel runat="server" ID="upPoliza">
                                     <ContentTemplate>
-                                        <asp:HiddenField runat="server" ID="hid_Polizas" Value="" />
                                         <asp:HiddenField runat="server" ID="hid_HTML" Value="" />
                                         <div class="clear padding5"></div>
                                         <div class="input-group">
@@ -240,7 +239,7 @@
                                                 </asp:GridView>
                                             </asp:Panel>
                                             <div style="width:100%;  text-align:right">
-                                                <asp:LinkButton id="btn_AddPol" runat="server" class="btn botones AgregaPoliza" data-toggle="modal" data-target="#EsperaModal">
+                                                <asp:LinkButton id="btn_AddPol" runat="server" class="btn botones">
                                                     <span>
                                                         <img class="btn-añadir"/>
                                                         Añadir
@@ -654,10 +653,10 @@
         <div class="row">
              <div class="col-md-12">
                  <div  style="width:100%; border:5px solid gray; border-width: 2px 0 0 0; text-align:right; padding: 0 0 0 620px; "  >
-                      <asp:LinkButton id="btn_Buscar" runat="server" class="btn botones" data-toggle="modal">
+                      <asp:LinkButton id="btn_Buscar" runat="server" class="btn botones boton-largo" data-toggle="modal">
                         <span>
                             <img class="btn-buscar"/>
-                            Reaseguros
+                            Busca Reaseguros
                         </span>
                     </asp:LinkButton>
                 </div>
