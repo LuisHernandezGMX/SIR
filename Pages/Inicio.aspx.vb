@@ -16,6 +16,9 @@ Partial Class Pages_Inicio
         Mensaje.MuestraMensaje("Inicio", "Acción del botón Cancelar en CodeBehind", TipoMsg.Confirma)
     End Sub
 
+    Private Sub btn_Imprimir_Click(sender As Object, e As EventArgs) Handles btn_Imprimir.Click
+
+    End Sub
 
     Private Sub gvd_Broker_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvd_Broker.RowCommand
         If e.CommandName = "Delete" Then

@@ -173,4 +173,16 @@ $("body").on("click", "[id*=gvd_Contrato] .Delete", function () {
     row.hide();
     return false;
 });
+
+//Delete event handler.
+$("body").on("click", "[id*=gvd_Poliza] .Delete", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    $('[id*=chk_SelPol]')[row[0].rowIndex - 1].value = "true";
+    row.hide();
+    return false;
+});
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
