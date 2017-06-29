@@ -160,7 +160,7 @@
         <asp:label runat="server" class="col-md-1 etiqueta-control" Width="90px">Fecha</asp:label>
         <asp:TextBox runat="server" ID="txt_Fecha" CssClass="estandar-control Fecha" Width="80px"  ></asp:TextBox>
 
-         
+        <asp:TextBox runat="server" ID="txt_importe" CssClass="estandar-control cantidad" Width="150px"  ></asp:TextBox>
 
     </ContentTemplate>
 </asp:UpdatePanel>
