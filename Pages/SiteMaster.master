@@ -104,15 +104,8 @@
                                     <ul>
                                         <li><a>Siniestros</a>
                                             <ul>
-                                                <li>
-                                                    <a>Administración</a>
-                                                </li>
-                                                <li>
-                                                    <a>Configuración</a>
-                                                </li>
-                                                <li>
-                                                    <a>Consulta de Facultativos</a>
-                                                </li>
+                                                <li><a href="../Recordatorios/RecSiniestrosAdmin.aspx">Configuración del Recordatorio</a></li> 
+                                                <li><a href="../Recordatorios/ConsultaFacultativos.aspx">Consulta de Facultativos</a></li> 
                                             </ul>
                                         </li>
                                    </ul>
