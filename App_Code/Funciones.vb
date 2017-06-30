@@ -78,9 +78,4 @@ Public Class Funciones
         gvd_Control.DataBind()
     End Sub
 
-    Public Shared Function BuscaEndoso() As Boolean
-        Dim page As Page = HttpContext.Current.CurrentHandler
-        ScriptManager.RegisterClientScriptBlock(page, GetType(Page), "Endoso", "fn_BuscaEndoso();", True)
-        Return True
-    End Function
 End Class

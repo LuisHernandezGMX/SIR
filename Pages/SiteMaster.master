@@ -293,7 +293,6 @@
                    <asp:UpdatePanel runat="server" ID="upPolizas">
                        <ContentTemplate>
                            <asp:HiddenField runat="server" ID="hid_Control_Pol" Value="" />
-                           <asp:HiddenField runat="server" ID="hid_Polizas" Value="" />
                            <asp:CheckBox runat="server" ID="chk_Vencidas" Text="Garantias Programadas" CssClass="etiqueta-control" AutoPostBack="true" />
                           
                            <table class="tabla">
