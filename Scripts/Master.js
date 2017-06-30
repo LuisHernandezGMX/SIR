@@ -72,13 +72,6 @@ function PageLoadMaster() {
     $(".nro_pol").attr({ maxLength: 7 });
     $(".nro_pol").css('text-align', 'center');
 
-
-    //Botón Busqueda de Endoso
-    $("[id*=btn_Busca_Endoso]").click(function () {
-        alert('entro');
-        $("input[id$='hid_Polizas']")[0].value = fn_ElementosSeleccionados($("[id*=gvd_Poliza]"), $('[id*=lbl_ClavePol]'), $('[id*=chk_SelPol]'), true);
-    });
-
     //Busqueda de Producto por Catalogo
     $("#btn_SelRam").click(function () {
         var strSel = '';
@@ -341,12 +334,6 @@ function fn_ElementosSeleccionados(Gread, Control, Seleccion, blnTexto) {
     else { strSel = ",==" + strSel + "=="; }
 
     return strSel;
-}
-
-//Busqueda de Endosos
-function fn_BuscaEndoso() {
-    $("input[id$='hid_Polizas']")[0].value = fn_ElementosSeleccionados($("[id*=gvd_Poliza]"), $('[id*=lbl_ClavePol]'), $('[id*=chk_SelPol]'), true);
-    __doPostBack($('[id*=btn_axuliar]')[0].name, '');
 }
 
 function fn_Seleccion(Control) {

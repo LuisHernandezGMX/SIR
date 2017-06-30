@@ -157,16 +157,17 @@ Partial Class Pages_SiteMaster
 
     Private Sub btn_Busca_Endoso_Click(sender As Object, e As EventArgs) Handles btn_Busca_Endoso.Click
         Try
+            Dim Polizas As String = "'-1'"
             Dim dtResultado As New DataTable
             Dim ws As New ws_Generales.GeneralesClient
 
-            Dim Polizas As String = Replace(hid_Polizas.Value, "====", "'")
-
-            Polizas = Replace(Polizas, ",'==", "'")
-            Polizas = Replace(Polizas, "==", "")
-
-            If Len(Polizas) = 0 Then
-                Polizas = "'" & Polizas & "'"
+            Dim gvd_Control As GridView = DirectCast(cph_principal.FindControl(hid_Control_Pol.Value), GridView)
+            If Not gvd_Control Is Nothing Then
+                For Each row In gvd_Control.Rows
+                    If DirectCast(row.FindControl("chk_SelPol"), HiddenField).Value <> "true" Then
+                        Polizas = Polizas & ",'" & DirectCast(row.FindControl("lbl_ClavePol"), Label).Text & "'"
+                    End If
+                Next
             End If
 
             dtResultado = Funciones.Lista_A_Datatable(ws.ObtienePolizas(ddl_SucursalPol.SelectedValue, txtClaveRam.Text,
@@ -245,6 +246,10 @@ Partial Class Pages_SiteMaster
         gvd_GrupoPolizas.Columns(8).Visible = sn_cobranzas
         gvd_GrupoPolizas.Columns(9).Visible = sn_descarta_endoso
 
+        If btn_Busca_Endoso.Visible = False Then
+            btn_Busca_Endoso_Click(Me, Nothing)
+        End If
+
         Funciones.AbrirModal("#Poliza")
     End Sub
 
@@ -290,15 +295,8 @@ Partial Class Pages_SiteMaster
             gvd_Control.DataSource = dt_Datos
             gvd_Control.DataBind()
 
-            Funciones.BuscaEndoso()
-        Catch ex As Exception
-            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
-        End Try
-    End Sub
-
-    Private Sub btn_axuliar_Click(sender As Object, e As EventArgs) Handles btn_axuliar.Click
-        Try
             btn_Busca_Endoso_Click(Me, Nothing)
+
         Catch ex As Exception
             Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
         End Try
