@@ -437,6 +437,8 @@ font-weight:bold;
 font-size:12px;
 font-family: Myriad Pro;
 color:#9c9c9c; 
+overflow-y:scroll;
+overflow-x:hidden;
 }
 
 .modal-catalogo {

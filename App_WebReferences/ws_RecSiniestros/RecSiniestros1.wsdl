@@ -79,6 +79,12 @@
   <wsdl:message name="IRecSiniestros_EliminaAvUsuario_OutputMessage">
     <wsdl:part name="parameters" element="tns:EliminaAvUsuarioResponse" />
   </wsdl:message>
+  <wsdl:message name="IRecSiniestros_ActualizaJobParam_InputMessage">
+    <wsdl:part name="parameters" element="tns:ActualizaJobParam" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_ActualizaJobParam_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ActualizaJobParamResponse" />
+  </wsdl:message>
   <wsdl:portType name="IRecSiniestros">
     <wsdl:operation name="ActualizaFaseRecup">
       <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/ActualizaFaseRecup" message="tns:IRecSiniestros_ActualizaFaseRecup_InputMessage" />
@@ -127,6 +133,10 @@
     <wsdl:operation name="EliminaAvUsuario">
       <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/EliminaAvUsuario" message="tns:IRecSiniestros_EliminaAvUsuario_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IRecSiniestros/EliminaAvUsuarioResponse" message="tns:IRecSiniestros_EliminaAvUsuario_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ActualizaJobParam">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/ActualizaJobParam" message="tns:IRecSiniestros_ActualizaJobParam_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRecSiniestros/ActualizaJobParamResponse" message="tns:IRecSiniestros_ActualizaJobParam_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IRecSiniestros" type="tns:IRecSiniestros">
@@ -232,6 +242,15 @@
     </wsdl:operation>
     <wsdl:operation name="EliminaAvUsuario">
       <soap:operation soapAction="http://tempuri.org/IRecSiniestros/EliminaAvUsuario" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ActualizaJobParam">
+      <soap:operation soapAction="http://tempuri.org/IRecSiniestros/ActualizaJobParam" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

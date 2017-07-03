@@ -40,6 +40,16 @@ function PageLoadMaster() {
         __doPostBack(this.name, '');
     });
 
+
+    //Botón Mostrar Aclaración
+    $("[id*=gvd_GrupoPolizas] .MuestraAclaracion").click(function () {
+        event.preventDefault ? event.preventDefault() : event.returnValue = false;
+        var row = $(this).closest("tr");
+        var id_pv = row.find('.id_pv');
+        fn_Aclaracion($(id_pv)[0].value);
+    });
+
+
     //ToolTip para cualquier control
     //Establecer la propiedad title
     $('.masterTooltip').click(function () {
@@ -71,6 +81,9 @@ function PageLoadMaster() {
     $(".nro_pol").numeric({ decimal: false, negative: false, min: 0, max: 9999999 });
     $(".nro_pol").attr({ maxLength: 7 });
     $(".nro_pol").css('text-align', 'center');
+
+    $(".Centro").css('text-align', 'center');
+    $(".Derecha").css('text-align', 'right');
 
     //Busqueda de Producto por Catalogo
     $("#btn_SelRam").click(function () {
@@ -143,7 +156,7 @@ function fn_MuestraMensaje(Titulo, Mensaje, Tipo, boton) {
     }
     
     fn_AbrirModal('#Mensajes');
-    $('#Mensajes').draggable();
+    //$('#Mensajes').draggable();
 }
 
 //Respuesta del Usuario en Mensaje de Confirmación
@@ -341,3 +354,29 @@ function fn_Seleccion(Control) {
         this.select();
     });
 }
+
+function fn_Aclaracion(id_pv) {
+    $.ajax({
+        type: 'POST',
+        contentType: "application/json; charset=utf-8",
+        url: '../LocalServices/ConsultaBD.asmx/GetAclaracion',
+        data: "{ 'id_pv': '" + id_pv + "'}",
+        dataType: 'JSON',
+        success: function (response) {
+            if (response.d.length > 0) {
+                fn_CerrarModal('#EsperaModal');
+                $(".Aclaracion")[0].innerHTML = response.d;
+                fn_AbrirModal('#AclaracionesModal');
+            }
+            else {
+                fn_CerrarModal('#EsperaModal');
+                fn_MuestraMensaje('Aclaraciones', 'No se encontraron registros', 0);
+            }
+        },
+        error: function (e) {
+            fn_CerrarModal('#EsperaModal');
+            fn_MuestraMensaje('JSON', e.responseText, 2);
+        }
+    });
+    return false;
+};

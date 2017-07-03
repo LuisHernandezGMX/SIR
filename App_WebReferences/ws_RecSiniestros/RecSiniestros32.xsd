@@ -181,4 +181,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ActualizaJobParam">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="srtHora" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="blnActivo" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ActualizaJobParamResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="ActualizaJobParamResult" nillable="true" type="q13:ArrayOfNullableOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
