@@ -41,39 +41,5 @@ Partial Class Pages_Inicio
 
     End Sub
 
-    <System.Web.Services.WebMethod>
-    Public Shared Function ObtieneDatos(ByVal Consulta As String) As List(Of Catalogo)
-        Dim sCnn As String
-        Dim OcultaCampo1 As String
-        Dim OcultaCampo2 As String
-        Dim OcultaCampo3 As String
-
-
-        Consulta = Replace(Consulta, "==", "'")
-
-        sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
-
-        Dim da As SqlDataAdapter
-        Dim dt As New DataTable
-
-        da = New SqlDataAdapter(Consulta, sCnn)
-        da.Fill(dt)
-
-        Dim Lista = New List(Of Catalogo)
-
-        Dim varCatalogo As Catalogo
-
-        For Each dr In dt.Rows
-            varCatalogo = New Catalogo
-            OcultaCampo1 = IIf(IsDBNull(dr("OcultaCampo1")), "", dr("OcultaCampo1"))
-            OcultaCampo2 = IIf(IsDBNull(dr("OcultaCampo2")), "", dr("OcultaCampo2"))
-            OcultaCampo3 = IIf(IsDBNull(dr("OcultaCampo3")), "", dr("OcultaCampo3"))
-            varCatalogo.Catalogo(dr("Clave"), dr("Descripcion"), OcultaCampo1, OcultaCampo2, OcultaCampo3)
-            Lista.Add(varCatalogo)
-        Next
-        Return Lista
-    End Function
-
-
 
 End Class
