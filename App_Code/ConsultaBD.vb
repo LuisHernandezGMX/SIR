@@ -64,4 +64,17 @@ Public Class ConsultaBD
         Return Salida
     End Function
 
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function GetAclaracion(ByVal id_pv As Integer) As String
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim Salida As String = vbNullString
+        Try
+            Salida = ws.ObtieneAclaraciones(id_pv)
+        Catch ex As Exception
+            Salida = vbNullString
+        End Try
+        Return Salida
+    End Function
+
 End Class

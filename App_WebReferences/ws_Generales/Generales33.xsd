@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
+  <xs:element name="InsertaLogError">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cod_usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Descripcion" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="hostname" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertaLogErrorResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="InsertaLogErrorResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertaATabla">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="strTabla" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="strKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="strDatos" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertaATablaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="InsertaATablaResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="EnviaCorreo">
     <xs:complexType>
       <xs:sequence>
@@ -35,17 +67,128 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetRamo">
+  <xs:element name="ObtienePolizas">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="Id" type="xs:int" />
+        <xs:element minOccurs="0" name="cod_suc" type="xs:int" />
+        <xs:element minOccurs="0" name="cod_ramo" type="xs:int" />
+        <xs:element minOccurs="0" name="nro_pol" type="xs:double" />
+        <xs:element minOccurs="0" name="str_pol" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="bln_garantias" type="xs:boolean" />
+        <xs:element minOccurs="0" name="FechaIni" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FechaFin" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sn_Ajuste" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetRamoResponse">
+  <xs:element name="ObtienePolizasResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GetRamoResult" nillable="true" type="xs:string" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtienePolizasResult" nillable="true" type="q2:ArrayOfspS_ListaPoliza_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneEndosos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="str_pol" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FecEmision" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneEndososResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneEndososResult" nillable="true" type="q3:ArrayOfspS_ListaEndoso_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtienePagador">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_pv" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtienePagadorResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtienePagadorResult" nillable="true" type="q4:ArrayOfspS_Pagador_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtienePagadorCuotas">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_pv" type="xs:double" />
+        <xs:element minOccurs="0" name="ind_pag" type="xs:int" />
+        <xs:element minOccurs="0" name="cod_aseg" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtienePagadorCuotasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtienePagadorCuotasResult" nillable="true" type="q5:ArrayOfspS_PagadorCuotas_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneDetallePagoCuota">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_pv" type="xs:double" />
+        <xs:element minOccurs="0" name="cod_aseg" type="xs:double" />
+        <xs:element minOccurs="0" name="ind_pag" type="xs:int" />
+        <xs:element minOccurs="0" name="nro_cuota" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneDetallePagoCuotaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneDetallePagoCuotaResult" nillable="true" type="q6:ArrayOfspS_DetallePagosCob_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneEndososNoPago">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cod_usuario" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneEndososNoPagoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneEndososNoPagoResult" nillable="true" type="q7:ArrayOfspS_EndososNoPagoOP_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneAclaraciones">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_pv" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneAclaracionesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ObtieneAclaracionesResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneParametro">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cPAR_Id" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneParametroResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ObtieneParametroResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
