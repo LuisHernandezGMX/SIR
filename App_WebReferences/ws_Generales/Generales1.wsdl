@@ -7,17 +7,41 @@
       <xsd:import schemaLocation="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IGenerales_InsertaLogError_InputMessage">
-    <wsdl:part name="parameters" element="tns:InsertaLogError" />
+  <wsdl:message name="IGenerales_InsertaBitacora_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertaBitacora" />
   </wsdl:message>
-  <wsdl:message name="IGenerales_InsertaLogError_OutputMessage">
-    <wsdl:part name="parameters" element="tns:InsertaLogErrorResponse" />
+  <wsdl:message name="IGenerales_InsertaBitacora_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertaBitacoraResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGenerales_InsertaError_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertaError" />
+  </wsdl:message>
+  <wsdl:message name="IGenerales_InsertaError_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertaErrorResponse" />
   </wsdl:message>
   <wsdl:message name="IGenerales_InsertaATabla_InputMessage">
     <wsdl:part name="parameters" element="tns:InsertaATabla" />
   </wsdl:message>
   <wsdl:message name="IGenerales_InsertaATabla_OutputMessage">
     <wsdl:part name="parameters" element="tns:InsertaATablaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGenerales_IsAuthenticated_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsAuthenticated" />
+  </wsdl:message>
+  <wsdl:message name="IGenerales_IsAuthenticated_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsAuthenticatedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGenerales_ObtieneUsuario_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneUsuario" />
+  </wsdl:message>
+  <wsdl:message name="IGenerales_ObtieneUsuario_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneUsuarioResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGenerales_ObtieneMenu_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneMenu" />
+  </wsdl:message>
+  <wsdl:message name="IGenerales_ObtieneMenu_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneMenuResponse" />
   </wsdl:message>
   <wsdl:message name="IGenerales_EnviaCorreo_InputMessage">
     <wsdl:part name="parameters" element="tns:EnviaCorreo" />
@@ -80,13 +104,29 @@
     <wsdl:part name="parameters" element="tns:ObtieneParametroResponse" />
   </wsdl:message>
   <wsdl:portType name="IGenerales">
-    <wsdl:operation name="InsertaLogError">
-      <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/InsertaLogError" message="tns:IGenerales_InsertaLogError_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IGenerales/InsertaLogErrorResponse" message="tns:IGenerales_InsertaLogError_OutputMessage" />
+    <wsdl:operation name="InsertaBitacora">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/InsertaBitacora" message="tns:IGenerales_InsertaBitacora_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGenerales/InsertaBitacoraResponse" message="tns:IGenerales_InsertaBitacora_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertaError">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/InsertaError" message="tns:IGenerales_InsertaError_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGenerales/InsertaErrorResponse" message="tns:IGenerales_InsertaError_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="InsertaATabla">
       <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/InsertaATabla" message="tns:IGenerales_InsertaATabla_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGenerales/InsertaATablaResponse" message="tns:IGenerales_InsertaATabla_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsAuthenticated">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/IsAuthenticated" message="tns:IGenerales_IsAuthenticated_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGenerales/IsAuthenticatedResponse" message="tns:IGenerales_IsAuthenticated_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneUsuario">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/ObtieneUsuario" message="tns:IGenerales_ObtieneUsuario_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGenerales/ObtieneUsuarioResponse" message="tns:IGenerales_ObtieneUsuario_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneMenu">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/ObtieneMenu" message="tns:IGenerales_ObtieneMenu_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGenerales/ObtieneMenuResponse" message="tns:IGenerales_ObtieneMenu_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="EnviaCorreo">
       <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/EnviaCorreo" message="tns:IGenerales_EnviaCorreo_InputMessage" />
@@ -131,8 +171,17 @@
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IGenerales" type="tns:IGenerales">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="InsertaLogError">
-      <soap:operation soapAction="http://tempuri.org/IGenerales/InsertaLogError" style="document" />
+    <wsdl:operation name="InsertaBitacora">
+      <soap:operation soapAction="http://tempuri.org/IGenerales/InsertaBitacora" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertaError">
+      <soap:operation soapAction="http://tempuri.org/IGenerales/InsertaError" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -142,6 +191,33 @@
     </wsdl:operation>
     <wsdl:operation name="InsertaATabla">
       <soap:operation soapAction="http://tempuri.org/IGenerales/InsertaATabla" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsAuthenticated">
+      <soap:operation soapAction="http://tempuri.org/IGenerales/IsAuthenticated" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneUsuario">
+      <soap:operation soapAction="http://tempuri.org/IGenerales/ObtieneUsuario" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneMenu">
+      <soap:operation soapAction="http://tempuri.org/IGenerales/ObtieneMenu" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

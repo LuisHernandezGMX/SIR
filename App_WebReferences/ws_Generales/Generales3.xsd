@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/WS_GMX" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/WS_GMX" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfspS_Usuario_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_Usuario_Result" nillable="true" type="tns:spS_Usuario_Result" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfspS_Usuario_Result" nillable="true" type="tns:ArrayOfspS_Usuario_Result" />
+  <xs:complexType name="spS_Usuario_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="circuito_op" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_sector" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_suc" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_usuario" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="limite_op" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="mail" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="sector" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="sucursal" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="spS_Usuario_Result" nillable="true" type="tns:spS_Usuario_Result" />
+  <xs:complexType name="ArrayOfspS_MenuWeb_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_MenuWeb_Result" nillable="true" type="tns:spS_MenuWeb_Result" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfspS_MenuWeb_Result" nillable="true" type="tns:ArrayOfspS_MenuWeb_Result" />
+  <xs:complexType name="spS_MenuWeb_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cod_modulo" type="xs:short" />
+      <xs:element minOccurs="0" name="cod_submodulo_web" type="xs:int" />
+      <xs:element minOccurs="0" name="descripcion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="nivel" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="sn_alta" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="sn_baja" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="sn_cambio" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="sn_consult" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ubicacion" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="spS_MenuWeb_Result" nillable="true" type="tns:spS_MenuWeb_Result" />
   <xs:complexType name="ArrayOfspS_CatalogosOP_Result2">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_CatalogosOP_Result2" nillable="true" type="tns:spS_CatalogosOP_Result2" />
