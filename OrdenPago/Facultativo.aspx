@@ -658,7 +658,7 @@
                             <img class="btn-buscar"/>
                             Busca Reaseguros
                         </span>
-                    </asp:LinkButton>
+                      </asp:LinkButton>
                 </div>
              </div>
 

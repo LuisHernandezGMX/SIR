@@ -116,6 +116,12 @@ min-width: 100px;
 color: white;
 }
 
+.separador{
+width:2px;
+height:23px;
+background-image:url(../Images/menu_sep-hz.png);
+}
+
 .principal-contenido
 {
 width:100%;
@@ -159,12 +165,18 @@ padding-bottom:5px;
 /*--------------------------------------------------------------------------------------------------------*/
 
 
-
-
-
-
-
 #cuadro_login{
+border-style:inset;
+border-color:#003A5D;
+width:480px; 
+min-width:450px; 
+border-width:1px; 
+height:250px; 
+min-height:250px;
+font-family: Myriad Pro;
+}
+
+#Autorizacion{
 border-style:inset;
 border-color:#003A5D;
 width:480px; 
@@ -437,6 +449,8 @@ font-weight:bold;
 font-size:12px;
 font-family: Myriad Pro;
 color:#9c9c9c; 
+overflow-y:scroll;
+overflow-x:hidden;
 }
 
 .modal-catalogo {

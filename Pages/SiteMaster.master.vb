@@ -7,10 +7,87 @@ Partial Class Pages_SiteMaster
     Private dt_Datos As DataTable
     Private config_poliza() As String
     Private dtPolizas As DataTable
+    Private DetalleUsuario() As String
+
+
+
+    Public Property Menu() As String
+        Get
+            Return menu_principal.InnerHtml
+        End Get
+        Set(ByVal value As String)
+            menu_principal.InnerHtml = value
+        End Set
+    End Property
+
+    Public Property cod_usuario() As String
+        Get
+            Return hid_codUsuario.Value
+        End Get
+        Set(ByVal value As String)
+            hid_codUsuario.Value = value
+        End Set
+    End Property
+
+    Public Property usuario() As String
+        Get
+            Return lbl_Usuario.Text
+        End Get
+        Set(ByVal value As String)
+            lbl_Usuario.Text = value
+        End Set
+    End Property
+
+    Public Property cod_suc() As Integer
+        Get
+            Return hid_codSuc.Value
+        End Get
+        Set(ByVal value As Integer)
+            hid_codSuc.Value = value
+        End Set
+    End Property
+
+    Public Property sucursal() As String
+        Get
+            Return lbl_Sucursal.Text
+        End Get
+        Set(ByVal value As String)
+            lbl_Sucursal.Text = value
+        End Set
+    End Property
+
+    Public Property cod_sector() As Integer
+        Get
+            Return hid_codSector.Value
+        End Get
+        Set(ByVal value As Integer)
+            hid_codSector.Value = value
+        End Set
+    End Property
+
+    Public Property sector() As String
+        Get
+            Return lbl_Sector.Text
+        End Get
+        Set(ByVal value As String)
+            lbl_Sector.Text = value
+        End Set
+    End Property
 
     Private Sub Pages_SiteMaster_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
             CargaRowOculto()
+            menu_principal.InnerHtml = Session("Menu")
+        End If
+        DetalleUsuario = Split(Context.User.Identity.Name, "|")
+        If DetalleUsuario.Count > 1 Then
+            hid_codUsuario.Value = DetalleUsuario(0)
+            lbl_Usuario.Text = DetalleUsuario(1)
+            hid_codSuc.Value = DetalleUsuario(2)
+            lbl_Sucursal.Text = DetalleUsuario(3)
+            hid_codSector.Value = DetalleUsuario(4)
+            lbl_Sector.Text = DetalleUsuario(5)
+            hid_mail.Value = DetalleUsuario(6)
         End If
     End Sub
 
@@ -378,6 +455,139 @@ Partial Class Pages_SiteMaster
             gvd_GrupoPolizas.DataBind()
         Catch ex As Exception
             Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub gvd_GrupoPolizas_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvd_GrupoPolizas.RowCommand
+        Try
+            If e.CommandName.Equals("Cobranzas") Then
+                Dim Index As Integer = e.CommandSource.NamingContainer.RowIndex
+                Dim id_pv As Integer = gvd_GrupoPolizas.DataKeys(Index)("id_pv")
+
+                Dim cod_suc As Integer = gvd_GrupoPolizas.DataKeys(Index)("cod_suc")
+                Dim cod_ramo As Integer = gvd_GrupoPolizas.DataKeys(Index)("cod_ramo")
+                Dim nro_pol As Integer = gvd_GrupoPolizas.DataKeys(Index)("nro_pol")
+                Dim aaaa_endoso As Integer = gvd_GrupoPolizas.DataKeys(Index)("aaaa_endoso")
+                Dim nro_endoso As Integer = gvd_GrupoPolizas.DataKeys(Index)("nro_endoso")
+
+                DetalleCobranzas(id_pv, cod_suc & "-" & cod_ramo & "-" & nro_pol & "-" & aaaa_endoso, nro_endoso)
+
+                Funciones.AbrirModal("#CobranzasModal")
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub DetalleCobranzas(ByVal id_pv As Integer, ByVal Poliza As String, ByVal nro_endoso As Integer)
+        Dim ws As New ws_Generales.GeneralesClient
+
+        hid_Poliza.Value = Poliza
+
+        lbl_PolizaCobranzas.Text = "Detalle Cobranzas >> " & Poliza & "-"
+
+        ddl_Endoso.DataValueField = "id_pv"
+        ddl_Endoso.DataTextField = "nro_endoso"
+
+        ddl_Endoso.DataSource = ws.ObtieneEndosos("'" & Poliza & "'", "")
+        ddl_Endoso.DataBind()
+        ddl_Endoso.SelectedValue = id_pv
+
+        gvd_Pagadores.DataSource = ws.ObtienePagador(id_pv)
+        gvd_Pagadores.DataBind()
+
+        Dim cod_aseg As Integer = gvd_Pagadores.DataKeys(0)("cod_aseg")
+        Dim ind_pagador As Integer = gvd_Pagadores.DataKeys(0)("cod_ind_pagador")
+
+        lbl_DetPagador.Text = "Cuotas Pagador >> " & cod_aseg
+        gvd_PagadorCuota.DataSource = ws.ObtienePagadorCuotas(id_pv, ind_pagador, cod_aseg)
+        gvd_PagadorCuota.DataBind()
+
+        Dim nro_cuota As Integer = gvd_PagadorCuota.DataKeys(0)("nro_cuota")
+
+        lbl_DetCuota.Text = "Pagos Cuota >> " & nro_cuota
+        gvd_DetCuotaPagador.DataSource = ws.ObtieneDetallePagoCuota(id_pv, cod_aseg, ind_pagador, nro_cuota)
+        gvd_DetCuotaPagador.DataBind()
+    End Sub
+
+    Private Sub gvd_Pagadores_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvd_Pagadores.RowCommand
+        Try
+            If e.CommandName.Equals("DetallePagador") Then
+                Dim ws As New ws_Generales.GeneralesClient
+
+                Dim Index As Integer = e.CommandSource.NamingContainer.RowIndex
+                Dim id_pv As Integer = gvd_Pagadores.DataKeys(Index)("id_pv")
+                Dim cod_aseg As Integer = gvd_Pagadores.DataKeys(Index)("cod_aseg")
+                Dim ind_pagador As Integer = gvd_Pagadores.DataKeys(Index)("cod_ind_pagador")
+
+                lbl_DetPagador.Text = "Cuotas Pagador >> " & cod_aseg
+                gvd_PagadorCuota.DataSource = ws.ObtienePagadorCuotas(id_pv, ind_pagador, cod_aseg)
+                gvd_PagadorCuota.DataBind()
+
+                Dim nro_cuota As Integer = gvd_PagadorCuota.DataKeys(0)("nro_cuota")
+
+                lbl_DetCuota.Text = "Pagos Cuota >> " & nro_cuota
+                gvd_DetCuotaPagador.DataSource = ws.ObtieneDetallePagoCuota(id_pv, cod_aseg, ind_pagador, nro_cuota)
+                gvd_DetCuotaPagador.DataBind()
+
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub gvd_PagadorCuota_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvd_PagadorCuota.RowCommand
+        Try
+            If e.CommandName.Equals("DetalleCuotaPagador") Then
+                Dim ws As New ws_Generales.GeneralesClient
+
+                Dim Index As Integer = e.CommandSource.NamingContainer.RowIndex
+
+                Dim id_pv As Integer = gvd_PagadorCuota.DataKeys(Index)("id_pv")
+                Dim cod_aseg As Integer = gvd_PagadorCuota.DataKeys(Index)("cod_aseg")
+                Dim ind_pagador As Integer = gvd_PagadorCuota.DataKeys(Index)("cod_ind_pagador")
+                Dim nro_cuota As Integer = gvd_PagadorCuota.DataKeys(Index)("nro_cuota")
+
+                lbl_DetCuota.Text = "Pagos Cuota >> " & nro_cuota
+                gvd_DetCuotaPagador.DataSource = ws.ObtieneDetallePagoCuota(id_pv, cod_aseg, ind_pagador, nro_cuota)
+                gvd_DetCuotaPagador.DataBind()
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub ddl_Endoso_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddl_Endoso.SelectedIndexChanged
+        Try
+            DetalleCobranzas(ddl_Endoso.SelectedValue, hid_Poliza.Value, ddl_Endoso.Text)
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Protected Sub chk_NoPago_CheckedChanged(sender As Object, e As EventArgs)
+        Try
+            Dim ws As New ws_OrdenPago.OrdenPagoClient
+
+            Dim gr As GridViewRow = DirectCast(DirectCast(DirectCast(sender, CheckBox).Parent, DataControlFieldCell).Parent, GridViewRow)
+            Dim id_pv As Integer = gvd_GrupoPolizas.DataKeys(gr.RowIndex)("id_pv")
+
+            If sender.checked = True Then
+                ws.InsertaPolNoPago(id_pv, "")
+            Else
+                ws.EliminaPolNoPago(id_pv)
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub lnk_CerrarSesion_Click(sender As Object, e As EventArgs) Handles lnk_CerrarSesion.Click
+        Try
+            FormsAuthentication.SignOut()
+            Response.Redirect("Pages/Login.aspx")
+        Catch ex As Exception
+
         End Try
     End Sub
 End Class

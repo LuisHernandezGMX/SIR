@@ -13,6 +13,39 @@ Imports System.Web.Services.Protocols
 Public Class ConsultaBD
     Inherits System.Web.Services.WebService
 
+    <System.Web.Services.WebMethod>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function ObtieneDatos(ByVal Consulta As String) As List(Of Catalogo)
+        Dim sCnn As String
+        Dim OcultaCampo1 As String
+        Dim OcultaCampo2 As String
+        Dim OcultaCampo3 As String
+
+        Consulta = Replace(Consulta, "==", "'")
+
+        sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
+
+        Dim da As SqlDataAdapter
+        Dim dt As New DataTable
+
+        da = New SqlDataAdapter(Consulta, sCnn)
+        da.Fill(dt)
+
+        Dim Lista = New List(Of Catalogo)
+
+        Dim varCatalogo As Catalogo
+
+        For Each dr In dt.Rows
+            varCatalogo = New Catalogo
+            OcultaCampo1 = IIf(IsDBNull(dr("OcultaCampo1")), "", dr("OcultaCampo1"))
+            OcultaCampo2 = IIf(IsDBNull(dr("OcultaCampo2")), "", dr("OcultaCampo2"))
+            OcultaCampo3 = IIf(IsDBNull(dr("OcultaCampo3")), "", dr("OcultaCampo3"))
+            varCatalogo.Catalogo(dr("Clave"), dr("Descripcion"), OcultaCampo1, OcultaCampo2, OcultaCampo3)
+            Lista.Add(varCatalogo)
+        Next
+        Return Lista
+    End Function
+
     <WebMethod()>
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
     Public Function GetFase(ByVal Id As Integer) As String
@@ -58,6 +91,19 @@ Public Class ConsultaBD
             If Not dtResult Is Nothing Then
                 Salida = dtResult.Rows(0).ItemArray(2).ToString
             End If
+        Catch ex As Exception
+            Salida = vbNullString
+        End Try
+        Return Salida
+    End Function
+
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function GetAclaracion(ByVal id_pv As Integer) As String
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim Salida As String = vbNullString
+        Try
+            Salida = ws.ObtieneAclaraciones(id_pv)
         Catch ex As Exception
             Salida = vbNullString
         End Try
