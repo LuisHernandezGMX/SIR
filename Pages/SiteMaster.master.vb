@@ -7,10 +7,87 @@ Partial Class Pages_SiteMaster
     Private dt_Datos As DataTable
     Private config_poliza() As String
     Private dtPolizas As DataTable
+    Private DetalleUsuario() As String
+
+
+
+    Public Property Menu() As String
+        Get
+            Return menu_principal.InnerHtml
+        End Get
+        Set(ByVal value As String)
+            menu_principal.InnerHtml = value
+        End Set
+    End Property
+
+    Public Property cod_usuario() As String
+        Get
+            Return hid_codUsuario.Value
+        End Get
+        Set(ByVal value As String)
+            hid_codUsuario.Value = value
+        End Set
+    End Property
+
+    Public Property usuario() As String
+        Get
+            Return lbl_Usuario.Text
+        End Get
+        Set(ByVal value As String)
+            lbl_Usuario.Text = value
+        End Set
+    End Property
+
+    Public Property cod_suc() As Integer
+        Get
+            Return hid_codSuc.Value
+        End Get
+        Set(ByVal value As Integer)
+            hid_codSuc.Value = value
+        End Set
+    End Property
+
+    Public Property sucursal() As String
+        Get
+            Return lbl_Sucursal.Text
+        End Get
+        Set(ByVal value As String)
+            lbl_Sucursal.Text = value
+        End Set
+    End Property
+
+    Public Property cod_sector() As Integer
+        Get
+            Return hid_codSector.Value
+        End Get
+        Set(ByVal value As Integer)
+            hid_codSector.Value = value
+        End Set
+    End Property
+
+    Public Property sector() As String
+        Get
+            Return lbl_Sector.Text
+        End Get
+        Set(ByVal value As String)
+            lbl_Sector.Text = value
+        End Set
+    End Property
 
     Private Sub Pages_SiteMaster_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
             CargaRowOculto()
+            menu_principal.InnerHtml = Session("Menu")
+        End If
+        DetalleUsuario = Split(Context.User.Identity.Name, "|")
+        If DetalleUsuario.Count > 1 Then
+            hid_codUsuario.Value = DetalleUsuario(0)
+            lbl_Usuario.Text = DetalleUsuario(1)
+            hid_codSuc.Value = DetalleUsuario(2)
+            lbl_Sucursal.Text = DetalleUsuario(3)
+            hid_codSector.Value = DetalleUsuario(4)
+            lbl_Sector.Text = DetalleUsuario(5)
+            hid_mail.Value = DetalleUsuario(6)
         End If
     End Sub
 
@@ -502,6 +579,15 @@ Partial Class Pages_SiteMaster
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub lnk_CerrarSesion_Click(sender As Object, e As EventArgs) Handles lnk_CerrarSesion.Click
+        Try
+            FormsAuthentication.SignOut()
+            Response.Redirect("Pages/Login.aspx")
+        Catch ex As Exception
+
         End Try
     End Sub
 End Class

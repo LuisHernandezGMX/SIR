@@ -1,5 +1,5 @@
 ﻿
-Partial Class Pages_Inicio
+Partial Class OrdenPago_NotasCobertura
     Inherits System.Web.UI.Page
 
 End Class

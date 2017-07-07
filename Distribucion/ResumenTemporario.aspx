@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB"  MasterPageFile="~/Pages/SiteMaster.master" AutoEventWireup="false"  CodeFile="Inicio.aspx.vb" Inherits="Pages_Inicio" %>
+﻿<%@ Page Title="" Language="VB" MasterPageFile="~/Pages/SiteMaster.master" AutoEventWireup="false" CodeFile="ResumenTemporario.aspx.vb" Inherits="Distribucion_ResumenTemporario" %>
 <%@ MasterType VirtualPath="~/Pages/SiteMaster.master" %>
 
 
