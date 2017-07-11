@@ -591,7 +591,19 @@ Partial Class Pages_SiteMaster
             FormsAuthentication.SignOut()
             Response.Redirect("Pages/Login.aspx")
         Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
 
+    Private Sub btn_Autorizar_Click(sender As Object, e As EventArgs) Handles btn_Autorizar.Click
+        Try
+            If Funciones.AutenticaUsuario(txt_usuario.Text, txt_contraseña.Text) = True Then
+                Funciones.EjecutaFuncion("fn_Repuesta_Autoriza();")
+            Else
+                Mensaje.MuestraMensaje("Master Page", "Usuario y/o Contraseña incorrecto(s)", TipoMsg.Falla)
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 End Class

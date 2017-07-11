@@ -42,3 +42,16 @@ $("body").on("click", "[id*=gvd_Estatus] .Delete", function () {
     row.hide();
     return false;
 });
+
+//Detecta evento de Confirmación en Controles con dicha Clase
+$("body").on("click", ".Autorizacion", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    if (this.name == '') {
+        var id = '';
+        id = this.id;
+        this.name = id.replace('cph_principal_', 'ctl00$cph_principal$');
+    }
+    $("input[id$='hid_controlAuto']")[0].value = this.name;
+    fn_AbrirModal('#Autorizacion');
+    return false;
+});

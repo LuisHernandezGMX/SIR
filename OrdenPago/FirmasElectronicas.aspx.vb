@@ -8,6 +8,10 @@ Partial Class OrdenPago_FirmasElectronicas
     End Sub
 
     Private Sub btn_Firmar_Click(sender As Object, e As EventArgs) Handles btn_Firmar.Click
-        Funciones.AbrirModal("#Autorizacion")
+        Try
+            Mensaje.MuestraMensaje("Firmas Electronicas", "La firma ha sido satisfactoria", TipoMsg.Confirma)
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electronicas", ex.Message, TipoMsg.Falla)
+        End Try
     End Sub
 End Class
