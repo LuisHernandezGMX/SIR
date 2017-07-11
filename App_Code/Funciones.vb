@@ -4,6 +4,19 @@ Imports Mensaje
 Imports Microsoft.VisualBasic
 
 Public Class Funciones
+    'Validación de Active Directory
+    Public Shared Function AutenticaUsuario(ByVal Usuario As String, ByVal Contraseña As String) As Boolean
+        Dim ws As New ws_Generales.GeneralesClient
+        Return ws.IsAuthenticated("GMX.COM.MX", Usuario, Contraseña)
+    End Function
+
+    Public Shared Function EjecutaFuncion(ByVal funcion As String) As Boolean
+        Dim page As Page = HttpContext.Current.CurrentHandler
+        ScriptManager.RegisterClientScriptBlock(page, GetType(Page), "Funcion", funcion, True)
+        Return True
+    End Function
+
+
     Public Shared Function AbrirModal(ByVal modal As String) As Boolean
         Dim page As Page = HttpContext.Current.CurrentHandler
         ScriptManager.RegisterClientScriptBlock(page, GetType(Page), "Abrir", "fn_AbrirModal('" & modal & "');", True)

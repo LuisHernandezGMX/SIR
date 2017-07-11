@@ -876,6 +876,7 @@
                         <div class="clear padding10"></div>
 
                         <div style="width:100%; padding-left:90px;">
+                            <asp:HiddenField runat="server" ID="hid_controlAuto" Value="" />
                             <asp:LinkButton id="btn_Autorizar" runat="server" class="btn botones"  Width="100px">
                                 <span>
                                     Autorizar
