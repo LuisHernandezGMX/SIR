@@ -223,7 +223,7 @@
                                             <label style="width:100px">Broker / Compañía:</label>
                                             <asp:Label runat="server" ID="lbl_BroCia" Text='<%# Eval("txt_otros") %>' Width="480px" Height="25px" ></asp:Label>
                                             <br />
-                                                <label style="width:100px">Moneda:</label>
+                                            <label style="width:100px">Moneda:</label>
                                             <asp:Label runat="server" ID="lbl_Moneda" Text='<%# Eval("Moneda") %>' Width="200px" Height="25px" ></asp:Label>
                                             <label style="width:100px">Fecha de Pago:</label>
                                             <asp:Label runat="server" ID="lbl_FechaPago" Text='<%# Eval("Fec_Pago") %>' Width="200px" Height="25px" ></asp:Label>
@@ -252,7 +252,7 @@
                         </span>
                     </asp:LinkButton>
 
-                    <asp:LinkButton id="btn_Firmar" runat="server" class="btn botones">
+                    <asp:LinkButton id="btn_Firmar" runat="server" class="btn botones Autorizacion">
                         <span>
                             <img class="btn-modificar"/>
                             Firmar

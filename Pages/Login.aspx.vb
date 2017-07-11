@@ -48,7 +48,7 @@ Partial Class Pages_Login
             Dim dtUsuario As New DataTable
 
             'Validadción en Active Directory
-            If ws.IsAuthenticated("GMX.COM.MX", txt_usuario.Text, txt_contraseña.Text) = True Then
+            If Funciones.AutenticaUsuario(txt_usuario.Text, txt_contraseña.Text) = True Then
                 'Validadción en SII
                 dtUsuario = Funciones.Lista_A_Datatable(ws.ObtieneUsuario(txt_usuario.Text).ToList)
                 If dtUsuario.Rows.Count > 0 Then
@@ -72,7 +72,7 @@ Partial Class Pages_Login
                     Mensaje.MuestraMensaje("Login", "No cuenta con permisos para ingresar a SII", TipoMsg.Falla)
                 End If
             Else
-                    Mensaje.MuestraMensaje("Login", "Usuario y/o Contraseña incorrectos", TipoMsg.Falla)
+                Mensaje.MuestraMensaje("Login", "Usuario y/o Contraseña incorrectos", TipoMsg.Falla)
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Login", ex.Message, TipoMsg.Falla)

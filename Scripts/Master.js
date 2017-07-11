@@ -165,6 +165,13 @@ function fn_Repuesta() {
     __doPostBack(document.getElementById('hid_ControlASP').value, '');
 }
 
+
+//Respuesta del Usuario en Mensaje de Confirmación
+function fn_Repuesta_Autoriza() {
+    fn_CerrarModal('#Autorizacion');
+    __doPostBack(document.getElementById('hid_controlAuto').value, '');
+}
+
 //Funciones de Consulta--------------------------------------------------------------------------------------------------------------------------------
 function fn_CargaCatalogo(Consulta, Tipo , Control, Prefijo, Titulo) {
     $.ajax({
