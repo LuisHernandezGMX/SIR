@@ -335,6 +335,8 @@ Partial Class Pages_SiteMaster
             dt_Datos = New DataTable
             dt_Datos.Columns.Add("Clave")
             dt_Datos.Columns.Add("Descripcion")
+            dt_Datos.Columns.Add("id_pv")
+
 
             Dim gvd_Control As GridView = DirectCast(cph_principal.FindControl(hid_Control_Pol.Value), GridView)
 
@@ -353,6 +355,7 @@ Partial Class Pages_SiteMaster
                 Dim chk_SelPol As CheckBox = DirectCast(row.FindControl("chk_SelPol"), CheckBox)
 
                 If chk_SelPol.Checked = True Then
+                    Dim vId_pv = gvd_GrupoPolizas.DataKeys(row.RowIndex)("id_pv")
                     Dim txt_Sucursal As Label = DirectCast(row.FindControl("txt_Sucursal"), Label)
                     Dim txt_Ramo As Label = DirectCast(row.FindControl("txt_Ramo"), Label)
                     Dim txt_Poliza As Label = DirectCast(row.FindControl("txt_Poliza"), Label)
@@ -365,6 +368,7 @@ Partial Class Pages_SiteMaster
                                       txt_Sufijo.Text & "-" & txt_Endoso.Text &
                                       IIf(gvd_GrupoPolizas.Columns(6).Visible = True, " Aj:" & txt_Ajuste.Text, "")
                     NewRow("Descripcion") = lbl_GrupoEndoso.Text
+                    NewRow("id_pv") = vId_pv
                     dt_Datos.Rows.Add(NewRow)
                 End If
             Next

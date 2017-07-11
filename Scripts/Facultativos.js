@@ -182,7 +182,51 @@ $("body").on("click", "[id*=gvd_Poliza] .Delete", function () {
     row.hide();
     return false;
 });
+
+//Delete event handler.
+$("body").on("click", "[id*=gvd_Asegurado] .Delete", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    $('[id*=chk_SelAse]')[row[0].rowIndex - 1].value = "true";
+    row.hide();
+    return false;
+});
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                           EVENTOS KEYDOWN
 
 
+$("body").on("keydown", "[id$=txtSearchAse]", function (e) {
+   
+    if (e.which != 13) {
+        $("input[id$='hidClaveAse']")[0].value = "";
+    }
+
+    $('[id$=txtSearchAse]').autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "../LocalServices/ConsultaBD.asmx/GetAsegurado",
+                data: "{ 'prefix': '" + request.term + "'}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    response($.map(data.d, function (item) {
+                        return {
+                            label: item.split('|')[0],
+                            val: item.split('|')[1]
+                        }
+                    }))
+                },
+                error: function (response) {
+                    EvaluaMensaje('JSON', response.responseText);
+                },
+            });
+        },
+        select: function (e, i) {
+            $("input[id$='hidClaveAse']")[0].value = i.item.val;
+        },
+        minLength: 1
+    });
+});
 
