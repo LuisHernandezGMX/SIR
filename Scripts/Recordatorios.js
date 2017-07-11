@@ -4,13 +4,17 @@ $(document).ready(function () {
 });
 
 function PageLoad() {
+    
+
     var options = {
+        now: $("input[id$='hid_hora']")[0].value,
         //upArrow: 'wickedpicker__controls__control-up',
         //downArrow: 'wickedpicker__controls__control-down',
         //hoverState: 'hover-state',
         title: 'Hora de Proceso'
     };
     $('.timepicker').wickedpicker(options);
+
 
     $("input[id$='txtClaveFas']").focusout(function () {
         var Id = $("input[id$='txtClaveFas']")[0].value;
@@ -53,7 +57,10 @@ function PageLoad() {
             },
         });
     });
+
 }
+
+
 
 //Colapsar Ventana
 $("body").on("click", ".contraer", function () {
@@ -66,8 +73,8 @@ $("body").on("click", ".contraer", function () {
 $("body").on("click", ".expandir", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
     var id = this.id.substr(this.id.length - 1)
-    fn_CambiaEstado(id, "0");
 });
+    fn_CambiaEstado(id, "0");
 
 //Detecta evento de Confirmación en Controles con dicha Clase
 $("body").on("click", ".Confirmacion", function () {
@@ -93,7 +100,6 @@ $("body").on("click", ".NuevoNivel", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
     fn_AbrirModal('#GuardaNivelModal');
 });
-
 
 
 $("body").on("click", ".BuscaEst", function () {
@@ -133,4 +139,7 @@ $("body").on("click", "#btn_SelSec", function () {
     //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
     fn_CargaCatalogo("spS_CatalogosOP ==Sec==,====", "Unica", "txtClaveSec|txtSearchSec|gvd_Usuarios", "Sec", "Departamentos");
 });
+
+
+
 
