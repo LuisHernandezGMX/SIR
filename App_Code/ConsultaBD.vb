@@ -82,6 +82,25 @@ Public Class ConsultaBD
 
     <WebMethod()>
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function GetAsegurado(ByVal prefix As String) As String()
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim ArrAsegurado As New List(Of String)()
+        Dim dtResult As New DataTable
+        Try
+            dtResult = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo("Ase", prefix, "").ToList)
+
+            For Each row In dtResult.Rows
+                ArrAsegurado.Add(String.Format("{0}|{1}", row("Descripcion"), row("Clave")))
+            Next
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("", ex.Message, 2)
+        End Try
+        Return ArrAsegurado.ToArray()
+    End Function
+
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
     Public Function GetProducto(ByVal Id As Integer) As String
         Dim ws As New ws_Generales.GeneralesClient
         Dim dtResult As New DataTable
