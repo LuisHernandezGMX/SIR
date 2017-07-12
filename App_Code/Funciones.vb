@@ -91,4 +91,25 @@ Public Class Funciones
         gvd_Control.DataBind()
     End Sub
 
+    Public Shared Function ObtieneElementos(ByRef Gvd As GridView, ByVal Catalogo As String, ByVal blnTexto As Boolean, Optional PolxIdpv As Boolean = False) As String
+        Dim strDatos As String = ""
+        For Each row As GridViewRow In Gvd.Rows
+            Dim Elemento = DirectCast(row.FindControl("chk_Sel" & Catalogo), HiddenField)
+            If Elemento.Value <> "true" Then
+                If PolxIdpv = True And Catalogo = "Pol" Then
+                    strDatos = strDatos & IIf(blnTexto, ",''", ",") & DirectCast(row.FindControl("lbl_idpv"), Label).Text & IIf(blnTexto, "''", "")
+                Else
+                    strDatos = strDatos & IIf(blnTexto, ",''", ",") & DirectCast(row.FindControl("lbl_Clave" & Catalogo), Label).Text & IIf(blnTexto, "''", "")
+                End If
+
+            End If
+        Next
+
+        If Len(strDatos) > 0 Then
+            strDatos = Mid(strDatos, 2, Len(strDatos) - 1)
+        End If
+
+        Return strDatos
+    End Function
+
 End Class
