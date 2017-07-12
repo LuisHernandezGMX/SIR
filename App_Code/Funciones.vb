@@ -97,9 +97,9 @@ Public Class Funciones
             Dim Elemento = DirectCast(row.FindControl("chk_Sel" & Catalogo), HiddenField)
             If Elemento.Value <> "true" Then
                 If PolxIdpv = True And Catalogo = "Pol" Then
-                    strDatos = strDatos & IIf(blnTexto, ",''", ",") & DirectCast(row.FindControl("lbl_idpv"), Label).Text & IIf(blnTexto, "''", "")
+                    strDatos = strDatos & IIf(blnTexto, ",'", ",") & DirectCast(row.FindControl("lbl_idpv"), Label).Text & IIf(blnTexto, "'", "")
                 Else
-                    strDatos = strDatos & IIf(blnTexto, ",''", ",") & DirectCast(row.FindControl("lbl_Clave" & Catalogo), Label).Text & IIf(blnTexto, "''", "")
+                    strDatos = strDatos & IIf(blnTexto, ",'", ",") & DirectCast(row.FindControl("lbl_Clave" & Catalogo), Label).Text & IIf(blnTexto, "'", "")
                 End If
 
             End If
