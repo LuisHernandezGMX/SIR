@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="5c6942cc-dc10-47e9-b0a8-b923a4d61c03" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4666b60c-2839-406d-83a7-716bf61ccf39" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,14 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://siigmxapp02/WS_GMX/Generales/Generales.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Generales3.xsd" MetadataType="Schema" ID="39c043b6-27d1-46a5-91a5-6f31732563f0" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?xsd=xsd2" />
-    <MetadataFile FileName="Generales1.wsdl" MetadataType="Wsdl" ID="8786bf09-9941-4203-9cc9-336ce3348377" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?wsdl" />
-    <MetadataFile FileName="Generales32.xsd" MetadataType="Schema" ID="76da0858-48e5-4fc8-bb44-8a9517a5c906" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?xsd=xsd1" />
-    <MetadataFile FileName="Generales33.xsd" MetadataType="Schema" ID="a99522d4-a83f-43c4-bd52-f94f48db850a" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?xsd=xsd0" />
-    <MetadataFile FileName="Generales1.disco" MetadataType="Disco" ID="75c1fc20-ea2a-4e60-b95d-27c94a020af3" SourceId="1" SourceUrl="http://gmxdfcnd5341lbq/WS_GMX/Generales/Generales.svc?disco" />
+    <MetadataFile FileName="Generales.xsd" MetadataType="Schema" ID="fcd9b57d-0b44-4107-8596-6c13bfabddb0" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?xsd=xsd1" />
+    <MetadataFile FileName="Generales1.xsd" MetadataType="Schema" ID="de6c4bbf-52ac-46eb-9f0d-2e35faf55290" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?xsd=xsd0" />
+    <MetadataFile FileName="Generales2.xsd" MetadataType="Schema" ID="25ec6f3b-8ad9-4db1-84de-26c917a21d57" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?xsd=xsd2" />
+    <MetadataFile FileName="Generales.disco" MetadataType="Disco" ID="3311cd87-87ad-4edd-a5ed-8235605b394f" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?disco" />
+    <MetadataFile FileName="Generales.wsdl" MetadataType="Wsdl" ID="70931420-61a6-4190-984a-439cfdc7d6c9" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

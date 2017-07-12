@@ -170,8 +170,8 @@
         <div class="panel-contenido ventana1" >
             <asp:UpdatePanel runat="server" ID="upOrdenes">
               <ContentTemplate>
-                    <asp:Panel runat="server" id="pnlOrdenP" width="100%" height="440px" scrollbars="Vertical">
-                        <asp:GridView runat="server" ID="gvd_LstOrdenPago" AutoGenerateColumns="false" 
+                    <asp:Panel runat="server" id="pnlOrdenP" width="100%">
+                        <asp:GridView runat="server" ID="gvd_LstOrdenPago" AutoGenerateColumns="false"  ShowHeader="false"
                                       CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
                                       GridLines="Horizontal"  ShowHeaderWhenEmpty="true" AllowPaging="true" PageSize="10" 
                                       DataKeyNames="nro_op,id_imputacion,id_pv,cod_estatus_op,fec_baja,fec_autoriz_sector,fec_autoriz_contab,fec_pago">
@@ -181,7 +181,7 @@
                                             <asp:CheckBox runat="server"  Width="0px" ID="chk_SelOp" Checked='<%# Eval("tSEl_Val") %>' Visible="false" />
                                     </ItemTemplate>
                                 </asp:TemplateField >
-                                    <asp:TemplateField HeaderText="" ItemStyle-HorizontalAlign="Center">
+                                <asp:TemplateField HeaderText="" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                             <asp:CheckBox runat="server" Width="20px" ID="chk_Impresion" Checked='<%# Eval("sn_impresion") %>'/>
                                             <asp:Image runat="server" ID="imgPrint" ImageUrl="../Images/icono-impresion_mini.png" ToolTip="Selecciona para Imprimir OP" />
@@ -189,53 +189,76 @@
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="Nro Op">
                                     <ItemTemplate>
-                                        <asp:LinkButton runat="server" ID="lbl_OrdenPago" Text='<%# Eval("nro_op")%>' CssClass="DetExh Link" Height="25px"></asp:LinkButton>
+                                        <asp:LinkButton runat="server" ID="lbl_OrdenPago" Text='<%# Eval("nro_op")%>' Font-Size="12px" Font-Bold="true" Width="45px" CssClass="Centro Link"></asp:LinkButton>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                             
-                                <asp:TemplateField HeaderText="Autorizaciones" >
+                                <asp:TemplateField HeaderText="" >
                                     <ItemTemplate>      
-                                        <asp:Label runat="server" ID="lbl_InfoPol" Text="Firmas" Width="145px" CssClass="DetAdicional"  ForeColor="White" BackColor="#284775"></asp:Label>                                                                                
-                                        <div id="div_Firmas" style="text-align:left;height:160px; width:145px" runat="server" class="Cobranza masterTooltip">
-                                            <%--<asp:CheckBox runat="server" Text=" Solicitante"  Width="130px"  Height="28px" ID="chk_FirmaSol" Checked='<%# Eval("sn_Solicita") %>' Enabled='<%# Eval("GeneraOp_Solicitante") %>' OnCheckedChanged="chk_FirmaSol_CheckedChanged" AutoPostBack="true"/>
-                                            <asp:CheckBox runat="server" Text=" Jefe Inmediato" Width="90px"  Height="28px" ID="chk_FirmaJefe" Checked='<%# Eval("sn_JefeDirecto") %>' Enabled='<%# Eval("Autoriza_JefeInmediato") %>' OnCheckedChanged="chk_FirmaJefe_CheckedChanged" AutoPostBack =" true"/>
-                                            <asp:LinkButton runat="server" ID="lnk_SelJefe" Text="Cambiar" Height="15px" Width="10px" ForeColor="Blue" OnClick="lnk_SelJefe_Click"></asp:LinkButton>
-                                            <asp:CheckBox runat="server" Text=" Sub Dirección" Width="90px" Height="28px" ID="chk_SubDir" Checked='<%# Eval("sn_Subdirector") %>' Enabled='<%# Eval("Autoriza_Subdirector") %>' OnCheckedChanged="chk_SubDir_CheckedChanged" AutoPostBack="true" />
-                                            <asp:LinkButton runat="server" ID="lnk_SelSubDir" Text="Cambiar" Height="15px" Width="10px" ForeColor="Blue" OnClick="lnk_SelSubDir_Click"></asp:LinkButton>
-                                            <asp:CheckBox runat="server" Text=" Director Area" Width="90px" Height="28px" ID="chk_FirmaDir" Checked='<%# Eval("sn_DireccionArea") %>' Enabled='<%# Eval("Autoriza_DirArea") %>' OnCheckedChanged="chk_FirmaDir_CheckedChanged" AutoPostBack="true" />
-                                            <asp:LinkButton runat="server" ID="lnk_SelDir" Text="Cambiar" Height="15px" Width="10px" ForeColor="Blue" OnClick="lnk_SelDir_Click"></asp:LinkButton>
-                                            <asp:CheckBox runat="server" Text=" Contabilidad" Width="90px" Height="28px" ID="chk_FirmaCon" Checked='<%# Eval("sn_Contabilidad") %>' Enabled='<%# Eval("Autoriza_Conta") %>' OnCheckedChanged="chk_FirmaCon_CheckedChanged" AutoPostBack="true"/>
-                                            <asp:LinkButton runat="server" ID="lnk_SelConta" Text="Cambiar" Height="15px" Width="10px" ForeColor="Blue" OnClick="lnk_SelConta_Click"></asp:LinkButton>--%>
+                                        <div class="cuadro-subtitulo-grid">
+                                            FIRMAS
+                                        </div>                                                                                
+                                        <div id="div_Firmas" style="text-align:left;height:160px; width:200px" runat="server" class="masterTooltip">
+                                            <asp:CheckBox runat="server" Text=" Solicitante"  Width="130px"  ID="chk_FirmaSol" Checked='<%# Eval("sn_Solicita") %>' Enabled='<%# Eval("GeneraOp_Solicitante") %>' OnCheckedChanged="chk_FirmaSol_CheckedChanged" AutoPostBack="true"/>
+                                            <asp:CheckBox runat="server" Text=" Jefe Inmediato" Width="130px"  ID="chk_FirmaJefe" Checked='<%# Eval("sn_JefeDirecto") %>' Enabled='<%# Eval("Autoriza_JefeInmediato") %>' OnCheckedChanged="chk_FirmaJefe_CheckedChanged" AutoPostBack =" true"/>
+                                            <asp:LinkButton runat="server" ID="lnk_SelJefe" Text="Cambiar"  Width="10px"  OnClick="lnk_SelJefe_Click"></asp:LinkButton>
+                                            <asp:CheckBox runat="server" Text=" SubDirección" Width="130px"  ID="chk_SubDir" Checked='<%# Eval("sn_Subdirector") %>' Enabled='<%# Eval("Autoriza_Subdirector") %>' OnCheckedChanged="chk_SubDir_CheckedChanged" AutoPostBack="true" />
+                                            <asp:LinkButton runat="server" ID="lnk_SelSubDir" Text="Cambiar" Width="10px"  OnClick="lnk_SelSubDir_Click"></asp:LinkButton>
+                                            <asp:CheckBox runat="server" Text=" Director Area" Width="130px" ID="chk_FirmaDir" Checked='<%# Eval("sn_DireccionArea") %>' Enabled='<%# Eval("Autoriza_DirArea") %>' OnCheckedChanged="chk_FirmaDir_CheckedChanged" AutoPostBack="true" />
+                                            <asp:LinkButton runat="server" ID="lnk_SelDir" Text="Cambiar" Width="10px"  OnClick="lnk_SelDir_Click"></asp:LinkButton>
+                                            <asp:CheckBox runat="server" Text=" Contabilidad" Width="130px"  ID="chk_FirmaCon" Checked='<%# Eval("sn_Contabilidad") %>' Enabled='<%# Eval("Autoriza_Conta") %>' OnCheckedChanged="chk_FirmaCon_CheckedChanged" AutoPostBack="true"/>
+                                            <asp:LinkButton runat="server" ID="lnk_SelConta" Text="Cambiar"  Width="10px"  OnClick="lnk_SelConta_Click"></asp:LinkButton>
                                         </div>
                                     </ItemTemplate>
                                 </asp:TemplateField>
 
                                 <asp:TemplateField HeaderText="">
                                     <ItemTemplate>
-                                        <asp:Label runat="server" ID="lbl_Detalle" Text="Detalle" CssClass="DetAdicional" Font-Bold="true"  ForeColor="White" BackColor="#284775"  ></asp:Label>                                                                                
-                                        <div id="div_Detalle" style="text-align:left;height:160px;width:625px" runat="server" class="Cobranza masterTooltip" >
-                                            <label style="width:100px">Asegurado:</label>
-                                            <asp:Label runat="server" ID="lbl_Asegurado" Text='<%# Eval("Asegurado")%>' Height="25px" Width="490px"></asp:Label>
-                                            <label style="width:100px">Ramos Contables:</label>
-                                                <asp:DropDownList ID="ddl_RamosContables"  Height="25px" Width="350px" runat="server"></asp:DropDownList>
+                                        <div class="cuadro-subtitulo-grid">
+                                            DETALLE
+                                        </div>
+                                                                                               
+                                        <div id="div_Detalle" style="text-align:left;height:160px;width:700px" runat="server" class="masterTooltip" >
+                                            <asp:Label runat="server" CssClass="col-md-1" Width="120px" Text="Asegurado:" Font-Bold="true"></asp:Label>
+                                            <asp:Label runat="server" ID="lbl_Asegurado" Text='<%# Eval("Asegurado")%>' Width="530px"></asp:Label>
+
+                                            <div class="clear padding5"></div>
+
+                                            <asp:Label runat="server" CssClass="col-md-1" Width="120px" Text="Ramos Contables:" Font-Bold="true"></asp:Label>
+                                            <asp:DropDownList ID="ddl_RamosContables"  Width="480px" runat="server" CssClass="estandar-control-grid"></asp:DropDownList>
                                             <asp:Label ID="lbl_RamosContables" Text='<%# DataBinder.Eval(Container.DataItem, "Ramos") %>' Visible="false" runat="server"/>
-                                            <br /><br />
-                                            <label style="width:100px">Broker / Compañía:</label>
-                                            <asp:Label runat="server" ID="lbl_BroCia" Text='<%# Eval("txt_otros") %>' Width="480px" Height="25px" ></asp:Label>
-                                            <br />
-                                            <label style="width:100px">Moneda:</label>
-                                            <asp:Label runat="server" ID="lbl_Moneda" Text='<%# Eval("Moneda") %>' Width="200px" Height="25px" ></asp:Label>
-                                            <label style="width:100px">Fecha de Pago:</label>
-                                            <asp:Label runat="server" ID="lbl_FechaPago" Text='<%# Eval("Fec_Pago") %>' Width="200px" Height="25px" ></asp:Label>
-                                            <br />
-                                            <label style="width:100px">Monto:</label>
-                                            <asp:Label runat="server" ID="lbl_Monto" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("Monto")))  %>' Width="200px"></asp:Label>
-                                            <label style="width:100px">Estatus:</label>
-                                            <asp:Label runat="server" ID="lbl_Estatus" Text='<%# Eval("estatus") %>' Width="50px"></asp:Label>
+                                            
+                                            <div class="clear padding5"></div>
+                                            
+                                            <asp:Label runat="server" CssClass="col-md-1" Width="120px" Text="Broker/Compañia:" Font-Bold="true"></asp:Label>
+                                            <asp:Label runat="server" ID="lbl_BroCia" Text='<%# Eval("txt_otros") %>' Width="530px" ></asp:Label>
+                                            
+                                            <div class="clear padding5"></div>
+
+                                            <asp:Label runat="server" CssClass="col-md-1" Width="120px" Text="Moneda:" Font-Bold="true"></asp:Label>
+                                            <asp:Label runat="server" ID="lbl_Moneda" Text='<%# Eval("Moneda") %>' Width="110px"  ></asp:Label>
+                                            <asp:Label runat="server" Width="100px" Text="Fecha Generación:" Font-Bold="true"></asp:Label>
+                                            <asp:Label runat="server" ID="lbl_FechaGenera" Text='<%# Eval("fec_generacion") %>' Width="110px"></asp:Label>
+                                            <asp:Label runat="server" Width="100px" Text="Fecha de Pago:" Font-Bold="true"></asp:Label>
+                                            <asp:Label runat="server" ID="lbl_FechaPago" Text='<%# Eval("Fec_Pago") %>' Width="110px"></asp:Label>
+                                            
+                                            <div class="clear padding5"></div>
+                                            
+                                            <asp:Label runat="server" CssClass="col-md-1" Width="120px" Text="Monto:" Font-Bold="true"></asp:Label>
+                                            <asp:Label runat="server" ID="lbl_Monto" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("Monto")))  %>' Width="110px"></asp:Label>
+                                            <asp:Label runat="server" Width="100px" Text="Estatus:" Font-Bold="true"></asp:Label>
+                                            <asp:Label runat="server" ID="lbl_Estatus" Text='<%# Eval("estatus") %>' Width="250px"></asp:Label>
+
+                                            <div class="clear padding5"></div>
+                                            <asp:Label runat="server" CssClass="col-md-1" Width="120px" Text="Descripción:" Font-Bold="true"></asp:Label>
+                                            <asp:label ID="lbl_Detalle" Text='<%# Eval("Texto") %>' Width="480px" Height="80px" runat="server"></asp:label>
+
                                         </div>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
+                            <PagerStyle CssClass="pager" />
+                            <PagerSettings Mode="NumericFirstLast" FirstPageText="Primero" LastPageText="Ultimo" />
                         </asp:GridView>
                     </asp:Panel>
               </ContentTemplate>
