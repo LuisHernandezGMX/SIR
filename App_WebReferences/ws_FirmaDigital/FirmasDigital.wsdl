@@ -4,8 +4,8 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/FirmasDigital/FirmasDigital.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/FirmasDigital/FirmasDigital.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/FirmasDigital/FirmasDigital.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
-      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/FirmasDigital/FirmasDigital.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/FirmasDigital/FirmasDigital.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/FirmasDigital/FirmasDigital.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IFirmasDigital_ActualizaFirma_InputMessage">
