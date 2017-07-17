@@ -42,6 +42,11 @@
         <xs:element minOccurs="0" name="FiltroUsuario" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="FiltroEstatus" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="FiltroFecGen" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cod_moneda" type="xs:int" />
+        <xs:element minOccurs="0" name="FiltroAseg" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FiltroMonto" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FitroNatOP" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="intFirmas" type="xs:int" />
         <xs:element minOccurs="0" name="CodUsuPermiso" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>

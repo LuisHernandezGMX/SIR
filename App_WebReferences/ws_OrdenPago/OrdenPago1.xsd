@@ -10,18 +10,20 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Abona" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Asegurado" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Autoriza_Conta" type="xs:int" />
-      <xs:element minOccurs="0" name="Autoriza_DirArea" type="xs:int" />
-      <xs:element minOccurs="0" name="Autoriza_JefeInmediato" type="xs:int" />
-      <xs:element minOccurs="0" name="Autoriza_Subdirector" type="xs:int" />
+      <xs:element minOccurs="0" name="Autoriza_Conta" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Autoriza_DirArea" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Autoriza_JefeInmediato" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Autoriza_Subdirector" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Baja" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Banco" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Cheque" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Contabilidad" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="GeneraOp_Solicitante" type="xs:int" />
+      <xs:element minOccurs="0" name="GeneraOp_Solicitante" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Impuesto" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="Moneda" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Monto" type="xs:decimal" />
       <xs:element minOccurs="0" name="OrigenPago" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PathFirma" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Ramos" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Sector" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SigMon" nillable="true" type="xs:string" />
@@ -69,12 +71,18 @@
       <xs:element minOccurs="0" name="nro_doc" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="nro_nit" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="nro_op" type="xs:int" />
-      <xs:element minOccurs="0" name="nro_recibo_imputacion" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="nro_recibo" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="sn_Contabilidad" type="xs:boolean" />
+      <xs:element minOccurs="0" name="sn_Contabilidad_Aux" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_DireccionArea" type="xs:boolean" />
+      <xs:element minOccurs="0" name="sn_DireccionArea_Aux" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_JefeDirecto" type="xs:boolean" />
+      <xs:element minOccurs="0" name="sn_JefeDirecto_Aux" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_Solicita" type="xs:boolean" />
+      <xs:element minOccurs="0" name="sn_Solicita_Aux" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_Subdirector" type="xs:boolean" />
+      <xs:element minOccurs="0" name="sn_Subdirector_Aux" type="xs:boolean" />
+      <xs:element minOccurs="0" name="sn_devolucion" type="xs:int" />
       <xs:element minOccurs="0" name="sn_impresion" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_transferencia" type="xs:decimal" />
       <xs:element minOccurs="0" name="tSEl_Val" nillable="true" type="xs:boolean" />

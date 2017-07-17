@@ -82,6 +82,8 @@ function PageLoadMaster() {
     $(".nro_pol").attr({ maxLength: 7 });
     $(".nro_pol").css('text-align', 'center');
 
+    $(".Monto").numeric({ decimal: false, negative: false, min: 0, max: 999999999999 });
+
     $(".Centro").css('text-align', 'center');
     $(".Derecha").css('text-align', 'right');
 
