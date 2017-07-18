@@ -155,3 +155,7 @@ $("body").on("keydown", "[id$=txtSearchAse]", function (e) {
         minLength: 1
     });
 });
+
+$("body").on("click", "[id*=gvd_LstOrdenPago] .OrdenPago", function () {
+    fn_AbrirModal('#OrdenPago');
+});

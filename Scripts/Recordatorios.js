@@ -73,8 +73,9 @@ $("body").on("click", ".contraer", function () {
 $("body").on("click", ".expandir", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
     var id = this.id.substr(this.id.length - 1)
-});
     fn_CambiaEstado(id, "0");
+});
+    
 
 //Detecta evento de Confirmación en Controles con dicha Clase
 $("body").on("click", ".Confirmacion", function () {

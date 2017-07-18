@@ -705,4 +705,43 @@ Partial Class OrdenPago_FirmasElectronicas
         strLink += strParametros
         Return strLink
     End Function
+
+    Private Sub gvd_LstOrdenPago_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvd_LstOrdenPago.RowCommand
+        Try
+            If e.CommandName = "OrdenPago" Then
+                Dim Index As Integer = e.CommandSource.NamingContainer.RowIndex
+                With gvd_LstOrdenPago
+                    lbl_Orden.Text = .DataKeys(Index)("nro_op")
+                    txt_FechaEstimada.Text = .DataKeys(Index)("fec_estim_pago")
+                    lbl_Transaccion.Text = IIf(IsDBNull(.DataKeys(Index)("nro_recibo")), "", .DataKeys(Index)("nro_recibo"))
+                    lbl_Compañia.Text = .DataKeys(Index)("txt_cheque_a_nom")
+                    lbl_Sucursal.Text = .DataKeys(Index)("SucEmision")
+                    lbl_MonedaPago.Text = .DataKeys(Index)("Moneda")
+                    lbl_TipoCambio.Text = .DataKeys(Index)("imp_cambio")
+                    lbl_MontoPago.Text = .DataKeys(Index)("Monto")
+                    lbl_Impuesto.Text = .DataKeys(Index)("Impuesto")
+                    lbl_Clave.Text = .DataKeys(Index)("nro_cuenta_transferencia")
+                    hid_codCuenta.Value = .DataKeys(Index)("id_cuenta_bancaria")
+                    lbl_Banco.Text = .DataKeys(Index)("Banco")
+                    hid_codBanco.Value = .DataKeys(Index)("cod_banco_transferencia")
+
+                    lbl_UsuAnula.Text = IIf(IsDBNull(.DataKeys(Index)("Baja")), "", .DataKeys(Index)("Baja"))
+                    lbl_FecAnula.Text = IIf(IsDBNull(.DataKeys(Index)("fec_baja")), "", .DataKeys(Index)("fec_baja"))
+
+                    lbl_Texto.Text = .DataKeys(Index)("Texto")
+
+                    lbl_UsuReaseguro.Text = IIf(IsDBNull(.DataKeys(Index)("Solicitante")), "", .DataKeys(Index)("Solicitante"))
+                    lbl_FecReaseguro.Text = IIf(IsDBNull(.DataKeys(Index)("fec_generacion")), "", .DataKeys(Index)("fec_generacion"))
+
+                    lbl_UsuTesoreria.Text = IIf(IsDBNull(.DataKeys(Index)("Tesoreria")), "", .DataKeys(Index)("Tesoreria"))
+                    lbl_FecTesoreria.Text = IIf(IsDBNull(.DataKeys(Index)("fec_autoriz_sector")), "", .DataKeys(Index)("fec_autoriz_sector"))
+
+                    lbl_UsuContabilidad.Text = IIf(IsDBNull(.DataKeys(Index)("Contabilidad")), "", .DataKeys(Index)("Contabilidad"))
+                    lbl_FecContabilidad.Text = IIf(IsDBNull(.DataKeys(Index)("fec_autoriz_contab")), "", .DataKeys(Index)("fec_autoriz_contab"))
+                End With
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
 End Class
