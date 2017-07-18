@@ -470,8 +470,17 @@
                         <asp:GridView runat="server" ID="gvd_LstOrdenPago" AutoGenerateColumns="false"  ShowHeader="false"
                                       CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
                                       GridLines="Horizontal"  ShowHeaderWhenEmpty="true" AllowPaging="true" PageSize="10" 
-                                      DataKeyNames="nro_op,id_imputacion,id_pv,cod_estatus_op,fec_baja,fec_autoriz_sector,fec_autoriz_contab,fec_pago,
-                                                    sn_Solicita_Aux,sn_JefeDirecto_Aux,sn_Subdirector_Aux,sn_DireccionArea_Aux,sn_Contabilidad_Aux">
+                                      DataKeyNames="nro_op,fec_estim_pago,SucEmision,cod_sector,Sector,
+                                                    Moneda,imp_cambio,Monto,Impuesto,
+                                                    id_imputacion,nro_recibo,fec_baja,txt_cheque_a_nom,
+                                                    Solicitante,Tesoreria,Contabilidad,Baja,cod_concepto_anulacion,
+                                                    id_cuenta_bancaria,nro_cuenta_transferencia,cod_banco_transferencia,Banco,
+                                                    fec_generacion,fec_autoriz_sector,fec_autoriz_contab,fec_pago,
+                                                    cod_estatus_op,estatus,Texto,sn_devolucion,sn_Solicita,sn_Solicita_Aux,
+                                                    cod_usuario_solicita,sn_JefeDirecto,sn_JefeDirecto_Aux,cod_usuario_jefe,sn_DireccionArea,
+                                                    sn_DireccionArea_Aux,cod_usuario_director,sn_SubDirector,sn_Subdirector_Aux,cod_usuario_subdir,
+                                                    sn_Contabilidad,sn_Contabilidad_Aux,cod_usuario_contabilidad,GeneraOp_Solicitante,
+                                                    Autoriza_JefeInmediato,Autoriza_DirArea,Autoriza_Subdirector,Autoriza_Conta,PathFirma,id_pv">
                             <Columns>
                                 <asp:TemplateField HeaderText="" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
@@ -486,7 +495,7 @@
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="Nro Op">
                                     <ItemTemplate>
-                                        <asp:LinkButton runat="server" ID="lbl_OrdenPago" Text='<%# Eval("nro_op")%>' Font-Size="12px" Font-Bold="true" Width="45px" data-toggle="modal" data-target="#OrdenPago" CssClass="Centro"></asp:LinkButton>
+                                        <asp:LinkButton runat="server"  CommandName="OrdenPago" ID="lbl_OrdenPago" Text='<%# Eval("nro_op")%>' Font-Size="12px" Font-Bold="true" Width="45px" CssClass="OrdenPago Centro"></asp:LinkButton>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                             
@@ -643,6 +652,8 @@
          </ContentTemplate>
        </asp:UpdatePanel>
     </div>
+
+
     <div id="OrdenPago" style="width:1000px; height:620px"  class="modal-orden">
         <asp:UpdatePanel runat="server" ID="upOrdenPago" >
          <ContentTemplate>
@@ -658,15 +669,16 @@
                      </div>
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Transacción:"></asp:Label>
-                         <asp:label runat="server" ID="lbl_Transaccion" CssClass="estandar-control Centro" Width="90px"></asp:label>
+                         <asp:textbox runat="server" ID="lbl_Transaccion" Enabled="false"  CssClass="estandar-control Centro" Width="90px"></asp:textbox>
                      </div>
                  </div>
                  
+                 <div class="clear padding5"></div>
 
                  <div class="row">
                      <div class="col-md-6">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Compañia:"></asp:Label>
-                         <asp:label runat="server" ID="lbl_Compañia" CssClass="estandar-control" Width="375px"></asp:label>
+                         <asp:textbox runat="server" ID="lbl_Compañia" Enabled="false"  CssClass="estandar-control" Width="375px"></asp:textbox>
                      </div>
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Fecha Estimada:"></asp:Label>
@@ -674,30 +686,32 @@
                      </div>
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Sucursal:"></asp:Label>
-                         <asp:Label runat="server" ID="lbl_Sucursal" CssClass="estandar-control" Width="100px"></asp:Label>
+                         <asp:textbox runat="server" ID="lbl_Sucursal" Enabled="false"  CssClass="estandar-control" Width="100px"></asp:textbox>
                      </div>
                  </div>
 
-           
+                <div class="clear padding5"></div>
 
                  <div class="row">
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Moneda:"></asp:Label>
-                         <asp:label runat="server" ID="lbl_MonedaPago" CssClass="estandar-control" Width="100px"></asp:label>
+                         <asp:textbox runat="server" ID="lbl_MonedaPago" Enabled="false"  CssClass="estandar-control" Width="100px"></asp:textbox>
                      </div>
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Tipo Cambio:"></asp:Label>
-                         <asp:label runat="server" ID="lbl_TipoCambio" CssClass="estandar-control Derecha" Width="90px"></asp:label>
+                         <asp:textbox runat="server" ID="lbl_TipoCambio" Enabled="false"  CssClass="estandar-control Derecha" Width="90px"></asp:textbox>
                      </div>
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Monto a Pagar:"></asp:Label>
-                         <asp:label runat="server" ID="lbl_MontoPago" CssClass="estandar-control Derecha" Width="100px"></asp:label>
+                         <asp:textbox runat="server" ID="lbl_MontoPago" Enabled="false"  CssClass="estandar-control Derecha" Width="100px"></asp:textbox>
                      </div>
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Impuesto ISR:"></asp:Label>
-                         <asp:label runat="server" ID="lbl_Impuesto" CssClass="estandar-control Derecha" Width="100px"></asp:label>
+                         <asp:textbox runat="server" ID="lbl_Impuesto" Enabled="false"  CssClass="estandar-control Derecha" Width="100px"></asp:textbox>
                      </div>
                  </div>
+
+                 <div class="clear padding5"></div>
 
                  <div class="row">
                      <div class="col-md-6">
@@ -714,12 +728,13 @@
                  <div class="clear padding5"></div>
                  <div class="row">
                      <div class="col-md-3">
+                         <asp:HiddenField runat="server" ID="hid_codCuenta" Value="" />
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Clave:"></asp:Label>
-                         <asp:label runat="server" ID="lbl_Clave" CssClass="estandar-control Derecha" Width="135px"></asp:label>
+                         <asp:textbox runat="server" ID="lbl_Clave" Enabled="false"  CssClass="estandar-control" Width="135px"></asp:textbox>
                      </div>
                      <div class="col-md-1">
                          <asp:Label runat="server" ID="lbl_EtiqBanco" CssClass="col-md-1 etiqueta-control"  Width="90px" Text="Banco:"></asp:Label>
-                         <asp:LinkButton id="btn_CambiaCuenta" runat="server" Height="26px" Visible="False" class="btn botones CuentaBanco" data-toggle="modal" data-target="#EsperaModal">
+                         <asp:LinkButton id="btn_CambiaCuenta"  runat="server" Height="26px" Visible="False" class="btn botones CuentaBanco" data-toggle="modal" data-target="#EsperaModal">
                             <span>
                                 <img class="btn-modificar"/>
                                 Cambiar
@@ -727,18 +742,20 @@
                         </asp:LinkButton>
                      </div>
                      <div class="col-md-2">
-                         <asp:label runat="server" ID="lbl_Banco" CssClass="estandar-control Derecha"  Width="123px"></asp:label>
+                         <asp:HiddenField runat="server" ID="hid_codBanco" Value="" />
+                         <asp:textbox runat="server" ID="lbl_Banco" Enabled="false"  CssClass="estandar-control"  Width="123px"></asp:textbox>
                      </div>
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Usuario Anula:"></asp:Label>
-                         <asp:label runat="server" ID="lbl_UsuAnula" CssClass="estandar-control Derecha" Width="100px"></asp:label>
+                         <asp:textbox runat="server" ID="lbl_UsuAnula" Enabled="false" CssClass="estandar-control" Width="100px"></asp:textbox>
                      </div>
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Fecha Baja:"></asp:Label>
-                         <asp:label runat="server" ID="lbl_FecAnula" CssClass="estandar-control Derecha" Width="100px"></asp:label>
+                         <asp:textbox runat="server" ID="lbl_FecAnula" Enabled="false" CssClass="estandar-control Centro" Width="100px"></asp:textbox>
                      </div>
                  </div>
 
+                 <div class="clear padding5"></div>
                         
                  <div class="cuadro-subtitulo-grid">
                     DETALLE DE PAGO
@@ -747,7 +764,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div style="width:100%;height:50px;overflow-y:scroll;overflow-x:hidden;">
-                            <asp:label runat="server" ID="lbl_Texto" CssClass="etiqueta-simple" Width="100%"></asp:label>
+                            <asp:label runat="server" ID="lbl_Texto" CssClass="texto-body" Width="100%"></asp:label>
                          </div>
                      </div>
                  </div>
@@ -758,7 +775,7 @@
                  </div>
                  <div class="clear padding5"></div>
                  <asp:Panel runat="server" ID="pnl_Contabilidad" Width="100%" Height="190px" ScrollBars="Both">
-                      <asp:GridView runat="server" ID="GridView1" AutoGenerateColumns="false"  ShowHeader="false"
+                      <asp:GridView runat="server" ID="gvd_Contabilidad" AutoGenerateColumns="false"  ShowHeader="false"
                                       CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
                                       GridLines="Horizontal"  ShowHeaderWhenEmpty="true" AllowPaging="true"
                                       DataKeyNames="id_pv">
@@ -810,7 +827,7 @@
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="%Pri">
                                     <ItemTemplate>
-                                        <asp:textbox runat="server" ID="lbl_PrimaTotal" Text='<%# Eval("prima_total") %>' CssClass="NoDisplay"></asp:textbox>
+                                        <asp:textbox runat="server" ID="lbl_PrimaTotal" Text='<%# Eval("prima_cedida") %>' CssClass="NoDisplay"></asp:textbox>
                                         <asp:textbox runat="server" ID="lbl_prcPrima" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("pje_pri")))%>' Width="60px" CssClass="estandar-control"></asp:textbox>
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -821,7 +838,7 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="%Com">
                                     <ItemTemplate>
-                                        <asp:textbox runat="server" ID="lbl_ComisionTotal" Text='<%# Eval("comision_total") %>' CssClass="NoDisplay" ></asp:textbox>
+                                        <asp:textbox runat="server" ID="lbl_ComisionTotal" Text='<%# Eval("comisiones") %>' CssClass="NoDisplay" ></asp:textbox>
                                         <asp:textbox runat="server" ID="lbl_prcCom" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("pje_com")))  %>' Width="60px" CssClass="estandar-control"></asp:textbox>
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -837,7 +854,7 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Retención">
                                     <ItemTemplate>
-                                        <asp:textbox runat="server" ID="lbl_pjeRet" Text='<%# Eval("pje_ret") %>'  CssClass="NoDisplay" ></asp:textbox>
+                                        <asp:textbox runat="server" ID="lbl_pjeRet" Text='<%# Eval("pje_isr") %>'  CssClass="NoDisplay" ></asp:textbox>
                                         <asp:label runat="server" ID="lbl_MontoISR" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("monto_isr")))  %>' Width="80px" CssClass="estandar-control"></asp:label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -853,10 +870,10 @@
                         </div>
                         <div class="clear padding5"></div>
                         <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Usuario:"></asp:Label>
-                        <asp:label runat="server" ID="lbl_UsuReaseguro" CssClass="estandar-control" Width="220px"></asp:label>
-                        <div class="clear padding3"></div>
+                        <asp:textbox runat="server" ID="lbl_UsuReaseguro" Enabled="false" CssClass="estandar-control" Width="220px"></asp:textbox>
+                        <div class="clear padding5"></div>
                         <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Fecha:"></asp:Label>
-                        <asp:label runat="server" ID="lbl_FecReaseguro" CssClass="estandar-control Centro" Width="100px"></asp:label>
+                        <asp:textbox runat="server" ID="lbl_FecReaseguro" Enabled="false" CssClass="estandar-control Centro" Width="100px"></asp:textbox>
                      </div>
                      <div class="col-md-4">
                          <div class="cuadro-subtitulo-grid">
@@ -864,10 +881,10 @@
                         </div>
                         <div class="clear padding5"></div>
                         <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Usuario:"></asp:Label>
-                        <asp:label runat="server" ID="lbl_UsuTesoreria" CssClass="estandar-control" Width="220px"></asp:label>
-                        <div class="clear padding3"></div>
+                        <asp:textbox runat="server" ID="lbl_UsuTesoreria" Enabled="false" CssClass="estandar-control" Width="220px"></asp:textbox>
+                        <div class="clear padding5"></div>
                         <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Fecha:"></asp:Label>
-                        <asp:label runat="server" ID="lbl_FecTesoreria" CssClass="estandar-control Centro" Width="100px"></asp:label>
+                        <asp:textbox runat="server" ID="lbl_FecTesoreria" Enabled="false" CssClass="estandar-control Centro" Width="100px"></asp:textbox>
                      </div>
                      <div class="col-md-4">
                          <div class="cuadro-subtitulo-grid">
@@ -875,10 +892,10 @@
                         </div>
                         <div class="clear padding5"></div>
                         <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Usuario:"></asp:Label>
-                        <asp:label runat="server" ID="lbl_UsuContabilidad" CssClass="estandar-control" Width="220px"></asp:label>
-                        <div class="clear padding3"></div>
+                        <asp:textbox runat="server" ID="lbl_UsuContabilidad" Enabled="false" CssClass="estandar-control" Width="220px"></asp:textbox>
+                        <div class="clear padding5"></div>
                         <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Fecha:"></asp:Label>
-                        <asp:label runat="server" ID="lbl_FecContabilidad" CssClass="estandar-control Centro" Width="100px"></asp:label>
+                        <asp:textbox runat="server" ID="lbl_FecContabilidad" Enabled="false" CssClass="estandar-control Centro" Width="100px"></asp:textbox>
                      </div>
                  </div>
              </div>

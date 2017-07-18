@@ -23,7 +23,7 @@ Partial Class Pages_Login
                 ArmaMenu = ArmaMenu & "</ul></li>" & separador & "<li>" & row("descripcion") & "<ul>"
                 blnBase = False
             Else
-                If Not IsDBNull(row("ubicacion")) Then
+                If Len(row("ubicacion")) > 0 Then
                     ArmaMenu = ArmaMenu & "<li><a href=""" & row("ubicacion") & """>" & row("descripcion") & "</a></li> "
                 Else
                     If blnBase = True Then

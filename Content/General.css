@@ -526,6 +526,12 @@ color:#003A5D;
 font-family: Myriad Pro;
 }
 
+.texto-body{
+font-size:11.5px;
+color:#555;
+font-family: Myriad Pro;
+}
+
 .estandar-control{
 display:block;
 width:100%;
