@@ -17,6 +17,19 @@
             </div>
             <div class="clear padding10"></div>
             <div style="width:1000px; min-width:1000px; overflow-x:hidden">
+                 <div class="row">
+                    <div class="col-md-6">
+                        <asp:UpdatePanel runat="server" ID="upd_Opc">
+                         <ContentTemplate>
+                               <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="150px">Tipo de Consulta: </asp:Label>
+                                <asp:RadioButton runat="server" ID="opcFac" CssClass="etiqueta-control" Text=" Facultativos" Checked="true" OnCheckedChanged="opcFac_CheckedChanged" AutoPostBack ="true" />
+                                <asp:RadioButton runat="server" ID="opcEsp" CssClass="etiqueta-control" Text=" Especiales" OnCheckedChanged="opcEsp_CheckedChanged" AutoPostBack ="true" />
+                         </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                </div>
+            
+             <div class="clear padding10"></div>
 
             <%--Seccion 1--%>
               <div class="row">
