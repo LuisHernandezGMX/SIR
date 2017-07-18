@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://siigmxapp02/WS_GMX/Generales/Generales.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
+  <xs:import schemaLocation="http://siigmxapp02/WS_GMX/Generales/Generales.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System" />
   <xs:element name="InsertaBitacora">
     <xs:complexType>
       <xs:sequence>
@@ -252,6 +253,21 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="ObtieneParametroResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ActualizaParametro">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cPAR_Id" type="xs:int" />
+        <xs:element minOccurs="0" name="cPAR_Value" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ActualizaParametroResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="ActualizaParametroResult" nillable="true" type="q10:ArrayOfNullableOfint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
