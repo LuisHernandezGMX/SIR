@@ -527,7 +527,7 @@ font-family: Myriad Pro;
 }
 
 .texto-body{
-font-size:11.5px;
+font-size:11px;
 color:#555;
 font-family: Myriad Pro;
 }
@@ -593,6 +593,9 @@ outline:0;
 box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
 }
 
+
+
+
 .botones{
 font-family:'Myriad Pro'; 
 font-size:12px; 
@@ -616,6 +619,7 @@ border-color: red;
 .botones:focus,fieldset[disabled] 
 .botones[disabled],.botones[readonly],fieldset[disabled] 
 .botones{background-color:#eee;opacity:1}
+
 
 .boton-mediano{
 width:100px; 
@@ -688,6 +692,32 @@ width: 14px; height: 14px;
 background-image: url(../Images/print_mini.png);
 width: 14px; height: 14px;
 }
+
+.btn-filtro{
+background-image: url(../Images/filtro_mini.png);
+width: 14px; height: 14px;
+}
+
+.btn-filtro-verde{
+background-image: url(../Images/filtro_mini_verde.png);
+width: 14px; height: 14px;
+}
+
+.btn-todos{
+background-image: url(../Images/todos_mini.png);
+width: 14px; height: 14px;
+}
+
+.btn-ninguno{
+background-image: url(../Images/ninguno_mini.png);
+width: 14px; height: 14px;
+}
+
+.btn-cargar{
+background-image: url(../Images/cargar_mini.png);
+width: 14px; height: 14px;
+}
+
 /*-------------------------------------------------------------------------------------------*/
 
 
@@ -707,6 +737,7 @@ color: White;
 border: none 0px transparent;
 height: 20px;
 text-align: center;
+align-content: center;
 font-size: 12px;
 }
 
