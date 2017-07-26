@@ -5,6 +5,7 @@
       <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IReporteador_InsertaVersionReporte_InputMessage">
@@ -13,16 +14,35 @@
   <wsdl:message name="IReporteador_InsertaVersionReporte_OutputMessage">
     <wsdl:part name="parameters" element="tns:InsertaVersionReporteResponse" />
   </wsdl:message>
+  <wsdl:message name="IReporteador_ObtieneVersionReporte_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneVersionReporte" />
+  </wsdl:message>
+  <wsdl:message name="IReporteador_ObtieneVersionReporte_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneVersionReporteResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReporteador">
     <wsdl:operation name="InsertaVersionReporte">
       <wsdl:input wsaw:Action="http://tempuri.org/IReporteador/InsertaVersionReporte" message="tns:IReporteador_InsertaVersionReporte_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReporteador/InsertaVersionReporteResponse" message="tns:IReporteador_InsertaVersionReporte_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneVersionReporte">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReporteador/ObtieneVersionReporte" message="tns:IReporteador_ObtieneVersionReporte_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReporteador/ObtieneVersionReporteResponse" message="tns:IReporteador_ObtieneVersionReporte_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReporteador" type="tns:IReporteador">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="InsertaVersionReporte">
       <soap:operation soapAction="http://tempuri.org/IReporteador/InsertaVersionReporte" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneVersionReporte">
+      <soap:operation soapAction="http://tempuri.org/IReporteador/ObtieneVersionReporte" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

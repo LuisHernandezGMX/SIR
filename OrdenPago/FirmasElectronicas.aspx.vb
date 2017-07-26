@@ -2,6 +2,15 @@
 Imports Mensaje
 Partial Class OrdenPago_FirmasElectronicas
     Inherits System.Web.UI.Page
+    Private Enum Filtros
+        Poliza = 0
+        Capa
+        Ramo
+        Contrato
+        Broker
+        Compañia
+        Cuota
+    End Enum
 
     Public Property dtOrdenPago() As DataTable
         Get
@@ -9,6 +18,24 @@ Partial Class OrdenPago_FirmasElectronicas
         End Get
         Set(ByVal value As DataTable)
             Session("dtOrdenPago") = value
+        End Set
+    End Property
+
+    Public Property dtContabilidad() As DataTable
+        Get
+            Return Session("dtContabilidad")
+        End Get
+        Set(ByVal value As DataTable)
+            Session("dtContabilidad") = value
+        End Set
+    End Property
+
+    Public Property EstadoOP() As Integer
+        Get
+            Return Session("EstadoOP")
+        End Get
+        Set(ByVal value As Integer)
+            Session("EstadoOP") = value
         End Set
     End Property
 
@@ -23,12 +50,18 @@ Partial Class OrdenPago_FirmasElectronicas
     Private Enum Operacion
         Ninguna
         Consulta
+        Modifica
+        Anula
     End Enum
+
+
+    Private dtConsulta As DataTable
 
     Private Sub OrdenPago_FirmasElectronicas_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
             EdoControl(Operacion.Ninguna)
             dtOrdenPago = Nothing
+            EstadoOP = Operacion.Ninguna
             Funciones.LlenaCatDDL(ddl_Moneda, "Mon")
             ddl_Moneda.SelectedValue = -1
         End If
@@ -103,7 +136,7 @@ Partial Class OrdenPago_FirmasElectronicas
         End If
 
 
-        dtOrdenPago = Funciones.Lista_A_Datatable(ws.ObtieneOrdenPago(FiltroOP, FiltroBrokerCia, "", FiltroPoliza, FiltroFechaPago, FiltroRamoContable, FiltroUsuario, FiltroEstatus, FiltroFechaGen, ddl_Moneda.SelectedValue, Trim(txtSearchAse.Text), FiltroMonto, FiltroNatOP, intFirmas, "OSANDOVAL").ToList)
+        dtOrdenPago = Funciones.Lista_A_Datatable(ws.ObtieneOrdenPago(FiltroOP, FiltroBrokerCia, "", FiltroPoliza, FiltroFechaPago, FiltroRamoContable, FiltroUsuario, FiltroEstatus, FiltroFechaGen, ddl_Moneda.SelectedValue, Trim(txtSearchAse.Text), FiltroMonto, FiltroNatOP, intFirmas, Master.cod_usuario).ToList)
 
         Return dtOrdenPago
     End Function
@@ -203,6 +236,66 @@ Partial Class OrdenPago_FirmasElectronicas
         End Select
     End Sub
 
+    Private Sub EdoControlOP(ByVal intOperacion As Integer)
+        Select Case intOperacion
+            Case Operacion.Consulta, Operacion.Anula
+                lbl_Orden.Enabled = False
+                txt_FechaEstimada.Enabled = False
+                btn_CambiaCuenta.Visible = False
+                lbl_EtiqBanco.Visible = True
+                lbl_Texto.Enabled = False
+                EdoCapturaMontos(False)
+
+                btn_Consultar.Visible = False
+                btn_Modificar.Visible = IIf(intOperacion = Operacion.Anula, False, True)
+                btn_Anular.Visible = IIf(intOperacion = Operacion.Anula, False, True)
+
+                btn_Guardar.Visible = IIf(intOperacion = Operacion.Consulta, False, True)
+                btn_Cancelar.Visible = True
+
+            Case Operacion.Modifica
+                lbl_Orden.Enabled = False
+                txt_FechaEstimada.Enabled = True
+                btn_CambiaCuenta.Visible = True
+                lbl_EtiqBanco.Visible = False
+                lbl_Texto.Enabled = True
+                EdoCapturaMontos(True)
+
+                btn_Consultar.Visible = False
+                btn_Modificar.Visible = False
+                btn_Anular.Visible = False
+
+                btn_Guardar.Visible = True
+                btn_Cancelar.Visible = True
+
+            Case Operacion.Ninguna
+                lbl_Orden.Enabled = True
+                txt_FechaEstimada.Enabled = False
+                btn_CambiaCuenta.Visible = False
+                lbl_EtiqBanco.Visible = True
+                lbl_Texto.Enabled = False
+
+                btn_Consultar.Visible = True
+                btn_Modificar.Visible = True
+                btn_Anular.Visible = True
+
+                btn_Guardar.Visible = False
+                btn_Cancelar.Visible = False
+
+        End Select
+    End Sub
+
+    Private Sub EdoCapturaMontos(blnEstado As Boolean)
+        'Si son devoluciones
+        If hid_devolucion.Value = -1 Then blnEstado = False
+
+        For Each row In gvd_Contabilidad.Rows
+            DirectCast(row.FindControl("txt_prcPrima"), TextBox).Enabled = blnEstado
+            DirectCast(row.FindControl("txt_Prima"), TextBox).Enabled = blnEstado
+            DirectCast(row.FindControl("txt_prcCom"), TextBox).Enabled = blnEstado
+            DirectCast(row.FindControl("txt_Comision"), TextBox).Enabled = blnEstado
+        Next
+    End Sub
 
     Private Sub btn_BuscaOP_Click(sender As Object, e As EventArgs) Handles btn_BuscaOP.Click
         Try
@@ -248,17 +341,17 @@ Partial Class OrdenPago_FirmasElectronicas
             Dim arrNumOrds() As String = strNumOrds.Split("|")
 
             'UPDATE A FIRMAS
-            If Not arrNumOrds(0) = vbNullString Then ActualizaFirmas(arrNumOrds(0), TipoPersona.Solicitante, "OSANDOVAL") 'Solicitante
-            If Not arrNumOrds(1) = vbNullString Then ActualizaFirmas(arrNumOrds(1), TipoPersona.JefeInmediato, "OSANDOVAL") 'Jefe Inmediato
-            If Not arrNumOrds(3) = vbNullString Then ActualizaFirmas(arrNumOrds(3), TipoPersona.DirectorArea, "OSANDOVAL") 'Dirección Area
-            If Not arrNumOrds(2) = vbNullString Then ActualizaFirmas(arrNumOrds(2), TipoPersona.Subdirector, "OSANDOVAL") 'Subdirector
-            If Not arrNumOrds(4) = vbNullString Then ActualizaFirmas(arrNumOrds(4), TipoPersona.Contabilidad, "OSANDOVAL") 'Contabilidad
+            If Not arrNumOrds(0) = vbNullString Then ActualizaFirmas(arrNumOrds(0), TipoPersona.Solicitante, Master.cod_usuario) 'Solicitante
+            If Not arrNumOrds(1) = vbNullString Then ActualizaFirmas(arrNumOrds(1), TipoPersona.JefeInmediato, Master.cod_usuario) 'Jefe Inmediato
+            If Not arrNumOrds(3) = vbNullString Then ActualizaFirmas(arrNumOrds(3), TipoPersona.DirectorArea, Master.cod_usuario) 'Dirección Area
+            If Not arrNumOrds(2) = vbNullString Then ActualizaFirmas(arrNumOrds(2), TipoPersona.Subdirector, Master.cod_usuario) 'Subdirector
+            If Not arrNumOrds(4) = vbNullString Then ActualizaFirmas(arrNumOrds(4), TipoPersona.Contabilidad, Master.cod_usuario) 'Contabilidad
 
             'ENVIO DE MAILS
-            If Not arrNumOrds(0) = vbNullString Then EnviaMail(TipoPersona.JefeInmediato, "OSANDOVAL", arrNumOrds(0)) 'Del Solicitante Al Jefe Inmediato
-            If Not arrNumOrds(1) = vbNullString Then EnviaMail(TipoPersona.DirectorArea, "OSANDOVAL", arrNumOrds(1))  'Del Jefe Inmediato Al Director
-            If Not arrNumOrds(3) = vbNullString Then EnviaMail(TipoPersona.Contabilidad, "OSANDOVAL", arrNumOrds(3))  'Del Dir Area A Contabilidad
-            If Not arrNumOrds(2) = vbNullString Then EnviaMail(TipoPersona.Contabilidad, "OSANDOVAL", arrNumOrds(2))  'Del Subdirector A Contabilidad
+            If Not arrNumOrds(0) = vbNullString Then EnviaMail(TipoPersona.JefeInmediato, Master.cod_usuario, arrNumOrds(0)) 'Del Solicitante Al Jefe Inmediato
+            If Not arrNumOrds(1) = vbNullString Then EnviaMail(TipoPersona.DirectorArea, Master.cod_usuario, arrNumOrds(1))  'Del Jefe Inmediato Al Director
+            If Not arrNumOrds(3) = vbNullString Then EnviaMail(TipoPersona.Contabilidad, Master.cod_usuario, arrNumOrds(3))  'Del Dir Area A Contabilidad
+            If Not arrNumOrds(2) = vbNullString Then EnviaMail(TipoPersona.Contabilidad, Master.cod_usuario, arrNumOrds(2))  'Del Subdirector A Contabilidad
 
             'Recarga de Grid en tiempo real despues de la Firma
             Funciones.LlenaGrid(gvd_LstOrdenPago, dtOrdenPago)
@@ -709,37 +802,484 @@ Partial Class OrdenPago_FirmasElectronicas
     Private Sub gvd_LstOrdenPago_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvd_LstOrdenPago.RowCommand
         Try
             If e.CommandName = "OrdenPago" Then
+
+                hid_Poliza.Value = ""
+                hid_Capa.Value = ""
+                hid_Ramo.Value = ""
+                hid_Contrato.Value = ""
+                hid_Broker.Value = ""
+                hid_Compañia.Value = ""
+                hid_Cuota.Value = ""
+
                 Dim Index As Integer = e.CommandSource.NamingContainer.RowIndex
-                With gvd_LstOrdenPago
-                    lbl_Orden.Text = .DataKeys(Index)("nro_op")
-                    txt_FechaEstimada.Text = .DataKeys(Index)("fec_estim_pago")
-                    lbl_Transaccion.Text = IIf(IsDBNull(.DataKeys(Index)("nro_recibo")), "", .DataKeys(Index)("nro_recibo"))
-                    lbl_Compañia.Text = .DataKeys(Index)("txt_cheque_a_nom")
-                    lbl_Sucursal.Text = .DataKeys(Index)("SucEmision")
-                    lbl_MonedaPago.Text = .DataKeys(Index)("Moneda")
-                    lbl_TipoCambio.Text = .DataKeys(Index)("imp_cambio")
-                    lbl_MontoPago.Text = .DataKeys(Index)("Monto")
-                    lbl_Impuesto.Text = .DataKeys(Index)("Impuesto")
-                    lbl_Clave.Text = .DataKeys(Index)("nro_cuenta_transferencia")
-                    hid_codCuenta.Value = .DataKeys(Index)("id_cuenta_bancaria")
-                    lbl_Banco.Text = .DataKeys(Index)("Banco")
-                    hid_codBanco.Value = .DataKeys(Index)("cod_banco_transferencia")
 
-                    lbl_UsuAnula.Text = IIf(IsDBNull(.DataKeys(Index)("Baja")), "", .DataKeys(Index)("Baja"))
-                    lbl_FecAnula.Text = IIf(IsDBNull(.DataKeys(Index)("fec_baja")), "", .DataKeys(Index)("fec_baja"))
+                If Consulta(gvd_LstOrdenPago.DataKeys(Index)("nro_op")) Then
+                    EstadoOP = Operacion.Consulta
+                    LLenaControl()
+                    EdoControlOP(Operacion.Consulta)
+                End If
 
-                    lbl_Texto.Text = .DataKeys(Index)("Texto")
+                'With gvd_LstOrdenPago
+                '    lbl_Orden.Text = .DataKeys(Index)("nro_op")
+                '    hid_devolucion.Value = .DataKeys(Index)("sn_devolucion")
+                '    txt_Estatus.Text = .DataKeys(Index)("cod_estatus_op") & ".-" & .DataKeys(Index)("estatus")
+                '    txt_FechaEstimada.Text = .DataKeys(Index)("fec_estim_pago")
+                '    lbl_Transaccion.Text = IIf(IsDBNull(.DataKeys(Index)("nro_recibo")), "", .DataKeys(Index)("nro_recibo"))
+                '    lbl_Compañia.Text = .DataKeys(Index)("txt_cheque_a_nom")
+                '    lbl_Sucursal.Text = .DataKeys(Index)("SucEmision")
+                '    lbl_MonedaPago.Text = .DataKeys(Index)("Moneda")
+                '    lbl_TipoCambio.Text = .DataKeys(Index)("imp_cambio")
+                '    lbl_MontoPago.Text = .DataKeys(Index)("Monto")
+                '    lbl_Impuesto.Text = .DataKeys(Index)("Impuesto")
+                '    lbl_Clave.Text = .DataKeys(Index)("nro_cuenta_transferencia")
+                '    hid_codCuenta.Value = .DataKeys(Index)("id_cuenta_bancaria")
+                '    lbl_Banco.Text = .DataKeys(Index)("Banco")
+                '    hid_codBanco.Value = .DataKeys(Index)("cod_banco_transferencia")
 
-                    lbl_UsuReaseguro.Text = IIf(IsDBNull(.DataKeys(Index)("Solicitante")), "", .DataKeys(Index)("Solicitante"))
-                    lbl_FecReaseguro.Text = IIf(IsDBNull(.DataKeys(Index)("fec_generacion")), "", .DataKeys(Index)("fec_generacion"))
+                '    lbl_UsuAnula.Text = IIf(IsDBNull(.DataKeys(Index)("Baja")), "", .DataKeys(Index)("Baja"))
+                '    lbl_FecAnula.Text = IIf(IsDBNull(.DataKeys(Index)("fec_baja")), "", .DataKeys(Index)("fec_baja"))
 
-                    lbl_UsuTesoreria.Text = IIf(IsDBNull(.DataKeys(Index)("Tesoreria")), "", .DataKeys(Index)("Tesoreria"))
-                    lbl_FecTesoreria.Text = IIf(IsDBNull(.DataKeys(Index)("fec_autoriz_sector")), "", .DataKeys(Index)("fec_autoriz_sector"))
+                '    lbl_Texto.Text = .DataKeys(Index)("Texto")
 
-                    lbl_UsuContabilidad.Text = IIf(IsDBNull(.DataKeys(Index)("Contabilidad")), "", .DataKeys(Index)("Contabilidad"))
-                    lbl_FecContabilidad.Text = IIf(IsDBNull(.DataKeys(Index)("fec_autoriz_contab")), "", .DataKeys(Index)("fec_autoriz_contab"))
-                End With
+                '    lbl_UsuReaseguro.Text = IIf(IsDBNull(.DataKeys(Index)("Solicitante")), "", .DataKeys(Index)("Solicitante"))
+                '    lbl_FecReaseguro.Text = IIf(IsDBNull(.DataKeys(Index)("fec_generacion")), "", .DataKeys(Index)("fec_generacion"))
+
+                '    lbl_UsuTesoreria.Text = IIf(IsDBNull(.DataKeys(Index)("Tesoreria")), "", .DataKeys(Index)("Tesoreria"))
+                '    lbl_FecTesoreria.Text = IIf(IsDBNull(.DataKeys(Index)("fec_autoriz_sector")), "", .DataKeys(Index)("fec_autoriz_sector"))
+
+                '    lbl_UsuContabilidad.Text = IIf(IsDBNull(.DataKeys(Index)("Contabilidad")), "", .DataKeys(Index)("Contabilidad"))
+                '    lbl_FecContabilidad.Text = IIf(IsDBNull(.DataKeys(Index)("fec_autoriz_contab")), "", .DataKeys(Index)("fec_autoriz_contab"))
+                'End With
+
             End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+    Protected Sub DespliegaFiltro(sender As Object, e As ImageClickEventArgs)
+        Try
+            Dim elemento As String
+            Dim Datos As New ArrayList()
+            Dim filtrados() As String = {""}
+            Dim blnTodo As Boolean = True
+            Dim Generales() As String = Split(sender.AlternateText, "|")
+
+            hid_Filtro.Value = Generales(2)
+
+            Select Case hid_Filtro.Value
+                Case Filtros.Poliza
+                    filtrados = Split(hid_Poliza.Value, "|")
+                Case Filtros.Capa
+                    filtrados = Split(hid_Capa.Value, "|")
+                Case Filtros.Ramo
+                    filtrados = Split(hid_Ramo.Value, "|")
+                Case Filtros.Contrato
+                    filtrados = Split(hid_Contrato.Value, "|")
+                Case Filtros.Broker
+                    filtrados = Split(hid_Broker.Value, "|")
+                Case Filtros.Compañia
+                    filtrados = Split(hid_Compañia.Value, "|")
+                Case Filtros.Cuota
+                    filtrados = Split(hid_Cuota.Value, "|")
+            End Select
+
+            'Titulo de la Ventana
+            lbl_TituloFiltro.Text = "Filtrado " & Generales(1)
+
+            chk_Filtro.Items.Clear()
+            For Each row In gvd_Contabilidad.Rows
+                elemento = gvd_Contabilidad.DataKeys(row.RowIndex)(Generales(0))
+                If Not Datos.Contains(elemento) Then
+                    Datos.Add(elemento)
+                    chk_Filtro.Items.Add(elemento)
+                End If
+            Next
+
+            If filtrados.Length = 1 Then
+                blnTodo = True
+            End If
+
+            For Each item In chk_Filtro.Items
+                If filtrados.Contains(item.Text) Or blnTodo = True Then
+                    item.Selected = True
+                End If
+            Next
+
+            Funciones.AbrirModal("#Filtro")
+            Funciones.EjecutaFuncion("fn_Desplazable('#Filtro');")
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Function GeneraDTContabilidad() As DataTable
+        GeneraDTContabilidad = New DataTable
+        With GeneraDTContabilidad
+            .Columns.Add("nro_reas")
+            .Columns.Add("id_imputacion")
+            .Columns.Add("txt_clave")
+            .Columns.Add("txt_clave_isr")
+            .Columns.Add("cod_cpto_pri")
+            .Columns.Add("cod_deb_cred_pri")
+            .Columns.Add("prima_cedida")
+            .Columns.Add("pje_pri")
+            .Columns.Add("prima")
+            .Columns.Add("cod_cpto_com")
+            .Columns.Add("cod_deb_cred_com")
+            .Columns.Add("comisiones")
+            .Columns.Add("pje_com")
+            .Columns.Add("comision")
+            .Columns.Add("prima_neta")
+            .Columns.Add("pje_isr")
+            .Columns.Add("monto_isr")
+            .Columns.Add("cod_broker")
+            .Columns.Add("broker")
+            .Columns.Add("cod_cia")
+            .Columns.Add("compañia")
+            .Columns.Add("cod_profit_center")
+            .Columns.Add("cod_subprofit_center")
+            .Columns.Add("id_contrato")
+            .Columns.Add("nro_tramo")
+            .Columns.Add("id_pv")
+            .Columns.Add("Poliza")
+            .Columns.Add("cod_suc_stro")
+            .Columns.Add("aaaa_ejercicio_stro")
+            .Columns.Add("nro_stro")
+            .Columns.Add("aaaamm_movimiento")
+            .Columns.Add("cod_ramo_contable")
+            .Columns.Add("ramo_contable")
+            .Columns.Add("nro_cuota")
+            .Columns.Add("fecha_fac")
+            .Columns.Add("cod_major")
+            .Columns.Add("cod_minor")
+            .Columns.Add("cod_class_peril")
+            .Columns.Add("sn_ogis")
+            .Columns.Add("nro_layer")
+            .Columns.Add("monto_isr_dev")
+        End With
+    End Function
+
+    Private Sub btn_aceptar_filtro_Click(sender As Object, e As EventArgs) Handles btn_aceptar_filtro.Click
+        Try
+            Dim blnTodo As Boolean = True
+
+            Dim hid_Control As HiddenField
+            hid_Control = New HiddenField
+
+            Select Case hid_Filtro.Value
+                Case Filtros.Poliza
+                    hid_Control = hid_Poliza
+                Case Filtros.Capa
+                    hid_Control = hid_Capa
+                Case Filtros.Ramo
+                    hid_Control = hid_Ramo
+                Case Filtros.Contrato
+                    hid_Control = hid_Contrato
+                Case Filtros.Broker
+                    hid_Control = hid_Broker
+                Case Filtros.Compañia
+                    hid_Control = hid_Compañia
+                Case Filtros.Cuota
+                    hid_Control = hid_Cuota
+            End Select
+
+            hid_Control.Value = ""
+
+            For Each item In chk_Filtro.Items
+                If item.Selected = True Then
+                    hid_Control.Value = hid_Control.Value & IIf(Len(hid_Control.Value) > 0, "|", "") & item.Text
+                Else
+                    blnTodo = False
+                End If
+            Next
+
+            If blnTodo = True Then
+                hid_Control.Value = ""
+            End If
+
+
+            Dim Consulta As String = "id_pv > '0'"
+            Consulta = Consulta & ArmaConsulta("poliza", Split(hid_Poliza.Value, "|"))
+            Consulta = Consulta & ArmaConsulta("nro_layer", Split(hid_Capa.Value, "|"))
+            Consulta = Consulta & ArmaConsulta("ramo_contable", Split(hid_Ramo.Value, "|"))
+            Consulta = Consulta & ArmaConsulta("id_Contrato", Split(hid_Contrato.Value, "|"))
+            Consulta = Consulta & ArmaConsulta("broker", Split(hid_Broker.Value, "|"))
+            Consulta = Consulta & ArmaConsulta("compañia", Split(hid_Compañia.Value, "|"))
+            Consulta = Consulta & ArmaConsulta("nro_cuota", Split(hid_Cuota.Value, "|"))
+
+            Dim myRow() As Data.DataRow
+            myRow = dtContabilidad.Select(Consulta)
+
+            Dim dtDatos As DataTable
+            dtDatos = GeneraDTContabilidad()
+
+            For Each item In myRow
+                dtDatos.Rows.Add(item("nro_reas"), item("id_imputacion"), item("txt_clave"), item("txt_clave_isr"), item("cod_cpto_pri"), item("cod_deb_cred_pri"), item("prima_cedida"), item("pje_pri"),
+                                 item("prima"), item("cod_cpto_com"), item("cod_deb_cred_com"), item("comisiones"), item("pje_com"), item("comision"), item("prima_neta"), item("pje_isr"),
+                                 item("monto_isr"), item("cod_broker"), item("broker"), item("cod_cia"), item("compañia"), item("cod_profit_center"), item("cod_subprofit_center"), item("id_contrato"),
+                                 item("nro_tramo"), item("id_pv"), item("Poliza"), item("cod_suc_stro"), item("aaaa_ejercicio_stro"), item("nro_stro"), item("aaaamm_movimiento"), item("cod_ramo_contable"),
+                                 item("ramo_contable"), item("nro_cuota"), item("fecha_fac"), item("cod_major"), item("cod_minor"), item("cod_class_peril"), item("sn_ogis"), item("nro_layer"), item("monto_isr_dev"))
+            Next
+
+            Funciones.LlenaGrid(gvd_Contabilidad, dtDatos)
+
+            Dim btn_Poliza = DirectCast(gvd_Contabilidad.HeaderRow.FindControl("btn_Poliza"), ImageButton)
+            Dim btn_Capa = DirectCast(gvd_Contabilidad.HeaderRow.FindControl("btn_Capa"), ImageButton)
+            Dim btn_Ramo = DirectCast(gvd_Contabilidad.HeaderRow.FindControl("btn_Ramo"), ImageButton)
+            Dim btn_Contrato = DirectCast(gvd_Contabilidad.HeaderRow.FindControl("btn_Contrato"), ImageButton)
+            Dim btn_Broker = DirectCast(gvd_Contabilidad.HeaderRow.FindControl("btn_Broker"), ImageButton)
+            Dim btn_Compañia = DirectCast(gvd_Contabilidad.HeaderRow.FindControl("btn_Compañia"), ImageButton)
+            Dim btn_Cuota = DirectCast(gvd_Contabilidad.HeaderRow.FindControl("btn_Cuota"), ImageButton)
+
+
+            btn_Poliza.CssClass = IIf(Len(hid_Poliza.Value) > 0, "btn-filtro-verde", "btn-filtro")
+            btn_Capa.CssClass = IIf(Len(hid_Capa.Value) > 0, "btn-filtro-verde", "btn-filtro")
+            btn_Ramo.CssClass = IIf(Len(hid_Ramo.Value) > 0, "btn-filtro-verde", "btn-filtro")
+            btn_Contrato.CssClass = IIf(Len(hid_Contrato.Value) > 0, "btn-filtro-verde", "btn-filtro")
+            btn_Broker.CssClass = IIf(Len(hid_Broker.Value) > 0, "btn-filtro-verde", "btn-filtro")
+            btn_Compañia.CssClass = IIf(Len(hid_Compañia.Value) > 0, "btn-filtro-verde", "btn-filtro")
+            btn_Cuota.CssClass = IIf(Len(hid_Cuota.Value) > 0, "btn-filtro-verde", "btn-filtro")
+
+            EdoControlOP(EstadoOP)
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Public Function ArmaConsulta(ByVal campo As String, ByVal elementos() As String) As String
+        Dim Consulta As String = ""
+
+        For Each item In elementos
+            If Len(item) > 0 Then
+                Consulta = Consulta & IIf(Len(Consulta) > 0, " OR ", " AND (") & campo & " = '" & item & "'"
+            End If
+        Next
+
+        If Len(Consulta) > 0 Then
+            Consulta = Consulta & ")"
+        End If
+
+        Return Consulta
+    End Function
+
+    Private Sub btn_NingunoFiltro_Click(sender As Object, e As EventArgs) Handles btn_NingunoFiltro.Click
+        Try
+            For Each item In chk_Filtro.Items
+                item.Selected = False
+            Next
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_TodosFiltro_Click(sender As Object, e As EventArgs) Handles btn_TodosFiltro.Click
+        Try
+            For Each item In chk_Filtro.Items
+                item.Selected = True
+            Next
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Function Consulta(ByVal nro_op As Integer) As Boolean
+        Dim ws As New ws_OrdenPago.OrdenPagoClient
+        Consulta = False
+        dtConsulta = New DataTable
+        dtConsulta = Funciones.Lista_A_Datatable(ws.ObtieneOrdenPago(nro_op, "", "", "", "", "", "", "", "", -1, "", "", "", -1, "").ToList)
+
+        If dtConsulta.Rows.Count > 0 Then
+            dtContabilidad = Funciones.Lista_A_Datatable(ws.ObtieneContabilidadOP(nro_op).ToList)
+            Consulta = True
+        End If
+    End Function
+
+    Private Sub LLenaControl()
+        With dtConsulta
+            lbl_Orden.Text = .Rows(0)("nro_op")
+            hid_devolucion.Value = .Rows(0)("sn_devolucion")
+            txt_Estatus.Text = .Rows(0)("cod_estatus_op") & ".-" & .Rows(0)("estatus")
+            txt_FechaEstimada.Text = .Rows(0)("fec_estim_pago")
+            lbl_Transaccion.Text = IIf(IsDBNull(.Rows(0)("nro_recibo")), "", .Rows(0)("nro_recibo"))
+            lbl_Compañia.Text = .Rows(0)("txt_cheque_a_nom")
+            lbl_Sucursal.Text = .Rows(0)("SucEmision")
+            lbl_MonedaPago.Text = .Rows(0)("Moneda")
+            lbl_TipoCambio.Text = .Rows(0)("imp_cambio")
+            lbl_MontoPago.Text = .Rows(0)("Monto")
+            lbl_Impuesto.Text = .Rows(0)("Impuesto")
+            lbl_Clave.Text = .Rows(0)("nro_cuenta_transferencia")
+            hid_codCuenta.Value = .Rows(0)("id_cuenta_bancaria")
+            lbl_Banco.Text = .Rows(0)("Banco")
+            hid_codBanco.Value = .Rows(0)("cod_banco_transferencia")
+
+            lbl_UsuAnula.Text = IIf(IsDBNull(.Rows(0)("Baja")), "", .Rows(0)("Baja"))
+            lbl_FecAnula.Text = IIf(IsDBNull(.Rows(0)("fec_baja")), "", .Rows(0)("fec_baja"))
+
+            lbl_Texto.Text = .Rows(0)("Texto")
+
+            lbl_UsuReaseguro.Text = IIf(IsDBNull(.Rows(0)("Solicitante")), "", .Rows(0)("Solicitante"))
+            lbl_FecReaseguro.Text = IIf(IsDBNull(.Rows(0)("fec_generacion")), "", .Rows(0)("fec_generacion"))
+
+            lbl_UsuTesoreria.Text = IIf(IsDBNull(.Rows(0)("Tesoreria")), "", .Rows(0)("Tesoreria"))
+            lbl_FecTesoreria.Text = IIf(IsDBNull(.Rows(0)("fec_autoriz_sector")), "", .Rows(0)("fec_autoriz_sector"))
+
+            lbl_UsuContabilidad.Text = IIf(IsDBNull(.Rows(0)("Contabilidad")), "", .Rows(0)("Contabilidad"))
+            lbl_FecContabilidad.Text = IIf(IsDBNull(.Rows(0)("fec_autoriz_contab")), "", .Rows(0)("fec_autoriz_contab"))
+
+            Funciones.LlenaGrid(gvd_Contabilidad, dtContabilidad)
+        End With
+    End Sub
+
+    Private Sub LimpiaControl()
+        With dtConsulta
+            hid_devolucion.Value = 0
+            txt_Estatus.Text = vbNullString
+            txt_FechaEstimada.Text = vbNullString
+            lbl_Transaccion.Text = vbNullString
+            lbl_Compañia.Text = vbNullString
+            lbl_Sucursal.Text = vbNullString
+            lbl_MonedaPago.Text = vbNullString
+            lbl_TipoCambio.Text = vbNullString
+            lbl_MontoPago.Text = vbNullString
+            lbl_Impuesto.Text = vbNullString
+            lbl_Clave.Text = vbNullString
+            hid_codCuenta.Value = vbNullString
+            lbl_Banco.Text = vbNullString
+            hid_codBanco.Value = vbNullString
+
+            lbl_UsuAnula.Text = vbNullString
+            lbl_FecAnula.Text = vbNullString
+
+            lbl_Texto.Text = vbNullString
+
+            lbl_UsuReaseguro.Text = vbNullString
+            lbl_FecReaseguro.Text = vbNullString
+
+            lbl_UsuTesoreria.Text = vbNullString
+            lbl_FecTesoreria.Text = vbNullString
+
+            lbl_UsuContabilidad.Text = vbNullString
+            lbl_FecContabilidad.Text = vbNullString
+
+            dtContabilidad = Nothing
+            Funciones.LlenaGrid(gvd_Contabilidad, dtContabilidad)
+
+            lbl_UsuReaseguro.Text = vbNullString
+            lbl_FecReaseguro.Text = vbNullString
+
+            lbl_UsuTesoreria.Text = vbNullString
+            lbl_FecTesoreria.Text = vbNullString
+
+            lbl_UsuContabilidad.Text = vbNullString
+            lbl_FecContabilidad.Text = vbNullString
+
+        End With
+    End Sub
+
+    Private Function ValidaCampoRequerido() As Boolean
+        ValidaCampoRequerido = False
+
+        If lbl_Orden.Text = vbNullString Then
+            Mensaje.MuestraMensaje("Firmas Electrónicas", "Debe especificar la Orden de Pago", TipoMsg.Advertencia)
+            lbl_Orden.Focus()
+            Exit Function
+        End If
+        ValidaCampoRequerido = True
+    End Function
+
+    Private Sub btn_Modificar_Click(sender As Object, e As EventArgs) Handles btn_Modificar.Click
+        Try
+            If ValidaCampoRequerido() Then
+                If Consulta(lbl_Orden.Text) Then
+                    EstadoOP = Operacion.Modifica
+                    LLenaControl()
+
+                    If ValidaEstatusOP() = False Then
+                        EstadoOP = Operacion.Consulta
+                    End If
+
+                    EdoControlOP(EstadoOP)
+                Else
+                    Mensaje.MuestraMensaje("Firmas Electrónicas", "La Orden de Pago no existe", TipoMsg.Advertencia)
+                End If
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_Anular_Click(sender As Object, e As EventArgs) Handles btn_Anular.Click
+        Try
+            If ValidaCampoRequerido() Then
+                If Consulta(lbl_Orden.Text) Then
+                    EstadoOP = Operacion.Anula
+                    LLenaControl()
+
+                    If ValidaEstatusOP() = False Then
+                        EstadoOP = Operacion.Consulta
+                    End If
+
+                    EdoControlOP(EstadoOP)
+                Else
+                    Mensaje.MuestraMensaje("Firmas Electrónicas", "La Orden de Pago no existe", TipoMsg.Advertencia)
+                End If
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Function ValidaEstatusOP() As Boolean
+
+        If Val(txt_Estatus.Text) > 2 Then
+            EdoControlOP(Operacion.Consulta)
+            Mensaje.MuestraMensaje("Firmas Electrónicas", "El estatus de esta Órden de Pago es: " & txt_Estatus.Text & ", por lo tanto no puede ser modificada o anulada", TipoMsg.Advertencia)
+            Return False
+        End If
+
+        If IsDate(lbl_FecAnula.Text) Then
+            EdoControlOP(Operacion.Consulta)
+            Mensaje.MuestraMensaje("Firmas Electrónicas", "Esta Orden de Pago fue anulada con anterioridad, solo puede ser consultada", TipoMsg.Advertencia)
+            Return False
+        End If
+
+        If IsDate(lbl_FecContabilidad.Text) Then
+            EdoControlOP(Operacion.Consulta)
+            Mensaje.MuestraMensaje("Firmas Electrónicas", "Esta Orden de Pago ya fue autorizada por Contabilidad, solo puede ser consultada", TipoMsg.Advertencia)
+            Return False
+        End If
+
+        If IsDate(lbl_FecTesoreria.Text) Then
+            Mensaje.MuestraMensaje("Firmas Electrónicas", "Esta Orden de Pago ya fue autorizada por Tesoreria, al modificarla perdera dicha autorización", TipoMsg.Advertencia)
+            Return True
+        End If
+
+        Return True
+    End Function
+
+    Private Sub btn_Consultar_Click(sender As Object, e As EventArgs) Handles btn_Consultar.Click
+        Try
+            If ValidaCampoRequerido() Then
+                If Consulta(lbl_Orden.Text) Then
+                    EstadoOP = Operacion.Consulta
+                    LLenaControl()
+                    EdoControlOP(Operacion.Consulta)
+                Else
+                    Mensaje.MuestraMensaje("Firmas Electrónicas", "La Orden de Pago no existe", TipoMsg.Advertencia)
+                End If
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_Cancelar_Click(sender As Object, e As EventArgs) Handles btn_Cancelar.Click
+        Try
+            EstadoOP = Operacion.Ninguna
+            LimpiaControl()
+            EdoControlOP(EstadoOP)
         Catch ex As Exception
             Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
         End Try

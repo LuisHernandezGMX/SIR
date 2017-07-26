@@ -116,6 +116,10 @@ min-width: 100px;
 color: white;
 }
 
+.home{
+background-image:url(../Images/menu_home-up.png);
+}
+
 .separador{
 width:2px;
 height:23px;

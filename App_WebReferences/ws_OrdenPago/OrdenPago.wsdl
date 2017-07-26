@@ -25,6 +25,12 @@
   <wsdl:message name="IOrdenPago_ObtieneOrdenPago_OutputMessage">
     <wsdl:part name="parameters" element="tns:ObtieneOrdenPagoResponse" />
   </wsdl:message>
+  <wsdl:message name="IOrdenPago_ObtieneContabilidadOP_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneContabilidadOP" />
+  </wsdl:message>
+  <wsdl:message name="IOrdenPago_ObtieneContabilidadOP_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneContabilidadOPResponse" />
+  </wsdl:message>
   <wsdl:portType name="IOrdenPago">
     <wsdl:operation name="InsertaPolNoPago">
       <wsdl:input wsaw:Action="http://tempuri.org/IOrdenPago/InsertaPolNoPago" message="tns:IOrdenPago_InsertaPolNoPago_InputMessage" />
@@ -37,6 +43,10 @@
     <wsdl:operation name="ObtieneOrdenPago">
       <wsdl:input wsaw:Action="http://tempuri.org/IOrdenPago/ObtieneOrdenPago" message="tns:IOrdenPago_ObtieneOrdenPago_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IOrdenPago/ObtieneOrdenPagoResponse" message="tns:IOrdenPago_ObtieneOrdenPago_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneContabilidadOP">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOrdenPago/ObtieneContabilidadOP" message="tns:IOrdenPago_ObtieneContabilidadOP_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOrdenPago/ObtieneContabilidadOPResponse" message="tns:IOrdenPago_ObtieneContabilidadOP_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IOrdenPago" type="tns:IOrdenPago">
@@ -61,6 +71,15 @@
     </wsdl:operation>
     <wsdl:operation name="ObtieneOrdenPago">
       <soap:operation soapAction="http://tempuri.org/IOrdenPago/ObtieneOrdenPago" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneContabilidadOP">
+      <soap:operation soapAction="http://tempuri.org/IOrdenPago/ObtieneContabilidadOP" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

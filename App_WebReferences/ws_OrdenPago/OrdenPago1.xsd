@@ -95,4 +95,56 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="spS_OrdenPago_Result" nillable="true" type="tns:spS_OrdenPago_Result" />
+  <xs:complexType name="ArrayOfspS_ContabilidadOP_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_ContabilidadOP_Result" nillable="true" type="tns:spS_ContabilidadOP_Result" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfspS_ContabilidadOP_Result" nillable="true" type="tns:ArrayOfspS_ContabilidadOP_Result" />
+  <xs:complexType name="spS_ContabilidadOP_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Poliza" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="aaaa_ejercicio_stro" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="aaaamm_movimiento" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="broker" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cod_broker" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_cia" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_class_peril" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_cpto_com" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_cpto_pri" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_deb_cred_com" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cod_deb_cred_pri" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cod_major" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_minor" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_profit_center" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_ramo_contable" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_subprofit_center" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_suc_stro" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="comision" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="comisiones" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="compañia" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="fecha_fac" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="id_contrato" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id_imputacion" type="xs:int" />
+      <xs:element minOccurs="0" name="id_pv" type="xs:int" />
+      <xs:element minOccurs="0" name="monto_isr" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="monto_isr_dev" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="nro_cuota" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="nro_layer" nillable="true" type="xs:short" />
+      <xs:element minOccurs="0" name="nro_reas" type="xs:int" />
+      <xs:element minOccurs="0" name="nro_stro" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="nro_tramo" type="xs:decimal" />
+      <xs:element minOccurs="0" name="pje_com" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="pje_isr" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="pje_pri" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="prima" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="prima_cedida" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="prima_neta" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ramo_contable" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="sn_ogis" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="txt_clave" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="txt_clave_isr" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="spS_ContabilidadOP_Result" nillable="true" type="tns:spS_ContabilidadOP_Result" />
 </xs:schema>

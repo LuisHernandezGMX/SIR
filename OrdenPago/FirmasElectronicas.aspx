@@ -653,6 +653,57 @@
        </asp:UpdatePanel>
     </div>
 
+    <div id="Filtro" style="width:420px; height:270px"  class="modal-catalogo">
+        <asp:UpdatePanel runat="server" ID="upFiltro" >          
+             <ContentTemplate>
+                <div class="cuadro-titulo" style="height:30px">
+                    <button type="button" class="close"  data-dismiss="modal">&times;</button>
+                    <div class="titulo-modal"><asp:label runat="server" ID="lbl_TituloFiltro">FILTRO</asp:label></div>
+                </div>
+        
+                 <div style="height:200px;width:420px; overflow-y:scroll;overflow-x:scroll">
+                     <asp:CheckBoxList runat="server" CssClass="texto-body" ID="chk_Filtro"></asp:CheckBoxList>
+                 </div>
+
+                 <div class="row">
+                     <div class="col-md-6">
+                         <div style="padding-left:10px;">
+                            <asp:LinkButton id="btn_TodosFiltro" runat="server" class="btn botones">
+                                <span>
+                                    <img class="btn-todos"/>
+                                    Todos
+                                </span>
+                            </asp:LinkButton>
+                            <asp:LinkButton id="btn_NingunoFiltro" runat="server" class="btn botones">
+                                <span>
+                                    <img class="btn-ninguno"/>
+                                    Ninguno
+                                </span>
+                            </asp:LinkButton>
+                         </div>
+                     </div>
+                     <div class="col-md-6">
+                         <div style="width:100%; text-align:right; padding-right:10px; ">
+                            <asp:LinkButton id="btn_aceptar_filtro" runat="server" class="btn botones">
+                                <span>
+                                    <img class="btn-aceptar"/>
+                                    Aceptar
+                                </span>
+                            </asp:LinkButton>
+
+                            <asp:LinkButton id="btn_cancelar_filtro" runat="server" data-dismiss="modal" class="btn botones">
+                                <span>
+                                    <img class="btn-cancelar"/>
+                                    Cerrar
+                                </span>
+                            </asp:LinkButton>
+                         </div>
+                     </div>
+                 </div>
+                 
+             </ContentTemplate>
+        </asp:UpdatePanel>
+    </div>
 
     <div id="OrdenPago" style="width:1000px; height:620px"  class="modal-orden">
         <asp:UpdatePanel runat="server" ID="upOrdenPago" >
@@ -664,12 +715,17 @@
              <div class="panel-contenido" >
                  <div class="row">
                      <div class="col-md-3">
+                         <asp:HiddenField runat="server" ID="hid_devolucion" Value="0" />
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="90px" Text="Nro. Orden:"></asp:Label>
                          <asp:textbox runat="server" ID="lbl_Orden" CssClass="estandar-control Centro" Width="100px"></asp:textbox>
                      </div>
                      <div class="col-md-3">
                          <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Transacción:"></asp:Label>
                          <asp:textbox runat="server" ID="lbl_Transaccion" Enabled="false"  CssClass="estandar-control Centro" Width="90px"></asp:textbox>
+                     </div>
+                     <div class="col-md-6">
+                         <asp:Label runat="server" CssClass="col-md-1 etiqueta-control" Width="120px" Text="Estatus:"></asp:Label>
+                         <asp:textbox runat="server" ID="txt_Estatus" Enabled="false"  CssClass="estandar-control" Width="357px"></asp:textbox>
                      </div>
                  </div>
                  
@@ -763,99 +819,189 @@
                  <div class="clear padding5"></div>
                  <div class="row">
                      <div class="col-md-12">
-                         <div style="width:100%;height:50px;overflow-y:scroll;overflow-x:hidden;">
-                            <asp:label runat="server" ID="lbl_Texto" CssClass="texto-body" Width="100%"></asp:label>
-                         </div>
+                         <asp:textbox runat="server" ID="lbl_Texto" CssClass="estandar-control" Height="50px" Width="100%" TextMode="MultiLine"></asp:textbox>
                      </div>
                  </div>
-                
+                 <div class="clear padding5"></div>
+                 <asp:HiddenField runat="server" ID="hid_Filtro" Value="0" />
+                 <asp:HiddenField runat="server" ID="hid_Poliza" Value="" />
+                 <asp:HiddenField runat="server" ID="hid_Capa" Value="" />
+                 <asp:HiddenField runat="server" ID="hid_Ramo" Value="" />
+                 <asp:HiddenField runat="server" ID="hid_Contrato" Value="" />
+                 <asp:HiddenField runat="server" ID="hid_Broker" Value="" />
+                 <asp:HiddenField runat="server" ID="hid_Compañia" Value="" />
+                 <asp:HiddenField runat="server" ID="hid_Cuota" Value="" />
 
                  <div class="cuadro-subtitulo-grid">
                     CONTABILIDAD EN TRANSITO
                  </div>
                  <div class="clear padding5"></div>
                  <asp:Panel runat="server" ID="pnl_Contabilidad" Width="100%" Height="190px" ScrollBars="Both">
-                      <asp:GridView runat="server" ID="gvd_Contabilidad" AutoGenerateColumns="false"  ShowHeader="false"
+                      <asp:GridView runat="server" ID="gvd_Contabilidad" AutoGenerateColumns="false" 
                                       CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                      GridLines="Horizontal"  ShowHeaderWhenEmpty="true" AllowPaging="true"
-                                      DataKeyNames="id_pv">
+                                      GridLines="Horizontal"  ShowHeaderWhenEmpty="true" 
+                                      DataKeyNames="id_pv,poliza,nro_layer,ramo_contable,id_Contrato,broker,compañia,nro_cuota">
                             <Columns>
                                <asp:TemplateField HeaderText="">
                                     <ItemTemplate>
-                                         <asp:CheckBox runat="server"  Width="0px" ID="chk_Sel"/>
+                                         <asp:CheckBox runat="server"  ID="chk_Sel"/>
                                     </ItemTemplate>
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="Poliza">
+                                    <HeaderTemplate>
+                                        <div style="width:85px;text-align:center;">
+                                            <asp:label runat="server" Text="Póliza"></asp:label>
+                                            <asp:ImageButton runat="server" ID="btn_Poliza" AlternateText="poliza|Póliza|0" OnClick="DespliegaFiltro" CssClass="btn-filtro"/>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:label runat="server" ID="lbl_Poliza" Text='<%# Eval("poliza") %>' Width="100px"></asp:label>
+                                        <asp:label runat="server" ID="lbl_Poliza" Text='<%# Eval("poliza") %>' Width="85px"></asp:label>
                                     </ItemTemplate>
                                 </asp:TemplateField >
-                                <asp:TemplateField HeaderText="Ajuste">
+<%--                                <asp:TemplateField HeaderText="Ajuste">
                                     <ItemTemplate>
                                         <asp:label runat="server" ID="lbl_Ajuste" Text='<%# Eval("nro_reas") %>' Width="40px"></asp:label>
                                     </ItemTemplate>
-                                </asp:TemplateField >
+                                </asp:TemplateField >--%>
                                 <asp:TemplateField HeaderText="Capa">
+                                    <HeaderTemplate>
+                                        <div style="width:50px;text-align:center;">
+                                            <asp:label runat="server" Text="Capa"></asp:label>
+                                            <asp:ImageButton runat="server" ID="btn_Capa" AlternateText="nro_layer|Capa|1" OnClick="DespliegaFiltro" CssClass="btn-filtro"/>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:label runat="server" ID="lbl_Capa" Text='<%# Eval("nro_layer") %>' Width="40px"></asp:label>
+                                        <asp:label runat="server" Text='<%# Eval("nro_layer") %>' CssClass="Centro" Width="50px"></asp:label>
                                     </ItemTemplate>
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="Ramo Contable">
+                                    <HeaderTemplate>
+                                        <div style="width:90px;text-align:center;">
+                                            <asp:label runat="server" Text="Ramo"></asp:label>
+                                            <asp:ImageButton runat="server" ID="btn_Ramo" AlternateText="ramo_contable|Ramo Contable|2" OnClick="DespliegaFiltro" CssClass="btn-filtro"/>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:label runat="server" ID="lbl_ramo" Text='<%# Eval("ramo_contable") %>' Width="100px"></asp:label>
+                                        <asp:label runat="server" ID="lbl_ramo" Text='<%# Eval("ramo_contable") %>' Width="90px"></asp:label>
                                     </ItemTemplate>
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="Contrato">
+                                    <HeaderTemplate>
+                                        <div style="width:70px;text-align:center;">
+                                            <asp:label runat="server" Text="Contrato"></asp:label>
+                                            <asp:ImageButton runat="server" ID="btn_Contrato" AlternateText="id_Contrato|Contrato|3" OnClick="DespliegaFiltro" CssClass="btn-filtro"/>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:label runat="server" ID="lbl_Contrato" Text='<%# Eval("id_Contrato") %>' Width="80px"></asp:label>
+                                        <asp:label runat="server" ID="lbl_Contrato" Text='<%# Eval("id_Contrato") %>' Width="70px"></asp:label>
                                     </ItemTemplate>
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="Broker">
+                                    <HeaderTemplate>
+                                        <div style="width:100px;text-align:center;">
+                                            <asp:label runat="server" Text="Broker"></asp:label>
+                                            <asp:ImageButton runat="server" ID="btn_Broker" AlternateText="broker|Broker|4" OnClick="DespliegaFiltro" CssClass="btn-filtro"/>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
                                         <asp:label runat="server" ID="lbl_Broker" Text='<%# Eval("broker") %>' Width="100px"></asp:label>
                                     </ItemTemplate>
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="Compañia">
+                                    <HeaderTemplate>
+                                        <div style="width:100px;text-align:center;">
+                                            <asp:label runat="server" Text="Compañia"></asp:label>
+                                            <asp:ImageButton runat="server" ID="btn_Compañia" AlternateText="compañia|Compañia|5" OnClick="DespliegaFiltro" CssClass="btn-filtro"/>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
                                         <asp:label runat="server" ID="lbl_Compañia" Text='<%# Eval("compañia") %>' Width="100px"></asp:label>
                                     </ItemTemplate>
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="Cuota">
+                                    <HeaderTemplate>
+                                        <div style="width:50px;text-align:center;">
+                                            <asp:label runat="server" Text="Cuota"></asp:label>
+                                            <asp:ImageButton runat="server" ID="btn_Cuota" AlternateText="nro_cuota|Cuota|6" OnClick="DespliegaFiltro" CssClass="btn-filtro"/>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:label runat="server" ID="lbl_Cuota" Text='<%# Eval("nro_cuota") %>' Width="40px"></asp:label>
+                                        <asp:label runat="server" ID="lbl_Cuota" Text='<%# Eval("nro_cuota") %>' CssClass="Centro" Width="50px"></asp:label>
                                     </ItemTemplate>
                                 </asp:TemplateField >
                                 <asp:TemplateField HeaderText="%Pri">
+                                    <HeaderTemplate>
+                                        <div style="width:55px;text-align:center;">
+                                            <asp:label runat="server" Text="%Pri"></asp:label>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:textbox runat="server" ID="lbl_PrimaTotal" Text='<%# Eval("prima_cedida") %>' CssClass="NoDisplay"></asp:textbox>
-                                        <asp:textbox runat="server" ID="lbl_prcPrima" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("pje_pri")))%>' Width="60px" CssClass="estandar-control"></asp:textbox>
+                                        <asp:textbox runat="server" ID="txt_PrimaTotal" Text='<%# Eval("prima_cedida") %>' CssClass="NoDisplay PrimaCedida"></asp:textbox>
+                                        <asp:textbox runat="server" ID="txt_prcPrima" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("pje_pri")))%>' Width="55px" CssClass="estandar-control Centro prcPrima"></asp:textbox>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Prima">
+                                    <HeaderTemplate>
+                                        <div style="width:80px;text-align:center;">
+                                            <asp:label runat="server" Text="Prima"></asp:label>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:textbox runat="server" ID="lbl_Prima" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prima")))  %>' Width="80px"  CssClass="estandar-control"></asp:textbox>
+                                        <asp:textbox runat="server" ID="txt_DebCredPri" Text='<%# Eval("cod_deb_cred_pri") %>' CssClass="NoDisplay cod_deb_cred_pri"></asp:textbox>
+                                        <asp:textbox runat="server" ID="txt_Prima" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prima")))  %>' Width="80px"  CssClass="estandar-control Derecha Prima"></asp:textbox>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="%Com">
+                                    <HeaderTemplate>
+                                        <div style="width:55px;text-align:center;">
+                                            <asp:label runat="server" Text="%Com"></asp:label>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:textbox runat="server" ID="lbl_ComisionTotal" Text='<%# Eval("comisiones") %>' CssClass="NoDisplay" ></asp:textbox>
-                                        <asp:textbox runat="server" ID="lbl_prcCom" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("pje_com")))  %>' Width="60px" CssClass="estandar-control"></asp:textbox>
+                                        <asp:textbox runat="server" ID="txt_ComisionTotal" Text='<%# Eval("comisiones") %>' CssClass="NoDisplay Comisiones" ></asp:textbox>
+                                        <asp:textbox runat="server" ID="txt_prcCom" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("pje_com")))  %>' Width="55px" CssClass="estandar-control Centro prcComision"></asp:textbox>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Comision">
+                                     <HeaderTemplate>
+                                        <div style="width:80px;text-align:center;">
+                                            <asp:label runat="server" Text="Comision"></asp:label>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:textbox runat="server" ID="lbl_Comision" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("comision")))  %>' Width="80px" CssClass="estandar-control"></asp:textbox>
+                                        <asp:textbox runat="server" ID="txt_DebCredCom" Text='<%# Eval("cod_deb_cred_com") %>' CssClass="NoDisplay cod_deb_cred_com"></asp:textbox>
+                                        <asp:textbox runat="server" ID="txt_Comision" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("comision")))  %>' Width="80px" CssClass="estandar-control Derecha Comision"></asp:textbox>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Prima Neta">
+                                    <HeaderTemplate>
+                                        <div style="width:80px;text-align:center;">
+                                            <asp:label runat="server" Text="Prima Neta"></asp:label>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:label runat="server" ID="lbl_PrimaNeta" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prima_neta")))  %>' Width="80px" CssClass="estandar-control"></asp:label>
+                                        <asp:textbox runat="server" ID="lbl_PrimaNeta" Enabled="false" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prima_neta")))  %>' Width="80px" CssClass="estandar-control Derecha PrimaNeta"></asp:textbox>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Retención">
+                                <asp:TemplateField HeaderText="ISR Retenido">
+                                    <HeaderTemplate>
+                                        <div style="width:70px;text-align:center;">
+                                            <asp:label runat="server" Text="ISR Retenido"></asp:label>
+                                        </div>
+                                    </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:textbox runat="server" ID="lbl_pjeRet" Text='<%# Eval("pje_isr") %>'  CssClass="NoDisplay" ></asp:textbox>
-                                        <asp:label runat="server" ID="lbl_MontoISR" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("monto_isr")))  %>' Width="80px" CssClass="estandar-control"></asp:label>
+                                        <asp:textbox runat="server" ID="lbl_pjeRet" Text='<%# Eval("pje_isr") %>'  CssClass="NoDisplay prcISR" ></asp:textbox>
+                                        <asp:textbox runat="server" ID="lbl_MontoISR" Enabled="false" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("monto_isr")))  %>' Width="70px" CssClass="estandar-control Derecha ISR"></asp:textbox>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="ISR Devuelto">
+                                    <HeaderTemplate>
+                                        <div style="width:70px;text-align:center;">
+                                            <asp:label runat="server" Text="ISR Devuelto"></asp:label>
+                                        </div>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <asp:textbox runat="server" ID="lbl_MontoISRDev" Enabled="false" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("monto_isr_dev")))  %>' Width="70px" CssClass="estandar-control Derecha"></asp:textbox>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
@@ -941,8 +1087,6 @@
                  </div>
              </div>
             
-                
-             </div>
          </ContentTemplate>
         </asp:UpdatePanel>
     </div>

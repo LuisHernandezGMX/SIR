@@ -389,3 +389,26 @@ function fn_Aclaracion(id_pv) {
     });
     return false;
 };
+
+function fn_Desplazable(modal) {
+    $(modal).draggable();
+}
+
+//Formato de comas a N posiciones decimales
+function fn_FormatoMonto(Monto,decimales) {
+    if (isNaN(Monto) == true) {
+        return '0.0000';
+    }
+    else {
+        return Monto.toFixed(decimales).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+    }
+}
+
+//Evalua tecla Numerica
+function fn_EvaluaNumerico(keynum){
+    if ((keynum == 8) || (keynum == 46))
+        return true;
+
+    return /\d/.test(String.fromCharCode(keynum));
+}
+
