@@ -58,4 +58,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ObtieneContabilidadOP">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nro_op" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneContabilidadOPResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneContabilidadOPResult" nillable="true" type="q2:ArrayOfspS_ContabilidadOP_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
