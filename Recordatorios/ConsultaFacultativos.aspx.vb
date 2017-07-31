@@ -42,14 +42,28 @@ Partial Class Recordatorios_ConsultaFacultativos
     End Sub
 
     Private Sub btn_Buscar_Click(sender As Object, e As EventArgs) Handles btn_Buscar.Click
-        Dim FiltroBro As String = ""
-        Dim FiltroCia As String = ""
-        Dim FiltroPol As String = ""
-        Dim FiltroRamoCont As String = ""
-        Dim FiltroSiniestro As String = ""
-        Dim FiltroAsegurado As String = ""
-        Dim Elementos As String = ""
-        Dim TipoMov As Integer
+        SQLFiltros(Cons.Accion.Consultar)
+    End Sub
+
+    Private Function SQLFiltros(Accion As Integer) As Integer
+        Dim FiltroBro As String = vbNullString
+        Dim FiltroCia As String = vbNullString
+        Dim FiltroPol As String = vbNullString
+        Dim FiltroRamoCont As String = vbNullString
+        Dim FiltroSiniestro As String = vbNullString
+        Dim FiltroAsegurado As String = vbNullString
+        Dim Elementos As String = vbNullString
+        Dim TipoMov As Integer = 1
+        Dim strConsulta As String = vbNullString
+
+        If opcEsp.Checked Then
+            TipoMov = 2
+            strConsulta = "CONSULTA ESPECIALES"
+        Else
+            TipoMov = 1
+            strConsulta = "CONSULTA FACULTATIVOS"
+        End If
+
         Try
 
             Elementos = Funciones.ObtieneElementos(gvd_Broker, "Bro", False)
@@ -94,22 +108,28 @@ Partial Class Recordatorios_ConsultaFacultativos
             strFiltros = strFiltros & "&FiltroAse=" & FiltroAsegurado
             strFiltros = strFiltros & "&FiltroNoSin=" & FiltroSiniestro
 
-            If opcFac.Checked Then
-                strSQL = "Sps_mov_facul_Espe 1,'" & FiltroBro & "','" & FiltroCia & "','" & Strings.Replace(FiltroPol, "'", "") & "','" & FiltroRamoCont & "'," & FiltroSiniestro
-                ws.ActualizaParametro(5, strSQL)
-                wsO.InsertaVersionReporte(16, 41, 3, Master.cod_usuario, "CONSULTA FACULTATIVOS", strFiltros, "NAV", 0)
+            If Accion = Cons.Accion.Consultar Then
+                Dim wsR As New ws_RecSiniestros.RecSiniestrosClient
+                Dim Resultado As New DataTable
+
+                Resultado = Funciones.Lista_A_Datatable(wsR.ObtieneSiniestros(TipoMov, FiltroSiniestro, FiltroBro, FiltroAsegurado, FiltroCia, FiltroRamoCont, FiltroPol, vbNullString, vbNullString).ToList)
+                gvd_Siniestros.DataSource = Resultado
+                gvd_Siniestros.DataBind()
+                'lbl_TotSin.Text = "VISTA PREVIA  (Total de Siniestros Encontrados: " & Resultado.Rows.Count() & " )"
+                'lbl_TotSin.Visible = True
             Else
-                strSQL = "Sps_mov_facul_Espe 2,'" & FiltroBro & "','" & FiltroCia & "','" & FiltroPol & "','" & FiltroRamoCont & "'," & FiltroSiniestro
-                ws.ActualizaParametro(6, strSQL)
-                wsO.InsertaVersionReporte(16, 41, 3, Master.cod_usuario, "CONSULTA ESPECIALES", strFiltros, "NAV", 0)
+                strSQL = "sp_rptMovSinxReas " & TipoMov & "," & FiltroSiniestro & ",'" & FiltroBro & "','" & FiltroAsegurado & "','" & FiltroCia & "','" & FiltroRamoCont & "','','','" & Strings.Replace(FiltroPol, "'", "") & "'"
+                ws.ActualizaParametro(IIf(TipoMov = 2, Cons.ConsulEsp, Cons.ConsulFac), Replace(Replace(strSQL, "''", "NULL"), ",,", ",NULL,"))
+                wsO.InsertaVersionReporte(Cons.ModuloRea, Cons.SubModRecSin, IIf(TipoMov = 2, Cons.RptEsp, Cons.RptFac), Master.cod_usuario, strConsulta, strFiltros, "NAV", 0)
+                Mensaje.MuestraMensaje("Configuración Consulta", "Se almacenó correctamente la consulta", Mensaje.TipoMsg.Confirma)
+                Limpiar()
             End If
-
-
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("", "", 1)
         End Try
-    End Sub
+    End Function
+
 
     Private Sub btn_CancelaFac_Click(sender As Object, e As EventArgs) Handles btn_CancelaFac.Click
         Limpiar()
@@ -117,15 +137,109 @@ Partial Class Recordatorios_ConsultaFacultativos
     Private Sub Limpiar()
         gvd_Asegurado.DataSource = Nothing
         gvd_Asegurado.DataBind()
+        gvd_Broker.DataSource = Nothing
+        gvd_Broker.DataBind()
+        gvd_Compañia.DataSource = Nothing
+        gvd_Compañia.DataBind()
+        gvd_Poliza.DataSource = Nothing
+        gvd_Poliza.DataBind()
+        gvd_RamoContable.DataSource = Nothing
+        gvd_RamoContable.DataBind()
+        gvd_Siniestros.DataSource = Nothing
+        gvd_Siniestros.DataBind()
+
         txtSearchAse.Text = ""
         txt_NoSiniestro.Text = ""
     End Sub
 
     Protected Sub opcFac_CheckedChanged(sender As Object, e As EventArgs)
         opcEsp.Checked = False
+        Limpiar()
     End Sub
     Protected Sub opcEsp_CheckedChanged(sender As Object, e As EventArgs)
         opcFac.Checked = False
+        Limpiar()
     End Sub
 
+    Private Sub btn_CargaConsulta_Click(sender As Object, e As EventArgs) Handles btn_CargaConsulta.Click
+        Dim ws As New ws_Reporteador.ReporteadorClient
+        Dim lFiltros As IList = Nothing
+        Dim lFiltrosF As IList = Nothing
+        Dim Filtros As String() = Nothing
+        Dim FiltroBroker As String = ""
+        Dim FiltroCia As String = ""
+        Dim FiltroPol As String = ""
+        Dim FiltroRamoC As String = ""
+        Dim FiltroAse As String = ""
+        Dim FiltroNoSin As String = ""
+        Dim inicio As Integer
+        Dim fin As Integer
+
+        Try
+            lFiltros = ws.ObtieneVersionReporte(IIf(opcFac.Checked, Cons.RptFac, Cons.RptEsp), -1, "")
+            Dim Elementos As Integer = lFiltros.Count
+
+            If Elementos > 0 Then
+                Filtros = Strings.Split(lFiltros(Elementos - 1).filtros, "&")
+
+                For Indice = 1 To Filtros.Count - 1
+                    inicio = InStr(Filtros(Indice), "=")
+                    fin = Len(Filtros(Indice))
+                    If fin <> inicio Then
+                        Select Case Indice
+                            Case 1
+                                FiltroBroker = Filtros(Indice).Substring(inicio, fin - inicio)
+                                If FiltroBroker <> "" Then Funciones.LlenaCatGrid(gvd_Broker, "Bro", " AND cod_cia_reas in (" & FiltroBroker & ")")
+                            Case 2
+                                FiltroCia = Filtros(Indice).Substring(inicio, fin - inicio)
+                                If FiltroCia <> "" Then Funciones.LlenaCatGrid(gvd_Compañia, "Cia", " AND cod_cia_reas in (" & FiltroCia & ")")
+                            Case 3
+                                FiltroPol = Filtros(Indice).Substring(inicio, fin - inicio)
+                                Dim wsGen As New ws_Generales.GeneralesClient
+                                Dim Resultado As New DataTable
+                                If FiltroPol <> "" Then
+                                    Resultado = Funciones.Lista_A_Datatable(wsGen.ObtieneCatalogo("Pol", " Where PV.id_pv in (" & FiltroPol & ")", "").ToList)
+                                    If Not Resultado Is Nothing Then
+                                        Resultado.Columns(3).ColumnName = "id_pv"
+                                        gvd_Poliza.DataSource = Resultado
+                                        gvd_Poliza.DataBind()
+                                    End If
+                                End If
+                            Case 4
+                                FiltroRamoC = Filtros(Indice).Substring(inicio, fin - inicio)
+                                If FiltroRamoC <> "" Then Funciones.LlenaCatGrid(gvd_RamoContable, "RamC", " Where cod_ramo_contable in (" & FiltroRamoC & ")")
+                            Case 5
+                                FiltroAse = Filtros(Indice).Substring(inicio, fin - inicio)
+                                If FiltroAse <> "" Then Funciones.LlenaCatGrid(gvd_Asegurado, "Ase", " Where mh.id_persona in (" & FiltroAse & ")")
+                            Case 6
+                                FiltroNoSin = Filtros(Indice).Substring(inicio, fin - inicio)
+                                txt_NoSiniestro.Text = FiltroNoSin
+                        End Select
+                    End If
+                Next
+
+
+
+            End If
+
+
+
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("", "", 1)
+        End Try
+
+
+
+    End Sub
+
+    Private Sub gvd_Siniestros_PageIndexChanging(sender As Object, e As GridViewPageEventArgs) Handles gvd_Siniestros.PageIndexChanging
+        gvd_Siniestros.PageIndex = e.NewPageIndex
+        SQLFiltros(Cons.Accion.Consultar)
+
+    End Sub
+
+    Private Sub btn_GuardarCons_Click(sender As Object, e As EventArgs) Handles btn_GuardarCons.Click
+        SQLFiltros(Cons.Accion.Guardar)
+    End Sub
 End Class
