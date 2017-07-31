@@ -1,9 +1,11 @@
 ﻿<%@ Page Title="" Language="VB" MasterPageFile="~/Pages/SiteMaster.master" AutoEventWireup="false" CodeFile="FirmasElectronicas.aspx.vb" Inherits="OrdenPago_FirmasElectronicas" %>
+
+<%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 <%@ MasterType VirtualPath="~/Pages/SiteMaster.master" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cph_principal" Runat="Server">
     <script src="../Scripts/FirmasElectronicas.js"></script>
-    <asp:HiddenField runat="server" ID="hid_Ventanas" Value="0|0|0|1|" />
+    <asp:HiddenField runat="server" ID="hid_Ventanas" Value="0|0|1|1|1|1|1|1|" />
     
     <div style="width:1000px; min-width:1000px; overflow-x:hidden">
         <div class="cuadro-titulo panel-encabezado">
@@ -18,7 +20,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <asp:label runat="server" class="col-md-1 etiqueta-control" Width="100px">Orden Pago</asp:label>
-                            <asp:TextBox runat="server" ID="txt_NroOP" CssClass="estandar-control nro_pol Centro" Width="110px"></asp:TextBox>
+                            <asp:TextBox runat="server" ID="txt_NroOP" CssClass="estandar-control" Width="370px"></asp:TextBox>
                         </div>
                     </div>
 
@@ -79,9 +81,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="cuadro-subtitulo">
+                        <input type="image" src="../Images/contraer_mini.png" id="coVentana2" class="contraer"  />
+                        <input type="image" src="../Images/expander_mini.png"   id="exVentana2" class="expandir"  />
                         Usuario Solicitante
                     </div>
-                    <div class="panel-subcontenido">
+                    <div class="panel-subcontenido ventana2">
                         <asp:UpdatePanel runat="server" ID="upSolicitante">
                            <ContentTemplate>
                                <asp:Panel runat="server" ID="pnlUsuario" Width="100%" Height="100px" ScrollBars="Both">
@@ -127,9 +131,11 @@
 
                 <div class="col-md-6">
                     <div class="cuadro-subtitulo">
+                        <input type="image" src="../Images/contraer_mini.png" id="coVentana3" class="contraer"  />
+                        <input type="image" src="../Images/expander_mini.png"   id="exVentana3" class="expandir"  />
                         Estatus Orden Pago
                     </div>
-                    <div class="panel-subcontenido">
+                    <div class="panel-subcontenido ventana3">
                         <asp:UpdatePanel runat="server" ID="upEstatus">
                            <ContentTemplate>
                                <asp:Panel runat="server" ID="pnlEstatus" Width="100%" Height="100px" ScrollBars="Both">
@@ -178,9 +184,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="cuadro-subtitulo">
+                        <input type="image" src="../Images/contraer_mini.png" id="coVentana4" class="contraer"  />
+                        <input type="image" src="../Images/expander_mini.png"   id="exVentana4" class="expandir"  />
                         Broker
                     </div>
-                    <div class="panel-subcontenido">
+                    <div class="panel-subcontenido ventana4">
                             <asp:UpdatePanel runat="server" ID="upBroker">
                                 <ContentTemplate>
                                     <asp:Panel runat="server" ID="pnlBroker" Width="100%" Height="100px" ScrollBars="Both">
@@ -226,9 +234,11 @@
 
                 <div class="col-md-6">
                     <div class="cuadro-subtitulo">
+                        <input type="image" src="../Images/contraer_mini.png" id="coVentana5" class="contraer"  />
+                        <input type="image" src="../Images/expander_mini.png"   id="exVentana5" class="expandir"  />
                         Reasegurador
                     </div>
-                    <div class="panel-subcontenido">
+                    <div class="panel-subcontenido ventana5">
                             <asp:UpdatePanel runat="server" ID="upCompañia">
                                 <ContentTemplate>
                                     <asp:Panel runat="server" ID="pnlCompañia" Width="100%" Height="100px" ScrollBars="Both">
@@ -276,9 +286,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="cuadro-subtitulo">
+                        <input type="image" src="../Images/contraer_mini.png" id="coVentana6" class="contraer"  />
+                        <input type="image" src="../Images/expander_mini.png"   id="exVentana6" class="expandir"  />
                         Póliza
                     </div>
-                    <div class="panel-subcontenido">
+                    <div class="panel-subcontenido ventana6">
                             <asp:UpdatePanel runat="server" ID="upPoliza">
                                 <ContentTemplate>
                                     <asp:HiddenField runat="server" ID="hid_HTML" Value="" />
@@ -326,9 +338,11 @@
                 </div>
                 <div class="col-md-6">
                     <div class="cuadro-subtitulo">
+                        <input type="image" src="../Images/contraer_mini.png" id="coVentana7" class="contraer"  />
+                        <input type="image" src="../Images/expander_mini.png"   id="exVentana7" class="expandir"  />
                         Ramo Contable
                     </div>
-                    <div class="panel-subcontenido">
+                    <div class="panel-subcontenido ventana7">
                             <asp:UpdatePanel runat="server" ID="upRamoContable">
                             <ContentTemplate>
                                     <asp:Panel runat="server" ID="pn_RamoContable" Width="100%" Height="100px" ScrollBars="Both">
@@ -479,8 +493,9 @@
                                                     cod_estatus_op,estatus,Texto,sn_devolucion,sn_Solicita,sn_Solicita_Aux,
                                                     cod_usuario_solicita,sn_JefeDirecto,sn_JefeDirecto_Aux,cod_usuario_jefe,sn_DireccionArea,
                                                     sn_DireccionArea_Aux,cod_usuario_director,sn_SubDirector,sn_Subdirector_Aux,cod_usuario_subdir,
-                                                    sn_Contabilidad,sn_Contabilidad_Aux,cod_usuario_contabilidad,GeneraOp_Solicitante,
-                                                    Autoriza_JefeInmediato,Autoriza_DirArea,Autoriza_Subdirector,Autoriza_Conta,PathFirma,id_pv">
+                                                    sn_Contabilidad,sn_Contabilidad_Aux,cod_usuario_contabilidad,sn_Rechazo,sn_Rechazo_Aux,cod_usuario_rechazo, 
+                                                    GeneraOp_Solicitante,Autoriza_JefeInmediato,Autoriza_DirArea,Autoriza_Subdirector,Autoriza_Conta,Autoriza_Rechazo,
+                                                    PathFirma,id_pv">
                             <Columns>
                                 <asp:TemplateField HeaderText="" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
@@ -514,6 +529,8 @@
                                             <asp:LinkButton runat="server" ID="lnk_SelSubDir" Text="Cambiar" Width="10px"  OnClick="lnk_SelSubDir_Click"></asp:LinkButton>
                                             <asp:CheckBox runat="server" Text=" Contabilidad" Width="130px"  ID="chk_FirmaCon" Checked='<%# Eval("sn_Contabilidad") %>' Enabled='<%# Eval("Autoriza_Conta") %>' OnCheckedChanged="chk_FirmaCon_CheckedChanged" AutoPostBack="true"/>
                                             <asp:LinkButton runat="server" ID="lnk_SelConta" Text="Cambiar"  Width="10px"  OnClick="lnk_SelConta_Click"></asp:LinkButton>
+                                            <asp:CheckBox runat="server" Text=" Rechazada" Width="130px"  ID="chk_Rechazo" Checked='<%# Eval("sn_Rechazo") %>' Enabled='<%# Eval("Autoriza_Rechazo") %>' OnCheckedChanged="chk_Rechazo_CheckedChanged" AutoPostBack="true"/>
+                                            <asp:LinkButton runat="server" ID="lnk_SelMotivo" Text="Motivo"  Width="10px"  OnClick="lnk_SelMotivo_Click"></asp:LinkButton>
                                         </div>
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -605,6 +622,7 @@
                             Firmar
                         </span>
                     </asp:LinkButton>
+
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
@@ -652,6 +670,24 @@
          </ContentTemplate>
        </asp:UpdatePanel>
     </div>
+
+    <div id="Grafica" style="width:420px; height:270px"  class="modal-catalogo">
+         <asp:UpdatePanel runat="server" ID="upGrafica" >          
+             <ContentTemplate>
+                 <div class="cuadro-titulo" style="height:30px">
+                    <button type="button" class="close"  data-dismiss="modal">&times;</button>
+                    <div class="titulo-modal"><asp:label runat="server" ID="lbl_TituloGrafica">GRAFICA</asp:label></div>
+                </div>
+                 
+<%--                 <asp:Chart runat=server>
+                     <Series><asp:Series Name="Series1"></asp:Series></Series>
+                     <ChartAreas><asp:ChartArea Name="ChartArea1"></asp:ChartArea></ChartAreas>
+                 </asp:Chart>--%>
+
+             </ContentTemplate>
+        </asp:UpdatePanel>
+    </div>
+
 
     <div id="Filtro" style="width:420px; height:270px"  class="modal-catalogo">
         <asp:UpdatePanel runat="server" ID="upFiltro" >          

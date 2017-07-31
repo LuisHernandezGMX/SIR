@@ -45,6 +45,7 @@ Partial Class OrdenPago_FirmasElectronicas
         DirectorArea
         Contabilidad
         Subdirector
+        Rechazo
     End Enum
 
     Private Enum Operacion
@@ -64,6 +65,12 @@ Partial Class OrdenPago_FirmasElectronicas
             EstadoOP = Operacion.Ninguna
             Funciones.LlenaCatDDL(ddl_Moneda, "Mon")
             ddl_Moneda.SelectedValue = -1
+
+            txt_NroOP.Text = Request.QueryString("NumOrds")
+            If Len(txt_NroOP.Text) > 0 Then
+                Master.cod_usuario = Split(Context.User.Identity.Name, "|")(0)
+                btn_BuscaOP_Click(Me, Nothing)
+            End If
         End If
     End Sub
 
@@ -84,7 +91,9 @@ Partial Class OrdenPago_FirmasElectronicas
 
         Dim ws As New ws_OrdenPago.OrdenPagoClient
 
+
         FiltroOP = IIf(Len(txt_NroOP.Text) > 0, txt_NroOP.Text, 0)
+
 
         FiltroBrokerCia = Funciones.ObtieneElementos(gvd_Broker, "Bro", False)
         FiltroBrokerCia = FiltroBrokerCia & IIf(Len(FiltroBrokerCia) > 0, ",", "") & Funciones.ObtieneElementos(gvd_Compañia, "Cia", False)
@@ -135,8 +144,8 @@ Partial Class OrdenPago_FirmasElectronicas
                         IIf(chk_Contabilidad.Checked, 1, 0) * 16
         End If
 
-
         dtOrdenPago = Funciones.Lista_A_Datatable(ws.ObtieneOrdenPago(FiltroOP, FiltroBrokerCia, "", FiltroPoliza, FiltroFechaPago, FiltroRamoContable, FiltroUsuario, FiltroEstatus, FiltroFechaGen, ddl_Moneda.SelectedValue, Trim(txtSearchAse.Text), FiltroMonto, FiltroNatOP, intFirmas, Master.cod_usuario).ToList)
+
 
         Return dtOrdenPago
     End Function
@@ -333,7 +342,7 @@ Partial Class OrdenPago_FirmasElectronicas
             Dim myRow() As Data.DataRow
             myRow = dtOrdenPago.Select("tSEl_Val ='" & True & "'")
             If myRow.Count = 0 Then
-                Mensaje.MuestraMensaje("Firmas Electrónicas", "No se ha seleccionado ninguna orden de Pago para autorizar", TipoMsg.Falla)
+                Mensaje.MuestraMensaje("Firmas Electrónicas", "No se ha seleccionado ninguna orden de Pago para Autorizar o Rechazar", TipoMsg.Falla)
                 Exit Sub
             End If
 
@@ -346,33 +355,42 @@ Partial Class OrdenPago_FirmasElectronicas
             If Not arrNumOrds(3) = vbNullString Then ActualizaFirmas(arrNumOrds(3), TipoPersona.DirectorArea, Master.cod_usuario) 'Dirección Area
             If Not arrNumOrds(2) = vbNullString Then ActualizaFirmas(arrNumOrds(2), TipoPersona.Subdirector, Master.cod_usuario) 'Subdirector
             If Not arrNumOrds(4) = vbNullString Then ActualizaFirmas(arrNumOrds(4), TipoPersona.Contabilidad, Master.cod_usuario) 'Contabilidad
+            If Not arrNumOrds(5) = vbNullString Then ActualizaFirmas(arrNumOrds(5), TipoPersona.Rechazo, Master.cod_usuario) 'Rechazos
 
             'ENVIO DE MAILS
             If Not arrNumOrds(0) = vbNullString Then EnviaMail(TipoPersona.JefeInmediato, Master.cod_usuario, arrNumOrds(0)) 'Del Solicitante Al Jefe Inmediato
             If Not arrNumOrds(1) = vbNullString Then EnviaMail(TipoPersona.DirectorArea, Master.cod_usuario, arrNumOrds(1))  'Del Jefe Inmediato Al Director
             If Not arrNumOrds(3) = vbNullString Then EnviaMail(TipoPersona.Contabilidad, Master.cod_usuario, arrNumOrds(3))  'Del Dir Area A Contabilidad
             If Not arrNumOrds(2) = vbNullString Then EnviaMail(TipoPersona.Contabilidad, Master.cod_usuario, arrNumOrds(2))  'Del Subdirector A Contabilidad
+            If Not arrNumOrds(5) = vbNullString Then EnviaMail(TipoPersona.Solicitante, Master.cod_usuario, arrNumOrds(5), True)   'Hacia el Solicitante
 
             'Recarga de Grid en tiempo real despues de la Firma
             Funciones.LlenaGrid(gvd_LstOrdenPago, dtOrdenPago)
             ListaRamosContables()
             DesHabilitaChecksFirma()
-            Mensaje.MuestraMensaje("Firmas Electrónicas", "Se firmarón los documentos satisfactoriamente", TipoMsg.Confirma)
+            Mensaje.MuestraMensaje("Firmas Electrónicas", "Se firmarón y/o rechazaron los documentos satisfactoriamente", TipoMsg.Confirma)
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
-    Private Sub EnviaMail(TipoPer As Integer, CodUSu As String, strNumOrds As String)
+    Private Sub EnviaMail(TipoPer As Integer, CodUSu As String, strNumOrds As String, Optional ByVal blnRechazo As Boolean = False)
         Dim ws As New ws_Generales.GeneralesClient
         Try
             Dim strBody As String
             Dim Mail As String
-            Mail = ObtieneUsuarioMail(TipoPer)
 
-            strBody = FormatoCorreo(strNumOrds, Master.usuario, TipoPer)
-            ws.EnviaCorreo("martinem@gmx.com.mx", strBody, "Solicitud de Firma de OPs", "", "")
+            If blnRechazo = False Then
+                Mail = ObtieneUsuarioMail(TipoPer)
+                strBody = FormatoCorreo(strNumOrds, Master.usuario, TipoPer)
+                ws.EnviaCorreo(Mail, strBody, "Solicitud de Firma de OPs", "", "")
+            Else
+                strBody = FormatoCorreoRechazo(strNumOrds, Master.usuario, TipoPer)
+                ws.EnviaCorreo("martinem@gmx.com.mx", strBody, "Rechazo de Firma de OPs", "", "")
+                ws.EnviaCorreo("oscar.sandoval@gmx.com.mx", strBody, "Rechazo de Firma de OPs", "", "")
+            End If
+
         Catch ex As Exception
             Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
         End Try
@@ -388,6 +406,7 @@ Partial Class OrdenPago_FirmasElectronicas
             Dim chk_SubDir = DirectCast(row.FindControl("chk_SubDir"), CheckBox)
             Dim chk_FirmaDir = DirectCast(row.FindControl("chk_FirmaDir"), CheckBox)
             Dim chk_FirmaCon = DirectCast(row.FindControl("chk_FirmaCon"), CheckBox)
+            Dim chk_Rechazo = DirectCast(row.FindControl("chk_Rechazo"), CheckBox)
 
             Dim lbl_OrdenPago = DirectCast(row.FindControl("lbl_OrdenPago"), LinkButton)
             Dim myRow() As Data.DataRow
@@ -400,11 +419,13 @@ Partial Class OrdenPago_FirmasElectronicas
             myRow(0)("sn_Subdirector") = chk_SubDir.Checked
             myRow(0)("sn_DireccionArea") = chk_FirmaDir.Checked
             myRow(0)("sn_Contabilidad") = chk_FirmaCon.Checked
+            myRow(0)("sn_Rechazo") = chk_Rechazo.Checked
         Next
         Return dtOrdenPago
     End Function
 
     Private Function CategorizaOPs() As String
+        Dim strOPRechazo As String = ""
         Dim strOPSubDir As String = ""
         Dim strOPConta As String = ""
         Dim strOPJefe As String = ""
@@ -414,6 +435,7 @@ Partial Class OrdenPago_FirmasElectronicas
 
         'Evauación de Firmas de Falso a Verdadero
         For Each row In dtOrdenPago.Rows
+            If row("sn_Rechazo") = True And row("sn_Rechazo_Aux") = False Then strOPRechazo += row("nro_op") & ","
             If row("sn_Subdirector") = True And row("sn_Subdirector_Aux") = False Then strOPSubDir += row("nro_op") & ","
             If row("sn_Contabilidad") = True And row("sn_Contabilidad_Aux") = False Then strOPConta += row("nro_op") & ","
             If row("sn_DireccionArea") = True And row("sn_DireccionArea_Aux") = False Then strOPDirArea += row("nro_op") & ","
@@ -426,8 +448,9 @@ Partial Class OrdenPago_FirmasElectronicas
         If Len(strOPDirArea) > 0 Then strOPDirArea = Left(strOPDirArea, Len(strOPDirArea) - 1)
         If Len(strOPConta) > 0 Then strOPConta = Left(strOPConta, Len(strOPConta) - 1)
         If Len(strOPSubDir) > 0 Then strOPSubDir = Left(strOPSubDir, Len(strOPSubDir) - 1)
+        If Len(strOPRechazo) > 0 Then strOPRechazo = Left(strOPRechazo, Len(strOPRechazo) - 1)
 
-        strFinal = strOPSol & "|" & strOPJefe & "|" & strOPSubDir & "|" & strOPDirArea & "|" & strOPConta
+        strFinal = strOPSol & "|" & strOPJefe & "|" & strOPSubDir & "|" & strOPDirArea & "|" & strOPConta & "|" & strOPRechazo
 
         Return strFinal
 
@@ -454,6 +477,8 @@ Partial Class OrdenPago_FirmasElectronicas
                             myRow(0)("sn_Contabilidad_Aux") = True
                         Case TipoPersona.Subdirector
                             myRow(0)("sn_Subdirector_Aux") = True
+                        Case TipoPersona.Rechazo
+                            myRow(0)("sn_Rechazo_Aux") = True
                     End Select
                 Next
             End If
@@ -515,6 +540,14 @@ Partial Class OrdenPago_FirmasElectronicas
         End Try
     End Sub
 
+    Protected Sub chk_Rechazo_CheckedChanged(sender As Object, e As EventArgs)
+        Try
+            SelectRow(sender, "chk_Rechazo")
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
     Private Sub SelectRow(sender As Object, CrtlNombre As String)
         Dim CrtlPrevio As String = ""
         Dim gr As GridViewRow = DirectCast(DirectCast(DirectCast(sender, CheckBox).Parent.Parent, DataControlFieldCell).Parent, GridViewRow)
@@ -524,19 +557,34 @@ Partial Class OrdenPago_FirmasElectronicas
         If CrtlNombre = "chk_FirmaDir" Then CrtlPrevio = "chk_FirmaJefe"
         If CrtlNombre = "chk_SubDir" Then CrtlPrevio = "chk_FirmaDir"
         If CrtlNombre = "chk_FirmaCon" Then CrtlPrevio = "chk_FirmaDir"
+        If CrtlNombre = "chk_Rechazo" Then CrtlPrevio = "chk_FirmaSol"
+
         Dim chkPrevio As CheckBox = TryCast(gvd_LstOrdenPago.Rows(gr.RowIndex).FindControl(CrtlPrevio), CheckBox)
+
         Dim chkSelRenglon As CheckBox = TryCast(gvd_LstOrdenPago.Rows(gr.RowIndex).FindControl("chk_SelOp"), CheckBox)
+
+
 
         If CrtlPrevio <> vbNullString Then
             If chkPrevio.Checked = True Then
                 If chkCtrl.Checked = True And chkCtrl.Enabled = True Then
                     chkSelRenglon.Checked = True
+
+                    If CrtlNombre = "chk_Rechazo" Then
+                        DirectCast(gvd_LstOrdenPago.Rows(gr.RowIndex).FindControl("chk_FirmaJefe"), CheckBox).Checked = False
+                        DirectCast(gvd_LstOrdenPago.Rows(gr.RowIndex).FindControl("chk_FirmaDir"), CheckBox).Checked = False
+                        DirectCast(gvd_LstOrdenPago.Rows(gr.RowIndex).FindControl("chk_SubDir"), CheckBox).Checked = False
+                        DirectCast(gvd_LstOrdenPago.Rows(gr.RowIndex).FindControl("chk_FirmaCon"), CheckBox).Checked = False
+                    Else
+                        DirectCast(gvd_LstOrdenPago.Rows(gr.RowIndex).FindControl("chk_Rechazo"), CheckBox).Checked = False
+                    End If
+
                 ElseIf chkCtrl.Checked = False And chkCtrl.Enabled = True Then
                     chkSelRenglon.Checked = False
                 End If
             Else
                 chkCtrl.Checked = False
-                Mensaje.MuestraMensaje("Firmas Electrónicas", "No puede firmar la Orden de Pago si no cuenta con la firma previa.", TipoMsg.Falla)
+                Mensaje.MuestraMensaje("Firmas Electrónicas", "No puede firmar o rechazar la Orden de Pago si no cuenta con la firma previa.", TipoMsg.Falla)
             End If
         Else
             If chkCtrl.Checked = True And chkCtrl.Enabled = True Then
@@ -578,6 +626,14 @@ Partial Class OrdenPago_FirmasElectronicas
     Protected Sub lnk_SelConta_Click(sender As Object, e As EventArgs)
         Try
             CargaModalFirmas(TipoPersona.Contabilidad)
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Protected Sub lnk_SelMotivo_Click(sender As Object, e As EventArgs)
+        Try
+
         Catch ex As Exception
             Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
         End Try
@@ -633,12 +689,14 @@ Partial Class OrdenPago_FirmasElectronicas
             Dim chkSubDir = DirectCast(row.FindControl("chk_SubDir"), CheckBox)
             Dim chkDir = DirectCast(row.FindControl("chk_FirmaDir"), CheckBox)
             Dim chkCon = DirectCast(row.FindControl("chk_FirmaCon"), CheckBox)
+            Dim chkRech = DirectCast(row.FindControl("chk_Rechazo"), CheckBox)
 
 
             Dim lnk_SelJefe = DirectCast(row.FindControl("lnk_SelJefe"), LinkButton)
             Dim lnk_SelDir = DirectCast(row.FindControl("lnk_SelDir"), LinkButton)
             Dim lnk_SelSubDir = DirectCast(row.FindControl("lnk_SelSubDir"), LinkButton)
             Dim lnk_SelConta = DirectCast(row.FindControl("lnk_SelConta"), LinkButton)
+            Dim lnk_SelMotivo = DirectCast(row.FindControl("lnk_SelMotivo"), LinkButton)
 
 
             If gvd_LstOrdenPago.DataKeys(row.RowIndex)("sn_Solicita_Aux") = True Then
@@ -667,6 +725,12 @@ Partial Class OrdenPago_FirmasElectronicas
                 chkCon.Enabled = False
                 lnk_SelConta.Enabled = False
                 lnk_SelConta.ForeColor = Drawing.Color.Gray
+            End If
+
+            If gvd_LstOrdenPago.DataKeys(row.RowIndex)("sn_Rechazo_Aux") = True Then
+                chkRech.Enabled = False
+                lnk_SelMotivo.Enabled = False
+                lnk_SelMotivo.ForeColor = Drawing.Color.Gray
             End If
         Next
     End Sub
@@ -790,11 +854,42 @@ Partial Class OrdenPago_FirmasElectronicas
 
     End Function
 
+    Private Function FormatoCorreoRechazo(strNumOrds As String, UsuSol As String, TipoPer As Integer) As String
+
+        Dim strBody As String = ""
+        strBody = "<table style = 'margin: 0px; border: medium; border-image: none; border-collapse: collapse;' border='1' cellspacing='0' cellpadding='0'>"
+        strBody += "<tbody> <tr style = 'mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes' >"
+        strBody += "<td width='395' valign='top' style='margin: 0px; padding: 0cm 5.4pt; border: 1px solid rgb(0, 0, 0); border-image: none; width: 296pt; background-color: transparent;'>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96);'><img width='74' height='74' src='\\gmxqroapp02\inetpub\wwwroot\OrdenPago\Images\Firmas\logo_gmx.jpg' v:shapes='Imagen_x0020_2'></span><span style='margin: 0px; color: rgb(0, 32, 96);'><span style='margin: 0px;'><font face='Calibri'>&nbsp;&nbsp;&nbsp;&nbsp; </font></span><span style='margin: 0px;'><font face='Calibri'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></span></span><b style='mso-bidi-font-weight:&#10;  normal'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif'; font-size: 16pt;'>GMX Seguros</span></b></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'>Rechazo"
+        strBody += " de Órdenes de Pago.</span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'>&nbsp;</span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'>Fueron rechazadas por parte de <b style='mso-bidi-font-weight:normal'>" & UsuSol & " </b>,"
+        strBody += " las siguientes órdenes de pago: </span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'><b style='mso-bidi-font-weight:normal'>" & strNumOrds & "</b></span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'>Para"
+        strBody += " ver el detalle dar clic en el enlace debajo:</span></p>"
+        strBody += "<p align='center' style='margin: 0px; text-align: center; line-height: normal;'><a href='"
+        strBody += ArmaLinkMail(strNumOrds)
+        strBody += "'><font color='#0000ff' face='Calibri'>Click Aqui</font></a></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><font face='Calibri'>&nbsp;</font></p>"
+        strBody += "</td>"
+        strBody += "<td width = '204' valign='top' style='background: rgb(15, 36, 62); border-width: 1px 1px 1px 0px; border-style: solid solid solid none; border-color: rgb(0, 0, 0); margin: 0px; padding: 0cm 5.4pt; border-image: none; width: 152.9pt;'>"
+        strBody += "<p align='center' style='margin 0px; text-align: center; line-height: normal;'><img width='62' height='62' src='\\gmxqroapp02\inetpub\wwwroot\OrdenPago\Images\Firmas\logomail.png' v:shapes='_x0000_i1025'></p>"
+        strBody += " <br> "
+        strBody += "<p align ='center' style='margin 0px; text-align: center; line-height: normal;'><img width='62' height='62' src='\\gmxqroapp02\inetpub\wwwroot\OrdenPago\Images\Firmas\icono-pago_blanco.png' v:shapes='_x0000_i1025'></p>"
+        strBody += "</td>"
+        strBody += "</tr>"
+        strBody += "</tbody></table>"
+
+        Return strBody
+    End Function
+
     Private Function ArmaLinkMail(strNumOrds As String) As String
         Dim ws As New ws_Generales.GeneralesClient
         Dim strLink As String = ws.ObtieneParametro(4) & "/Pages/Login.aspx"
         Dim strParametros As String
-        strParametros = "?Origen=1&NumOrds=" & strNumOrds
+        strParametros = "?NumOrds=" & strNumOrds
         strLink += strParametros
         Return strLink
     End Function
@@ -1284,4 +1379,5 @@ Partial Class OrdenPago_FirmasElectronicas
             Mensaje.MuestraMensaje("Firmas Electrónicas", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
+
 End Class
