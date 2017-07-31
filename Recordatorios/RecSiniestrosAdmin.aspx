@@ -105,7 +105,6 @@
                         <input type="image" src="../Images/contraer_mini.png" id="coVentana1" class="contraer"  />
                         <input type="image" src="../Images/expander_mini.png"   id="exVentana1" class="expandir"  />
                         <label class="etiqueta-simple">Catálogo de Estatus de Siniestro</label>
-                        
                     </div>
                     <div class="clear padding10"></div>
                      <div class="panel-contenido ventana1" >
@@ -117,7 +116,7 @@
                                     <div class="input-group">
                                        <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="150px">Seleccione Fase: </asp:Label>
                                        <asp:TextBox runat="server" ID="txtClaveFas" CssClass="form-control" Width="70px" Height="26px"></asp:TextBox>
-                                       <button type="button" id="btn_SelFas" class="btn btn-info" data-toggle="modal" style="width: 36px; height: 26px;" data-target="#EsperaModal">...</button>
+                                       <button type="button" id="btn_SelFas" class="btn botones" data-toggle="modal" style="width: 36px; height: 26px;" data-target="#EsperaModal">...</button>
                                        <asp:TextBox runat="server" ID="txtSearchFas" CssClass="form-control" Width="260px" Height="26px"></asp:TextBox>
                                    </div>
                                  </div>
@@ -264,7 +263,7 @@
                                     <div class="input-group">
                                        <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="150px">Seleccione Depto: </asp:Label>
                                        <asp:TextBox runat="server" ID="txtClaveSec" CssClass="form-control" Width="70px" Height="26px"></asp:TextBox>
-                                       <button type="button" id="btn_SelSec" class="btn btn-info" data-toggle="modal" style="width: 36px; height: 26px;" data-target="#EsperaModal">...</button>
+                                       <button type="button" id="btn_SelSec" class="btn botones" data-toggle="modal" style="width: 36px; height: 26px;" data-target="#EsperaModal">...</button>
                                        <asp:TextBox runat="server" ID="txtSearchSec" CssClass="form-control" Width="260px" Height="26px"></asp:TextBox>
                                    </div>
                                  </div>

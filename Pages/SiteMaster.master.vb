@@ -77,7 +77,7 @@ Partial Class Pages_SiteMaster
     Private Sub Pages_SiteMaster_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
             CargaRowOculto()
-            menu_principal.InnerHtml = menu_principal.InnerHtml & Session("Menu")
+            menu_principal.InnerHtml = Session("Menu")
         End If
         DetalleUsuario = Split(Context.User.Identity.Name, "|")
         If DetalleUsuario.Count > 1 Then
