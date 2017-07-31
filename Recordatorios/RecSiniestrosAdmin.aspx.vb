@@ -339,9 +339,17 @@ Partial Class Recordatorios_RecSiniestrosAdmin_
 
     Private Sub btn_GuardarHora_Click(sender As Object, e As EventArgs) Handles btn_GuardarHora.Click
         Dim hora As String = hid_hora.Value
+        Dim estado As Integer
         Dim ws As New ws_RecSiniestros.RecSiniestrosClient
         Try
-            ws.ActualizaJobParam(hora, IIf(lbl_StatusJob.Text = "DESACTIVADO", 0, 1))
+            estado = IIf(lbl_StatusJob.Text = "DESACTIVADO", 0, 1)
+            ws.ActualizaJobParam(hora, estado)
+
+
+
+            Dim HoraFormato As String
+            HoraFormato = Replace(hora, ":", "") & "00"
+            Dim Resultado = ws.ActualizaHoraJob(HoraFormato, Now.ToString("yyyyMMdd"), estado)
             MuestraMensaje("Horario", "Se guardo correctamente el horario", TipoMsg.Confirma)
 
         Catch ex As Exception
