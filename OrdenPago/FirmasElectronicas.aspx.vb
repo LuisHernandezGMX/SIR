@@ -384,7 +384,7 @@ Partial Class OrdenPago_FirmasElectronicas
             If blnRechazo = False Then
                 Mail = ObtieneUsuarioMail(TipoPer)
                 strBody = FormatoCorreo(strNumOrds, Master.usuario, TipoPer)
-                ws.EnviaCorreo(Mail, strBody, "Solicitud de Firma de OPs", "", "")
+                ws.EnviaCorreo("martinem@gmx.com.mx", strBody, "Solicitud de Firma de OPs", "", "")
             Else
                 strBody = FormatoCorreoRechazo(strNumOrds, Master.usuario, TipoPer)
                 ws.EnviaCorreo("martinem@gmx.com.mx", strBody, "Rechazo de Firma de OPs", "", "")
@@ -887,7 +887,7 @@ Partial Class OrdenPago_FirmasElectronicas
 
     Private Function ArmaLinkMail(strNumOrds As String) As String
         Dim ws As New ws_Generales.GeneralesClient
-        Dim strLink As String = ws.ObtieneParametro(4) & "/Pages/Login.aspx"
+        Dim strLink As String = ws.ObtieneParametro(4) & "/OrdenPago/FirmasElectronicas.aspx"
         Dim strParametros As String
         strParametros = "?NumOrds=" & strNumOrds
         strLink += strParametros
