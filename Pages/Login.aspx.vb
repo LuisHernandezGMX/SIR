@@ -5,42 +5,59 @@ Partial Class Pages_Login
     Inherits System.Web.UI.Page
 
     Private Function ArmaMenu(ByVal dtMenu As DataTable) As String
-        Dim nivel As Integer = 0
-        Dim blnBase As Boolean = False
-        Dim separador As String = "<li> <img Class=""separador"" /></li>"
-        ArmaMenu = "<ul id = ""menu"" >" &
-                        "<li><ul><div id=""casita"">" &
-                                    "<a href=""../Pages/Inicio.aspx"">" &
-                                    "<img class=""home"" src=""../Images/menu_home-up.png"" width=""26"" height=""22"" border=""0"" id=""home"" onmouseout=""MM_swapImgRestore()"" onmouseover=""MM_swapImage('home','','../Images/menu_home-over.png',1)"" onmousedown=""MM_swapImage('home','','../Images/menu_home-down.png',1)""></a>" &
-                                 "</div>"
+        Dim Menu As String = "<ul id=""menu"">" &
+                                "<li> " &
+                                        "<div id=""casita"">" &
+                                            "<a href=""../Pages/Inicio.aspx"">" &
+                                            "<img src=""../Images/menu_home-up.png"" width=""26"" height=""22"" border=""0"" id=""home"" onmouseout=""MM_swapImgRestore()"" onmouseover=""MM_swapImage('home','','../Images/menu_home-over.png',1)"" onmousedown=""MM_swapImage('home','','../Images/menu_home-down.png',1)""></a>" &
+                                       "</div>" &
+                                "</li>"
 
-        For Each row In dtMenu.Rows
-            If nivel <> row("nivel") Then
-                nivel = row("nivel")
-                If blnBase = True Then
-                    ArmaMenu = ArmaMenu & "</ul></li>"
-                End If
-                ArmaMenu = ArmaMenu & "</ul></li>" & separador & "<li>" & row("descripcion") & "<ul>"
-                blnBase = False
+        Dim separador As String = "<li> <img Class=""separador"" /></li>"
+
+        Dim myRow() As Data.DataRow
+        myRow = dtMenu.Select("nivel ='" & 0 & "'")
+
+        For Each item In myRow
+            Menu = Menu & separador & "<li>"
+
+            If len(item("ubicacion")) > 0 Then
+                Menu = Menu & "<a href=""" & item("ubicacion") & """>" & item("descripcion") & "</a>"
             Else
-                If Len(row("ubicacion")) > 0 Then
-                    ArmaMenu = ArmaMenu & "<li><a href=""" & row("ubicacion") & """>" & row("descripcion") & "</a></li> "
-                Else
-                    If blnBase = True Then
-                        ArmaMenu = ArmaMenu & "</ul></li>"
-                    End If
-                    ArmaMenu = ArmaMenu & "<li>" & row("descripcion") & "<ul>"
-                    blnBase = True
-                End If
+                Menu = Menu & item("descripcion") & "<ul>"
+                Menu = Menu & ArmaSubMenus(dtMenu, item("cod_submodulo_web"))
+                Menu = Menu & "</ul>"
             End If
+            Menu = Menu & "</li>"
+        Next
+        Menu = Menu & "</ul>"
+
+        Return Menu
+    End Function
+
+    Private Function ArmaSubMenus(ByVal dtMenu As DataTable, ByVal cod_submodulo As Integer)
+        Dim submenu As String = ""
+
+        'Validación de Selección
+        Dim myRow() As Data.DataRow
+        myRow = dtMenu.Select("nivel ='" & cod_submodulo & "'")
+
+        For Each item In myRow
+            submenu = submenu & "<li>"
+
+            If len(item("ubicacion")) > 0 Then
+                submenu = submenu & "<a href=""" & item("ubicacion") & """>" & item("descripcion") & "</a>"
+            Else
+                submenu = submenu & item("descripcion") & "<ul>"
+                submenu = submenu & ArmaSubMenus(dtMenu, item("cod_submodulo_web"))
+                submenu = submenu & "</ul>"
+            End If
+            submenu = submenu & "</li>"
         Next
 
-        If blnBase = True Then
-            ArmaMenu = ArmaMenu & "</ul></li>"
-        End If
-
-        ArmaMenu = ArmaMenu & "</ul></li>" & "</ul>"
+        Return submenu
     End Function
+
 
     Private Sub btn_Aceptar_Click(sender As Object, e As EventArgs) Handles btn_Aceptar.Click
         Try
@@ -67,9 +84,14 @@ Partial Class Pages_Login
 
                     Response.Cookies.Add(authCookie)
 
-                    Response.Redirect("Inicio.aspx", False)
+                    If len(request.querystring("ReturnUrl")) > 0 Then
+                        Response.Redirect(FormsAuthentication.GetRedirectUrl(dtUsuario.Rows(0)("cod_usuario") & "|" & dtUsuario.Rows(0)("usuario"), False))
+                    Else
+                        Response.Redirect("Inicio.aspx", False)
+                    End If
+
                 Else
-                    Mensaje.MuestraMensaje("Login", "No cuenta con permisos para ingresar a SII", TipoMsg.Falla)
+                        Mensaje.MuestraMensaje("Login", "No cuenta con permisos para ingresar a SII", TipoMsg.Falla)
                 End If
             Else
                 Mensaje.MuestraMensaje("Login", "Usuario y/o Contraseña incorrectos", TipoMsg.Falla)

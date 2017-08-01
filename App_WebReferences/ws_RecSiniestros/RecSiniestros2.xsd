@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
   <xs:element name="ActualizaFaseRecup">
     <xs:complexType>
       <xs:sequence>
@@ -193,6 +194,44 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="ActualizaJobParamResult" nillable="true" type="q13:ArrayOfNullableOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ActualizaHoraJob">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="srtHoraIni" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="strFechaIni" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Activado" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ActualizaHoraJobResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="ActualizaHoraJobResult" nillable="true" type="q14:ArrayOfNullableOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneSiniestros">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tipo_mov" type="xs:int" />
+        <xs:element minOccurs="0" name="nro_stro" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="broker" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="aseg" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="reaseg" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cod_ramo_conta" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="poliza" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fec_desde" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fec_hasta" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneSiniestrosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneSiniestrosResult" nillable="true" type="q15:ArrayOfsp_rptMovSinxReas_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

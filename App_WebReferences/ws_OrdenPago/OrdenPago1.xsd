@@ -13,6 +13,7 @@
       <xs:element minOccurs="0" name="Autoriza_Conta" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Autoriza_DirArea" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Autoriza_JefeInmediato" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Autoriza_Rechazo" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Autoriza_Subdirector" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Baja" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Banco" nillable="true" type="xs:string" />
@@ -51,6 +52,7 @@
       <xs:element minOccurs="0" name="cod_usuario_contabilidad" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_usuario_director" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_usuario_jefe" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cod_usuario_rechazo" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_usuario_solicita" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_usuario_subdir" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="estatus" nillable="true" type="xs:string" />
@@ -78,6 +80,8 @@
       <xs:element minOccurs="0" name="sn_DireccionArea_Aux" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_JefeDirecto" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_JefeDirecto_Aux" type="xs:boolean" />
+      <xs:element minOccurs="0" name="sn_Rechazo" type="xs:boolean" />
+      <xs:element minOccurs="0" name="sn_Rechazo_Aux" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_Solicita" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_Solicita_Aux" type="xs:boolean" />
       <xs:element minOccurs="0" name="sn_Subdirector" type="xs:boolean" />
