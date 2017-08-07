@@ -28,11 +28,11 @@ function PageLoadMaster() {
 
         for (i = 0; i <= Filas.length - 2; i++) {
             if ($('[id*=chk_Cat]')[i].checked == true) {
-                varSeleccion = varSeleccion + $('[id*=lbl_ClaveCat]')[i].innerText + '~' +
-                                              $('[id*=lbl_DesCat]')[i].innerText + '~' +
-                                              $('[id*=lbl_Oculta1]')[i].innerText + '~' +
-                                              $('[id*=lbl_Oculta2]')[i].innerText + '~' +
-                                              $('[id*=lbl_Oculta3]')[i].innerText + '|';
+                varSeleccion = varSeleccion + Filas[i+1].cells[1].innerText + '~' +
+                                              Filas[i+1].cells[2].innerText + '~' +
+                                              Filas[i+1].cells[3].innerText + '~' +
+                                              Filas[i+1].cells[4].innerText + '~' +
+                                              Filas[i+1].cells[5].innerText + '|';
             }
         }
 
