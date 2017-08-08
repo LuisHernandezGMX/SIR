@@ -116,6 +116,29 @@ function PageLoadMaster() {
     });
 
 
+    $('#txt_Filtro').keyup(function (event) {
+        var searchKey = $(this).val().toLowerCase();
+        var textoFila = ''
+
+        var Filas = $("[id*=gvd_Catalogo]")[0].rows;
+
+        for (i = 0; i <= Filas.length - 2; i++) {
+            var Clave =  Filas[i + 1].cells[1].innerText.toLowerCase()  
+            var Descripcion =  Filas[i + 1].cells[2].innerText.toLowerCase() 
+
+            if (Clave.indexOf(searchKey) >= 0 || Descripcion.indexOf(searchKey) >= 0) {
+                $(Filas[i+1]).show();
+            }
+            else {
+                $(Filas[i+1]).hide();
+            }
+        }
+
+        if ($('#txt_Filtro')[0].value == "") {
+            $('[id$=gvd_Catalogo]').tablePagination({});
+        }
+    });
+
 }
 
 
@@ -391,7 +414,18 @@ function fn_Aclaracion(id_pv) {
 };
 
 function fn_Desplazable(modal) {
-    $(modal).draggable();
+    $(modal).draggable({ disabled: false });
+}
+
+function fn_NoDesplazable(control, control_base) {
+    var left = $(control_base).css("left");
+    var top = $(control_base).css("top");
+
+    $(control).css({
+        'left': left,
+        'top': top
+    });
+    $(control).draggable({disabled:true });
 }
 
 //Formato de comas a N posiciones decimales

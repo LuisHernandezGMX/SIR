@@ -247,21 +247,25 @@
         </div> 
         
         <!-- Modal -->
-        <div id="Catalogo" style="width:350px; height:440px" class="modal-catalogo" >
+        <div id="Catalogo" style="width:350px; height:470px" class="modal-catalogo" >
             <div class="cuadro-titulo" style="height:30px">
                 <button type="button" style="color:white;" class="close"  data-dismiss="modal">&times;</button>
                 <div class="titulo-modal"><label id="lbl_Catalogo">Catálogo</label></div>
             </div>
 
-            <div class="modal-body" style="height:420px">
+            <div class="modal-body" style="height:450px">
                 <asp:UpdatePanel runat="server" ID="upCatalogo">
                     <ContentTemplate>
                         <asp:HiddenField runat="server" ID="hid_Control" Value="" />
                         <asp:HiddenField runat="server" ID="hid_Seleccion" Value="" />
                         <asp:HiddenField runat="server" ID="hid_Prefijo" Value="" />
-                        <asp:Panel runat="server" ID="pnlCatalogo" Width="320px" Height="350px" ScrollBars="Vertical">
+                        <div class="input-group">
+                            <asp:label runat="server"  class="col-md-1 etiqueta-control" Width="50px">Filtro:</asp:label>
+                            <input type="text" id="txt_Filtro" class="estandar-control" style="width:245px; height:26px;" />
+                        </div>
+                        <asp:Panel runat="server" ID="pnlCatalogo" Width="320px" Height="360px" ScrollBars="Vertical">
                             <asp:GridView runat="server"  ID="gvd_Catalogo" AutoGenerateColumns="false" 
-                                          GridLines="Horizontal"  ShowHeaderWhenEmpty="true"
+                                          GridLines="Horizontal"  ShowHeaderWhenEmpty="true" CssClass="grid-view"
                                           HeaderStyle-CssClass="header">
                                 <Columns>
                                     <asp:TemplateField HeaderText="">

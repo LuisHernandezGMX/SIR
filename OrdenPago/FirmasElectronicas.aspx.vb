@@ -106,13 +106,13 @@ Partial Class OrdenPago_FirmasElectronicas
 
         If IsDate(txtFecGeneraDe.Text) And IsDate(txtFecGeneraA.Text) Then
             If CDate(txtFecGeneraDe.Text) <= CDate(txtFecGeneraA.Text) Then
-                FiltroFechaGen = " AND fec_generacion >= '" & txtFecGeneraDe.Text & "' AND fec_generacion < '" & txtFecGeneraA.Text & "'"
+                FiltroFechaGen = " AND fec_generacion >= '" & CDate(txtFecGeneraDe.Text).ToString("yyyyMMdd") & "' AND fec_generacion <= '" & CDate(txtFecGeneraA.Text).ToString("yyyyMMdd") & "'"
             End If
         End If
 
         If IsDate(txtFecPagoDe.Text) And IsDate(txtFecPagoA.Text) Then
             If CDate(txtFecPagoDe.Text) <= CDate(txtFecPagoA.Text) Then
-                FiltroFechaPago = " AND fec_pago >= '" & txtFecPagoDe.Text & "' AND fec_pago < '" & txtFecPagoA.Text & "'"
+                FiltroFechaPago = " AND fec_pago >= '" & CDate(txtFecPagoDe.Text).ToString("yyyyMMdd") & "' AND fec_pago <= '" & CDate(txtFecPagoA.Text).ToString("yyyyMMdd") & "'"
             End If
         End If
 

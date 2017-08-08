@@ -223,6 +223,22 @@ box-shadow: 5px 5px 5px #003A5D;
 border-radius: 0px 0px 20px 20px;  
 }
 
+.cuadro-subtitulo-flotante{
+width:100%;
+padding-right:10px;
+padding-top:5px;
+padding-left:15px;
+border-bottom-style:inset;
+border-bottom-width:1px;
+border-bottom-color:#003A5D;
+text-align:left;
+background-color:white;
+color:#003A5D;
+font-size:12px;
+font-family:Myriad Pro;
+font-weight:bold;
+}
+
 .cuadro-subtitulo-grid{
 width:100%;
 padding-right:10px;
@@ -503,6 +519,60 @@ opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px
 border-radius: 11px; left: 29.5%; top: 0%; margin-left: -150px; position: fixed; z-index: 9980; background-color: rgb(255, 255, 255); 
 -moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
 opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; 
+}
+
+.modal-flotante {
+border-radius: 11px;  margin-left: -150px;  position: fixed; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c; width:400px;
+}
+
+.generales{
+    left: 30%; top: 25%;
+}
+
+.reaseguro{
+    left: 30%; top: 30%;
+}
+
+.siniestros{
+    left: 30%; top: 35%;
+}
+
+.cumulos{
+    left: 30%; top: 40%;
+}
+
+.cobranzas{
+    left: 30%; top: 45%;
+}
+
+.contabilidad{
+    left: 30%; top: 50%;
+}
+
+.poliza{
+    left: 70%; top: 25%;
+}
+
+.broker{
+    left: 70%; top: 30%;
+}
+
+.compañia{
+    left: 70%; top: 35%;
+}
+
+.ramo_contable{
+    left: 70%; top: 40%;
+}
+
+.producto{
+    left: 70%; top: 45%;
+}
+
+.adicionales{
+    left: 70%; top: 50%;
 }
 /*------------------------------------*/
 
