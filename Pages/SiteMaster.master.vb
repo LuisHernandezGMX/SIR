@@ -109,6 +109,7 @@ Partial Class Pages_SiteMaster
             Dim lbl_Oculta1 As Label
             Dim lbl_Oculta2 As Label
             Dim lbl_Oculta3 As Label
+            Dim Elemento As String
 
             If Len(Seleccionados) > 0 Then
 
@@ -127,8 +128,16 @@ Partial Class Pages_SiteMaster
                     dt_Datos.Columns.Add("OcultaCampo3")
 
                     For Each row As GridViewRow In gvd_Control.Rows
-                        Dim Elemento = DirectCast(row.FindControl("chk_Sel" & Prefijo), HiddenField)
-                        If Elemento.Value <> "true" Then
+
+
+                        If TryCast(row.FindControl("chk_Sel" & Prefijo), HiddenField) Is Nothing Then
+                            Elemento = IIf(DirectCast(row.FindControl("chk_Sel" & Prefijo), CheckBox).Checked, "true", "false")
+                        Else
+                            Elemento = DirectCast(row.FindControl("chk_Sel" & Prefijo), HiddenField).Value
+                        End If
+
+
+                        If Elemento <> "true" Then
                             Dim Fila As DataRow = dt_Datos.NewRow()
                             Fila("Clave") = DirectCast(row.FindControl("lbl_Clave" & Prefijo), Label).Text
                             Fila("Descripcion") = DirectCast(row.FindControl("lbl_Desc"), Label).Text
@@ -237,11 +246,19 @@ Partial Class Pages_SiteMaster
             Dim Polizas As String = "'-1'"
             Dim dtResultado As New DataTable
             Dim ws As New ws_Generales.GeneralesClient
+            Dim Elemento As String
 
             Dim gvd_Control As GridView = DirectCast(cph_principal.FindControl(hid_Control_Pol.Value), GridView)
             If Not gvd_Control Is Nothing Then
                 For Each row In gvd_Control.Rows
-                    If DirectCast(row.FindControl("chk_SelPol"), HiddenField).Value <> "true" Then
+
+                    If TryCast(row.FindControl("chk_SelPol"), HiddenField) Is Nothing Then
+                        Elemento = IIf(DirectCast(row.FindControl("chk_SelPol"), CheckBox).Checked, "true", "false")
+                    Else
+                        Elemento = DirectCast(row.FindControl("chk_SelPol"), HiddenField).Value
+                    End If
+
+                    If Elemento <> "true" Then
                         Polizas = Polizas & ",'" & DirectCast(row.FindControl("lbl_ClavePol"), Label).Text & "'"
                     End If
                 Next
@@ -332,6 +349,8 @@ Partial Class Pages_SiteMaster
 
     Private Sub btn_Aceptar_Endoso_Click(sender As Object, e As EventArgs) Handles btn_Aceptar_Endoso.Click
         Try
+            Dim Elemento As String
+
             dt_Datos = New DataTable
             dt_Datos.Columns.Add("Clave")
             dt_Datos.Columns.Add("Descripcion")
@@ -341,8 +360,14 @@ Partial Class Pages_SiteMaster
             Dim gvd_Control As GridView = DirectCast(cph_principal.FindControl(hid_Control_Pol.Value), GridView)
 
             For Each row As GridViewRow In gvd_Control.Rows
-                Dim Elemento = DirectCast(row.FindControl("chk_SelPol"), HiddenField)
-                If Elemento.Value <> "true" Then
+
+                If TryCast(row.FindControl("chk_SelPol"), HiddenField) Is Nothing Then
+                    Elemento = IIf(DirectCast(row.FindControl("chk_SelPol"), CheckBox).Checked, "true", "false")
+                Else
+                    Elemento = DirectCast(row.FindControl("chk_SelPol"), HiddenField).Value
+                End If
+
+                If Elemento <> "true" Then
                     Dim Fila As DataRow = dt_Datos.NewRow()
                     Fila("Clave") = DirectCast(row.FindControl("lbl_ClavePol"), Label).Text
                     Fila("Descripcion") = DirectCast(row.FindControl("lbl_DescripcionPol"), Label).Text
