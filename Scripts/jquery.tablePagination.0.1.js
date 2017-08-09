@@ -33,9 +33,9 @@
 			prevArrow : (new Image()).src="../Images/prev.gif",
 			lastArrow : (new Image()).src="../Images/last.gif",
 			nextArrow : (new Image()).src="../Images/next.gif",
-			rowsPerPage : 12,
+			rowsPerPage : 15,
 			currPage : 1,
-			optionsForRows : [10,12,20,50],
+			optionsForRows : [15,20,50,100],
 			ignoreRows : []
 		};  
 		settings = $.extend(defaults, settings);

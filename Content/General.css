@@ -223,6 +223,22 @@ box-shadow: 5px 5px 5px #003A5D;
 border-radius: 0px 0px 20px 20px;  
 }
 
+.cuadro-subtitulo-flotante{
+width:100%;
+padding-right:10px;
+padding-top:5px;
+padding-left:15px;
+border-bottom-style:inset;
+border-bottom-width:1px;
+border-bottom-color:#003A5D;
+text-align:left;
+background-color:white;
+color:#003A5D;
+font-size:12px;
+font-family:Myriad Pro;
+font-weight:bold;
+}
+
 .cuadro-subtitulo-grid{
 width:100%;
 padding-right:10px;
@@ -504,6 +520,60 @@ border-radius: 11px; left: 29.5%; top: 0%; margin-left: -150px; position: fixed;
 -moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
 opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; 
 }
+
+.modal-flotante {
+border-radius: 11px;  margin-left: -150px;  position: fixed; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c; width:400px;
+}
+
+.generales{
+    left: 400px; top: 160px;
+}
+
+.reaseguro{
+    left: 400px; top: 195px;
+}
+
+.siniestros{
+    left: 400px; top: 230px;
+}
+
+.cumulos{
+    left: 400px; top: 265px;
+}
+
+.cobranzas{
+    left: 400px; top: 300px;
+}
+
+.contabilidad{
+    left: 400px; top: 335px;
+}
+
+.poliza{
+    left: 830px; top: 160px;
+}
+
+.broker{
+    left: 830px; top: 195px;
+}
+
+.compañia{
+    left: 830px; top: 230px;
+}
+
+.ramo_contable{
+    left: 830px; top: 265px;
+}
+
+.producto{
+    left: 830px; top: 300px;
+}
+
+.adicionales{
+    left: 830px; top: 335px;
+}
 /*------------------------------------*/
 
 
@@ -624,6 +694,10 @@ border-color: red;
 .botones[disabled],.botones[readonly],fieldset[disabled] 
 .botones{background-color:#eee;opacity:1}
 
+.boton-chico{
+height:27px;
+width:40px; 
+}
 
 .boton-mediano{
 width:100px; 
@@ -722,6 +796,10 @@ background-image: url(../Images/cargar_mini.png);
 width: 14px; height: 14px;
 }
 
+.btn-enviar{
+background-image: url(../Images/enviar_mini.png);
+width: 14px; height: 14px;
+} 
 /*-------------------------------------------------------------------------------------------*/
 
 

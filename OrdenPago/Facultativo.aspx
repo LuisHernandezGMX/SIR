@@ -4,7 +4,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="cph_principal" Runat="Server">
     <script src="../Scripts/Facultativos.js"></script>
 
-    <asp:HiddenField runat="server" ID="hid_Ventanas" Value="0|0|0|0|" />
+    <asp:HiddenField runat="server" ID="hid_Ventanas" Value="1|1|1|1|" />
     <%-----------------------------------Sección 1----------------------------------------------------------------------------------------------------%>
         <div style="width:1000px; min-width:1000px; overflow-x:hidden">
             <div class="cuadro-titulo panel-encabezado">
@@ -114,6 +114,7 @@
                 </div>
             </div>
 
+            <div class="clear padding10"></div>
 
              <%-----------------------------------Sección 2----------------------------------------------------------------------------------------------------%>
             <div class="cuadro-titulo panel-encabezado">
@@ -252,6 +253,8 @@
                     </div>
                 </div>
             </div>
+
+            <div class="clear padding10"></div>
 
              <%-----------------------------------Sección 3----------------------------------------------------------------------------------------------------%>
             <div class="cuadro-titulo panel-encabezado">
@@ -420,6 +423,8 @@
                      </div>
                 </div>
             </div>
+
+            <div class="clear padding10"></div>
 
              <%-----------------------------------Sección 3----------------------------------------------------------------------------------------------------%>
             <div class="cuadro-titulo panel-encabezado">
@@ -649,6 +654,8 @@
             </div>
 
         </div>
+
+        <div class="clear padding10"></div>
 
         <div class="row">
              <div class="col-md-12">
