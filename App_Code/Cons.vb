@@ -12,6 +12,12 @@ Public Class Cons
     Public Const ConsulFac As Integer = 5
     Public Const ConsulEsp As Integer = 6
 
+    'Tipo Consulta
+    Public Enum TipoMov
+        Fac = 1
+        Esp = 2
+    End Enum
+
     'Acciones Filtros
     Public Enum Accion
         Consultar

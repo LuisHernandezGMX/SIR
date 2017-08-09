@@ -277,7 +277,7 @@
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="Clave">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_ClaveAvU" Text='<%# Eval("Clave") %>' Width="50px" Font-Size="10px" ></asp:Label>
+                                                        <asp:Label runat="server" ID="lbl_ClaveAvU" Text='<%# Eval("Clave") %>' Width="80px" Font-Size="10px" ></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Descripción">
