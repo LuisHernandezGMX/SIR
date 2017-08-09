@@ -5,7 +5,7 @@
     <script src="../Scripts/Reporteador.js"></script>
     <asp:HiddenField runat="server" ID="hid_Ventanas" Value="1|1|1|1|1|1|1|1|1|1|1|1|1|" />
     
-    <div style="width:1000px; min-width:1000px; overflow-x:hidden;">
+    <div style="width:1000px; min-width:1050px; overflow-x:hidden;">
         <div class="cuadro-titulo panel-encabezado">
             Configuración del Reporte
         </div>
@@ -34,10 +34,10 @@
                
 
                             <div id="ventana0" class="panel-subcontenido ventana0">
-                                <asp:Panel runat="server" ID="pnlGenerales" Width="100%" Height="200px" ScrollBars="Both">
+                                <asp:Panel runat="server" ID="pnlGenerales" Width="100%" Height="250px" ScrollBars="Both">
                                     <asp:GridView runat="server" ID="gvd_Generales" AutoGenerateColumns="false" 
                                                   CssClass ="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="Clave,Descripcion,OcultaCampo1" >
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
@@ -51,9 +51,17 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Descripción">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="300px"></asp:Label>
+                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="290px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="">
+                                                    <HeaderTemplate>
+                                                        <asp:Image runat="server" CssClass="btn-filtro" />
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                            <asp:CheckBox runat="server" ID="chk_Filtro" AutoPostBack="true" OnCheckedChanged="FiltraCampo"/>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField >
                                             </Columns>
                                         </asp:GridView>
                                     </asp:Panel>
@@ -63,9 +71,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaGenerales" data-toggle="modal" data-target="#EsperaModal"  />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaGenerales" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Generales" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -93,10 +110,10 @@
                             </div>
                 
                             <div id="ventana1" class="panel-subcontenido ventana1">
-                                <asp:Panel runat="server" ID="pnlReaseguro" Width="100%" Height="200px" ScrollBars="Both">
+                                <asp:Panel runat="server" ID="pnlReaseguro" Width="100%" Height="250px" ScrollBars="Both">
                                     <asp:GridView runat="server" ID="gvd_Reaseguro" AutoGenerateColumns="false" 
                                                   CssClass ="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="Clave,Descripcion,OcultaCampo1">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
@@ -110,9 +127,17 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Descripción">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="300px"></asp:Label>
+                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="290px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="">
+                                                    <HeaderTemplate>
+                                                        <asp:Image runat="server" CssClass="btn-filtro" />
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                            <asp:CheckBox runat="server" ID="chk_Filtro" AutoPostBack="true" OnCheckedChanged="FiltraCampo"/>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField >
                                             </Columns>
                                         </asp:GridView>
                                     </asp:Panel>
@@ -122,9 +147,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaReaseguro" data-toggle="modal" data-target="#EsperaModal" />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaReaseguro" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Reaseguro" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -153,10 +187,10 @@
                
 
                             <div id="ventana2" class="panel-subcontenido ventana2">
-                                <asp:Panel runat="server" ID="pnl_Siniestros" Width="100%" Height="200px" ScrollBars="Both">
+                                <asp:Panel runat="server" ID="pnl_Siniestros" Width="100%" Height="250px" ScrollBars="Both">
                                     <asp:GridView runat="server" ID="gvd_Siniestros" AutoGenerateColumns="false" 
                                                   CssClass ="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="Clave,Descripcion,OcultaCampo1">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
@@ -170,9 +204,17 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Descripción">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="300px"></asp:Label>
+                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="290px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="">
+                                                    <HeaderTemplate>
+                                                        <asp:Image runat="server" CssClass="btn-filtro" />
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                            <asp:CheckBox runat="server" ID="chk_Filtro" AutoPostBack="true" OnCheckedChanged="FiltraCampo"/>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField >
                                             </Columns>
                                         </asp:GridView>
                                     </asp:Panel>
@@ -182,9 +224,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaSiniestros" data-toggle="modal" data-target="#EsperaModal" />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaSiniestros" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Siniestros" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -213,10 +264,10 @@
                
 
                             <div id="ventana3" class="panel-subcontenido ventana3">
-                                <asp:Panel runat="server" ID="pnlCumulos" Width="100%" Height="200px" ScrollBars="Both">
+                                <asp:Panel runat="server" ID="pnlCumulos" Width="100%" Height="250px" ScrollBars="Both">
                                     <asp:GridView runat="server" ID="gvd_Cumulos" AutoGenerateColumns="false" 
                                                   CssClass ="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="Clave,Descripcion,OcultaCampo1">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
@@ -230,9 +281,17 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Descripción">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="300px"></asp:Label>
+                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="290px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="">
+                                                    <HeaderTemplate>
+                                                        <asp:Image runat="server" CssClass="btn-filtro" />
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                            <asp:CheckBox runat="server" ID="chk_Filtro" AutoPostBack="true" OnCheckedChanged="FiltraCampo"/>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField >
                                             </Columns>
                                         </asp:GridView>
                                     </asp:Panel>
@@ -242,9 +301,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaCumulos" data-toggle="modal" data-target="#EsperaModal" />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaCumulos" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Cumulos" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -273,10 +341,10 @@
                
 
                             <div id="ventana4" class="panel-subcontenido ventana4">
-                                <asp:Panel runat="server" ID="pnlCobranzas" Width="100%" Height="200px" ScrollBars="Both">
+                                <asp:Panel runat="server" ID="pnlCobranzas" Width="100%" Height="250px" ScrollBars="Both">
                                     <asp:GridView runat="server" ID="gvd_Cobranzas" AutoGenerateColumns="false" 
                                                   CssClass ="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="Clave,Descripcion,OcultaCampo1">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
@@ -290,9 +358,17 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Descripción">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="300px"></asp:Label>
+                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="290px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="">
+                                                    <HeaderTemplate>
+                                                        <asp:Image runat="server" CssClass="btn-filtro" />
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                            <asp:CheckBox runat="server" ID="chk_Filtro" AutoPostBack="true" OnCheckedChanged="FiltraCampo"/>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField >
                                             </Columns>
                                         </asp:GridView>
                                     </asp:Panel>
@@ -302,9 +378,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaCobranzas" data-toggle="modal" data-target="#EsperaModal" />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaCobranzas" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Cobranzas" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -333,10 +418,10 @@
                
 
                             <div id="ventana5" class="panel-subcontenido ventana5">
-                                <asp:Panel runat="server" ID="pnlContabilidad" Width="100%" Height="200px" ScrollBars="Both">
+                                <asp:Panel runat="server" ID="pnlContabilidad" Width="100%" Height="250px" ScrollBars="Both">
                                     <asp:GridView runat="server" ID="gvd_Contabilidad" AutoGenerateColumns="false" 
                                                   CssClass ="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                                  GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="Clave,Descripcion,OcultaCampo1">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
@@ -350,9 +435,17 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Descripción">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="300px"></asp:Label>
+                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="290px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="">
+                                                    <HeaderTemplate>
+                                                        <asp:Image runat="server" CssClass="btn-filtro" />
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                            <asp:CheckBox runat="server" ID="chk_Filtro" AutoPostBack="true" OnCheckedChanged="FiltraCampo"/>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField >
                                             </Columns>
                                         </asp:GridView>
                                     </asp:Panel>
@@ -362,9 +455,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaContabilidad" data-toggle="modal" data-target="#EsperaModal" />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaContabilidad" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Contabilidad" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -424,9 +526,17 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <asp:ImageButton runat="server" ID="btn_AddPol" ImageUrl="../Images/expander_mini.png"/>
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <button id="btn_AddPol" class="btn botones boton-chico" runat="server">
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </button>
+                                                <button id="btn_Poliza" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -484,9 +594,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaBroker" data-toggle="modal" data-target="#EsperaModal"  />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaBroker" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Broker" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -544,9 +663,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaCia" data-toggle="modal" data-target="#EsperaModal" />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaCia" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Compañia" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -582,12 +710,12 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelRac"/>
+                                                            <asp:CheckBox runat="server" ID="chk_SelRamC"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_ClaveRac" Text='<%# Eval("Clave") %>' Width="50px"></asp:Label>
+                                                        <asp:Label runat="server" ID="lbl_ClaveRamC" Text='<%# Eval("Clave") %>' Width="50px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Descripción">
@@ -604,9 +732,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaRamoCont" data-toggle="modal" data-target="#EsperaModal"  />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaRamoCont" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_RamoContable" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -664,9 +801,18 @@
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png" class="AgregaProducto" data-toggle="modal" data-target="#EsperaModal"  />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaProducto" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Producto" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -676,7 +822,7 @@
                 </div>
 
                 <div id="hid_adicionales" class="modal-flotante adicionales NoDisplay"></div>
-                <div id="div_adicionales" class="modal-flotante adicionales">
+                <div id="div_adicionales" style="width:600px;" class="modal-flotante adicionales">
                     <asp:UpdatePanel runat="server" ID="upAdicionales">
                         <ContentTemplate>
                             <div class="cuadro-subtitulo-flotante">
@@ -696,15 +842,101 @@
 
                             <div id="ventana11" class="panel-subcontenido ventana11">
                                 
+                                    <asp:Panel runat="server" ID="pnlAdicionales" Width="100%" Height="200px" ScrollBars="Both">
+                                        <asp:GridView runat="server" ID="gvd_Adicionales" AutoGenerateColumns="false" 
+                                                      CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
+                                                      GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                            <Columns>
+                                                <asp:TemplateField HeaderText="">
+                                                    <ItemTemplate>
+                                                            <asp:CheckBox runat="server" ID="chk_SelAdi"/>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField >
+
+                                                <asp:TemplateField HeaderText="">
+                                                    <ItemTemplate>
+                                                        <asp:Label runat="server" ID="lbl_Where" CssClass="estandar-control" Width="70px" Text="EN DONDE: " Visible="false" ></asp:Label>
+                                                        <asp:DropDownList ID="ddl_Union" CssClass="estandar-control" Width="70px" runat="server"  Visible="true" >
+                                                            <asp:ListItem Text="Y" Value="AND" ></asp:ListItem>
+                                                            <asp:ListItem Text="O" Value="OR"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <asp:HiddenField runat="server" ID="hid_Union" Value='<%# Split(Eval("OcultaCampo2"), ";")(0)  %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="">
+                                                    <ItemTemplate>
+                                                        <asp:Label runat="server" ID="lbl_ClaveAdi" Text='<%# Eval("Clave") %>' Width="15px"></asp:Label>
+                                                        <asp:HiddenField runat="server" ID="hid_seccion" Value='<%# Eval("OcultaCampo1") %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="Campo">
+                                                    <ItemTemplate>
+                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="120px"></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="">
+                                                    <ItemTemplate>
+                                                        <asp:DropDownList ID="ddl_Operador" CssClass="estandar-control" Width="115px" runat="server"  >
+                                                            <asp:ListItem Text="IGUAL A" Value="="></asp:ListItem>
+                                                            <asp:ListItem Text="MENOR A" Value="<"></asp:ListItem>
+                                                            <asp:ListItem Text="MAYOR A" Value=">"></asp:ListItem>
+                                                            <asp:ListItem Text="MENOR O IGUAL A" Value="<="></asp:ListItem>
+                                                            <asp:ListItem Text="MAYOR O IGUAL A" Value=">="></asp:ListItem>
+                                                            <asp:ListItem Text="DIFERENTE A" Value="<>"></asp:ListItem>
+                                                            <asp:ListItem Text="COMIENCE CON.." Value="LIKE @%"></asp:ListItem>
+                                                            <asp:ListItem Text="TERMINE CON..." Value="LIKE %@"></asp:ListItem>
+                                                            <asp:ListItem Text="CONTENGA..." Value="LIKE %@%"></asp:ListItem>
+                                                            <asp:ListItem Text="NO CONTENGA..." Value="NOT LIKE %@%"></asp:ListItem>
+                                                            <asp:ListItem Text="DENTRO DE" Value="IN(@)"></asp:ListItem>
+                                                            <asp:ListItem Text="NO DENTRO DE" Value="NOT IN(@)"></asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <asp:HiddenField runat="server" ID="hid_Operador" Value='<%# Split(Eval("OcultaCampo2"), ";")(1) %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="Condición">
+                                                    <ItemTemplate>
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <asp:TextBox CssClass="estandar-control" runat="server" ID="txt_Condicion" Text='<%# Eval("OcultaCampo3") %>' Width="200px"></asp:TextBox>
+                                                                </td>
+                                                                <td>
+                                                                    <asp:LinkButton id="btn_Multiples" CommandName="ValoresMultiples" runat="server" class="btn botones boton-chico ValoresMultiples">
+                                                                        <span>
+                                                                            <img class="btn-modificar"/>
+                                                                        </span>
+                                                                    </asp:LinkButton>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
+                                    </asp:Panel>
+
                                     <div class="row">
                                         <div class="col-md-6">
                                             <input type="image" src="../Images/select_mini.png"  />
                                             <input type="image" src="../Images/unselect_mini.png"  />
                                         </div>
                                         <div class="col-md-6">
-                                            <div style="width:100%;  text-align:right">
-                                                <input type="image" src="../Images/expander_mini.png"  />
-                                                <input type="image" src="../Images/contraer_mini.png"  />
+                                            <div style="width:100%;  text-align:right; padding-right:10px;">
+                                                <asp:LinkButton runat="server" class="btn botones boton-chico AgregaAdicional" data-toggle="modal" data-target="#EsperaModal" >
+                                                    <span>
+                                                        <img class="btn-añadir"/>
+                                                    </span>
+                                                </asp:LinkButton>
+
+                                                <button id="btn_Adicionales" class="btn botones boton-chico" onserverclick="QuitaElementos" runat="server">
+                                                    <span>
+                                                        <img class="btn-quitar"/>
+                                                    </span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -714,10 +946,75 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        
-        
+    <div id="Multivalores" style="width:300px; height:350px"  class="modal-catalogo">
+        <asp:UpdatePanel runat="server" ID="upMultivalores" >
+            <ContentTemplate>
+                <div class="cuadro-titulo" style="height:30px">
+                    <button type="button" class="close"  data-dismiss="modal">&times;</button>
+                    <div class="titulo-modal"><label>Valores Multiples</label></div>
+                </div>
 
+                <div class="modal-body" style="height:308px">
+                    <asp:HiddenField runat="server" ID="hid_RowCondicion" Value="-1" />
+                    <asp:HiddenField runat="server" ID="hid_Todos" Value="0" />
+                             
+                    <div style="height:220px; overflow-y:scroll; overflow-x:hidden;">
+                        <asp:GridView runat="server" ID="gvd_Multiples" ShowHeader="false" AutoGenerateColumns="false" 
+                                      CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
+                                      GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                            <Columns>
+                                <asp:TemplateField HeaderText="">
+                                    <ItemTemplate>
+                                        <asp:CheckBox runat="server" ID="chk_SelCol" />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Valor">
+                                    <ItemTemplate>
+                                        <asp:textbox runat="server" ID="txt_Valor" CssClass="estandar-control" Text='<%# Eval("Valor") %>' Width="235px"></asp:textbox>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+                    </div>   
+
+                    <div class="clear padding5"></div>
+                    
+                    <div style="width:100%; text-align:right;">
+                        <asp:LinkButton id="btn_AñadirValor" runat="server" class="btn botones boton-chico">
+                            <span>
+                                <img class="btn-añadir"/>
+                            </span>
+                        </asp:LinkButton>
+
+                        <asp:LinkButton id="btn_QuitarValor" runat="server" class="btn botones boton-chico">
+                            <span>
+                                <img class="btn-quitar"/>
+                            </span>
+                        </asp:LinkButton>
+                    </div>
+
+                    <div class="clear padding5"></div>
+                    
+                    <div style="width:100%; text-align:right; border-top:inset;border-top-width:1px; padding-top:3px;">
+                        <asp:LinkButton id="btn_AplicaValores" runat="server" class="btn botones">
+                            <span>
+                                <img class="btn-aceptar"/>
+                                Aceptar
+                            </span>
+                        </asp:LinkButton>
+
+                        <asp:LinkButton id="btn_CancelaValores" runat="server" data-dismiss="modal" class="btn botones">
+                            <span>
+                                <img class="btn-cancelar"/>
+                                Cerrar
+                            </span>
+                        </asp:LinkButton>
+                    </div>
+                </div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
     </div>
 
 </asp:Content>
