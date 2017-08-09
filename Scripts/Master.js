@@ -5,6 +5,11 @@
 //Evento Inicial en Master
 function PageLoadMaster() {
     fn_EstadoVentanas();
+    fn_EstadoGrid("gvd_Broker", "chk_SelBro");
+    fn_EstadoGrid("gvd_Compañia", "chk_SelCia");
+    fn_EstadoGrid("gvd_Poliza", "chk_SelPol");
+    fn_EstadoGrid("gvd_RamoContable", "chk_SelRamC");
+    fn_EstadoGrid("gvd_Producto", "chk_SelPro");
 
     $(".Fecha").datepicker({
         showOn: 'focus',
@@ -120,19 +125,22 @@ function PageLoadMaster() {
         var searchKey = $(this).val().toLowerCase();
         var textoFila = ''
 
-        var Filas = $("[id*=gvd_Catalogo]")[0].rows;
+        if (searchKey.length > 1) {
+            var Filas = $("[id*=gvd_Catalogo]")[0].rows;
 
-        for (i = 0; i <= Filas.length - 2; i++) {
-            var Clave =  Filas[i + 1].cells[1].innerText.toLowerCase()  
-            var Descripcion =  Filas[i + 1].cells[2].innerText.toLowerCase() 
+            for (i = 0; i <= Filas.length - 2; i++) {
+                var Clave = Filas[i + 1].cells[1].innerText.toLowerCase()
+                var Descripcion = Filas[i + 1].cells[2].innerText.toLowerCase()
 
-            if (Clave.indexOf(searchKey) >= 0 || Descripcion.indexOf(searchKey) >= 0) {
-                $(Filas[i+1]).show();
-            }
-            else {
-                $(Filas[i+1]).hide();
+                if (Clave.indexOf(searchKey) >= 0 || Descripcion.indexOf(searchKey) >= 0) {
+                    $(Filas[i + 1]).show();
+                }
+                else {
+                    $(Filas[i + 1]).hide();
+                }
             }
         }
+        
 
         if ($('#txt_Filtro')[0].value == "") {
             $('[id$=gvd_Catalogo]').tablePagination({});
@@ -352,6 +360,18 @@ function fn_EstadoVentanas() {
         else {
             $("#coVentana" + i).show();
             $("#exVentana" + i).hide();
+        }
+    }
+}
+
+function fn_EstadoGrid(Grid, Control) {
+    if ($("[id*=" + Grid + "]")[0] != undefined) {
+        var Rows = $("[id*=" + Grid + "]")[0].rows;
+        for (i = 0; i <= Rows.length - 2; i++) {
+            if ($('[id*=' + Control + ']')[i].value == "true") {
+                var row = $('[id*=' + Control + ']')[i].parentNode.parentNode;
+                row.style.display = "none";
+            }
         }
     }
 }

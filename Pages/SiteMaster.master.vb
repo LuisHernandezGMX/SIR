@@ -9,6 +9,11 @@ Partial Class Pages_SiteMaster
     Private dtPolizas As DataTable
     Private DetalleUsuario() As String
 
+    'Public Property Contenedor() As 
+    '    Get
+    '        Return cph_principal
+    '    End Get
+    'End Property
 
 
     Public Property Menu() As String
@@ -145,17 +150,17 @@ Partial Class Pages_SiteMaster
                             Fila("OcultaCampo2") = ""
                             Fila("OcultaCampo3") = ""
 
-                            lbl_Oculta1 = DirectCast(row.FindControl("lbl_Oculta1"), Label)
+                            lbl_Oculta1 = TryCast(row.FindControl("lbl_Oculta1"), Label)
                             If Not lbl_Oculta1 Is Nothing Then
                                 Fila("OcultaCampo1") = lbl_Oculta1.Text
                             End If
 
-                            lbl_Oculta2 = DirectCast(row.FindControl("lbl_Oculta2"), Label)
+                            lbl_Oculta2 = TryCast(row.FindControl("lbl_Oculta2"), Label)
                             If Not lbl_Oculta2 Is Nothing Then
                                 Fila("OcultaCampo2") = lbl_Oculta2.Text
                             End If
 
-                            lbl_Oculta3 = DirectCast(row.FindControl("lbl_Oculta3"), Label)
+                            lbl_Oculta3 = TryCast(row.FindControl("lbl_Oculta3"), Label)
                             If Not lbl_Oculta3 Is Nothing Then
                                 Fila("OcultaCampo3") = lbl_Oculta3.Text
                             End If
@@ -614,7 +619,7 @@ Partial Class Pages_SiteMaster
     Private Sub lnk_CerrarSesion_Click(sender As Object, e As EventArgs) Handles lnk_CerrarSesion.Click
         Try
             FormsAuthentication.SignOut()
-            Response.Redirect("Pages/Login.aspx")
+            Response.Redirect("../Pages/Login.aspx")
         Catch ex As Exception
             Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
         End Try
