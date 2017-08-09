@@ -242,4 +242,5 @@ Partial Class Recordatorios_ConsultaFacultativos
     Private Sub btn_GuardarCons_Click(sender As Object, e As EventArgs) Handles btn_GuardarCons.Click
         SQLFiltros(Cons.Accion.Guardar)
     End Sub
+
 End Class
