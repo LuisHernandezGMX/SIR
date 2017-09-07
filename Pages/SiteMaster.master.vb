@@ -205,20 +205,31 @@ Partial Class Pages_SiteMaster
                                 txt_Descripcion.Text = Split(Datos(0), "~")(1)
 
                             Case 3
-                                Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
-                                Dim txt_Descripcion As TextBox = DirectCast(cph_principal.FindControl(Controles(1)), TextBox)
-                                Dim gvd_GridView As GridView = DirectCast(cph_principal.FindControl(Controles(2)), GridView)
+                                If Left(Controles(0), 3) = "gvd" Then
+                                    Dim gvd_Ctrl As GridView = DirectCast(cph_principal.FindControl(Controles(0)), GridView)
+                                    Dim ItemCtrl = DirectCast(gvd_Ctrl.Rows(Controles(1)).FindControl(Controles(2)), Label)
+                                    Dim Clave As String = "(" & Split(Datos(0), "~")(0) & ") "
+                                    Dim Descrip As String = Trim(Mid(Split(Datos(0), "~")(1), 1, InStr(Split(Datos(0), "~")(1), "(") - 1))
+                                    ItemCtrl.Text = Clave & Descrip
+                                Else
+                                    Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
+                                    Dim txt_Descripcion As TextBox = DirectCast(cph_principal.FindControl(Controles(1)), TextBox)
+                                    Dim gvd_GridView As GridView = DirectCast(cph_principal.FindControl(Controles(2)), GridView)
 
-                                If txt_Clave Is Nothing And txt_Descripcion Is Nothing And gvd_GridView Is Nothing Then
-                                    txt_Clave = DirectCast(frmMaster.FindControl(Controles(0)), TextBox)
-                                    txt_Descripcion = DirectCast(frmMaster.FindControl(Controles(1)), TextBox)
-                                    gvd_GridView = DirectCast(frmMaster.FindControl(Controles(2)), GridView)
+                                    If txt_Clave Is Nothing And txt_Descripcion Is Nothing And gvd_GridView Is Nothing Then
+                                        txt_Clave = DirectCast(frmMaster.FindControl(Controles(0)), TextBox)
+                                        txt_Descripcion = DirectCast(frmMaster.FindControl(Controles(1)), TextBox)
+                                        gvd_GridView = DirectCast(frmMaster.FindControl(Controles(2)), GridView)
+                                    End If
+
+                                    txt_Clave.Text = Split(Datos(0), "~")(0)
+                                    txt_Descripcion.Text = Split(Datos(0), "~")(1)
+                                    gvd_GridView.DataSource = Nothing
+                                    gvd_GridView.DataBind()
+
                                 End If
 
-                                txt_Clave.Text = Split(Datos(0), "~")(0)
-                                txt_Descripcion.Text = Split(Datos(0), "~")(1)
-                                gvd_GridView.DataSource = Nothing
-                                gvd_GridView.DataBind()
+
                         End Select
                     End If
 
