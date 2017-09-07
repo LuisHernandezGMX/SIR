@@ -694,6 +694,11 @@ border-color: red;
 .botones[disabled],.botones[readonly],fieldset[disabled] 
 .botones{background-color:#eee;opacity:1}
 
+.boton-mini{
+height:27px;
+width:30px; 
+}
+
 .boton-chico{
 height:27px;
 width:40px; 
