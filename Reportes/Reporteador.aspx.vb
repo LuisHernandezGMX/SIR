@@ -78,11 +78,11 @@ Partial Class Reportes_Reporteador
 
             For Each Fila In gvd_Adicionales.Rows
                 If DescartaClave <> DirectCast(Fila.FindControl("lbl_ClaveAdi"), Label).Text Then
-                    dtReporteador.Rows.Add(DirectCast(Fila.FindControl("lbl_ClaveAdi"), Label).Text,
-                                       DirectCast(Fila.FindControl("lbl_Desc"), Label).Text,
-                                       DirectCast(Fila.FindControl("hid_seccion"), HiddenField).Value,
-                                       DirectCast(Fila.FindControl("ddl_Union"), DropDownList).SelectedValue & ";" & DirectCast(Fila.FindControl("ddl_Operador"), DropDownList).SelectedValue,
-                                       DirectCast(Fila.FindControl("txt_Condicion"), TextBox).Text)
+                    dtReporteador.Rows.Add(TryCast(Fila.FindControl("lbl_ClaveAdi"), Label).Text,
+                                           TryCast(Fila.FindControl("lbl_Desc"), Label).Text,
+                                           TryCast(Fila.FindControl("hid_seccion"), HiddenField).Value,
+                                           TryCast(Fila.FindControl("ddl_Union"), DropDownList).SelectedValue & ";" & DirectCast(Fila.FindControl("ddl_Operador"), DropDownList).SelectedValue,
+                                           TryCast(Fila.FindControl("txt_Condicion"), TextBox).Text)
                 End If
             Next
 
@@ -181,11 +181,31 @@ Partial Class Reportes_Reporteador
 
     Public Sub QuitaElementos(sender As Object, e As EventArgs)
         Try
-            dtReporteador = GeneradtReporteador()
-            Dim gvd_Control As GridView = DirectCast(Master.FindControl(Replace(sender.ID, "btn", "gvd")), GridView)
+            Dim cph_principal As ContentPlaceHolder = Master.Contenedor
+            Dim gvd_Control As GridView = DirectCast(cph_principal.FindControl(Replace(sender.ID, "btn", "gvd")), GridView)
 
-            Dim a As String
-            a = ""
+            dtReporteador = GeneradtReporteador()
+
+            For Each row In gvd_Control.Rows
+                If TryCast(row.FindControl("chk_Sel"), CheckBox).Checked = False Then
+                    If sender.ID = "btn_Adicionales" Then
+                        dtReporteador.Rows.Add(TryCast(row.FindControl("lbl_ClaveAdi"), Label).Text,
+                                               TryCast(row.FindControl("lbl_Desc"), Label).Text,
+                                               TryCast(row.FindControl("hid_seccion"), HiddenField).Value,
+                                               TryCast(row.FindControl("ddl_Union"), DropDownList).SelectedValue & ";" & DirectCast(row.FindControl("ddl_Operador"), DropDownList).SelectedValue,
+                                               TryCast(row.FindControl("txt_Condicion"), TextBox).Text)
+                    Else
+                        dtReporteador.Rows.Add(gvd_Control.DataKeys(row.RowIndex)("Clave"),
+                                               gvd_Control.DataKeys(row.RowIndex)("Descripcion"),
+                                               gvd_Control.DataKeys(row.RowIndex)("OcultaCampo1"),
+                                               gvd_Control.DataKeys(row.RowIndex)("OcultaCampo2"),
+                                               gvd_Control.DataKeys(row.RowIndex)("OcultaCampo3"))
+                    End If
+                End If
+            Next
+
+            Funciones.LlenaGrid(gvd_Control, dtReporteador)
+
         Catch ex As Exception
             Mensaje.MuestraMensaje("Reporteador", ex.Message, TipoMsg.Falla)
         End Try
