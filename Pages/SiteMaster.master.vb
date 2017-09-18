@@ -9,11 +9,11 @@ Partial Class Pages_SiteMaster
     Private dtPolizas As DataTable
     Private DetalleUsuario() As String
 
-    'Public Property Contenedor() As 
-    '    Get
-    '        Return cph_principal
-    '    End Get
-    'End Property
+    Public ReadOnly Property Contenedor() As ContentPlaceHolder
+        Get
+            Return cph_principal
+        End Get
+    End Property
 
 
     Public Property Menu() As String

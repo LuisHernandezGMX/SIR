@@ -84,14 +84,14 @@ Partial Class Pages_Login
 
                     Response.Cookies.Add(authCookie)
 
-                    If len(request.querystring("ReturnUrl")) > 0 Then
+                    If Len(Request.QueryString("ReturnUrl")) > 0 Then
                         Response.Redirect(FormsAuthentication.GetRedirectUrl(dtUsuario.Rows(0)("cod_usuario") & "|" & dtUsuario.Rows(0)("usuario"), False))
                     Else
                         Response.Redirect("Inicio.aspx", False)
                     End If
 
                 Else
-                        Mensaje.MuestraMensaje("Login", "No cuenta con permisos para ingresar a SII", TipoMsg.Falla)
+                    Mensaje.MuestraMensaje("Login", "No cuenta con permisos para ingresar a SII", TipoMsg.Falla)
                 End If
             Else
                 Mensaje.MuestraMensaje("Login", "Usuario y/o Contraseña incorrectos", TipoMsg.Falla)

@@ -4,6 +4,14 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="cph_principal" Runat="Server">
     <div class="clear padding50"></div>
 
+    <script type="text/javascript">
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                __doPostBack('ctl00$cph_principal$btn_Aceptar', '')
+            }
+        });
+    </script>
+
     <div id="cuadro_login" class="panel-encabezado" >
         <div class="cuadro-titulo">
             <strong>INICIAR SESIÓN</strong>
@@ -41,7 +49,7 @@
                             <div class="clear padding10"></div>
 
                             <div style="width:100%; padding-left:90px;">
-                                <asp:LinkButton id="btn_Aceptar" runat="server" class="btn botones"  Width="205px">
+                                <asp:LinkButton id="btn_Aceptar" runat="server" class="btn botones Aceptar"  Width="205px">
                                     <span>
                                         Iniciar Sesión
                                     </span>
