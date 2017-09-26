@@ -41,7 +41,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelGen"/>
+                                                        <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -67,8 +67,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Generales]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Generales]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -117,7 +117,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelRea"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -143,8 +143,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Reaseguro]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Reaseguro]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -194,7 +194,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelSin"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -220,8 +220,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Siniestros]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Siniestros]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -271,7 +271,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelCum"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -297,8 +297,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Cumulos]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Cumulos]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -348,7 +348,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelCob"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -374,8 +374,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Cobranzas]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Cobranzas]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -425,7 +425,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelCon"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -451,8 +451,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Contabilidad]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Contabilidad]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -504,7 +504,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelPol"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -522,8 +522,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Poliza]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Poliza]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -572,7 +572,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelBro"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -590,8 +590,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Broker]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Broker]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -641,7 +641,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelCia"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -659,8 +659,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Compañia]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Compañia]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -710,7 +710,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelRamC"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -728,8 +728,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_RamoContable]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_RamoContable]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -779,7 +779,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelPro"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
                                                 <asp:TemplateField HeaderText="">
@@ -797,8 +797,8 @@
                                     </asp:Panel>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Producto]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Producto]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
@@ -849,7 +849,7 @@
                                             <Columns>
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
-                                                            <asp:CheckBox runat="server" ID="chk_SelAdi"/>
+                                                            <asp:CheckBox runat="server" ID="chk_Sel"/>
                                                     </ItemTemplate>
                                                 </asp:TemplateField >
 
@@ -921,8 +921,8 @@
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="image" src="../Images/select_mini.png"  />
-                                            <input type="image" src="../Images/unselect_mini.png"  />
+                                            <input type="image" src="../Images/select_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Adicionales]', true, 'chk_Sel')"  />
+                                            <input type="image" src="../Images/unselect_mini.png" onclick="fn_PreSeleccion('[id$=gvd_Adicionales]', false, 'chk_Sel')" />
                                         </div>
                                         <div class="col-md-6">
                                             <div style="width:100%;  text-align:right; padding-right:10px;">
