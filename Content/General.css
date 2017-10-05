@@ -283,15 +283,21 @@ font-weight:bold;
 text-align:left;
 }
 
+
+
 .panel-encabezado{
 box-shadow: 5px 10px 10px #aaa; 
 border-radius: 0px 0px 20px 20px;  
 }
 
+
 .panel-sombra{
 box-shadow: 5px 10px 10px #aaa; 
 border-radius: 20px;  
 }
+
+
+
 
 
 .clear {
@@ -522,9 +528,15 @@ opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px
 }
 
 .modal-flotante {
-border-radius: 11px;  margin-left: -150px;  position: fixed; background-color: rgb(255, 255, 255); 
--moz-border-radius: 11px; -webkit-border-radius: 11px;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+border-radius: 11px; left: 30%; top: 20%;  margin-left: -150px;  position: fixed; z-index: 9981; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
 box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c; width:400px;
+} 
+
+.modal-simple{
+border-radius: 11px; left: 30%; top: 20%;  margin-left: -150px;  position: fixed; z-index: 9981; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
 }
 
 .generales{
@@ -705,7 +717,7 @@ width:30px;
 }
 
 .boton-chico{
-height:27px;
+height:25px;
 width:40px; 
 }
 
@@ -881,6 +893,7 @@ padding:5px 10px 5px 10px;
 padding-right:5px;
 padding-top:5px;
 padding-left:5px;
+padding-bottom:5px;
 border-style:inset;
 border-width:.5px;
 border-color:#003A5D;
@@ -891,11 +904,23 @@ font-family:Myriad Pro;
 border-radius: 10px 10px 10px 10px;
 line-height:12px;  
 }
+
+.panel-seccion{
+border-radius: 0px 0px 10px 10px;  
+padding-bottom: 5px;
+font-family:Myriad Pro;
+border-style:inset;
+border-width:.5px;
+border-color:#003A5D;
+box-shadow: 5px 5px 5px #aaa; 
+}
 /*-------------------------------------------------------------------------------------------*/
 
-.tabla tr > td{
-    padding: 2px;
-}
+/*.tabla tr > td{
+    padding-bottom:10px;
+}*/
+
+.tabla { border-spacing: 40px 10px; background-color:aqua; }
 
 .ui-autocomplete { 
     max-height: 250px;
@@ -905,6 +930,4 @@ line-height:12px;
     overflow-x: hidden;
     position: fixed;
     z-index: 215000000 !important;
-    font-size: 10px;
-    font-family: Myriad Pro;
 }
