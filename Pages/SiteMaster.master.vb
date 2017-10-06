@@ -81,6 +81,7 @@ Partial Class Pages_SiteMaster
 
     Private Sub Pages_SiteMaster_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            Funciones.LlenaCatDDL(ddl_SucursalPol, "Suc")
             CargaRowOculto()
             menu_principal.InnerHtml = Session("Menu")
         End If
@@ -342,7 +343,6 @@ Partial Class Pages_SiteMaster
     Public Sub MuestraPolizario(ByVal Control As String, Optional ByVal sn_garantias As Boolean = True,
                                 Optional ByVal sn_ajuste As Boolean = True, Optional ByVal sn_aclaraciones As Boolean = True,
                                 Optional ByVal sn_cobranzas As Boolean = True, Optional ByVal sn_descarta_endoso As Boolean = True)
-        Funciones.LlenaCatDDL(ddl_SucursalPol, "Suc")
 
         hid_Control_Pol.Value = Control
         chk_Vencidas.Visible = sn_garantias

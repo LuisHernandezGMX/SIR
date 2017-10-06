@@ -902,7 +902,7 @@
                                                         <table>
                                                             <tr>
                                                                 <td>
-                                                                    <asp:TextBox CssClass="estandar-control" runat="server" ID="txt_Condicion" Text='<%# Eval("OcultaCampo3") %>' Width="200px"></asp:TextBox>
+                                                                    <asp:TextBox CssClass="estandar-control" runat="server" ID="txt_Condicion" Text='<%# Eval("OcultaCampo3") %>' Width="220px"></asp:TextBox>
                                                                 </td>
                                                                 <td>
                                                                     <asp:LinkButton id="btn_Multiples" CommandName="ValoresMultiples" runat="server" class="btn botones boton-chico ValoresMultiples">

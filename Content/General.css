@@ -534,7 +534,7 @@ box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color
 } 
 
 .modal-simple{
-border-radius: 11px; left: 30%; top: 20%;  margin-left: -150px;  position: fixed; z-index: 9981; background-color: rgb(255, 255, 255); 
+border-radius: 11px; left: 28%; top: 15%;  margin-left: -150px;  position: fixed; z-index: 9981; background-color: rgb(255, 255, 255); 
 -moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
 box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
 }
@@ -613,7 +613,7 @@ font-family: Myriad Pro;
 }
 
 .etiqueta{
-width:60px;
+width:30px;
 font-weight:bold;
 }
 
@@ -822,6 +822,16 @@ width: 14px; height: 14px;
 background-image: url(../Images/enviar_mini.png);
 width: 14px; height: 14px;
 } 
+
+.btn-monitor{
+background-image: url(../Images/monitor_mini.png);
+width: 14px; height: 14px;
+} 
+
+.btn-refresh{
+background-image: url(../Images/refresh_mini.png);
+width: 14px; height: 14px;
+} 
 /*-------------------------------------------------------------------------------------------*/
 
 
@@ -854,6 +864,7 @@ color:#284775;
 background-color:#fff;
 padding:2px;
 margin:2% auto;
+
 }
 
 .pager a{
@@ -900,6 +911,22 @@ border-color:#003A5D;
 text-align:left;
 color:#003A5D;
 font-size:11.5px;
+font-family:Myriad Pro;
+border-radius: 10px 10px 10px 10px;
+line-height:12px;  
+}
+
+.cuadro-postit-total{
+padding-right:5px;
+padding-top:5px;
+padding-left:5px;
+padding-bottom:5px;
+border-style:inset;
+border-width:.5px;
+text-align:left;
+color:white;
+background-color:#003A5D;
+font-size:12px;
 font-family:Myriad Pro;
 border-radius: 10px 10px 10px 10px;
 line-height:12px;  
