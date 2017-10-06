@@ -101,12 +101,25 @@ Public Class ConsultaBD
 
     <WebMethod()>
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function GetAclaracion(ByVal id_pv As Integer) As String
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim Salida As String = vbNullString
+        Try
+            Salida = ws.ObtieneAclaraciones(id_pv)
+        Catch ex As Exception
+            Salida = vbNullString
+        End Try
+        Return Salida
+    End Function
+
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
     Public Function GetProducto(ByVal Id As Integer) As String
         Dim ws As New ws_Generales.GeneralesClient
         Dim dtResult As New DataTable
         Dim Salida As String = vbNullString
         Try
-            dtResult = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo("RamU", "AND cod_ramo=" & Id.ToString(), "").ToList)
+            dtResult = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo("Pro", "AND cod_ramo=" & Id.ToString(), "").ToList)
             If Not dtResult Is Nothing Then
                 Salida = dtResult.Rows(0).ItemArray(2).ToString
             End If
@@ -118,15 +131,23 @@ Public Class ConsultaBD
 
     <WebMethod()>
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
-    Public Function GetAclaracion(ByVal id_pv As Integer) As String
+    Public Function GetAutocompletar(ByVal catalogo As String, ByVal prefix As String, ByVal strSel As String) As String()
         Dim ws As New ws_Generales.GeneralesClient
-        Dim Salida As String = vbNullString
+        Dim ArrAsegurado As New List(Of String)()
+        Dim dtResult As New DataTable
         Try
-            Salida = ws.ObtieneAclaraciones(id_pv)
+            dtResult = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo(catalogo, prefix, strSel).ToList)
+
+            For Each row In dtResult.Rows
+                ArrAsegurado.Add(String.Format("{0}|{1}", row("Descripcion"), row("Clave")))
+            Next
+
         Catch ex As Exception
-            Salida = vbNullString
+            Mensaje.MuestraMensaje("", ex.Message, 2)
         End Try
-        Return Salida
+        Return ArrAsegurado.ToArray()
     End Function
+
+
 
 End Class

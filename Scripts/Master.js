@@ -11,6 +11,8 @@ function PageLoadMaster() {
     fn_EstadoGrid("gvd_RamoContable", "chk_SelRamC");
     fn_EstadoGrid("gvd_Producto", "chk_SelPro");
 
+    $(".Fecha").mask("99/99/9999");
+
     $(".Fecha").datepicker({
         showOn: 'focus',
         buttonImageOnly: false,
@@ -33,11 +35,11 @@ function PageLoadMaster() {
 
         for (i = 0; i <= Filas.length - 2; i++) {
             if ($('[id*=chk_Cat]')[i].checked == true) {
-                varSeleccion = varSeleccion + Filas[i+1].cells[1].innerText + '~' +
-                                              Filas[i+1].cells[2].innerText + '~' +
-                                              Filas[i+1].cells[3].innerText + '~' +
-                                              Filas[i+1].cells[4].innerText + '~' +
-                                              Filas[i+1].cells[5].innerText + '|';
+                varSeleccion = varSeleccion + Filas[i + 1].cells[1].innerText + '~' +
+                                              Filas[i + 1].cells[2].innerText + '~' +
+                                              Filas[i + 1].cells[3].innerText + '~' +
+                                              Filas[i + 1].cells[4].innerText + '~' +
+                                              Filas[i + 1].cells[5].innerText + '|';
             }
         }
 
@@ -87,7 +89,14 @@ function PageLoadMaster() {
     $(".nro_pol").attr({ maxLength: 7 });
     $(".nro_pol").css('text-align', 'center');
 
-    $(".Monto").numeric({ decimal: false, negative: false, min: 0, max: 999999999999 });
+    //$(".Monto").numeric({ precision: 18, scale: 4 });
+    $(".Monto").numeric({ decimal: ".", negative: false, scale: 3 });
+    //$(".Monto").numeric({ decimal: true, negative: false, min: 0, max: 9999999 });
+    $(".Monto").css('text-align', 'right');
+
+    $(".Prc").numeric({ decimal: ".", negative: false, scale: 2 });
+    $(".Prc").css('text-align', 'right');
+    $(".Prc").attr({ maxLength: 5 });
 
     $(".Centro").css('text-align', 'center');
     $(".Derecha").css('text-align', 'right');
@@ -95,7 +104,7 @@ function PageLoadMaster() {
     //Busqueda de Producto por Catalogo
     $("#btn_SelRam").click(function () {
         var strSel = '';
-        fn_CargaCatalogo("spS_CatalogosOP ==RamU==,====" + strSel, "Unica", "txtClaveRam|txtSearchRam", "RamU", "Productos");
+        fn_CargaCatalogo("spS_CatalogosOP ==Pro==,====" + strSel, "Unica", "txtClaveRam|txtSearchRam", "Pro", "Productos");
     });
 
     //Busqueda de Producto por Clave
@@ -140,7 +149,7 @@ function PageLoadMaster() {
                 }
             }
         }
-        
+
 
         if ($('#txt_Filtro')[0].value == "") {
             $('[id$=gvd_Catalogo]').tablePagination({});
@@ -165,8 +174,7 @@ function fn_MuestraMensaje(Titulo, Mensaje, Tipo, boton) {
     document.getElementById('btn_No').style.display = 'none';
 
     //Almacena el control que desplego el Mensaje de Confirmación
-    if (boton != undefined)
-    {
+    if (boton != undefined) {
         document.getElementById('hid_ControlASP').value = boton;
     }
 
@@ -187,7 +195,7 @@ function fn_MuestraMensaje(Titulo, Mensaje, Tipo, boton) {
             document.getElementById('btn_No').style.display = 'inline-block';
             break;
     }
-    
+
     fn_AbrirModal('#Mensajes');
     //$('#Mensajes').draggable();
 }
@@ -206,7 +214,7 @@ function fn_Repuesta_Autoriza() {
 }
 
 //Funciones de Consulta--------------------------------------------------------------------------------------------------------------------------------
-function fn_CargaCatalogo(Consulta, Tipo , Control, Prefijo, Titulo) {
+function fn_CargaCatalogo(Consulta, Tipo, Control, Prefijo, Titulo) {
     $.ajax({
         type: 'POST',
         contentType: "application/json; charset=utf-8",
@@ -249,7 +257,7 @@ function fn_CargaCatalogo(Consulta, Tipo , Control, Prefijo, Titulo) {
 
             }
             else {
-                fn_MuestraMensaje('Catálogo', 'No se encontraron registros',0);
+                fn_MuestraMensaje('Catálogo', 'No se encontraron registros', 0);
                 fn_CerrarModal('#EsperaModal');
             }
         },
@@ -260,6 +268,45 @@ function fn_CargaCatalogo(Consulta, Tipo , Control, Prefijo, Titulo) {
     });
     return false;
 };
+
+//Función de Autocompletar
+function fn_Autocompletar(Catalogo, ControlClave, ControlBusqueda, ControlAdic, minChar) {
+    $("input[id$='" + ControlBusqueda + "']").css("color", "#555");
+    if (ControlAdic == "") {
+        var strSel = "";
+    }
+    else {
+        var strSel = $('[id$=' + ControlAdic + ']')[0].value;
+    }
+
+    $('[id$=' + ControlBusqueda + ']').autocomplete({
+        minLength: minChar,
+        source: function (request, response) {
+            $.ajax({
+                url: "../LocalServices/ConsultaBD.asmx/GetAutocompletar",
+                data: "{ 'catalogo': '" + Catalogo + "' , 'prefix': '" + request.term + "' , 'strSel': '" + strSel + "'}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    response($.map(data.d, function (item) {
+                        return {
+                            label: item.split('|')[0],
+                            val: item.split('|')[1]
+                        }
+                    }))
+                },
+                error: function (response) {
+                    EvaluaMensaje('JSON', response.responseText);
+                },
+            });
+        },
+        select: function (e, i) {
+            $("input[id$='" + ControlClave + "']")[0].value = i.item.val;
+        }
+    });
+}
+
 
 //Cambio de selección de elemento en Catalogo
 function fn_CambioSeleccion(Control, TipoSeleccion) {
@@ -319,6 +366,15 @@ function fn_AbrirModal(modal) {
 //Cerrar Modal
 function fn_CerrarModal(modal) {
     $(modal).modal('hide');
+}
+
+function fn_AbrirModalSimple(modal) {
+    fn_Desplazable(modal);
+    $(modal).css("display", "block");
+}
+
+function fn_CerrarModalSimple(modal) {
+    $(modal).css("display", "none");
 }
 
 //Cambia Estado de Ventana
@@ -445,11 +501,11 @@ function fn_NoDesplazable(control, control_base) {
         'left': left,
         'top': top
     });
-    $(control).draggable({disabled:true });
+    $(control).draggable({ disabled: true });
 }
 
 //Formato de comas a N posiciones decimales
-function fn_FormatoMonto(Monto,decimales) {
+function fn_FormatoMonto(Monto, decimales) {
     if (isNaN(Monto) == true) {
         return '0.0000';
     }
@@ -459,10 +515,18 @@ function fn_FormatoMonto(Monto,decimales) {
 }
 
 //Evalua tecla Numerica
-function fn_EvaluaNumerico(keynum){
+function fn_EvaluaNumerico(keynum) {
     if ((keynum == 8) || (keynum == 46))
         return true;
 
     return /\d/.test(String.fromCharCode(keynum));
 }
 
+function fn_EvaluaAutoComplete(ControlClave, ControlDescripcion) {
+    if ($("input[id$='" + ControlClave + "']")[0].value == "") {
+        $("input[id$='" + ControlDescripcion + "']").css("color", "red");
+    }
+    else {
+        $("input[id$='" + ControlDescripcion + "']").css("color", "#555");
+    }
+}
