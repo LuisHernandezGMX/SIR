@@ -1,4 +1,17 @@
 ﻿////////////////////////////////////////////////////////////////////EVENTO EXPANDIR-CONTRAER/////////////////////////////////////
+function PageLoadFacultativos() {
+    fn_EstadoGridSaldos('Nac');
+    fn_EstadoGridSaldos('Dll');
+    LeftClickNac = 0;
+    LeftClickDll = 0;
+    $('.TotalNac')[0].innerText = fn_FormatoMonto(parseFloat($('[id*=txt_TotalNac]')[0].value), 2)
+    $('.TotalDll')[0].innerText = fn_FormatoMonto(parseFloat($('[id*=txt_TotalDll]')[0].value), 2)
+}
+
+
+var LeftClickNac = 0;
+var LeftClickDll = 0;
+
 //Colapsar Ventana
 $("body").on("click", ".contraer", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
@@ -230,3 +243,117 @@ $("body").on("keydown", "[id$=txtSearchAse]", function (e) {
     });
 });
 
+
+//-----------------------------------------------------------------------------------------------------------------------------
+$("body").on("click", "[id*=gvd_SaldosNac] .Seleccion", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    if ($('[id*=txt_SelNac]')[row[0].rowIndex].value == "0") {
+        $(this).css("background-color", "lightgreen");
+        $('[id*=txt_SelNac]')[row[0].rowIndex].value = "1"
+
+        $('[id*=txt_TotalNac]')[0].value = parseFloat($('[id*=txt_TotalNac]')[0].value) + parseFloat($('[id*=txt_ImpNac]')[row[0].rowIndex].value);
+        $('.TotalNac')[0].innerText = fn_FormatoMonto(parseFloat($('[id*=txt_TotalNac]')[0].value), 2)
+    }
+    else {
+        $(this).css("background-color", "white");
+        $('[id*=txt_SelNac]')[row[0].rowIndex].value = "0"
+
+        $('[id*=txt_TotalNac]')[0].value = parseFloat($('[id*=txt_TotalNac]')[0].value) - parseFloat($('[id*=txt_ImpNac]')[row[0].rowIndex].value);
+        $('.TotalNac')[0].innerText = fn_FormatoMonto(parseFloat($('[id*=txt_TotalNac]')[0].value), 2)
+    }
+});
+
+$("body").on("mousedown", "[id*=gvd_SaldosNac] .Seleccion", function (e) {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    if (e.which == 1) {
+        LeftClickNac = 1;
+    }
+});
+
+$("body").on("mouseup", "[id*=gvd_SaldosNac] .Seleccion", function (e) {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    LeftClickNac = 0;
+});
+
+$("body").on("mouseover", "[id*=gvd_SaldosNac] .Seleccion", function (e) {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    if (e.which == 1 && LeftClickNac == 1) {
+        var row = $(this).closest("tr");
+        if ($('[id*=txt_SelNac]')[row[0].rowIndex].value == "0") {
+            $(this).css("background-color", "lightgreen");
+            $('[id*=txt_SelNac]')[row[0].rowIndex].value = "1"
+            $('[id*=txt_TotalNac]')[0].value = parseFloat($('[id*=txt_TotalNac]')[0].value) + parseFloat($('[id*=txt_ImpNac]')[row[0].rowIndex].value);
+            $('.TotalNac')[0].innerText = fn_FormatoMonto(parseFloat($('[id*=txt_TotalNac]')[0].value), 2)
+        } 
+    }
+});
+
+
+
+
+
+$("body").on("click", "[id*=gvd_SaldosDll] .Seleccion", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    if ($('[id*=txt_SelDll]')[row[0].rowIndex].value == "0") {
+        $(this).css("background-color", "lightgreen");
+        $('[id*=txt_SelDll]')[row[0].rowIndex].value = "1"
+
+        $('[id*=txt_TotalDll]')[0].value = parseFloat($('[id*=txt_TotalDll]')[0].value) + parseFloat($('[id*=txt_ImpDll]')[row[0].rowIndex].value);
+        $('.TotalDll')[0].innerText = fn_FormatoMonto(parseFloat($('[id*=txt_TotalDll]')[0].value), 2)
+    }
+    else {
+        $(this).css("background-color", "white");
+        $('[id*=txt_SelDll]')[row[0].rowIndex].value = "0"
+
+        $('[id*=txt_TotalDll]')[0].value = parseFloat($('[id*=txt_TotalDll]')[0].value) - parseFloat($('[id*=txt_ImpDll]')[row[0].rowIndex].value);
+        $('.TotalDll')[0].innerText = fn_FormatoMonto(parseFloat($('[id*=txt_TotalDll]')[0].value), 2)
+    }
+});
+
+$("body").on("mousedown", "[id*=gvd_SaldosDll] .Seleccion", function (e) {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    if (e.which == 1) {
+        LeftClickDll = 1;
+    }
+});
+
+$("body").on("mouseup", "[id*=gvd_SaldosDll] .Seleccion", function (e) {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    LeftClickDll = 0;
+});
+
+$("body").on("mouseover", "[id*=gvd_SaldosDll] .Seleccion", function (e) {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    if (e.which == 1 && LeftClickDll == 1) {
+        var row = $(this).closest("tr");
+        if ($('[id*=txt_SelDll]')[row[0].rowIndex].value == "0") {
+            $(this).css("background-color", "lightgreen");
+            $('[id*=txt_SelDll]')[row[0].rowIndex].value = "1"
+
+            $('[id*=txt_TotalDll]')[0].value = parseFloat($('[id*=txt_TotalDll]')[0].value) + parseFloat($('[id*=txt_ImpDll]')[row[0].rowIndex].value);
+            $('.TotalDll')[0].innerText = fn_FormatoMonto(parseFloat($('[id*=txt_TotalDll]')[0].value), 2)
+        }
+    }
+});
+
+
+
+
+function fn_EstadoGridSaldos(Sufijo) {
+    $("[id*=gvd_Saldos" + Sufijo  + "] tr").each(function (e) {
+        var row = $(this).closest("tr");
+        if ($('[id*=txt_Sel' + Sufijo + ']')[row[0].rowIndex] != undefined) {
+            if ($('[id*=txt_Sel' + Sufijo + ']')[row[0].rowIndex].value == "1") {
+                var Seleccion = row.find('.Seleccion');
+                $(Seleccion).css("background-color", "lightgreen");
+            }
+        }
+    });
+}
+
+$("body").on("click", ".VerResumen", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    fn_AbrirModalSimple('#Resumen');
+});

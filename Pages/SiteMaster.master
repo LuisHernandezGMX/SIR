@@ -301,67 +301,64 @@
                            <asp:HiddenField runat="server" ID="hid_Control_Pol" Value="" />
                            <asp:CheckBox runat="server" ID="chk_Vencidas" Text="Garantias Programadas" CssClass="etiqueta-control" AutoPostBack="true" />
                           
-                           <table class="tabla">
-                               <tr>
-                                   <td>
-                                       <asp:Label runat="server" ID="lbl_fechaDe" class="col-md-1 etiqueta-control" Width="80px">Fecha</asp:Label>
-                                       <asp:TextBox runat="server" ID="txt_FechaIni" CssClass="estandar-control Fecha" Width="90px" Height="26px" Enabled="false"></asp:TextBox>
-                                   </td>
-                                   <td>
-                                       <asp:Label runat="server" ID="lbl_fechaA" class="col-md-1 etiqueta-control" Width="40px">A</asp:Label>
-                                   </td>
-                                   <td>
-                                       
-                                       <asp:TextBox runat="server" ID="txt_FechaFin" CssClass="estandar-control Fecha" Width="90px" Height="26px" Enabled="false"></asp:TextBox>
-                                   </td>
-                                   
-                                   <td>
+                           <div class="row">
+                               <div class="col-md-4">
+                                   <asp:Label runat="server" ID="lbl_fechaDe" class="col-md-1 etiqueta-control" Width="80px">Fecha</asp:Label>
+                                   <asp:TextBox runat="server" ID="txt_FechaIni" CssClass="col-md-1 estandar-control Fecha" Width="100px" Enabled="false"></asp:TextBox>
+                                   <asp:Label runat="server" ID="lbl_fechaA" class="col-md-1 etiqueta-control" Width="40px">A</asp:Label>
+                                   <asp:TextBox runat="server" ID="txt_FechaFin" CssClass="estandar-control Fecha" Width="100px" Enabled="false"></asp:TextBox>
+                               </div>
+                           </div>
+                           <div class="clear padding5"></div>
 
-                                   </td>
-                               </tr>
-                               <tr>
-                                   <td colspan="4">
-                                       <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="80px">Sucursal</asp:Label>
-                                       <asp:DropDownList runat="server" ID="ddl_SucursalPol" CssClass="estandar-control" Width="445px" Height="26px"></asp:DropDownList>
-                                   </td>
-                               </tr>
-                               <tr>
-                                   <td>
-                                       <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="80px">Ramo</asp:Label>
-                                       <asp:TextBox runat="server" ID="txtClaveRam" CssClass="estandar-control cod" Width="90px" Height="26px"></asp:TextBox>
-                                   </td>
-                                   <td>
-                                       <button type="button" id="btn_SelRam" class="btn botones" data-toggle="modal" style="width: 40px; height: 26px;" data-target="#EsperaModal">...</button>
-                                   </td>
-                                   <td colspan="2">
-                                       <asp:TextBox runat="server" ID="txtSearchRam" Enabled="false" CssClass="estandar-control desc_ramo" Width="308px" Height="26px"></asp:TextBox>
-                                   </td>
-                               </tr>
-                               <tr>
-                                   <td>
-                                       <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="80px">Póliza</asp:Label>
-                                       <asp:TextBox runat="server" ID="txt_NoPoliza" CssClass="estandar-control nro_pol" Width="90px" Height="26px"></asp:TextBox>
-                                   </td>
-                                   <td colspan="3">
-                                       <asp:LinkButton id="btn_Busca_Endoso" runat="server" class="btn botones boton-largo Endoso">
-                                            <span>
-                                                <img class="btn-buscar"/>
-                                                Endosos
-                                            </span>
-                                       </asp:LinkButton>
-             
-                                       <asp:LinkButton id="btn_Cancela_Endoso" runat="server" Visible="false" class="btn botones boton-largo">
-                                            <span>
-                                                <img class="btn-cancelar"/>
-                                                Cancelar
-                                            </span>
-                                       </asp:LinkButton>
-                                   </td>
-                               </tr>
-                           </table>
+                           <div class="row">
+                               <div class="col-md-6">
+                                   <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="80px">Sucursal</asp:Label>
+                                   <asp:DropDownList runat="server" ID="ddl_SucursalPol" CssClass="estandar-control" Width="445px"></asp:DropDownList>
+                               </div>
+                           </div>
+                          
+                            <div class="clear padding5"></div>
 
-   
-                           <asp:Panel runat="server" ID="pnlPolizas" Width="100%" Height="410px" ScrollBars="Both">
+                           <div class="row">
+                               <div class="col-md-6">
+                                   <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="80px">Ramo</asp:Label>
+                                   <asp:TextBox runat="server" ID="txtClaveRam" CssClass="col-md-1 estandar-control cod" Width="60px"></asp:TextBox>
+                                   <button type="button" id="btn_SelRam" class="col-md-1 btn botones" data-toggle="modal" style="width: 40px; height: 26px;" data-target="#EsperaModal">...</button>
+                                   <asp:TextBox runat="server" ID="txtSearchRam" Enabled="false" CssClass="estandar-control desc_ramo" Width="345px"></asp:TextBox> 
+                               </div>
+
+                           </div>
+
+                           <div class="clear padding5"></div>
+
+                           <div class="row">
+                               <div class="col-md-2">
+                                   <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="80px">Póliza</asp:Label>
+                                   <asp:TextBox runat="server" ID="txt_NoPoliza" CssClass="estandar-control nro_pol" Width="100px"></asp:TextBox>
+                               </div>
+                           </div>
+                           
+                           <div class="clear padding5"></div>
+
+                           <div style="width:41.5%; text-align:right; border-top-style:inset; border-width:1px; border-color:#003A5D">
+                                <asp:LinkButton id="btn_Busca_Endoso" runat="server" class="btn botones boton-largo Endoso">
+                                    <span>
+                                        <img class="btn-buscar"/>
+                                        Endosos
+                                    </span>
+                                </asp:LinkButton>
+                                <asp:LinkButton id="btn_Cancela_Endoso" runat="server" Visible="false" class="btn botones boton-largo">
+                                    <span>
+                                        <img class="btn-cancelar"/>
+                                        Cancelar
+                                    </span>
+                                </asp:LinkButton>
+                           </div>
+
+                           <div class="clear padding5"></div>
+
+                           <asp:Panel runat="server" ID="pnlPolizas" Width="100%" Height="380px" ScrollBars="Both">
                                <asp:GridView runat="server" ID="gvd_GrupoPolizas" AutoGenerateColumns="false" GridLines="Horizontal" 
                                              DataKeyNames="id_pv,cod_grupo_endo,cod_suc,cod_ramo,nro_pol,aaaa_endoso,nro_endoso" AllowPaging="true" 
                                              CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"

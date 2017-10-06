@@ -22,6 +22,11 @@ Partial Class OrdenPago_Contrato
             datos.Rows.Add(1, "Broker", "Compañia", "15CPCAR", "Incendio", "Prima CC-Extranjero-Contrato", -13517.98)
             datos.Rows.Add(1, "Broker", "Compañia", "15CPCAR", "Incendio", "Comision CC-Extranjero-Contrato", 461.25)
             datos.Rows.Add(1, "Broker", "Compañia", "15CPCAR", "Incendio", "Prima CC-Extranjero-Contrato", 3819.93)
+            datos.Rows.Add(1, "Broker", "Compañia", "15CPCAR", "Incendio", "Prima CC-Extranjero-Contrato", 3819.93)
+            datos.Rows.Add(1, "Broker", "Compañia", "15CPCAR", "Incendio", "Prima CC-Extranjero-Contrato", 3819.93)
+            datos.Rows.Add(1, "Broker", "Compañia", "15CPCAR", "Incendio", "Prima CC-Extranjero-Contrato", 3819.93)
+            datos.Rows.Add(1, "Broker", "Compañia", "15CPCAR", "Incendio", "Prima CC-Extranjero-Contrato", 3819.93)
+            datos.Rows.Add(1, "Broker", "Compañia", "15CPCAR", "Incendio", "Prima CC-Extranjero-Contrato", 3819.93)
 
             gvd_SaldosNac.DataSource = datos
             gvd_SaldosNac.DataBind()
