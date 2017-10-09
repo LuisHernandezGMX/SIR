@@ -36,15 +36,15 @@
                     <div class="clear padding5"></div>
 
                     <div class="row">
-                        <div class="col-md-3">
-                            <asp:label runat="server" class="col-md-1 etiqueta-control" Width="100px">Monto</asp:label>
-                            <asp:TextBox runat="server" ID="txt_MontoDe" CssClass="estandar-control Monto Derecha" Width="110px" ></asp:TextBox>
-                        </div>
-                        <div class="col-sm-1">
-                            <asp:label runat="server" class="etiqueta-control">A</asp:label>
+                        <div class="col-md-4">
+                            <asp:label runat="server" class="col-md-1 etiqueta-control" Width="100px">Tipo Contrato</asp:label>
+                            <asp:DropDownList runat="server" ID="ddl_TipoContrato" CssClass="estandar-control" Width="200px" ></asp:DropDownList>
                         </div>
                         <div class="col-md-2">
-                            <asp:TextBox runat="server" ID="txt_MontoA" CssClass="estandar-control Monto Derecha" Width="130px" ></asp:TextBox>
+                            <asp:DropDownList runat="server" ID="ddl_Agrupado" CssClass="estandar-control" Width="130px" >
+                                <asp:ListItem Text="Agrupado" Value="0"></asp:ListItem>
+                                <asp:ListItem Text="No Agrupado" Value="1"></asp:ListItem>
+                            </asp:DropDownList>
                         </div>
                         <div class="col-md-3">
                             <asp:label runat="server" class="col-md-1 etiqueta-control" Width="100px">Fecha Pago</asp:label>
@@ -270,7 +270,7 @@
 
             <div class="clear padding5"></div>
             
-            <div class="row">
+            <div class="row NoDisplay" >
                 <div class="col-md-12">
                     <div class="cuadro-subtitulo">
                         Naturaleza de Orden de Pago
@@ -314,6 +314,7 @@
         </div>
     </div>
 
+    <div class="clear padding100"></div> 
 </asp:Content>
 
 
