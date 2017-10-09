@@ -529,7 +529,7 @@ opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px
 
 .modal-flotante {
 border-radius: 11px; left: 30%; top: 20%;  margin-left: -150px;  position: fixed; z-index: 9981; background-color: rgb(255, 255, 255); 
--moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+-moz-border-radius: 11px; -webkit-border-radius: 11px; /*display:none;*/  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
 box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c; width:400px;
 } 
 
