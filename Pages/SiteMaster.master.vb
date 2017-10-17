@@ -280,11 +280,12 @@ Partial Class Pages_SiteMaster
                     End If
                 Next
             End If
+            Dim SubModWeb As Integer = Session("SubModWeb")
 
             dtResultado = Funciones.Lista_A_Datatable(ws.ObtienePolizas(ddl_SucursalPol.SelectedValue, txtClaveRam.Text,
                                                                         txt_NoPoliza.Text, Polizas, chk_Vencidas.Checked,
                                                                         txt_FechaIni.Text, txt_FechaFin.Text,
-                                                                        IIf(gvd_GrupoPolizas.Columns(6).Visible = True, 1, 0)).ToList)
+                                                                        IIf(gvd_GrupoPolizas.Columns(6).Visible = True, 1, 0), SubModWeb).ToList)
 
             Session("dtPolizas") = dtResultado
 
@@ -342,7 +343,8 @@ Partial Class Pages_SiteMaster
 
     Public Sub MuestraPolizario(ByVal Control As String, Optional ByVal sn_garantias As Boolean = True,
                                 Optional ByVal sn_ajuste As Boolean = True, Optional ByVal sn_aclaraciones As Boolean = True,
-                                Optional ByVal sn_cobranzas As Boolean = True, Optional ByVal sn_descarta_endoso As Boolean = True)
+                                Optional ByVal sn_cobranzas As Boolean = True, Optional ByVal sn_descarta_endoso As Boolean = True,
+                                Optional ByVal sn_descarta_ac As Boolean = True, Optional ByVal sn_submod_web As Integer = -1)
 
         hid_Control_Pol.Value = Control
         chk_Vencidas.Visible = sn_garantias
@@ -355,6 +357,13 @@ Partial Class Pages_SiteMaster
         gvd_GrupoPolizas.Columns(7).Visible = sn_aclaraciones
         gvd_GrupoPolizas.Columns(8).Visible = sn_cobranzas
         gvd_GrupoPolizas.Columns(9).Visible = sn_descarta_endoso
+        gvd_GrupoPolizas.Columns(10).Visible = sn_descarta_ac
+
+        If sn_descarta_ac = True Then
+            Session.Add("SubModWeb", "")
+            Session("SubModWeb") = sn_submod_web
+        End If
+
 
         If btn_Busca_Endoso.Visible = False Then
             btn_Busca_Endoso_Click(Me, Nothing)
@@ -488,11 +497,13 @@ Partial Class Pages_SiteMaster
             For Each Row In gvd_GrupoPolizas.Rows
                 Dim chk_SelPol As CheckBox = DirectCast(Row.FindControl("chk_SelPol"), CheckBox)
                 Dim chk_NoPago As CheckBox = DirectCast(Row.FindControl("chk_NoPago"), CheckBox)
+                Dim chk_NoAC As CheckBox = DirectCast(Row.FindControl("chk_NoAC"), CheckBox)
                 Dim id_pv As Integer = gvd_GrupoPolizas.DataKeys(Row.RowIndex)("id_pv")
 
                 myRow = dtPolizas.Select("id_pv ='" & id_pv & "'")
                 myRow(0)("tSEL_Val") = chk_SelPol.Checked
                 myRow(0)("sn_NoPago") = chk_NoPago.Checked
+                myRow(0)("sn_NoAC") = chk_NoAC.Checked
             Next
 
             gvd_GrupoPolizas.PageIndex = e.NewPageIndex
@@ -642,6 +653,25 @@ Partial Class Pages_SiteMaster
                 Funciones.EjecutaFuncion("fn_Repuesta_Autoriza();")
             Else
                 Mensaje.MuestraMensaje("Master Page", "Usuario y/o Contraseña incorrecto(s)", TipoMsg.Falla)
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Protected Sub chk_NoAC_CheckedChanged(sender As Object, e As EventArgs)
+        Try
+            Dim ws As New ws_RecSiniestros.RecSiniestrosClient
+
+            Dim gr As GridViewRow = DirectCast(DirectCast(DirectCast(sender, CheckBox).Parent, DataControlFieldCell).Parent, GridViewRow)
+            Dim id_pv As Integer = gvd_GrupoPolizas.DataKeys(gr.RowIndex)("id_pv")
+
+            Dim SubModWeb As Integer = Session("SubModWeb")
+
+            If sender.checked = True Then
+                ws.InsertaPolNoAC(id_pv, Me.cod_usuario, SubModWeb)
+            Else
+                ws.EliminaPolNoAC(id_pv, SubModWeb)
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)

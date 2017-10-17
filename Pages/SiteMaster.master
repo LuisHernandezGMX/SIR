@@ -441,6 +441,14 @@
                                            </ItemTemplate>
                                        </asp:TemplateField>
 
+                                       <asp:TemplateField HeaderText="Descarta Endoso">
+                                           <ItemTemplate>
+                                               <div style="width: 100px; text-align: center;">
+                                                   <asp:CheckBox runat="server" ID="chk_NoAC" AutoPostBack="true" OnCheckedChanged="chk_NoAC_CheckedChanged" Checked='<%# Eval("sn_NoAC") %>'></asp:CheckBox>
+                                               </div>
+                                           </ItemTemplate>
+                                       </asp:TemplateField>
+
                                        <asp:TemplateField HeaderText="Asegurado">
                                            <ItemTemplate>
                                                <asp:label runat="server" Height="30px" ID="lbl_Asegurado" Text='<%# Eval("Asegurado")%>' Width="200px" ></asp:label>
