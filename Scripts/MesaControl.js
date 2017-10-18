@@ -41,15 +41,8 @@ $("body").on("click", ".AgregaSuscriptor", function () {
 
 //Detecta la clase Agregar Broker y abre el Catalogo
 $("body").on("click", ".AgregaBroker", function () {
-    fn_CargaCatalogo("spS_CatalogosOP ==Bro==,====", "Unica", "txt_ClaveBro|txt_SearchBro", "Bro", "INTERMEDIARIOS");
-});
-
-//Detecta la clase Agregar Broker y abre el Catalogo
-$("body").on("click", ".AgregaBrokers", function () {
-    var strSel = fn_ElementosSeleccionados($("[id*=gvd_Broker]"), $('[id*=lbl_ClaveBro]'), $('[id*=chk_SelBro]'), false);
-
     //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
-    fn_CargaCatalogo("spS_CatalogosOP ==Bro==,====" + strSel, "Multiple", "gvd_Broker", "Bro", "INTERMEDIARIOS");
+    fn_CargaCatalogo("spS_CatalogosOP ==Bro==,====", "Multiple", "lst_Brokers", "Bro", "INTERMEDIARIOS");
 });
 
 $("body").on("click", ".AgregaRamoCont", function () {
@@ -82,23 +75,10 @@ $("body").on("click", "[id*=gvd_Compañia] .Delete", function () {
 });
 
 //Funciones de Autocompletar----------------------------------------------------------------------------------------------
-//Responsable
-$("body").on("keydown", "[id$=txt_SearchResp]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_SearchOfi']").focus();
-        return false;
-    }
-
-    if (e.which != 13) {
-        $("input[id$='txt_ClaveResp']")[0].value = "";
-    }
-    fn_Autocompletar("Usu", "txt_ClaveResp", "txt_SearchResp", "", 2)
-});
-
 //Oficina
 $("body").on("keydown", "[id$=txt_SearchOfi]", function (e) {
     if (e.which == 9) {
-        $("input[id$='txt_SearchSusc']").focus();
+        $("input[id$='txt_SearchRamC']").focus();
         return false;
     }
 
@@ -108,36 +88,10 @@ $("body").on("keydown", "[id$=txt_SearchOfi]", function (e) {
     fn_Autocompletar("Suc", "txt_ClaveOfi", "txt_SearchOfi", "", 1)
 });
 
-//Suscriptor
-$("body").on("keydown", "[id$=txt_SearchSusc]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_SearchAse']").focus();
-        return false;
-    }
-
-    if (e.which != 13) {
-        $("input[id$='txt_ClaveSusc']")[0].value = "";
-    }
-    fn_Autocompletar("Usu", "txt_ClaveSusc", "txt_SearchSusc", "", 2)
-});
-
-//Asegurado
-$("body").on("keydown", "[id$=txt_SearchAse]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_SearchRamC']").focus();
-        return false;
-    }
-
-    if (e.which != 13) {
-        $("input[id$='txt_ClaveAseg']")[0].value = "";
-    }
-    fn_Autocompletar("Ase", "txt_ClaveAseg", "txt_SearchAse", "", 3)
-});
-
 //Ante Ramo
 $("body").on("keydown", "[id$=txt_SearchRamC]", function (e) {
     if (e.which == 9) {
-        $("input[id$='txt_ClaveRam']").focus();
+        $("input[id$='txt_SearchCob']").focus();
         return false;
     }
 
@@ -147,18 +101,105 @@ $("body").on("keydown", "[id$=txt_SearchRamC]", function (e) {
     fn_Autocompletar("RamC", "txt_ClaveRamC", "txt_SearchRamC", "", 1)
 });
 
-//Clave Ramo
-$("body").on("keydown", "[id$=txt_ClaveRam]", function (e) {
+//Cobertura
+$("body").on("keydown", "[id$=txt_SearchCob]", function (e) {
+    if (e.which == 9) {
+        $("input[id$='txt_SearchAse']").focus();
+        return false;
+    }
+
+    //if (e.which != 13) {
+    //    $("input[id$='txt_ClaveCob']")[0].value = "";
+    //}
+    //fn_Autocompletar("Cob", "txt_ClaveCob", "txt_SearchCob", "", 1)
+});
+
+//Asegurado
+$("body").on("keydown", "[id$=txt_SearchAse]", function (e) {
+    if (e.which == 9) {
+        $('.Moneda').focus();
+        return false;
+    }
+
+    if (e.which != 13) {
+        $("input[id$='txt_ClaveAseg']")[0].value = "";
+    }
+    fn_Autocompletar("Ase", "txt_ClaveAseg", "txt_SearchAse", "", 3)
+});
+
+//Giro Asegurado
+$("body").on("keydown", "[id$=txt_GiroAsegurado]", function (e) {
+    if (e.which == 9) {
+        $("input[id$='txt_SearchGiro']").focus();
+        return false;
+    }
+});
+
+//Giro
+$("body").on("keydown", "[id$=txt_SearchGiro]", function (e) {
+    if (e.which == 9) {
+        $('.TipoMov').focus();
+        return false;
+    }
+
+    if (e.which != 13) {
+        $("input[id$='txt_ClaveGiro']")[0].value = "";
+    }
+    fn_Autocompletar("Gro", "txt_ClaveGiro", "txt_SearchGiro", "txt_ClaveRam", 2)
+});
+
+//Suscriptor
+$("body").on("keydown", "[id$=txt_SearchSusc]", function (e) {
+    if (e.which == 9) {
+        $("input[id$='txt_SearchAge']").focus();
+        return false;
+    }
+
+    if (e.which != 13) {
+        $("input[id$='txt_ClaveSusc']")[0].value = "";
+    }
+    fn_Autocompletar("Usu", "txt_ClaveSusc", "txt_SearchSusc", "", 2)
+});
+
+//Agente
+$("body").on("keydown", "[id$=txt_SearchAge]", function (e) {
+    if (e.which == 9) {
+        $("input[id$='txt_ComAgente']").focus();
+        return false;
+    }
+
+    if (e.which != 13) {
+        $("input[id$='txt_ClaveAge']")[0].value = "";
+    }
+    fn_Autocompletar("Ase", "txt_ClaveAge", "txt_SearchAge", "", 3)
+});
+
+
+//COmision Agente
+$("body").on("keydown", "[id$=txt_ComAgente]", function (e) {
+    if (e.which == 9) {
+        $("input[id$='txt_SearchSuc']").focus();
+        return false;
+    }
+});
+
+//Sucursal Poliza
+$("body").on("keydown", "[id$=txt_SearchSuc]", function (e) {
     if (e.which == 9) {
         $("input[id$='txt_SearchRam']").focus();
         return false;
     }
+
+    if (e.which != 13) {
+        $("input[id$='txt_ClaveSuc']")[0].value = "";
+    }
+    fn_Autocompletar("Suc", "txt_ClaveSuc", "txt_SearchSuc", "", 1)
 });
 
 //Descripción Ramo
 $("body").on("keydown", "[id$=txt_SearchRam]", function (e) {
     if (e.which == 9) {
-        $("input[id$='txt_SearchGiro']").focus();
+        $("input[id$='txt_NroPoliza']").focus();
         return false;
     }
 
@@ -166,151 +207,64 @@ $("body").on("keydown", "[id$=txt_SearchRam]", function (e) {
         $("input[id$='txt_ClaveRam']")[0].value = "";
     }
     fn_Autocompletar("Pro", "txt_ClaveRam", "txt_SearchRam", "", 1)
-    $("input[id$='txt_ClaveGiro']")[0].value = "";
-    $("input[id$='txt_SearchGiro']")[0].value = "";
+    //$("input[id$='txt_ClaveGiro']")[0].value = "";
+    //$("input[id$='txt_SearchGiro']")[0].value = "";
 });
 
-//Giro
-$("body").on("keydown", "[id$=txt_SearchGiro]", function (e) {
-    if (e.which != 13 && e.which != 9) {
-        $("input[id$='txt_ClaveGiro']")[0].value = "";
-    }
-    fn_Autocompletar("Gro", "txt_ClaveGiro", "txt_SearchGiro", "txt_ClaveRam", 2)
-});
-
-$("body").on("keydown", "[id$=txt_GiroAsegurado]", function (e) {
-    if (e.which == 9) {
-        $('.Moneda').focus();
-        return false;
-    }
-});
-
-//Prima
-$("body").on("keydown", "[id$=txt_Prima]", function (e) {
-    if (e.which == 9) {
-        $('.TipoMov').focus();
-        return false;
-    }
-});
-
-//Reasegurador
-$("body").on("keydown", "[id$=txt_SearchBro]", function (e) {
-    if (e.which == 9) {
-        $('.TipoColoca').focus();
-        return false;
-    }
-
-    if (e.which != 13) {
-        $("input[id$='txt_ClaveBro']")[0].value = "";
-    }
-    fn_Autocompletar("Bro", "txt_ClaveBro", "txt_SearchBro", "", 1)
-});
-
-
-$("body").on("keydown", ".Estado", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_ObsSuscriptor']").focus();
-        return false;
-    }
-});
-
-$("body").on("keydown", "[id$=txt_OfiSuscriptor]", function (e) {
+//Sufijo
+$("body").on("keydown", "[id$=txt_Sufijo]", function (e) {
     if (e.which == 9) {
         $("input[id$='txt_VigIni']").focus();
         return false;
     }
 });
 
-$("body").on("keydown", "[id$=txt_FecConfirmacion]", function (e) {
+//Fin de Vigencia
+$("body").on("keydown", "[id$=txt_VigFin]", function (e) {
     if (e.which == 9) {
-        $('.EstatusPoliza').focus();
+        $("input[id$='txt_SumaAseg']").focus();
         return false;
     }
 });
 
+//Cuota
+$("body").on("keydown", "[id$=chk_Target]", function (e) {
+    if (e.which == 9) {
+        $("input[id$='txt_Notas']").focus();
+        return false;
+    }
+});
+
+
+
+//Responsable
+$("body").on("keydown", "[id$=txt_SearchResp]", function (e) {
+    if (e.which == 9) {
+        $('.Esquema').focus();
+        return false;
+    }
+
+    if (e.which != 13) {
+        $("input[id$='txt_ClaveResp']")[0].value = "";
+    }
+    fn_Autocompletar("Usu", "txt_ClaveResp", "txt_SearchResp", "", 2)
+});
+
+
 //----------------------------------------------------------------------------------------------------------------------
-
-$("body").on("focus", "[id$=txt_FRecibido]", function (e) {
+$("body").on("focus", ".Seleccion", function (e) {
     fn_Seleccion(this);
 });
 
-$("body").on("focus", "[id$=txt_SearchResp]", function (e) {
+$("body").on("focus", "[id$=gvd_Compañia] .Seleccion", function (e) {
     fn_Seleccion(this);
 });
 
-$("body").on("focus", "[id$=txt_SearchOfi]", function (e) {
-    fn_Seleccion(this);
+$("body").on("focusout", "[id$=gvd_Compañia] .Prc", function (e) {
+    var Prc = parseFloat($(this)[0].value.replace(",", "").replace(",", ""))
+    $(this)[0].value = fn_FormatoMonto(Prc, 2);
 });
-
-$("body").on("focus", "[id$=txt_SearchSusc]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_DescMov]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_SearchBro]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_VigIni]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_VigFin]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_FecOfrecimiento]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_FecConfirmacion]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_SearchAse]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_SearchRamC]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_ClaveRam]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_SearchRam]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_SearchGiro]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_SumaAseg]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_Prima]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_ObsSuscriptor]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_ObsConducto]", function (e) {
-    fn_Seleccion(this);
-});
-
-$("body").on("focus", "[id$=txt_OfiSuscriptor]", function (e) {
-    fn_Seleccion(this);
-});
-
-
+//---------------------------------------------------------------
 
 $("body").on("focusout", "[id$=txt_SumaAseg]", function (e) {
     var SumaAseg = parseFloat($(this)[0].value.replace(",", "").replace(",", ""))
@@ -322,7 +276,15 @@ $("body").on("focusout", "[id$=txt_Prima]", function (e) {
     $(this)[0].value = fn_FormatoMonto(Prima, 2);
 });
 
+$("body").on("focusout", "[id$=txt_ComAgente]", function (e) {
+    var Comision = parseFloat($(this)[0].value.replace(",", "").replace(",", ""))
+    $(this)[0].value = fn_FormatoMonto(Comision, 2);
+});
 
+$("body").on("focusout", "[id$=txt_Cuota]", function (e) {
+    var Cuota = parseFloat($(this)[0].value.replace(",", "").replace(",", ""))
+    $(this)[0].value = fn_FormatoMonto(Cuota, 2);
+});
 
 //-----------------------------------------------------EVENTOS FOCUSOUT-------------------------------------------
 //Busqueda de Producto por Clave
@@ -359,12 +321,20 @@ $("body").on("focusout", "[id$=txt_SearchSusc]", function (e) {
     fn_EvaluaAutoComplete('txt_ClaveSusc', 'txt_SearchSusc');
 });
 
-$("body").on("focusout", "[id$=txt_SearchBro]", function (e) {
-    fn_EvaluaAutoComplete('txt_ClaveBro', 'txt_SearchBro');
+$("body").on("focusout", "[id$=txt_SearchSuc]", function (e) {
+    fn_EvaluaAutoComplete('txt_ClaveSuc', 'txt_SearchSuc');
 });
 
 $("body").on("focusout", "[id$=txt_SearchAse]", function (e) {
     fn_EvaluaAutoComplete('txt_ClaveAseg', 'txt_SearchAse');
+});
+
+$("body").on("focusout", "[id$=txt_SearchAge]", function (e) {
+    fn_EvaluaAutoComplete('txt_ClaveAge', 'txt_SearchAge');
+});
+
+$("body").on("focusout", "[id$=txt_SearchCob]", function (e) {
+    fn_EvaluaAutoComplete('txt_ClaveCob', 'txt_SearchCob');
 });
 
 $("body").on("focusout", "[id$=txt_SearchRamC]", function (e) {
@@ -387,6 +357,23 @@ $("body").on("click", "[id*=gvd_Monitor] .Folio", function () {
     if (Folio[0].text != '0') {
         window.open("Gestion.aspx?Folio=" + Folio[0].text);
     }
+});
+
+//Delete event handler.
+$("body").on("click", "[id*=gvd_Compañia] .dropdown-toggle", function () {
+    var row = $(this).closest("tr");
+    var pos = $(this).position();
+
+  
+    var Intermediario1 = row.find('.Intermediario1');
+
+    var Intermediario2 = row.find('.Intermediario2');
+
+    $(Intermediario2)[0].innerText = $(Intermediario1)[0].innerText;
+
+    var menu = row.find('.dropdown-menu');
+    $(menu).css("top", pos.top + 293);
+    $(this).dropdown();
 });
 
 
