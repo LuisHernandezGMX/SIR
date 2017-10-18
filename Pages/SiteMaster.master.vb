@@ -112,14 +112,33 @@ Partial Class Pages_SiteMaster
         Try
             Dim Datos() As String
             Dim Seleccionados As String = hid_Seleccion.Value
-            Dim lbl_Oculta1 As Label
-            Dim lbl_Oculta2 As Label
-            Dim lbl_Oculta3 As Label
+            Dim lbl_Oculta1 As Object
+            Dim lbl_Oculta2 As Object
+            Dim lbl_Oculta3 As Object
+            Dim lbl_Oculta4 As Object
+            Dim lbl_Oculta5 As Object
+            Dim lbl_Oculta6 As Object
+            Dim lbl_Oculta7 As Object
+            Dim lbl_Oculta8 As Object
+            Dim lbl_Oculta9 As Object
+            Dim lbl_Oculta10 As Object
+            Dim lbl_Oculta11 As Object
+            Dim lbl_Oculta12 As Object
             Dim Elemento As String
+            Dim OcultaCampo4 As String = vbNullString
+            Dim OcultaCampo5 As String = vbNullString
+            Dim OcultaCampo6 As String = vbNullString
+            Dim OcultaCampo7 As String = vbNullString
+            Dim OcultaCampo8 As String = vbNullString
+            Dim OcultaCampo9 As String = vbNullString
+            Dim OcultaCampo10 As String = vbNullString
+            Dim OcultaCampo11 As String = vbNullString
+            Dim OcultaCampo12 As String = vbNullString
+
 
             If Len(Seleccionados) > 0 Then
 
-                Dim gvd_Control As GridView = DirectCast(cph_principal.FindControl(hid_Control.Value), GridView)
+                Dim gvd_Control As GridView = TryCast(cph_principal.FindControl(hid_Control.Value), GridView)
 
                 Dim Prefijo As String = hid_Prefijo.Value
                 Datos = Split(Seleccionados.Substring(0, Seleccionados.Length - 1), "|")
@@ -151,19 +170,142 @@ Partial Class Pages_SiteMaster
                             Fila("OcultaCampo2") = ""
                             Fila("OcultaCampo3") = ""
 
-                            lbl_Oculta1 = TryCast(row.FindControl("lbl_Oculta1"), Label)
+
+                            'Controles adicionles, no vienen de base de datos, concatenar 3 en cada control Oculta fijo
+                            lbl_Oculta4 = row.FindControl("lbl_Oculta4")
+                            lbl_Oculta5 = row.FindControl("lbl_Oculta5")
+                            lbl_Oculta6 = row.FindControl("lbl_Oculta6")
+                            lbl_Oculta7 = row.FindControl("lbl_Oculta7")
+                            lbl_Oculta8 = row.FindControl("lbl_Oculta8")
+                            lbl_Oculta9 = row.FindControl("lbl_Oculta9")
+                            lbl_Oculta10 = row.FindControl("lbl_Oculta10")
+                            lbl_Oculta11 = row.FindControl("lbl_Oculta11")
+                            lbl_Oculta12 = row.FindControl("lbl_Oculta12")
+
+
+                            If Not lbl_Oculta4 Is Nothing Then
+                                Select Case lbl_Oculta4.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        OcultaCampo4 = "|" & lbl_Oculta4.Text
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        OcultaCampo4 = "|" & lbl_Oculta4.Checked
+                                End Select
+                            End If
+
+                            If Not lbl_Oculta5 Is Nothing Then
+                                Select Case lbl_Oculta5.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        OcultaCampo5 = "|" & lbl_Oculta5.Text
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        OcultaCampo5 = "|" & lbl_Oculta5.Checked
+                                End Select
+                            End If
+
+                            If Not lbl_Oculta6 Is Nothing Then
+                                Select Case lbl_Oculta6.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        OcultaCampo6 = "|" & lbl_Oculta6.Text
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        OcultaCampo6 = "|" & lbl_Oculta6.Checked
+                                End Select
+                            End If
+
+                            If Not lbl_Oculta7 Is Nothing Then
+                                Select Case lbl_Oculta7.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        OcultaCampo7 = "|" & lbl_Oculta7.Text
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        OcultaCampo7 = "|" & lbl_Oculta7.Checked
+                                End Select
+                            End If
+
+                            If Not lbl_Oculta8 Is Nothing Then
+                                Select Case lbl_Oculta8.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        OcultaCampo8 = "|" & lbl_Oculta8.Text
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        OcultaCampo8 = "|" & lbl_Oculta8.Checked
+                                End Select
+                            End If
+
+                            If Not lbl_Oculta9 Is Nothing Then
+                                Select Case lbl_Oculta9.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        OcultaCampo9 = "|" & lbl_Oculta9.Text
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        OcultaCampo9 = "|" & lbl_Oculta9.Checked
+                                End Select
+                            End If
+
+                            If Not lbl_Oculta10 Is Nothing Then
+                                Select Case lbl_Oculta10.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        OcultaCampo10 = "|" & lbl_Oculta10.Text
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        OcultaCampo10 = "|" & lbl_Oculta10.Checked
+                                End Select
+                            End If
+
+                            If Not lbl_Oculta11 Is Nothing Then
+                                Select Case lbl_Oculta11.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        OcultaCampo11 = "|" & lbl_Oculta11.Text
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        OcultaCampo11 = "|" & lbl_Oculta11.Checked
+                                End Select
+                            End If
+
+                            If Not lbl_Oculta12 Is Nothing Then
+                                Select Case lbl_Oculta12.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        OcultaCampo12 = "|" & lbl_Oculta12.Text
+                                    Case GetType(System.Web.UI.WebControls.DropDownList)
+                                        OcultaCampo12 = "|" & lbl_Oculta12.SelectedValue
+                                End Select
+                            End If
+
+                            'Controles Pirncipales y fijos
+                            lbl_Oculta1 = row.FindControl("lbl_Oculta1")
+                            lbl_Oculta2 = row.FindControl("lbl_Oculta2")
+                            lbl_Oculta3 = row.FindControl("lbl_Oculta3")
+
                             If Not lbl_Oculta1 Is Nothing Then
-                                Fila("OcultaCampo1") = lbl_Oculta1.Text
+                                Select Case lbl_Oculta1.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        Fila("OcultaCampo1") = lbl_Oculta1.Text & OcultaCampo4 & OcultaCampo5 & OcultaCampo6 & OcultaCampo7 & OcultaCampo8 & OcultaCampo9 & OcultaCampo10 & OcultaCampo11
+                                    Case GetType(System.Web.UI.WebControls.DropDownList)
+                                        Fila("OcultaCampo1") = lbl_Oculta1.SelectedValue & OcultaCampo4 & OcultaCampo5 & OcultaCampo6 & OcultaCampo7 & OcultaCampo8 & OcultaCampo9 & OcultaCampo10 & OcultaCampo11
+                                    Case GetType(System.Web.UI.WebControls.HiddenField)
+                                        Fila("OcultaCampo1") = lbl_Oculta1.Value & OcultaCampo4 & OcultaCampo5 & OcultaCampo6 & OcultaCampo7 & OcultaCampo8 & OcultaCampo9 & OcultaCampo10 & OcultaCampo11
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        Fila("OcultaCampo1") = lbl_Oculta1.Checked & OcultaCampo4 & OcultaCampo5 & OcultaCampo6 & OcultaCampo7 & OcultaCampo8 & OcultaCampo9 & OcultaCampo10 & OcultaCampo11
+                                End Select
                             End If
 
-                            lbl_Oculta2 = TryCast(row.FindControl("lbl_Oculta2"), Label)
                             If Not lbl_Oculta2 Is Nothing Then
-                                Fila("OcultaCampo2") = lbl_Oculta2.Text
+                                Select Case lbl_Oculta2.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        Fila("OcultaCampo2") = lbl_Oculta2.Text
+                                    Case GetType(System.Web.UI.WebControls.DropDownList)
+                                        Fila("OcultaCampo2") = lbl_Oculta2.SelectedValue
+                                    Case GetType(System.Web.UI.WebControls.HiddenField)
+                                        Fila("OcultaCampo2") = lbl_Oculta2.Value
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        Fila("OcultaCampo2") = lbl_Oculta2.Checked
+                                End Select
                             End If
 
-                            lbl_Oculta3 = TryCast(row.FindControl("lbl_Oculta3"), Label)
                             If Not lbl_Oculta3 Is Nothing Then
-                                Fila("OcultaCampo3") = lbl_Oculta3.Text
+                                Select Case lbl_Oculta3.GetType()
+                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
+                                        Fila("OcultaCampo3") = lbl_Oculta3.Text & OcultaCampo12
+                                    Case GetType(System.Web.UI.WebControls.DropDownList)
+                                        Fila("OcultaCampo3") = lbl_Oculta3.SelectedValue & OcultaCampo12
+                                    Case GetType(System.Web.UI.WebControls.HiddenField)
+                                        Fila("OcultaCampo3") = lbl_Oculta3.Value & OcultaCampo12
+                                    Case GetType(System.Web.UI.WebControls.CheckBox)
+                                        Fila("OcultaCampo3") = lbl_Oculta3.Checked & OcultaCampo12
+                                End Select
                             End If
 
                             dt_Datos.Rows.Add(Fila)
@@ -185,15 +327,32 @@ Partial Class Pages_SiteMaster
                 Else
                     If Len(hid_Control.Value) > 0 Then
                         Dim Controles() As String = Split(hid_Control.Value, "|")
+                        Dim subindice As Integer
 
                         Select Case Controles.Count
                             Case 1
-                                Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
-                                If txt_Clave Is Nothing Then
-                                    txt_Clave = DirectCast(frmMaster.FindControl(Controles(0)), TextBox)
-                                End If
-                                txt_Clave.Text = Split(Datos(0), "~")(0)
+                                If Left(Controles(0), 3) = "lst" Then
+                                    Dim lst_Clave As ListBox = DirectCast(cph_principal.FindControl(Controles(0)), ListBox)
+                                    If Not lst_Clave Is Nothing Then
+                                        Datos = Split(Seleccionados.Substring(0, Seleccionados.Length - 1), "|")
+                                        For Each dato In Datos
+                                            subindice = 0
+                                            For Each item In lst_Clave.Items
+                                                If Split(dato, "~")(0) = Split(item.value, "-")(0) Then
+                                                    subindice = subindice + 1
+                                                End If
+                                            Next
 
+                                            lst_Clave.Items.Add(New ListItem(Split(dato, "~")(0) & ".-" & Split(dato, "~")(1), Split(dato, "~")(0) & "-" & subindice))
+                                        Next
+                                    End If
+                                Else
+                                    Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
+                                    If txt_Clave Is Nothing Then
+                                        txt_Clave = DirectCast(frmMaster.FindControl(Controles(0)), TextBox)
+                                    End If
+                                    txt_Clave.Text = Split(Datos(0), "~")(0)
+                                End If
                             Case 2
                                 Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
                                 Dim txt_Descripcion As TextBox = DirectCast(cph_principal.FindControl(Controles(1)), TextBox)

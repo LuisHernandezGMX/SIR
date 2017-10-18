@@ -297,9 +297,6 @@ border-radius: 20px;
 }
 
 
-
-
-
 .clear {
 	height: 0px; clear: both; display: block; visibility: hidden;
 }
@@ -711,6 +708,7 @@ border-color: red;
 .botones[disabled],.botones[readonly],fieldset[disabled] 
 .botones{background-color:#eee;opacity:1}
 
+
 .boton-mini{
 height:27px;
 width:30px; 
@@ -832,6 +830,11 @@ width: 14px; height: 14px;
 background-image: url(../Images/refresh_mini.png);
 width: 14px; height: 14px;
 } 
+
+.btn-abajo{
+background-image: url(../Images/downarrow_white.png);
+width: 14px; height: 14px;
+} 
 /*-------------------------------------------------------------------------------------------*/
 
 
@@ -941,6 +944,7 @@ border-width:.5px;
 border-color:#003A5D;
 box-shadow: 5px 5px 5px #aaa; 
 }
+
 /*-------------------------------------------------------------------------------------------*/
 
 /*.tabla tr > td{
@@ -957,4 +961,10 @@ box-shadow: 5px 5px 5px #aaa;
     overflow-x: hidden;
     position: fixed;
     z-index: 215000000 !important;
+}
+
+
+.Lista{
+    overflow-y:scroll;
+    overflow-x:scroll;
 }
