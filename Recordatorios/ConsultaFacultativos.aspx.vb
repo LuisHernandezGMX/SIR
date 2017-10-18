@@ -6,7 +6,7 @@ Partial Class Recordatorios_ConsultaFacultativos
     Inherits System.Web.UI.Page
 
     Private Sub btn_AddPol_Click(sender As Object, e As EventArgs) Handles btn_AddPol.Click
-        Master.MuestraPolizario("gvd_Poliza", False, False, False, False, False)
+        Master.MuestraPolizario("gvd_Poliza", False, False, False, False, False, True, Cons.Recordatorio.Siniestros)
     End Sub
 
     Private Sub btn_AgregarAse_Click(sender As Object, e As EventArgs) Handles btn_AgregarAse.Click
@@ -113,12 +113,14 @@ Partial Class Recordatorios_ConsultaFacultativos
                 Dim Resultado As New DataTable
 
                 Resultado = Funciones.Lista_A_Datatable(wsR.ObtieneSiniestros(TipoMov, FiltroSiniestro, FiltroBro, FiltroAsegurado, FiltroCia, FiltroRamoCont, FiltroPol, vbNullString, vbNullString).ToList)
-                gvd_Siniestros.DataSource = Resultado
-                gvd_Siniestros.DataBind()
-                'lbl_TotSin.Text = "VISTA PREVIA  (Total de Siniestros Encontrados: " & Resultado.Rows.Count() & " )"
-                'lbl_TotSin.Visible = True
+                If Resultado.Rows.Count > 0 Then
+                    gvd_Siniestros.DataSource = Resultado
+                    gvd_Siniestros.DataBind()
+                Else
+                    Mensaje.MuestraMensaje("Busqueda", "No se encontraron registros con los criterios seleccionados", Mensaje.TipoMsg.Advertencia)
+                End If
             Else
-                strSQL = "sp_rptMovSinxReas " & TipoMov & "," & FiltroSiniestro & ",'" & FiltroBro & "','" & FiltroAsegurado & "','" & FiltroCia & "','" & FiltroRamoCont & "','','','" & Strings.Replace(FiltroPol, "'", "") & "'"
+                    strSQL = "sp_rptMovSinxReas " & TipoMov & "," & FiltroSiniestro & ",'" & FiltroBro & "','" & FiltroAsegurado & "','" & FiltroCia & "','" & FiltroRamoCont & "','','','" & Strings.Replace(FiltroPol, "'", "") & "'"
                 ws.ActualizaParametro(IIf(TipoMov = 2, Cons.ConsulEsp, Cons.ConsulFac), Replace(Replace(strSQL, "''", "NULL"), ",,", ",NULL,"))
                 wsO.InsertaVersionReporte(Cons.ModuloRea, Cons.SubModRecSin, IIf(TipoMov = 2, Cons.RptEsp, Cons.RptFac), Master.cod_usuario, strConsulta, strFiltros, "NAV", 0)
                 Mensaje.MuestraMensaje("Configuración Consulta", "Se almacenó correctamente la consulta", Mensaje.TipoMsg.Confirma)
@@ -126,7 +128,7 @@ Partial Class Recordatorios_ConsultaFacultativos
             End If
 
         Catch ex As Exception
-            Mensaje.MuestraMensaje("", "", 1)
+            Mensaje.MuestraMensaje("Falla", "Se generó un error al guardar o consultar información con los filtros elegidos", Mensaje.TipoMsg.Advertencia)
         End Try
     End Function
 
