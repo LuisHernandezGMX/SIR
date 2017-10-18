@@ -493,6 +493,10 @@ function fn_Desplazable(modal) {
     $(modal).draggable({ disabled: false });
 }
 
+function fn_Resizable(modal) {
+    $(modal).resizable();
+}
+
 function fn_NoDesplazable(control, control_base) {
     var left = $(control_base).css("left");
     var top = $(control_base).css("top");
