@@ -361,5 +361,4 @@ Partial Class Recordatorios_RecSiniestrosAdmin_
         hid_hora.Value = Convert.ToDateTime(txt_hora.Text).ToString("HH:mm")
     End Sub
 
-
 End Class

@@ -106,17 +106,47 @@ $("body").on("click", ".NuevoNivel", function () {
 $("body").on("click", ".BuscaEst", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Estatus]"), $('[id*=lbl_ClaveSts]'), $('[id*=chk_SelSts]'), false);
     var Id = $("input[id$='txtClaveFas']")[0].value;
-    var Condicion = ' WHERE id_Fase = ' + Id
-    fn_CargaCatalogo("spS_CatalogosOP ==Sts==" + ",==" + Condicion + "==" + strSel, "Multiple", "gvd_Estatus", "Sts", "Estatus de Siniestro");
+    if (Id != "") {
+        var Condicion = ' WHERE id_Fase = ' + Id;
+        fn_CargaCatalogo("spS_CatalogosOP ==Sts==" + ",==" + Condicion + "==" + strSel, "Multiple", "gvd_Estatus", "Sts", "Estatus de Siniestro");
+    }
+    else {
+        fn_MuestraMensaje('Validación', 'Se debe indicar una Fase antes de buscar', 0, "")
+        return false;
+    }
 });
 
 $("body").on("click", ".BuscaAvU", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Usuarios]"), $('[id*=lbl_ClaveAvU]'), $('[id*=chk_SelAvU]'), false);
     var Id = $("input[id$='txtClaveSec']")[0].value;
-    var Condicion = ' WHERE ts.cod_sector = ' + Id
-    fn_CargaCatalogo("spS_CatalogosOP ==AvU==" + ",==" + Condicion + "==" + strSel, "Multiple", "gvd_Usuarios", "Sec", "Aviso a Usuarios");
+    if (Id != "") {
+        var Condicion = ' WHERE ts.cod_sector = ' + Id
+        fn_CargaCatalogo("spS_CatalogosOP ==AvU==" + ",==" + Condicion + "==" + strSel, "Multiple", "gvd_Usuarios", "Sec", "Aviso a Usuarios");
+    }
+    else {
+        fn_MuestraMensaje('Validación', 'Se debe indicar un Departamento antes de buscar usuario', 0, "")
+        return false;
+    }
+});
+//-----------------------Botones en Grid---------------------------------------------------
+$("body").on("click", ".btnMoneda", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    fn_CargaCatalogo("spS_CatalogosOP ==Mon==,====", "Unica", "gvd_ModFac|" + ((row[0].rowIndex) - 1) + "|lbl_Moneda", "Mon", "MONEDAS");
 });
 
+$("body").on("click", ".btnReasegurador", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    fn_CargaCatalogo("spS_CatalogosOP ==Cia==,====", "Unica", "gvd_ModFac|" + ((row[0].rowIndex) - 1) + "|lbl_Reasegurador", "Cia", "REASEGURADOR");
+});
+
+$("body").on("click", ".btnBroker", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    fn_CargaCatalogo("spS_CatalogosOP ==Bro==,====", "Unica", "gvd_ModFac|" + ((row[0].rowIndex) - 1) + "|lbl_Broker", "Bro", "CORREDOR");
+});
+//'--------------------------------------------------------------------
 
 //Detecta la clase Agregar Broker y abre el Catalogo
 $("body").on("click", ".BuscaFase", function () {
@@ -141,6 +171,23 @@ $("body").on("click", "#btn_SelSec", function () {
     fn_CargaCatalogo("spS_CatalogosOP ==Sec==,====", "Unica", "txtClaveSec|txtSearchSec|gvd_Usuarios", "Sec", "Departamentos");
 });
 
-
+//Delete event handler.
+$("body").on("click", "[id*=gvd_Siniestros] .Delete", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    var txtjustif = $('[id*=txt_Justifica]')[row[0].rowIndex - 1].value;
+    if (txtjustif != "") {   
+        $('[id*=chk_SelSin]')[row[0].rowIndex - 1].value = "true";
+        row.hide();
+        var btnJust = row.find('.BtnJustifica');
+        __doPostBack(btnJust[0].name, '');
+        return false;
+    }
+    else {
+        fn_MuestraMensaje('Validación', 'Se debe indicar una justificación de rechazo', 0, "")
+        return false;
+    }
+    
+});
 
 

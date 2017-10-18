@@ -469,7 +469,7 @@
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Poliza">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_Poliza" Text='<%# Eval("POLIZA") %>' Width="70px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="lbl_Poliza" Text='<%# Eval("POLIZA") %>' Width="60px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Sufijo">
@@ -489,12 +489,12 @@
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Evento">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label2" Text='<%# Eval("EVENTO_CAT") %>' Width="100px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label2" Text='<%# Eval("EVENTO_CAT") %>' Width="70px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Fecha Mov">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label3" Text='<%# Eval("FEC_MOV") %>' Width="40px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label3" Text='<%# Eval("FEC_MOV") %>' Width="70px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Moneda">
@@ -504,12 +504,12 @@
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Ramo Contable">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label5" Text='<%# Eval("COD_RAMO_CONTABLE") %>' Width="50px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label5" Text='<%# Eval("COD_RAMO_CONTABLE") %>' Width="60px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Contrato">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label6" Text='<%# Eval("CONTRATO") %>' Width="50px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label6" Text='<%# Eval("CONTRATO") %>' Width="70px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Descripción">
@@ -524,22 +524,22 @@
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Corredor">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label9" Text='<%# Eval("CORREDOR") %>' Width="280px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label9" Text='<%# Eval("CORREDOR") %>' Width="350px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Estimación">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label10" Text='<%# Eval("ESTIMACION") %>' Width="100px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label10" Text='<%# Eval("ESTIMACION") %>' Width="150px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Movimiento">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label11" Text='<%# Eval("MOVIMIENTO") %>' Width="100px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label11" Text='<%# Eval("MOVIMIENTO") %>' Width="120px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Solicitud">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label12" Text='<%# Eval("SOLICITUD_PAGO") %>' Width="100px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label12" Text='<%# Eval("SOLICITUD_PAGO") %>' Width="80px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                  <asp:TemplateField HeaderText="Monto Mov">
@@ -569,7 +569,7 @@
                                                 </asp:TemplateField>
                                                          <asp:TemplateField HeaderText="Fecha Ocur">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label18" Text='<%# Eval("FECHA_OCURRENCIA") %>' Width="100px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label18" Text='<%# Eval("FECHA_OCURRENCIA") %>' Width="70px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                          <asp:TemplateField HeaderText="Registro REA">
@@ -579,12 +579,12 @@
                                                 </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="Registro COR">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label20" Text='<%# Eval("REG_CORREDOR") %>' Width="50px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label20" Text='<%# Eval("REG_CORREDOR") %>' Width="60px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Asegurado">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label21" Text='<%# Eval("ASEGURADO") %>' Width="200px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label21" Text='<%# Eval("ASEGURADO") %>' Width="270px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Cobertura">
@@ -599,27 +599,27 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="CodCia">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label24" Text='<%# Eval("cod_cia_reas_cia") %>' Width="40px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label24" Text='<%# Eval("cod_cia_reas_cia") %>' Width="50px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="CodAgente">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label25" Text='<%# Eval("cod_agente") %>' Width="40px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label25" Text='<%# Eval("cod_agente") %>' Width="60px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="CodTContrato">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label26" Text='<%# Eval("cod_tipo_contrato") %>' Width="40px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label26" Text='<%# Eval("cod_tipo_contrato") %>' Width="60px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Fecha Ini">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label27" Text='<%# Eval("FEC_INI_VIG") %>' Width="50px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label27" Text='<%# Eval("FEC_INI_VIG") %>' Width="70px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Fecha Fin">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label28" Text='<%# Eval("FEC_FIN_VIG") %>' Width="50px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label28" Text='<%# Eval("FEC_FIN_VIG") %>' Width="70px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Pais">
@@ -629,32 +629,27 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Causa">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label30" Text='<%# Eval("CAUSA_STRO") %>' Width="200px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label30" Text='<%# Eval("CAUSA_STRO") %>' Width="180px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Dirección">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label31" Text='<%# Eval("DIR_STRO") %>' Width="200px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label31" Text='<%# Eval("DIR_STRO") %>' Width="350px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Fecha Aviso">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label32" Text='<%# Eval("FEC_AVISO") %>' Width="50px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label32" Text='<%# Eval("FEC_AVISO") %>' Width="70px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Ajustador">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label33" Text='<%# Eval("AJUSTADOR") %>' Width="200px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label33" Text='<%# Eval("AJUSTADOR") %>' Width="280px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Riesgo">
                                                     <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label34" Text='<%# Eval("RIESGO") %>' Width="100px" Font-Size="10px"></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="NoCorEstim">
-                                                    <ItemTemplate>
-                                                        <asp:Label runat="server" ID="Label35" Text='<%# Eval("NRO_CORRELA_ESTIM") %>' Width="40px" Font-Size="10px"></asp:Label>
+                                                        <asp:Label runat="server" ID="Label34" Text='<%# Eval("RIESGO") %>' Width="250px" Font-Size="10px"></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
