@@ -7,9 +7,9 @@
          <script src="../Scripts/jquery.numeric.js"></script>
          <script src="../Scripts/Recordatorios.js"></script>
 
-         <script type="text/javascript"> 
+<%--         <script type="text/javascript"> 
              Sys.WebForms.PageRequestManager.getInstance().add_endRequest(PageLoad);
-         </script>
+         </script>--%>
 
 
        <asp:UpdatePanel runat="server" ID="updValores">

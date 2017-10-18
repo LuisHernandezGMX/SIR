@@ -9,6 +9,7 @@ Public Class Cons
     Public Const RptEsp As Integer = 4
 
     'Parametros (cPAR_Parametros)
+    Public Const ParamRpt As Integer = 3
     Public Const ConsulFac As Integer = 5
     Public Const ConsulEsp As Integer = 6
 
@@ -22,6 +23,11 @@ Public Class Cons
     Public Enum Accion
         Consultar
         Guardar
+    End Enum
+
+    'Modulos Recordatorios
+    Public Enum Recordatorio
+        Siniestros = 61
     End Enum
 
 End Class
