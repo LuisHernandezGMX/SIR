@@ -33,36 +33,36 @@ $("body").on("click", ".expandir", function () {
 $("body").on("click", ".AgregaBroker", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Broker]"), $('[id*=lbl_ClaveBro]'), $('[id*=chk_SelBro]'), false);
 
-    //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
-    fn_CargaCatalogo("spS_CatalogosOP ==Bro==,====" + strSel, "Multiple", "gvd_Broker", "Bro", "BROKERS");
+    //*************fn_CargaCatalogo(PrefijoCatalogo,Condicion,Seleccion,TipoSeleccion,IdGrid,Titulo)***************
+    fn_CargaCatalogo("Bro", "", strSel, "Multiple", "gvd_Broker", "BROKERS");
 });
 
 //Detecta la clase Agregar Compañia y abre el Catalogo
 $("body").on("click", ".AgregaCia", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Compañia]"), $('[id*=lbl_ClaveCia]'), $('[id*=chk_SelCia]'), false);
 
-    //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
-    fn_CargaCatalogo("spS_CatalogosOP ==Cia==,====" + strSel, "Multiple", "gvd_Compañia", "Cia", "COMPAÑIAS");
+    //*************fn_CargaCatalogo(PrefijoCatalogo,Condicion,Seleccion,TipoSeleccion,IdGrid,Titulo)***************
+    fn_CargaCatalogo("Cia", "", strSel, "Multiple", "gvd_Compañia", "COMPAÑIAS");
 });
 
 $("body").on("click", ".AgregaRamoCont", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_RamoContable]"), $('[id*=lbl_ClaveRamC]'), $('[id*=chk_SelRamC]'), true);
-    fn_CargaCatalogo("spS_CatalogosOP ==RamC==,====" + strSel, "Multiple", "gvd_RamoContable", "RamC", "RAMOS CONTABLES");
+    fn_CargaCatalogo("RamC", "", strSel, "Multiple", "gvd_RamoContable", "RAMOS CONTABLES");
 });
 
 $("body").on("click", ".AgregaProducto", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Producto]"), $('[id*=lbl_ClavePro]'), $('[id*=chk_SelPro]'), true);
-    fn_CargaCatalogo("spS_CatalogosOP ==Pro==,====" + strSel, "Multiple", "gvd_Producto", "Pro", "PRODUCTOS");
+    fn_CargaCatalogo("Pro", "", strSel, "Multiple", "gvd_Producto", "PRODUCTOS");
 });
 
 $("body").on("click", ".AgregaUsuario", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Usuario]"), $('[id*=lbl_ClaveUsu]'), $('[id*=chk_SelUsu]'), true);
-    fn_CargaCatalogo("spS_CatalogosOP ==Usu==,====" + strSel, "Multiple", "gvd_Usuario", "Usu", "USUARIOS");
+    fn_CargaCatalogo("Usu", "", strSel, "Multiple", "gvd_Usuario", "USUARIOS");
 });
 
 $("body").on("click", ".AgregaEstatus", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Estatus]"), $('[id*=lbl_ClaveEst]'), $('[id*=chk_SelEst]'), true);
-    fn_CargaCatalogo("spS_CatalogosOP ==Est==,====" + strSel, "Multiple", "gvd_Estatus", "Est", "ESTATUS");
+    fn_CargaCatalogo("Est", "", strSel, "Multiple", "gvd_Estatus", "ESTATUS");
 });
 
 $("body").on("click", ".AgregaContrato", function () {
@@ -118,7 +118,7 @@ $("body").on("click", ".AgregaContrato", function () {
     }
 
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Contrato]"), $('[id*=lbl_ClaveFac]'), $('[id*=chk_SelFac]'), true);
-    fn_CargaCatalogo("spS_CatalogosOP ==Fac==," + Condicion + strSel, "Multiple", "gvd_Contrato", "Fac", "FACULTATIVOS");
+    fn_CargaCatalogo("Fac", Condicion , strSel, "Multiple", "gvd_Contrato", "FACULTATIVOS");
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

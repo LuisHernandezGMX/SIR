@@ -81,7 +81,7 @@ Partial Class Pages_SiteMaster
 
     Private Sub Pages_SiteMaster_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            Funciones.LlenaCatDDL(ddl_SucursalPol, "Suc")
+            Funciones.LlenaCatDDL(ddl_SucursalPol, "Suc",,,,,, False)
             CargaRowOculto()
             menu_principal.InnerHtml = Session("Menu")
         End If

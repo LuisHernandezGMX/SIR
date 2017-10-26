@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <asp:label runat="server" class="col-md-1  etiqueta-control" Width="110px">F. Recibido</asp:label>
-                                    <asp:TextBox runat="server" ID="txt_FRecibido" CssClass="estandar-control Fecha Centro Seleccion" Width="110px"></asp:TextBox>
+                                    <asp:TextBox runat="server" ID="txt_FRecibido" CssClass="estandar-control Fecha Centro Seleccion" Width="110px" TextMode="Date"></asp:TextBox>
 
                                     <asp:label runat="server" class="col-md-1 etiqueta-control" Visible="false" Width="140px">Fecha Hoy</asp:label>
                                     <asp:TextBox runat="server" ID="txt_FechaHoy" Enabled="false" Visible="false" CssClass="estandar-control Derecha" Width="170px"></asp:TextBox>   
@@ -192,9 +192,9 @@
                                     <button type="button" id="btn_SelProducto" runat="server" class="btn botones boton-chico AgregaProducto" data-toggle="modal" data-target="#EsperaModal">...</button>
                                     <div class="clear padding5"></div>
                                     <asp:label runat="server" class="col-md-1  etiqueta-control" Width="105px">Poliza</asp:label>
-                                    <asp:TextBox runat="server" ID="txt_NroPoliza" CssClass="col-md-1 estandar-control Centro Seleccion" Width="100px"></asp:TextBox>       
+                                    <asp:TextBox runat="server" ID="txt_NroPoliza" CssClass="col-md-1 estandar-control Centro cod Seleccion" Width="100px"></asp:TextBox>       
                                     <asp:label runat="server" class="col-md-1  etiqueta-control" Width="85px">Sufijo</asp:label>
-                                    <asp:TextBox runat="server" ID="txt_Sufijo" CssClass="estandar-control Centro Seleccion" Width="50px"></asp:TextBox>       
+                                    <asp:TextBox runat="server" ID="txt_Sufijo" CssClass="estandar-control Centro cod Seleccion" Width="50px"></asp:TextBox>       
                                 </div>
                             </div>
                         </div>
@@ -217,13 +217,13 @@
                                 <div class="ventana3">
                                     <div class="clear padding5"></div>
                                     <asp:label runat="server" class="col-md-1  etiqueta-control" Width="105px">Fecha Inicio</asp:label>
-                                    <asp:TextBox runat="server" ID="txt_VigIni" CssClass="estandar-control Fecha Derecha Seleccion" Width="235px"></asp:TextBox>
+                                    <asp:TextBox runat="server" ID="txt_VigIni" CssClass="estandar-control Fecha Derecha Seleccion"  TextMode="Date" AutoPostBack="true" Width="235px"></asp:TextBox>
                                     <div class="clear padding5"></div>
                                     <asp:label runat="server" class="col-md-1 etiqueta-control" Width="105px">(#) Dias Riesgo</asp:label>
-                                    <asp:TextBox runat="server" ID="txt_DiasVig" CssClass="estandar-control Derecha Seleccion" Width="235px"></asp:TextBox>
+                                    <asp:TextBox runat="server" ID="txt_DiasVig" CssClass="estandar-control Derecha Seleccion" TextMode="Number" AutoPostBack="true" Width="235px"></asp:TextBox>
                                     <div class="clear padding5"></div>
                                     <asp:label runat="server" class="col-md-1 etiqueta-control" Width="105px">Fecha Fin</asp:label>
-                                    <asp:TextBox runat="server" ID="txt_VigFin" CssClass="estandar-control Fecha Derecha Seleccion" Width="235px"></asp:TextBox>
+                                    <asp:TextBox runat="server" ID="txt_VigFin" CssClass="estandar-control Fecha Derecha Seleccion" TextMode="Date" AutoPostBack="true" Width="235px"></asp:TextBox>
                                 </div>
                             </div>
                         </div>
@@ -313,90 +313,90 @@
                             <div class="ventana6">
                                 <div class="clear padding5"></div>
 
-               
-                                    <button type="button" id="btn_Subjetividad" runat="server" class="btn botones boton-mediano dropdown-toggle" data-toggle="dropdown">
-                                         <span>
-                                            <img class="btn-abajo"/>
-                                            Subjetividad
-                                        </span>
-                                    </button>
-                                    <div class="dropdown-menu" style="left: 250px; top: 325px; position: fixed;">
-                                        <asp:label runat="server" id="lbl_Intermediario" class="etiqueta-simple"></asp:label>
-                                        <div class="clear padding3"></div>
-                                        
-                                        <table>
-                                            <tr>
-                                                <td>
-                                                     <asp:TextBox runat="server" ID="txt_Subjetividad1" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:TextBox runat="server" ID="txt_FecSubjetividad1" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:CheckBox runat="server" ID="chk_Subjetividad1"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                     <asp:TextBox runat="server" ID="txt_Subjetividad2" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:TextBox runat="server" ID="txt_FecSubjetividad2" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:CheckBox runat="server" ID="chk_Subjetividad2"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                     <asp:TextBox runat="server" ID="txt_Subjetividad3" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:TextBox runat="server" ID="txt_FecSubjetividad3" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:CheckBox runat="server" ID="chk_Subjetividad3"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                     <asp:TextBox runat="server" ID="txt_Subjetividad4" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:TextBox runat="server" ID="txt_FecSubjetividad4" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:CheckBox runat="server" ID="chk_Subjetividad4"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                     <asp:TextBox runat="server" ID="txt_Subjetividad5" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:TextBox runat="server" ID="txt_FecSubjetividad5" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
-                                                </td>
-                                                <td>
-                                                    <asp:CheckBox runat="server" ID="chk_Subjetividad5"/>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                    
-                                
-                                
-                             
-
                                 <asp:HiddenField runat="server" ID="hid_Indice" Value="-1" />
                                 <asp:ListBox runat="server" CssClass="estandar-control" ID="lst_Brokers" AutoPostBack="true" Height="155px" Width="100%">
                                 </asp:ListBox>
-                                <div style="width:100%;  text-align:right">
-                                    <asp:LinkButton id="btn_AddBroker" runat="server" class="btn botones AgregaBroker" data-toggle="modal" data-target="#EsperaModal">
-                                        <span>
-                                            <img class="btn-añadir"/>
-                                            Añadir
-                                        </span>
-                                    </asp:LinkButton>
+                               
+                                <div class="row">
+                                    <div class="col-md-6"> 
+                                        <button type="button" id="btn_Subjetividad" runat="server" class="btn botones boton-chico dropdown-toggle" data-toggle="dropdown">
+                                            <span>
+                                                <img class="btn-abajo"/>
+                                            </span>
+                                        </button>
+                                        <div class="dropdown-menu" style="left: 250px; top: 475px; position: fixed;">
+                                            <asp:label runat="server" id="lbl_Intermediario" class="etiqueta-simple"></asp:label>
+                                            <div class="clear padding3"></div>
+                                        
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                            <asp:TextBox runat="server" ID="txt_Subjetividad1" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:TextBox runat="server" ID="txt_FecSubjetividad1" TextMode="Date" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:CheckBox runat="server" ID="chk_Subjetividad1"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                            <asp:TextBox runat="server" ID="txt_Subjetividad2" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:TextBox runat="server" ID="txt_FecSubjetividad2"  TextMode="Date" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:CheckBox runat="server" ID="chk_Subjetividad2"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                            <asp:TextBox runat="server" ID="txt_Subjetividad3" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:TextBox runat="server" ID="txt_FecSubjetividad3" TextMode="Date" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:CheckBox runat="server" ID="chk_Subjetividad3"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                            <asp:TextBox runat="server" ID="txt_Subjetividad4" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:TextBox runat="server" ID="txt_FecSubjetividad4" TextMode="Date" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:CheckBox runat="server" ID="chk_Subjetividad4"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                            <asp:TextBox runat="server" ID="txt_Subjetividad5" CssClass="estandar-control Seleccion" Width="400px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:TextBox runat="server" ID="txt_FecSubjetividad5" TextMode="Date" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
+                                                    </td>
+                                                    <td>
+                                                        <asp:CheckBox runat="server" ID="chk_Subjetividad5"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"> 
+                                        <div style="width:100%;  text-align:right">
+                                            <asp:LinkButton id="btn_AddBroker" runat="server" class="btn botones AgregaBroker" data-toggle="modal" data-target="#EsperaModal">
+                                                <span>
+                                                    <img class="btn-añadir"/>
+                                                    Añadir
+                                                </span>
+                                            </asp:LinkButton>
+                                        </div> 
+                                    </div>
                                 </div> 
                             </div>
                          </div>
@@ -429,24 +429,24 @@
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="">
                                                 <ItemTemplate>
-                                                    <button type="button" id="btn_Subjetividad" runat="server" class="btn botones boton-mediano dropdown-toggle" data-toggle="dropdown" >
-                                                            <span>
+                                                    <button type="button" id="btn_Subjetividad" runat="server" class="btn botones boton-chico dropdown-toggle" data-toggle="dropdown">
+                                                        <span>
                                                             <img class="btn-abajo"/>
-                                                            Subjetividad
                                                         </span>
                                                     </button>
+                                                    
                                                     <div class="dropdown-menu" style="left:960px; top:310px; position: fixed;">
                                                         <asp:label runat="server" class="etiqueta-simple Intermediario2"></asp:label>
                                                         <div class="clear padding3"></div>
                                                         <asp:CheckBox runat="server" ID="lbl_Oculta1"  class="col-md-1" />
                                                         <asp:TextBox runat="server" ID="lbl_Oculta4"  CssClass="col-md-1 estandar-control Seleccion" Width="350px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="lbl_Oculta5" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="lbl_Oculta5" TextMode="Date" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
                                                         <asp:CheckBox runat="server" ID="lbl_Oculta6"  class="col-md-1" />
                                                         <asp:TextBox runat="server" ID="lbl_Oculta7" CssClass="col-md-1 estandar-control Seleccion" Width="350px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="lbl_Oculta8"  CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="lbl_Oculta8" TextMode="Date"  CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
                                                         <asp:CheckBox runat="server" ID="lbl_Oculta9"  class="col-md-1" />
                                                         <asp:TextBox runat="server" ID="lbl_Oculta10"  CssClass="col-md-1 estandar-control Seleccion" Width="350px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="lbl_Oculta11" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="lbl_Oculta11" TextMode="Date" CssClass="estandar-control Fecha Seleccion" Width="70px"></asp:TextBox>
                                                     </div>
                                                 </ItemTemplate>
                                             </asp:TemplateField>

@@ -11,6 +11,135 @@
     <asp:HiddenField runat="server" ID="hid_Ventanas" Value="1|1|0|0|" />
 
     <div style="width:1100px; min-width:1000px; overflow-x:hidden">
+        
+        <%-----------------------------------Sección 2----------------------------------------------------------------------------------------------------%>
+        <div class="cuadro-titulo panel-encabezado">
+            <input type="image" src="../Images/contraer_mini_inv.png" id="coVentana1" class="contraer"  />
+            <input type="image" src="../Images/expander_mini_inv.png"   id="exVentana1" class="expandir"  />
+            <strong>Filtro Contratos / Ramo Contable</strong>
+        </div>
+        <div class="panel-contenido ventana1" >
+            <div class="row">
+                <div class="col-md-4">
+                    <asp:label runat="server" class="col-md-1 etiqueta-control" Width="100px">Fecha Desde:</asp:label>
+                    <asp:TextBox runat="server" ID="txt_FechaDe" CssClass="col-md-1 estandar-control Fecha Centro" Width="80px"  ></asp:TextBox>
+                    <asp:label runat="server" class="col-md-1 etiqueta-control" Width="20px">A</asp:label>
+                    <asp:TextBox runat="server" ID="txt_FechaA" CssClass="estandar-control Fecha Centro" Width="80px" ></asp:TextBox>
+                </div>
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-4">
+
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="cuadro-subtitulo">
+                        Contratos
+                    </div>
+                    <div class="panel-subcontenido">
+                                            
+                        <asp:UpdatePanel runat="server" ID="upContrato">
+                            <ContentTemplate>
+                                <asp:Panel runat="server" ID="pnlContrato" Width="100%" Height="105px" ScrollBars="Both">
+                                    <asp:GridView runat="server" ID="gvd_Contrato" AutoGenerateColumns="false"  
+                                                    CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
+                                                    GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                        <Columns>
+                                            <asp:TemplateField HeaderText="">
+                                                <ItemTemplate>
+                                                    <asp:HiddenField runat="server" ID="chk_SelFac" />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Clave">
+                                                <ItemTemplate>
+                                                    <asp:Label runat="server" ID="lbl_ClaveFac" Text='<%# Eval("Clave") %>' Width="60px"></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Descripción" ItemStyle-CssClass="DescripcionCia">
+                                                <ItemTemplate>
+                                                    <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="350px"></asp:Label>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField>
+                                                <ItemTemplate>
+                                                    <asp:imagebutton ImageUrl="~/Images/delete_rojo.png" CommandName="Delete" Height="26" runat="server" CssClass="btn Delete" />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                                </asp:Panel>
+                                <div style="width:100%;  text-align:right">
+                                    <asp:LinkButton id="btn_AddCtr" runat="server" class="btn botones AgregaContrato" data-toggle="modal" data-target="#EsperaModal">
+                                        <span>
+                                            <img class="btn-añadir"/>
+                                            Añadir
+                                        </span>
+                                    </asp:LinkButton>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="cuadro-subtitulo">
+                        Ramos Contables
+                    </div>
+                    <div class="panel-subcontenido">
+                            <asp:UpdatePanel runat="server" ID="upPoliza">
+                                <ContentTemplate>
+                                    <asp:Panel runat="server" ID="pn_RamoContable" Width="100%" Height="130px" ScrollBars="Both">
+                                        <asp:GridView runat="server" ID="gvd_RamoContable" AutoGenerateColumns="false" 
+                                                        CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
+                                                        GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                            <Columns>
+                                                <asp:TemplateField HeaderText="">
+                                                    <ItemTemplate>
+                                                            <asp:HiddenField runat="server" ID="chk_SelRamC" value="false"/>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField >
+                                                <asp:TemplateField HeaderText="Clave">
+                                                    <ItemTemplate>
+                                                        <asp:Label runat="server" ID="lbl_ClaveRamC" Text='<%# Eval("Clave") %>' Width="50px"></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Descripción">
+                                                    <ItemTemplate>
+                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="360px"></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <ItemTemplate>
+                                                        <asp:imagebutton ImageUrl="~/Images/delete_rojo.png" CommandName="Delete" Height="26" runat="server" CssClass="btn Delete" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
+                                    </asp:Panel>
+                                    <div style="width:100%;  text-align:right">
+                                        <asp:LinkButton id="btn_AddRamoContable" runat="server" class="btn botones AgregaRamoCont" data-toggle="modal" data-target="#EsperaModal">
+                                            <span>
+                                                <img class="btn-añadir"/>
+                                                Añadir
+                                            </span>
+                                        </asp:LinkButton>
+                                    </div>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>       
+                    </div>                                        
+                </div>
+            </div>
+        </div>
+        
+        <div class="clear padding10"></div>
+
+
         <div class="cuadro-titulo panel-encabezado">
             <input type="image" src="../Images/contraer_mini_inv.png" id="coVentana0" class="contraer"  />
             <input type="image" src="../Images/expander_mini_inv.png"   id="exVentana0" class="expandir"  />
@@ -117,135 +246,6 @@
                 </div>
             </div>
 
-            <div class="clear padding10"></div>
-
-            <%-----------------------------------Sección 2----------------------------------------------------------------------------------------------------%>
-            <div class="cuadro-titulo panel-encabezado">
-                <input type="image" src="../Images/contraer_mini_inv.png" id="coVentana1" class="contraer"  />
-                <input type="image" src="../Images/expander_mini_inv.png"   id="exVentana1" class="expandir"  />
-                <strong>Filtro Contratos / Ramo Contable</strong>
-            </div>
-            <div class="panel-contenido ventana1" >
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="cuadro-subtitulo">
-                            Contratos
-                        </div>
-                        <div class="panel-subcontenido">
-                            <asp:UpdatePanel runat="server" ID="upFechas">
-                            <ContentTemplate>
-
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <asp:label runat="server" class="col-md-1 etiqueta-control" Width="100px">Fecha Desde:</asp:label>
-                                                <asp:TextBox runat="server" ID="txt_FechaDe" CssClass="estandar-control Fecha" Width="110px" Height="26px" ></asp:TextBox>
-                                            </td>
-                                            <td>
-                                                <asp:label runat="server" class="col-md-1 etiqueta-control" Width="38px">A</asp:label>
-                                                <asp:TextBox runat="server" ID="txt_FechaA" CssClass="estandar-control Fecha" Width="110px" Height="26px" ></asp:TextBox>
-                                            </td>
-                                        </tr>
-                                    </table>
-        
-                                </ContentTemplate>
-                            </asp:UpdatePanel>
-                                            
-                                                            
-
-                            <asp:UpdatePanel runat="server" ID="upContrato">
-                                <ContentTemplate>
-                                    <asp:Panel runat="server" ID="pnlContrato" Width="100%" Height="105px" ScrollBars="Both">
-                                        <asp:GridView runat="server" ID="gvd_Contrato" AutoGenerateColumns="false"  
-                                                      CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                      GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
-                                            <Columns>
-                                                <asp:TemplateField HeaderText="">
-                                                    <ItemTemplate>
-                                                        <asp:HiddenField runat="server" ID="chk_SelFac" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Clave">
-                                                    <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_ClaveFac" Text='<%# Eval("Clave") %>' Width="60px"></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Descripción" ItemStyle-CssClass="DescripcionCia">
-                                                    <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="350px"></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField>
-                                                    <ItemTemplate>
-                                                        <asp:imagebutton ImageUrl="~/Images/delete_rojo.png" CommandName="Delete" Height="26" runat="server" CssClass="btn Delete" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                            </Columns>
-                                        </asp:GridView>
-                                    </asp:Panel>
-                                    <div style="width:100%;  text-align:right">
-                                        <asp:LinkButton id="btn_AddCtr" runat="server" class="btn botones AgregaContrato" data-toggle="modal" data-target="#EsperaModal">
-                                            <span>
-                                                <img class="btn-añadir"/>
-                                                Añadir
-                                            </span>
-                                        </asp:LinkButton>
-                                    </div>
-                                </ContentTemplate>
-                            </asp:UpdatePanel>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-6">
-                        <div class="cuadro-subtitulo">
-                            Ramos Contables
-                        </div>
-                        <div class="panel-subcontenido">
-                                <asp:UpdatePanel runat="server" ID="upPoliza">
-                                    <ContentTemplate>
-                                        <asp:Panel runat="server" ID="pn_RamoContable" Width="100%" Height="130px" ScrollBars="Both">
-                                            <asp:GridView runat="server" ID="gvd_RamoContable" AutoGenerateColumns="false" 
-                                                          CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                          GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
-                                                <Columns>
-                                                    <asp:TemplateField HeaderText="">
-                                                        <ItemTemplate>
-                                                                <asp:HiddenField runat="server" ID="chk_SelRamC" value="false"/>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField >
-                                                    <asp:TemplateField HeaderText="Clave">
-                                                        <ItemTemplate>
-                                                            <asp:Label runat="server" ID="lbl_ClaveRamC" Text='<%# Eval("Clave") %>' Width="50px"></asp:Label>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="Descripción">
-                                                        <ItemTemplate>
-                                                            <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="360px"></asp:Label>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField>
-                                                        <ItemTemplate>
-                                                            <asp:imagebutton ImageUrl="~/Images/delete_rojo.png" CommandName="Delete" Height="26" runat="server" CssClass="btn Delete" />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                </Columns>
-                                            </asp:GridView>
-                                        </asp:Panel>
-                                        <div style="width:100%;  text-align:right">
-                                            <asp:LinkButton id="btn_AddRamoContable" runat="server" class="btn botones AgregaRamoCont" data-toggle="modal" data-target="#EsperaModal">
-                                                <span>
-                                                    <img class="btn-añadir"/>
-                                                    Añadir
-                                                </span>
-                                            </asp:LinkButton>
-                                        </div>
-                                    </ContentTemplate>
-                                </asp:UpdatePanel>       
-                        </div>                                        
-                    </div>
-                </div>
-            </div>
 
             <div class="clear padding5"></div>
 

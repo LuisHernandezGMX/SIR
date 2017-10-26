@@ -28,37 +28,38 @@ $("body").on("click", ".expandir", function () {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $("body").on("click", ".AgregaResponsable", function () {
-    fn_CargaCatalogo("spS_CatalogosOP ==Usu==,====", "Unica", "txt_ClaveResp|txt_SearchResp", "Usu", "USUARIOS");
+    fn_CargaCatalogo("Usu", "", "", "Unica", "txt_ClaveResp|txt_SearchResp", "USUARIOS");
 });
 
 $("body").on("click", ".AgregaOficina", function () {
-    fn_CargaCatalogo("spS_CatalogosOP ==Suc==,====", "Unica", "txt_ClaveOfi|txt_SearchOfi", "Suc", "OFICINAS");
+    fn_CargaCatalogo("Suc", "", "", "Unica", "txt_ClaveOfi|txt_SearchOfi", "OFICINAS");
 });
 
 $("body").on("click", ".AgregaSuscriptor", function () {
-    fn_CargaCatalogo("spS_CatalogosOP ==Usu==,====", "Unica", "txt_ClaveSusc|txt_SearchSusc", "Usu", "USUARIOS");
+    fn_CargaCatalogo("Usu", "", "", "Unica", "txt_ClaveSusc|txt_SearchSusc", "USUARIOS");
 });
 
 //Detecta la clase Agregar Broker y abre el Catalogo
 $("body").on("click", ".AgregaBroker", function () {
-    //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
-    fn_CargaCatalogo("spS_CatalogosOP ==Bro==,====", "Multiple", "lst_Brokers", "Bro", "INTERMEDIARIOS");
+    //*************fn_CargaCatalogo(PrefijoCatalogo,Condicion,Seleccion,TipoSeleccion,IdGrid,Titulo)***************
+    fn_CargaCatalogo("Bro", "", "", "Multiple", "lst_Brokers", "INTERMEDIARIOS");
 });
 
 $("body").on("click", ".AgregaRamoCont", function () {
-    fn_CargaCatalogo("spS_CatalogosOP ==RamC==,====", "Unica", "txt_ClaveRamC|txt_SearchRamC", "RamC", "ANTE-RAMOS");
+    fn_CargaCatalogo("RamC", "", "", "Unica", "txt_ClaveRamC|txt_SearchRamC", "ANTE-RAMOS");
 });
 
 $("body").on("click", ".AgregaProducto", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Producto]"), $('[id*=lbl_ClavePro]'), $('[id*=chk_SelPro]'), true);
-    fn_CargaCatalogo("spS_CatalogosOP ==Pro==,====" + strSel, "Multiple", "gvd_Producto", "Pro", "PRODUCTOS");
+
+    fn_CargaCatalogo("Pro", "" , strSel, "Multiple", "gvd_Producto", "PRODUCTOS");
 });
 
 $("body").on("click", ".AgregaCia", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Compañia]"), $('[id*=lbl_ClaveCia]'), $('[id*=chk_SelCia]'), false);
 
-    //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
-    fn_CargaCatalogo("spS_CatalogosOP ==Cia==,====" + strSel, "Multiple", "gvd_Compañia", "Cia", "REASEGURADORES");
+    //*************fn_CargaCatalogo(PrefijoCatalogo,Condicion,Seleccion,TipoSeleccion,IdGrid,Titulo)***************
+    fn_CargaCatalogo("Cia", "", strSel, "Multiple", "gvd_Compañia", "REASEGURADORES");
 });
 
 $("body").on("click", ".VerReaseguradores", function () {
