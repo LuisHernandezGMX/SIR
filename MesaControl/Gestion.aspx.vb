@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports Mensaje
+Imports System.DateTime
 Partial Class MesaControl_Gestion
     Inherits System.Web.UI.Page
 
@@ -42,8 +43,7 @@ Partial Class MesaControl_Gestion
     Private Sub MesaControl_Gestion_Load(sender As Object, e As EventArgs) Handles Me.Load
         Try
             If Not IsPostBack Then
-                Funciones.LlenaCatDDL(ddl_Moneda, "Mon")
-                ddl_Moneda.Items.RemoveAt(2)
+                Funciones.LlenaCatDDL(ddl_Moneda, "Mon",,,,,, False)
                 txt_FechaHoy.Text = Today.ToString("dd/MM/yyyy")
 
                 EdoControl(Operacion.Ninguna)
@@ -493,9 +493,9 @@ Partial Class MesaControl_Gestion
                 chk_Subjetividad3.Checked = False
 
                 txt_Subjetividad4.Text = vbNullString
-                txt_FecSubjetividad4.Text = vbNullString
                 chk_Subjetividad4.Checked = False
 
+                txt_FecSubjetividad4.Text = vbNullString
                 txt_Subjetividad5.Text = vbNullString
                 txt_FecSubjetividad5.Text = vbNullString
                 chk_Subjetividad5.Checked = False
@@ -556,6 +556,59 @@ Partial Class MesaControl_Gestion
                 End If
 
             End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub txt_VigIni_TextChanged(sender As Object, e As EventArgs) Handles txt_VigIni.TextChanged
+        Try
+
+            If IsDate(txt_VigIni.Text) Then
+                If IsNumeric(txt_DiasVig.Text) Then
+                    txt_VigFin.Text = CDate(txt_VigIni.Text).AddDays(txt_DiasVig.Text - 1).ToString("dd/MM/yyyy")
+                Else
+                    If IsDate(txt_VigFin.Text) Then
+                        txt_DiasVig.Text = DateDiff(DateInterval.Day, CDate(txt_VigIni.Text), CDate(txt_VigFin.Text)) + 1
+                    End If
+                End If
+            End If
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub txt_DiasVig_TextChanged(sender As Object, e As EventArgs) Handles txt_DiasVig.TextChanged
+        Try
+            If IsNumeric(txt_DiasVig.Text) Then
+                If IsDate(txt_VigIni.Text) Then
+                    txt_VigFin.Text = CDate(txt_VigIni.Text).AddDays(txt_DiasVig.Text - 1).ToString("dd/MM/yyyy")
+                Else
+                    If IsDate(txt_VigFin.Text) Then
+                        txt_VigIni.Text = CDate(txt_VigFin.Text).AddDays(-1 * txt_DiasVig.Text + 1).ToString("dd/MM/yyyy")
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub txt_VigFin_TextChanged(sender As Object, e As EventArgs) Handles txt_VigFin.TextChanged
+        Try
+            If IsDate(txt_VigFin.Text) Then
+
+                If IsDate(txt_VigIni.Text) Then
+                    txt_DiasVig.Text = DateDiff(DateInterval.Day, CDate(txt_VigIni.Text), CDate(txt_VigFin.Text)) + 1
+                Else
+                    If IsNumeric(txt_DiasVig.Text) Then
+                        txt_VigIni.Text = CDate(txt_VigFin.Text).AddDays(-1 * txt_DiasVig.Text - 1).ToString("dd/MM/yyyy")
+                    End If
+                End If
+
+            End If
+
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
         End Try

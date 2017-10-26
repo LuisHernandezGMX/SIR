@@ -41,11 +41,8 @@ Partial Class Reportes_ReporteCtaCte
 
     Private Sub Reportes_ReporteCtaCte_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            Funciones.LlenaCatDDL(ddl_Moneda, "Mon")
-            ddl_Moneda.SelectedValue = -1
-
-            Funciones.LlenaCatDDL(ddl_TipoContrato, "Tct")
-            ddl_TipoContrato.SelectedValue = -1
+            Funciones.LlenaCatDDL(ddl_Moneda, "Mon",,,,, -1)
+            Funciones.LlenaCatDDL(ddl_TipoContrato, "Tct",,,,, -1)
         End If
     End Sub
 
