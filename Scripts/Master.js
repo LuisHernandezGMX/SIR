@@ -81,8 +81,8 @@ function PageLoadMaster() {
     //FORMATEO DE CAMPOS EN LA VISTA
     $(".Fecha").mask("99/99/9999");
 
-    $(".cod").numeric({ decimal: false, negative: true, min: 0, max: 9999 });
-    $(".cod").attr({ maxLength: 4 });
+    $(".cod").numeric({ decimal: false, negative: true, min: 0, max: 999999 });
+    $(".cod").attr({ maxLength: 6 });
     $(".cod").css('text-align', 'center');
 
     $(".nro_pol").numeric({ decimal: false, negative: false, min: 0, max: 9999999 });
@@ -103,8 +103,7 @@ function PageLoadMaster() {
 
     //Busqueda de Producto por Catalogo
     $("#btn_SelRam").click(function () {
-        var strSel = '';
-        fn_CargaCatalogo("spS_CatalogosOP ==Pro==,====" + strSel, "Unica", "txtClaveRam|txtSearchRam", "Pro", "Productos");
+        fn_CargaCatalogo("Pro", "", "", "Unica", "txtClaveRam|txtSearchRam", "Productos");
     });
 
     //Busqueda de Producto por Clave
@@ -214,18 +213,18 @@ function fn_Repuesta_Autoriza() {
 }
 
 //Funciones de Consulta--------------------------------------------------------------------------------------------------------------------------------
-function fn_CargaCatalogo(Consulta, Tipo, Control, Prefijo, Titulo) {
+function fn_CargaCatalogo(Catalogo, Condicion, Seleccion, Tipo, Control, Titulo) {
     $.ajax({
         type: 'POST',
         contentType: "application/json; charset=utf-8",
         url: '../LocalServices/ConsultaBD.asmx/ObtieneDatos',
-        data: "{ 'Consulta': '" + Consulta + "'}",
+        data: "{ 'Consulta': 'spS_CatalogosSIR ==" + Catalogo + "==,==" + Condicion + "==" + Seleccion + "'}",
         dataType: 'JSON',
         success: function (response) {
             if (response.d.length > 0) {
                 $("#lbl_Catalogo")[0].innerText = Titulo;
                 $("input[id$='hid_Control']")[0].value = Control;
-                $("input[id$='hid_Prefijo']")[0].value = Prefijo;
+                $("input[id$='hid_Prefijo']")[0].value = Catalogo;
                 fn_AbrirModal('#Catalogo');
 
                 $("[id*=gvd_Catalogo] tr").not($("[id*=gvd_Catalogo] tr:first")).remove();

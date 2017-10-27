@@ -53,7 +53,8 @@ Public Class Funciones
     End Function
 
     Public Shared Sub LlenaCatDDL(DDL As DropDownList, Prefijo As String, Optional Condicion As String = "", Optional Sel As String = "",
-                                  Optional DataValue As String = "Clave", Optional DataText As String = "Descripcion", Optional SelCurrent As Integer = 0)
+                                  Optional DataValue As String = "Clave", Optional DataText As String = "Descripcion", Optional SelCurrent As Integer = 0,
+                                  Optional optTodas As Boolean = True)
         Dim Resultado As New DataTable
         Try
             Dim ws As New ws_Generales.GeneralesClient
@@ -63,9 +64,18 @@ Public Class Funciones
                 DDL.DataTextField = DataText
                 DDL.DataSource = Resultado
                 DDL.DataBind()
+
+                If optTodas = True Then
+                    Dim opcion As ListItem
+                    opcion = New ListItem(". . .", "-1")
+                    DDL.Items.Add(opcion)
+                End If
+
                 If SelCurrent <> 0 Then
                     DDL.SelectedValue = SelCurrent
                 End If
+
+
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Carga DDL", "Ocurrio un Error llenar DDL", TipoMsg.Falla)
