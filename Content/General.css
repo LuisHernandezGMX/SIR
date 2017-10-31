@@ -536,6 +536,13 @@ border-radius: 11px; left: 28%; top: 15%;  margin-left: -150px;  position: fixed
 box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
 }
 
+.modal-ajustes {
+border-radius: 11px; left: 30%; top: 10%; margin-left: -150px;  position: fixed; z-index: 10000; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px;  display:none; overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+opacity: 1; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; 
+border-color:#9c9c9c;
+}
+
 .generales{
     left: 400px; top: 160px;
 }
