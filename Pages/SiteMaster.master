@@ -18,6 +18,7 @@
         <script src="../Scripts/jquery.mask.js"></script> 
         <script src="../Scripts/jquery.maskMoney.js"></script>
         <script src="../Scripts/wickedpicker.js"></script> 
+        <script src="../Scripts/gridviewScroll.min.js"></script>
     </asp:ContentPlaceHolder>
 </head>
 
@@ -38,6 +39,7 @@
         </asp:UpdateProgress>  
         
         <div id="div_Estilos">
+            <link href="../Content/Responsive.css" rel="stylesheet" />
             <link href="../Content/General.css" rel="stylesheet" />
             <link href="../Content/jquery-ui.css" rel="stylesheet" />
             <link href="../Content/jquery-ui.min.css" rel="stylesheet" />
@@ -69,49 +71,6 @@
 
                     
                     <div id="menu_principal" runat="server" >
-
-                            <%--<ul id="menu">
-                                <li><div id="casita">
-                                        <a href="../Pages/Inicio.aspx" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('home','','../Images/menu_home-over.png',1)" onmousedown="MM_swapImage('home','','../Images/menu_home-down.png',1)">
-                                        <img class="home" src="../Images/menu_home-up.png" alt="Inicio" width="26" height="22" border="0" id="home" /></a>
-                                    </div>
-                                </li>            
-                                <li><img class="separador" /></li>
-                                <li>Ordenes de Pago
-                                    <ul>
-                                        <li><a href="../OrdenPago/Facultativo.aspx">Registro Facultativo</a></li> 
-                                        <li><a href="Login.aspx">Registro Saldos</a></li>
-                                    </ul>       
-                                </li>
-                                <li><img class="separador" /></li>
-                                <li><a href="FirmasElectronicas.aspx">Firmas Electrónicas</a></li>
-                                <li><img class="separador" /></li>
-                                <li><a href="NotasCobertura.aspx">Notas de Cobertura</a></li>
-                                <li><img class="separador" /></li>
-                                <li><a href="DistReaseguro.aspx">Distribución de Reaseguro</a></li>
-                                <li><img class="separador" /></li>
-                                <li><a href="AjusteReaseguro.aspx">Ajustes</a></li>
-                                <li><img class="separador" /></li>
-                                <li>Reportes
-                                    <ul>
-                                        <li><a>Reporteador</a></li>
-                                        <li><a>Garantias de Pago</a></li>
-                                        <li><a>Temporarios</a></li>
-                                   </ul>
-                                </li>
-                                <li><img class="separador" /></li>
-                                <li>Recordatorios
-                                    <ul>
-                                        <li><a>Siniestros</a>
-                                            <ul>
-                                                <li><a href="../Recordatorios/RecSiniestrosAdmin.aspx">Configuración del Recordatorio</a></li> 
-                                                <li><a href="../Recordatorios/ConsultaFacultativos.aspx">Consulta de Facultativos</a></li> 
-                                            </ul>
-                                        </li>
-                                   </ul>
-                                </li>
-                             </ul>--%>
-
                     </div>
 
 
@@ -132,42 +91,129 @@
 		        </div>
             </div>   
         
-             
-            <%--CONTENDOR PRINCIPAL--%>
-            <div class="principal-contenido">
-                <table>
-                    <tr>
-                        <td>
-                            <div class="zona-logo">
-                                <img  class="profile-img" src ="../Images/reaseguro_ico_page.png" alt=""/> 
-                                <div class="clear padding30"></div>
 
-                                <asp:Label runat="server" ID="lbl_TituloSeccion" CssClass="titulo-seccion" Text="Indicadores"></asp:Label>
-                                
-                                <div class="clear padding5"></div>
-                                <div id="cuadro_fecha">
-                                    <table>
-                                        <tr>
-                                            <td><asp:label runat="server" class="etiqueta-control" Width="60px">Fecha:</asp:label></td>
-                                            <td><asp:label runat="server" ID="lbl_fecha" Width="60px" CssClass="etiqueta-simple" ></asp:label></td>
-                                        </tr>
-                                        <tr>
-                                            <td><asp:label runat="server" class="etiqueta-control" Width="60px">Hora:</asp:label></td>
-                                            <td><asp:label runat="server" ID="lbl_hora" Width="60px" CssClass="etiqueta-simple" ></asp:label></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="zona-form">
-                                <asp:ContentPlaceHolder id="cph_principal" runat="server">
-                                </asp:ContentPlaceHolder>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <%-------CONTENDOR PRINCIPAL-------%>
+            <table>
+                <tr>
+                    <td style="vertical-align:top;">
+
+
+                        <div runat="server" id="div_Logo" class="zona-logo">
+                            <asp:UpdatePanel runat="server" ID="upLogo">
+                                <ContentTemplate>
+                                    <div id="cuadro_imagen">
+                                        <img  class="profile-img" src ="../Images/reaseguro_ico_page.png" alt=""/> 
+                                    </div>
+
+                                    <div class="clear padding10"></div>
+
+                                    <div id="cuadro_titulo">
+                                        <asp:Label runat="server" ID="lbl_TituloSeccion" CssClass="titulo-seccion" Text="Indicadores"></asp:Label>
+                                    </div>
+                            
+                                    <div class="clear padding5"></div>
+
+                                    <div runat="server" id="cuadro_fecha">
+                                        <table>
+                                            <tr>
+                                                <td><asp:label runat="server" class="etiqueta-control" Width="60px">Fecha:</asp:label></td>
+                                                <td><asp:label runat="server" ID="lbl_fecha" Width="60px" CssClass="etiqueta-simple" ></asp:label></td>
+                                            </tr>
+                                            <tr>
+                                                <td><asp:label runat="server" class="etiqueta-control" Width="60px">Hora:</asp:label></td>
+                                                <td><asp:label runat="server" ID="lbl_hora" Width="60px" CssClass="etiqueta-simple" ></asp:label></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                            
+                                    <div runat="server" id="cuadro_tablero" visible="false">
+                                        <div class="cuadro-titulo">
+                                            Tablero de Avance
+                                        </div>
+                                    
+                                         <div class="clear padding4"></div>
+
+                                        <asp:label runat="server" class="col-md-1 etiqueta-control" Width="23%">Folio</asp:label>
+                                        <asp:TextBox runat="server" ID="txt_Folio" CssClass="estandar-control Tablero"  Width="75%"></asp:TextBox>
+
+                                        <div class="clear padding4"></div>
+
+                                        <asp:label runat="server" class="col-md-1 etiqueta-control" Width="23%">Oferta</asp:label>
+                                        <asp:TextBox runat="server" ID="txt_Oferta" CssClass="estandar-control Tablero" Enabled="false" Width="75%"></asp:TextBox>
+
+                                        <div class="clear padding4"></div>
+
+                                        <asp:Panel runat="server" ID="pnl_Tablero" Width="100%" ScrollBars="None">
+                                            <asp:GridView runat="server"  ID="gvd_Tablero" AutoGenerateColumns="false" 
+                                                          GridLines="Horizontal"  ShowHeaderWhenEmpty="true" CssClass="grid-view"
+                                                          HeaderStyle-CssClass="header" DataKeyNames="Id">
+                                                <Columns>
+                                                    <asp:TemplateField HeaderText="">
+                                                        <ItemTemplate>
+                                                            <asp:Label runat="server" ID="lbl_Estatus" Text='<%# Eval("Proceso") %>' Width="120px" ></asp:Label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="INICIO">
+                                                        <ItemTemplate>
+                                                            <asp:textbox runat="server" ID="txt_FecInicio" CssClass="estandar-control Tablero Fecha Centro FecIni" TextMode="Date" Text='<%# Eval("Fecha_Inicio") %>' Width="75px"></asp:textbox>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="TERMINO">
+                                                        <ItemTemplate>
+                                                            <asp:textbox runat="server" ID="txt_FecTermino" CssClass="estandar-control Tablero Fecha Centro FecFin" TextMode="Date" Text='<%# Eval("Fecha_Termino") %>' Width="75px"></asp:textbox>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="LAPSO">
+                                                        <ItemTemplate>
+                                                            <asp:Label runat="server" ID="lbl_Lapso" Text='<%# Eval("Lapso") %>' CssClass="Centro Lapso" Width="35px"></asp:Label>
+                                                            <asp:TextBox runat="server" ID="lbl_LapsoAux" Text='<%# Eval("Lapso") %>' CssClass="NoDisplay LapsoAux"></asp:TextBox>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:TemplateField HeaderText="">
+                                                        <ItemTemplate>
+                                                            <asp:linkbutton runat="server" ID="lnk_Notas" CommandName="Notas" Text="Notas" Width="30px"></asp:linkbutton>
+                                                            <asp:textbox runat="server" ID="txt_Nota" CssClass="NoDisplay" Text='<%# Eval("Notas") %>'></asp:textbox>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                </Columns>
+                                            </asp:GridView>
+                                            <div class="row">
+                                            <div class="col-md-1" >
+                                               
+                                            </div>
+                                            <div class="col-md-1" style="height:20px;background-color:yellow;"">
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                 <asp:label runat="server" class="etiqueta-control">Proyecto</asp:label> 
+                                            </div>
+                                            <div class="col-md-1" style="height:20px;background-color:lightgreen;"">
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="etiqueta-control">En Firme</asp:label> 
+                                            </div>
+                                        </div>
+                                        </asp:Panel>
+                                        
+                                        <div class="clear padding4"></div>
+                                    </div>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                    </td>
+                    <td>
+                        <div runat="server" id="div_Form"  class="zona-form">
+                            <asp:ContentPlaceHolder id="cph_principal" runat="server">
+                            </asp:ContentPlaceHolder>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <%-----------------------------------%>
+             
+            
+
 
             <%--PIE DE PAGINA--%>
             <div id="pie_contenedor">
@@ -249,7 +295,7 @@
         <!-- Modal -->
         <div id="Catalogo" style="width:350px; height:470px" class="modal-catalogo" >
             <div class="cuadro-titulo" style="height:30px">
-                <button type="button" style="color:white;" class="close"  data-dismiss="modal">&times;</button>
+                <button type="button" id="btn_Cerrar_Cat" style="color:white;" class="close">&times;</button>
                 <div class="titulo-modal"><label id="lbl_Catalogo">Catálogo</label></div>
             </div>
 
@@ -280,7 +326,7 @@
 
                         <div style="width:100%; text-align:right;">
                              <asp:Button runat="server" id="btn_Aceptar_Catalogo" class="btn botones" Text="Aceptar"  />
-                             <button type="button" id="btn_Cancelar_Catalogo" class="btn botones" data-dismiss="modal">Cancelar</button>
+                             <asp:Button runat="server" id="btn_Cancelar_Catalogo" class="btn botones" Text="Cancelar" />
                         </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>
