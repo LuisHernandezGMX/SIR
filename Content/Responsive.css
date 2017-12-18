@@ -1,0 +1,58 @@
+﻿@media only screen and (max-width: 1366px) and (min-width: 1280px){
+    .zona-principal {
+        width:980px;
+    }
+
+    .panel-seccion-fija{
+        font-family:Myriad Pro;
+        border-width:.5px;
+        border-right-style:inset;
+        border-color:rgba(0,0,0,.2);
+        z-index:100;
+        width:980px;
+        background-color: rgb(255, 255, 255); 
+        position:fixed;
+    }
+
+    .tab-content{
+        height:310px; 
+        overflow-y:scroll;
+        overflow-x:hidden;
+    }
+
+    .Descripcion{
+        width:150px; 
+    }
+
+}
+
+@media only screen and (max-width: 1600px) and (min-width: 1367px){
+    .zona-principal {
+        width:1200px;
+    }
+
+    .panel-seccion-fija{
+        font-family:Myriad Pro;
+        border-width:.5px;
+        border-right-style:inset;
+        border-color:rgba(0,0,0,.2);
+        z-index:100;
+        width:1200px;
+        background-color: rgb(255, 255, 255); 
+        position:fixed;
+    }
+
+    .tab-content{
+        height:490px; 
+        overflow-y:scroll;
+        overflow-x:hidden;
+    }
+
+    .Descripcion{
+        width:250px; 
+    }
+}
+
+
+
+

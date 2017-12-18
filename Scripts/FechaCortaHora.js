@@ -1,6 +1,9 @@
 ﻿function startDateShort() {
     var f = new Date();
-    document.getElementById('lbl_fecha').innerHTML = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
+    var control = document.getElementById('lbl_fecha')
+    if (control != undefined) {
+        control.innerHTML = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
+    }
 }
 
 function startTime() {
@@ -10,7 +13,12 @@ function startTime() {
     s = today.getSeconds();
     m = checkTime(m);
     s = checkTime(s);
-    document.getElementById('lbl_hora').innerHTML = h + ":" + m + ":" + s;
+
+    var control = document.getElementById('lbl_hora')
+
+    if (control != undefined) {
+        control.innerHTML = h + ":" + m + ":" + s;
+    }
     t = setTimeout('startTime()', 500);
 }
 

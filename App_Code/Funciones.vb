@@ -10,9 +10,9 @@ Public Class Funciones
         Return ws.IsAuthenticated("GMX.COM.MX", Usuario, Contraseña)
     End Function
 
-    Public Shared Function EjecutaFuncion(ByVal funcion As String) As Boolean
+    Public Shared Function EjecutaFuncion(ByVal funcion As String, Optional ByVal Key As String = "Funcion") As Boolean
         Dim page As Page = HttpContext.Current.CurrentHandler
-        ScriptManager.RegisterClientScriptBlock(page, GetType(Page), "Funcion", funcion, True)
+        ScriptManager.RegisterClientScriptBlock(page, GetType(Page), Key, funcion, True)
         Return True
     End Function
 
