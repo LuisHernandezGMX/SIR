@@ -355,4 +355,39 @@ Partial Class Recordatorios_DetalleSiniestros
 
     End Sub
 
+
+    Protected Sub btn_modGuardarAJ_Click(sender As Object, e As EventArgs)
+
+        'Guarda generales
+        Dim ws As New ws_RecSiniestros.RecSiniestrosClient
+        Try
+            '  ws.GuardaAjustes(lbl_NumSinModal, 0, vbNull, vbNull, vbNull, vbNull, vbNull, vbNull, txt_ModFecIni.Text, txt_ModFecFin.Text,)
+
+            For Each row As GridViewRow In gvd_ModFac.Rows
+                Dim lbling As String = DirectCast(row.FindControl("lbl_codbro"), Label).Text
+                Dim lblini As String = DirectCast(row.FindControl("lbl_codcia"), Label).Text
+                Dim CveRea As String = Trim(Replace(Replace(Left(DirectCast(row.FindControl("lbl_Reasegurador"), Label).Text, 4), "(", ""), ")", ""))
+                Dim CveCorr As String = Trim(Replace(Replace(Left(DirectCast(row.FindControl("lbl_Broker"), Label).Text, 4), "(", ""), ")", ""))
+
+                If CveRea <> lblini Then
+
+                End If
+
+                If CveCorr <> lbling Then
+
+                End If
+
+            Next
+
+            'DirectCast(gvd_ModFac.Rows(0).Cells(0).FindControl("lbl_codbro"), Label)
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("", "", Mensaje.TipoMsg.Confirma)
+        End Try
+
+
+
+
+
+    End Sub
+
 End Class

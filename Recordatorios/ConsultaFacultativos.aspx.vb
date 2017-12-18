@@ -245,4 +245,7 @@ Partial Class Recordatorios_ConsultaFacultativos
         SQLFiltros(Cons.Accion.Guardar)
     End Sub
 
+    Private Sub btn_PolDescart_Click(sender As Object, e As EventArgs) Handles btn_PolDescart.Click
+        Funciones.AbrirModal("#DescartadasModal")
+    End Sub
 End Class

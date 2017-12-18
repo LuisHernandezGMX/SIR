@@ -108,7 +108,8 @@ $("body").on("click", ".BuscaEst", function () {
     var Id = $("input[id$='txtClaveFas']")[0].value;
     if (Id != "") {
         var Condicion = ' WHERE id_Fase = ' + Id;
-        fn_CargaCatalogo("spS_CatalogosOP ==Sts==" + ",==" + Condicion + "==" + strSel, "Multiple", "gvd_Estatus", "Sts", "Estatus de Siniestro");
+        //fn_CargaCatalogo("spS_CatalogosOP ==Sts==" + ",==" + Condicion + "==" + strSel, "Multiple", "gvd_Estatus", "Sts", "Estatus de Siniestro");
+        fn_CargaCatalogo("Sts", Condicion,strSel, "Multiple", "gvd_Estatus", "Estatus de Siniestro");
     }
     else {
         fn_MuestraMensaje('Validación', 'Se debe indicar una Fase antes de buscar', 0, "")
@@ -121,7 +122,8 @@ $("body").on("click", ".BuscaAvU", function () {
     var Id = $("input[id$='txtClaveSec']")[0].value;
     if (Id != "") {
         var Condicion = ' WHERE ts.cod_sector = ' + Id
-        fn_CargaCatalogo("spS_CatalogosOP ==AvU==" + ",==" + Condicion + "==" + strSel, "Multiple", "gvd_Usuarios", "Sec", "Aviso a Usuarios");
+        //fn_CargaCatalogo("spS_CatalogosOP ==AvU==" + ",==" + Condicion + "==" + strSel, "Multiple", "gvd_Usuarios", "Sec", "Aviso a Usuarios");
+        fn_CargaCatalogo("AvU",Condicion, strSel, "Multiple", "gvd_Usuarios", "Aviso a Usuarios");
     }
     else {
         fn_MuestraMensaje('Validación', 'Se debe indicar un Departamento antes de buscar usuario', 0, "")
@@ -132,43 +134,56 @@ $("body").on("click", ".BuscaAvU", function () {
 $("body").on("click", ".btnMoneda", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
     var row = $(this).closest("tr");
-    fn_CargaCatalogo("spS_CatalogosOP ==Mon==,====", "Unica", "gvd_ModFac|" + ((row[0].rowIndex) - 1) + "|lbl_Moneda", "Mon", "MONEDAS");
+    fn_CargaCatalogo("Mon","","", "Unica", "gvd_ModFac|" + ((row[0].rowIndex) - 1) + "|lbl_Moneda", "MONEDAS");
 });
 
 $("body").on("click", ".btnReasegurador", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
     var row = $(this).closest("tr");
-    fn_CargaCatalogo("spS_CatalogosOP ==Cia==,====", "Unica", "gvd_ModFac|" + ((row[0].rowIndex) - 1) + "|lbl_Reasegurador", "Cia", "REASEGURADOR");
+    $('[id*=hid_Edit]')[row[0].rowIndex - 1].value = "true";
+    
+    fn_CargaCatalogo("Cia","","", "Unica", "gvd_ModFac|" + ((row[0].rowIndex) - 1) + "|lbl_Reasegurador", "REASEGURADOR");
 });
 
 $("body").on("click", ".btnBroker", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
     var row = $(this).closest("tr");
-    fn_CargaCatalogo("spS_CatalogosOP ==Bro==,====", "Unica", "gvd_ModFac|" + ((row[0].rowIndex) - 1) + "|lbl_Broker", "Bro", "CORREDOR");
+    fn_CargaCatalogo("Bro","","", "Unica", "gvd_ModFac|" + ((row[0].rowIndex) - 1) + "|lbl_Broker", "CORREDOR");
 });
 //'--------------------------------------------------------------------
 
 //Detecta la clase Agregar Broker y abre el Catalogo
+//$("body").on("click", ".BuscaFase", function () {
+//    var strSel = fn_ElementosSeleccionados($("[id*=gvd_Fase]"), $('[id*=lbl_ClaveFas]'), $('[id*=chk_SelFas]'), false);
+//    //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
+//    fn_CargaCatalogo("spS_CatalogosOP ==Fas==,====" + strSel, "Multiple", "gvd_Fase", "Fas", "FASES DE RECUPERACION");
+//});
+
 $("body").on("click", ".BuscaFase", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Fase]"), $('[id*=lbl_ClaveFas]'), $('[id*=chk_SelFas]'), false);
     //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
-    fn_CargaCatalogo("spS_CatalogosOP ==Fas==,====" + strSel, "Multiple", "gvd_Fase", "Fas", "FASES DE RECUPERACION");
+    fn_CargaCatalogo("Fas","",strSel, "Multiple", "gvd_Fase", "FASES DE RECUPERACION");
 });
 
 $("body").on("click", ".BuscaNivel", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Nivel]"), $('[id*=lbl_ClaveNiv]'), $('[id*=chk_SelNiv]'), false);
     //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
-    fn_CargaCatalogo("spS_CatalogosOP ==Niv==,====" + strSel, "Multiple", "gvd_Nivel", "Niv", "NIVELES DE RECORDATORIO");
+    //fn_CargaCatalogo("spS_CatalogosOP ==Niv==,====" + strSel, "Multiple", "gvd_Nivel", "Niv", "NIVELES DE RECORDATORIO");
+    fn_CargaCatalogo("Niv","",strSel, "Multiple", "gvd_Nivel", "NIVELES DE RECORDATORIO");
 });
 
+//$("body").on("click", "#btn_SelFas", function () {
+//    //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
+//    fn_CargaCatalogo("spS_CatalogosOP ==Fas==,====", "Unica", "txtClaveFas|txtSearchFas|gvd_Estatus", "Fas", "Fases");
+//});
 $("body").on("click", "#btn_SelFas", function () {
     //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
-    fn_CargaCatalogo("spS_CatalogosOP ==Fas==,====", "Unica", "txtClaveFas|txtSearchFas|gvd_Estatus", "Fas", "Fases");
+    fn_CargaCatalogo("Fas","", "","Unica", "txtClaveFas|txtSearchFas|gvd_Estatus", "Fases");
 });
 
 $("body").on("click", "#btn_SelSec", function () {
     //*************fn_CargaCatalogo(Consulta,Seleccion,TipoSeleccion,IdGrid,PrefijoCatalogo,Titulo)***************
-    fn_CargaCatalogo("spS_CatalogosOP ==Sec==,====", "Unica", "txtClaveSec|txtSearchSec|gvd_Usuarios", "Sec", "Departamentos");
+    fn_CargaCatalogo("Sec","","", "Unica", "txtClaveSec|txtSearchSec|gvd_Usuarios", "Departamentos");
 });
 
 //Delete event handler.
