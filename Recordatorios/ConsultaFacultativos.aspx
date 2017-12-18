@@ -231,12 +231,19 @@
                                                 </asp:GridView>
                                             </asp:Panel>
                                             <div style="width:100%;  text-align:right">
+                                                 <asp:LinkButton id="btn_PolDescart" runat="server" class="btn botones boton-mediano">
+                                                    <span>
+                                                        <img class="btn-todos"/>
+                                                        Descartadas
+                                                    </span>
+                                                </asp:LinkButton>
                                                 <asp:LinkButton id="btn_AddPol" runat="server" class="btn botones">
                                                     <span>
                                                         <img class="btn-añadir"/>
                                                         Añadir
                                                     </span>
                                                 </asp:LinkButton>
+
                                             </div>
                                     </ContentTemplate>
                                 </asp:UpdatePanel>       
@@ -666,11 +673,79 @@
                     </div>
                 </div>
 
-      
+                 <!-- Modal -->
+                <div id="DescartadasModal" style="width:920px; height:400px"  class="modalOrdenPago">
+                        <div class="cuadro-titulo" style="height:40px">
+                            <button type="button" class="close"  data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">
+                                    Pólizas Descartadas para Aviso de Cobro
+                                </h4>
+                        </div>
+                        <div class="modal-body" style="height:398px">
+                               <asp:UpdatePanel runat="server" ID="upDescartadas">
+                                   <ContentTemplate>
 
-              </div>
+                                      <asp:Panel runat="server" ID="pnlDescartadas" Width="100%" Height="300px" ScrollBars="Both">
+                                          <asp:GridView runat="server" ID="gvd_Descartadas" AutoGenerateColumns="false" CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern" 
+                                              GridLines="Horizontal"  ShowHeaderWhenEmpty="false" >
+                                            <Columns>
+                                                   <asp:TemplateField HeaderText="" ItemStyle-CssClass="SelCia">
+                                                        <ItemTemplate>
+                                                            <asp:CheckBox runat="server" ID="chk_SelPol" />
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
 
+                                                    <asp:TemplateField HeaderText="Endoso" ItemStyle-CssClass="ClaveCia">
+                                                        <ItemTemplate>
+                                                            <asp:label runat="server" ID="lbl_Poliza" Text='<%# Eval("Poliza") %>' Width="100px" Font-Size="10px"></asp:label>
+                                                            <asp:HiddenField runat="server" ID="hid_idpv" Value='<%# Eval("id_pv") %>' />
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
 
+                                                    <asp:TemplateField HeaderText="Asegurado">
+                                                        <ItemTemplate>
+                                                                <asp:textbox runat="server" ID="lbl_Asegurado" Enabled="false" Text='<%# Eval("Asegurado")   %>' Width="300px" CssClass="form-control" Font-Size="10px" Height="26px" ></asp:textbox>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+
+                                                    <asp:TemplateField HeaderText="Grupo">
+                                                        <ItemTemplate>
+                                                                <asp:textbox runat="server" ID="lbl_GrupoEndoso" Enabled="false" Text='<%# Eval("GrupoEndoso")   %>' Width="220px" CssClass="form-control" Font-Size="10px" Height="26px" ></asp:textbox>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+
+                                                   <asp:TemplateField HeaderText="Tipo">
+                                                        <ItemTemplate>
+                                                                <asp:textbox runat="server" ID="lbl_GrupoTipoEndoso" Enabled="false" Text='<%# Eval("TipoEndoso")   %>' Width="220px" CssClass="form-control" Font-Size="10px" Height="26px" ></asp:textbox>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+
+                                                    <asp:TemplateField HeaderText="Usuario">
+                                                        <ItemTemplate>
+                                                                <asp:textbox runat="server" ID="lbl_Usuario" Text='<%# Eval("Usuario")   %>' Enabled="false" Width="220px" CssClass="form-control" Font-Size="10px" Height="26px" ></asp:textbox>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+
+                                                    <asp:TemplateField HeaderText="Fecha">
+                                                        <ItemTemplate>
+                                                                <asp:label runat="server" ID="lbl_Fecha" Text='<%# Eval("Fecha")   %>' Width="80px" CssClass="form-control" Font-Size="10px" Height="26px" ></asp:label>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
+                                      </asp:Panel>
+
+                                      <div style="width:100%; text-align:right;">
+                                         <asp:Button runat="server" id="btn_QuitarNoPago" class="btn btn-success" Text="Quitar"  style="height:30px; width:80px;" />
+                                         <asp:Button runat="server" id="btn_CerrarNoPago" class="btn btn-danger" Text="Cerrar" data-dismiss="modal"  style="height:30px; width:80px;" />
+                                      </div>
+                                   </ContentTemplate>
+                                </asp:UpdatePanel>
+                          </div>
+                      </div> 
+                    <%-- fin de modal--%>
+
+      </div>
 
 </asp:Content>
 

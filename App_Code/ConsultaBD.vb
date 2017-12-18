@@ -22,6 +22,7 @@ Public Class ConsultaBD
         Dim OcultaCampo3 As String
 
         Consulta = Replace(Consulta, "==", "'")
+        Consulta = Replace(Consulta, "|", "'")
 
         sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
 
@@ -97,6 +98,24 @@ Public Class ConsultaBD
             Mensaje.MuestraMensaje("", ex.Message, 2)
         End Try
         Return ArrAsegurado.ToArray()
+    End Function
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function GetEventoCat(ByVal prefix As String) As String()
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim ArrEveCat As New List(Of String)()
+        Dim dtResult As New DataTable
+        Try
+            dtResult = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo("Eve", prefix, "").ToList)
+
+            For Each row In dtResult.Rows
+                ArrEveCat.Add(String.Format("{0}|{1}", row("Descripcion"), row("Clave")))
+            Next
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("", ex.Message, 2)
+        End Try
+        Return ArrEveCat.ToArray()
     End Function
 
     <WebMethod()>

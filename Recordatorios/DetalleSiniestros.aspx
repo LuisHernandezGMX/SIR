@@ -396,7 +396,7 @@
             </div>
 
         </div>
-                  <div id="GuardaAjustesAC" style="width:900px; height:500px"  class="modal-catalogo">
+                  <div id="GuardaAjustesAC" style="width:900px; height:500px"  class="modal-ajustes">
                        <div class="cuadro-titulo" style="height:40px">
                             <button type="button" class="close"  data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">
@@ -408,7 +408,7 @@
                                <div class="modal-body" style="height:470px">
 
                                    <div class="clear padding5"></div>
-                                   <asp:label runat="server" class="col-md-1 etiqueta-control" ID="lbl_NumSinModal" Width="300px">Siniestro: </asp:label>  
+                                   <asp:label runat="server" class="col-md-1 titulo-seccion " ID="lbl_NumSinModal" Width="300px">Siniestro: </asp:label>  
                                    <div class="clear padding10"></div>
                                     <div>
                                         <table>
@@ -422,14 +422,14 @@
                                                  <br />
                                                 <td>
                                                     <asp:label runat="server" class="col-md-1 etiqueta-control" Width="150px">Fecha Vigencia Inicial:</asp:label>
-                                                    <asp:textbox runat="server" ID="txt_ModFecIni" CssClass ="estandar-control Fecha"  Width="100px" Font-Size="10px"></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_ModFecIni" CssClass ="estandar-control Fecha Centro"  Width="100px" Font-Size="10px"></asp:textbox>
                                                 </td>
 
                                             <%--</tr>
                                              <tr>--%>
                                                 <td>
                                                     <asp:label runat="server" class="col-md-1 etiqueta-control" Width="150px">Fecha Vigencia Final</asp:label>
-                                                     <asp:textbox runat="server" ID="txt_ModFecFin" CssClass ="estandar-control Fecha"  Width="100px" Font-Size="10px"></asp:textbox>
+                                                     <asp:textbox runat="server" ID="txt_ModFecFin" CssClass ="estandar-control Fecha Centro"  Width="100px" Font-Size="10px"></asp:textbox>
                                                 </td>
                                             </tr>
                                         </table>
@@ -471,15 +471,21 @@
                                                               CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
                                                               GridLines="Horizontal"  ShowHeaderWhenEmpty="false" >
                                                     <Columns>
+                                                      <asp:TemplateField Visible="false" >
+                                                            <ItemTemplate>
+                                                                <asp:label runat="server" ID="lbl_codcia" CssClass="estandar-control"  Text='<%# Eval("cod_cia_reas") %>' Width="120px" Font-Size="10px"></asp:label>
+                                                            </ItemTemplate>
+                                                    </asp:TemplateField>
                                                    <asp:TemplateField HeaderText="Reasegurador">
                                                        <ItemTemplate>
-                                                        <div class="row" style="width:350px">
-                                                            <div class="col-md-6">
-                                                                 <asp:Label runat="server" ID="lbl_Reasegurador"  Text='<%# Eval("txt_razon_social") %>' Width="280px" Font-Size="10px"></asp:Label>
+                                                           <asp:HiddenField runat="server" ID="hid_Edit" value="false"/>
+                                                        <div class="row" style="width:400px">
+                                                            <div class="col-md-6" style="width:80%">
+                                                                 <asp:Label runat="server" ID="lbl_Reasegurador" Text='<%# Eval("txt_razon_social") %>' Width="320px" Font-Size="10px"></asp:Label>
                                                                  
                                                             </div>
-                                                             <div class="col-md-6">
-                                                               <asp:Button runat="server" ID="btn_Reaseg" Text="..." CssClass ="btn botones boton-mini btnReasegurador" Height="25px"/>
+                                                             <div class="col-md-6" style="width:20%">
+                                                               <asp:Button runat="server" ID="btn_Reaseg" Text="..." CssClass ="btn botones boton-chico btnReasegurador Derecha" Height="25px"/>
                                                             </div>
                                                             
                                                         </div>
@@ -490,33 +496,37 @@
                                                                 <asp:textbox runat="server" ID="lbl_RegReasegurador" CssClass="estandar-control"  Text='<%# Eval("cia_cod_naic") %>' Width="120px" Font-Size="10px"></asp:textbox>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
+                                                       <asp:TemplateField Visible="false" >
+                                                            <ItemTemplate>
+                                                                <asp:label runat="server" ID="lbl_codbro" CssClass="estandar-control"  Text='<%# Eval("cod_cia_reas_brok") %>' Width="120px" Font-Size="10px"></asp:label>
+                                                            </ItemTemplate>
+                                                      </asp:TemplateField>
                                                          <asp:TemplateField HeaderText="Corredor">
-                                                                 <ItemTemplate>
-                                                        <div class="row" style="width:450px">
-                                                            <div class="col-md-6">
-                                                                 <asp:Label runat="server" ID="lbl_Broker" Text='<%# Eval("txt_broker") %>' Width="350px" Font-Size="10px"></asp:Label>
-                                                            </div>
-                                                             <div class="col-md-6">
-                                                                <asp:Button runat="server" ID="btn_Broker" Text="..." CssClass ="btn botones boton-mini btnBroker" Height="25px"/>
-                                                            </div>
+                                                           <ItemTemplate>
+                                                                <div class="row" style="width:450px">
+                                                                    <div class="col-md-6" style="width:83%">
+                                                                         <asp:Label runat="server" ID="lbl_Broker" Text='<%# Eval("txt_broker") %>' Width="360px" Font-Size="10px"></asp:Label>
+                                                                    </div>
+                                                                     <div class="col-md-6" style="width:17%">
+                                                                        <asp:Button runat="server" ID="btn_Broker" Text="..." CssClass ="btn botones boton-chico btnBroker" Height="25px"/>
+                                                                    </div>
                                                             
-                                                        </div>
-                                                        
-                                                    </ItemTemplate>
+                                                                </div>
+                                                          </ItemTemplate>
                                                 </asp:TemplateField>
                                                      </Columns>
                                                 </asp:GridView>
                                          </asp:Panel>
                            
                                 
-                                         <div style="width:100%; padding-left:215px; border-top:none;border-top-width:1px; padding-top:3px;">
-                                            <asp:LinkButton id="btn_GuardarAJ" runat="server" class="btn botones">
+                                         <div style="width:100%; padding-left:215px; border-top:none;border-top-width:1px; padding-top:3px;" class="Derecha">
+                                            <asp:LinkButton id="btn_modGuardarAJ" runat="server" class="btn botones" OnClick="btn_modGuardarAJ_Click" >
                                                 <span>
                                                     <img class="btn-guardar"/>
                                                     Guardar
                                                 </span>
                                             </asp:LinkButton>
-                                            <asp:LinkButton id="btn_CancelaAJ" runat="server" class="btn botones">
+                                            <asp:LinkButton id="btn_modCancelaAJ" runat="server" class="btn botones" OnClientClick="fn_CerrarModal('#GuardaAjustesAC');">
                                                 <span>
                                                     <img class="btn-cancelar"/>
                                                     Cancelar

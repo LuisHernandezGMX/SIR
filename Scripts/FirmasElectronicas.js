@@ -53,6 +53,35 @@ $("body").on("click", ".AgregaRamoCont", function () {
     fn_CargaCatalogo("RamC", "", strSel, "Multiple", "gvd_RamoContable", "RAMOS CONTABLES");
 });
 
+$("body").on("click", ".AgregaContrato", function () {
+    var strSel = fn_ElementosSeleccionados($("[id*=gvdContrato]"), $('[id*=lbl_ClaveCto]'), $('[id*=chk_SelCto]'), false);
+    var Fecini = $("input[id$='txtFecIni']")[0].value;
+    var Fecfin = $("input[id$='txtFecFin']")[0].value;
+    var Ejercicio = $("input[id$='hidEjercicio']")[0].value;
+    if (Fecini != "") {
+        var Condicion = 'Where fec_vig_desde >=|=='+ Fecini +'==| and fec_vig_hasta <=|==' + Fecfin + '==| and aaaa_ejercicio=' + Ejercicio;
+        fn_CargaCatalogo("CtrN", Condicion, strSel, "Multiple", "gvdContrato", "Contratos");
+    }
+    else {
+        fn_MuestraMensaje('Validación', 'Se debe indicar Rango de fechas y Ejercicio', 0, "")
+        return false;
+    }
+});
+
+$("body").on("click", ".AgregaCtoL", function () {
+    var strSel = fn_ElementosSeleccionados($("[id*=gvdCtoLocal]"), $('[id*=lbl_ClaveCtoL]'), $('[id*=chk_SelCtoL]'), false);
+    var Fecini = $("input[id$='txtFecIni']")[0].value;
+    var Fecfin = $("input[id$='txtFecFin']")[0].value;
+    var Ejercicio = $("input[id$='hidEjercicio']")[0].value;
+    if (Fecini != "") {
+        var Condicion = 'And fec_vig_desde >=|==' + Fecini + '==| and fec_vig_hasta <=|==' + Fecfin + '==| and aaaa_ejercicio=' + Ejercicio;
+        fn_CargaCatalogo("CtrL", Condicion, strSel, "Multiple", "gvdCtoLocal", "Contratos Local");
+    }
+    else {
+        fn_MuestraMensaje('Validación', 'Se debe indicar Rango de fechas y Ejercicio', 0, "")
+        return false;
+    }
+});
 
 
 //Delete event handler.
@@ -151,6 +180,40 @@ $("body").on("keydown", "[id$=txtSearchAse]", function (e) {
         },
         select: function (e, i) {
             $("input[id$='hidClaveAse']")[0].value = i.item.val;
+        },
+        minLength: 1
+    });
+});
+
+$("body").on("keydown", "[id$=txtSearchEve]", function (e) {
+
+    if (e.which != 13) {
+        $("input[id$='hidClaveEve']")[0].value = "";
+    }
+
+    $('[id$=txtSearchEve]').autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "../LocalServices/ConsultaBD.asmx/GetEventoCat",
+                data: "{ 'prefix': '" + request.term + "'}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    response($.map(data.d, function (item) {
+                        return {
+                            label: item.split('|')[0],
+                            val: item.split('|')[1]
+                        }
+                    }))
+                },
+                error: function (response) {
+                    EvaluaMensaje('JSON', response.responseText);
+                },
+            });
+        },
+        select: function (e, i) {
+            $("input[id$='hidClaveEve']")[0].value = i.item.val;
         },
         minLength: 1
     });
