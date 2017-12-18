@@ -9,6 +9,8 @@ Partial Class Pages_SiteMaster
     Private dtPolizas As DataTable
     Private DetalleUsuario() As String
 
+    Public Event gv_Tablero_Rowcommand(sender As Object, e As GridViewCommandEventArgs)
+
     Public ReadOnly Property Contenedor() As ContentPlaceHolder
         Get
             Return cph_principal
@@ -79,6 +81,84 @@ Partial Class Pages_SiteMaster
         End Set
     End Property
 
+    Public Property Titulo() As String
+        Get
+            Return lbl_TituloSeccion.Text
+        End Get
+        Set(ByVal value As String)
+            lbl_TituloSeccion.Text = value
+        End Set
+    End Property
+
+    Public Property mgv_Tablero() As GridView
+        Get
+            Return gvd_Tablero
+        End Get
+        Set(ByVal value As GridView)
+            gvd_Tablero = value
+        End Set
+    End Property
+
+    Public Property mtx_Folio() As TextBox
+        Get
+            Return txt_Folio
+        End Get
+        Set(ByVal value As TextBox)
+            txt_Folio = value
+        End Set
+    End Property
+
+    Public Property mtx_Oferta() As TextBox
+        Get
+            Return txt_Oferta
+        End Get
+        Set(ByVal value As TextBox)
+            txt_Oferta = value
+        End Set
+    End Property
+
+    Public WriteOnly Property Clase_Logo() As String
+        Set(ByVal value As String)
+            div_Logo.Attributes("class") = value
+        End Set
+    End Property
+
+    Public WriteOnly Property Clase_Form() As String
+        Set(ByVal value As String)
+            div_Form.Attributes("class") = value
+        End Set
+    End Property
+
+    Public WriteOnly Property tablero_visible() As Boolean
+        Set(ByVal value As Boolean)
+            cuadro_tablero.Visible = value
+        End Set
+    End Property
+
+    Public WriteOnly Property fecha_visible() As Boolean
+        Set(ByVal value As Boolean)
+            cuadro_fecha.Visible = value
+        End Set
+    End Property
+
+    Public Property mSeleccionados() As String
+        Get
+            Return hid_Seleccion.Value
+        End Get
+        Set(ByVal value As String)
+            hid_Seleccion.Value = value
+        End Set
+    End Property
+
+    Public Property mPrefijo() As String
+        Get
+            Return hid_Prefijo.Value
+        End Get
+        Set(ByVal value As String)
+            hid_Prefijo.Value = value
+        End Set
+    End Property
+
     Private Sub Pages_SiteMaster_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
             Funciones.LlenaCatDDL(ddl_SucursalPol, "Suc",,,,,, False)
@@ -118,22 +198,12 @@ Partial Class Pages_SiteMaster
             Dim lbl_Oculta4 As Object
             Dim lbl_Oculta5 As Object
             Dim lbl_Oculta6 As Object
-            Dim lbl_Oculta7 As Object
-            Dim lbl_Oculta8 As Object
-            Dim lbl_Oculta9 As Object
-            Dim lbl_Oculta10 As Object
-            Dim lbl_Oculta11 As Object
-            Dim lbl_Oculta12 As Object
+
             Dim Elemento As String
             Dim OcultaCampo4 As String = vbNullString
             Dim OcultaCampo5 As String = vbNullString
             Dim OcultaCampo6 As String = vbNullString
-            Dim OcultaCampo7 As String = vbNullString
-            Dim OcultaCampo8 As String = vbNullString
-            Dim OcultaCampo9 As String = vbNullString
-            Dim OcultaCampo10 As String = vbNullString
-            Dim OcultaCampo11 As String = vbNullString
-            Dim OcultaCampo12 As String = vbNullString
+
 
 
             If Len(Seleccionados) > 0 Then
@@ -175,12 +245,7 @@ Partial Class Pages_SiteMaster
                             lbl_Oculta4 = row.FindControl("lbl_Oculta4")
                             lbl_Oculta5 = row.FindControl("lbl_Oculta5")
                             lbl_Oculta6 = row.FindControl("lbl_Oculta6")
-                            lbl_Oculta7 = row.FindControl("lbl_Oculta7")
-                            lbl_Oculta8 = row.FindControl("lbl_Oculta8")
-                            lbl_Oculta9 = row.FindControl("lbl_Oculta9")
-                            lbl_Oculta10 = row.FindControl("lbl_Oculta10")
-                            lbl_Oculta11 = row.FindControl("lbl_Oculta11")
-                            lbl_Oculta12 = row.FindControl("lbl_Oculta12")
+
 
 
                             If Not lbl_Oculta4 Is Nothing Then
@@ -210,60 +275,6 @@ Partial Class Pages_SiteMaster
                                 End Select
                             End If
 
-                            If Not lbl_Oculta7 Is Nothing Then
-                                Select Case lbl_Oculta7.GetType()
-                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
-                                        OcultaCampo7 = "|" & lbl_Oculta7.Text
-                                    Case GetType(System.Web.UI.WebControls.CheckBox)
-                                        OcultaCampo7 = "|" & lbl_Oculta7.Checked
-                                End Select
-                            End If
-
-                            If Not lbl_Oculta8 Is Nothing Then
-                                Select Case lbl_Oculta8.GetType()
-                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
-                                        OcultaCampo8 = "|" & lbl_Oculta8.Text
-                                    Case GetType(System.Web.UI.WebControls.CheckBox)
-                                        OcultaCampo8 = "|" & lbl_Oculta8.Checked
-                                End Select
-                            End If
-
-                            If Not lbl_Oculta9 Is Nothing Then
-                                Select Case lbl_Oculta9.GetType()
-                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
-                                        OcultaCampo9 = "|" & lbl_Oculta9.Text
-                                    Case GetType(System.Web.UI.WebControls.CheckBox)
-                                        OcultaCampo9 = "|" & lbl_Oculta9.Checked
-                                End Select
-                            End If
-
-                            If Not lbl_Oculta10 Is Nothing Then
-                                Select Case lbl_Oculta10.GetType()
-                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
-                                        OcultaCampo10 = "|" & lbl_Oculta10.Text
-                                    Case GetType(System.Web.UI.WebControls.CheckBox)
-                                        OcultaCampo10 = "|" & lbl_Oculta10.Checked
-                                End Select
-                            End If
-
-                            If Not lbl_Oculta11 Is Nothing Then
-                                Select Case lbl_Oculta11.GetType()
-                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
-                                        OcultaCampo11 = "|" & lbl_Oculta11.Text
-                                    Case GetType(System.Web.UI.WebControls.CheckBox)
-                                        OcultaCampo11 = "|" & lbl_Oculta11.Checked
-                                End Select
-                            End If
-
-                            If Not lbl_Oculta12 Is Nothing Then
-                                Select Case lbl_Oculta12.GetType()
-                                    Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
-                                        OcultaCampo12 = "|" & lbl_Oculta12.Text
-                                    Case GetType(System.Web.UI.WebControls.DropDownList)
-                                        OcultaCampo12 = "|" & lbl_Oculta12.SelectedValue
-                                End Select
-                            End If
-
                             'Controles Pirncipales y fijos
                             lbl_Oculta1 = row.FindControl("lbl_Oculta1")
                             lbl_Oculta2 = row.FindControl("lbl_Oculta2")
@@ -272,13 +283,13 @@ Partial Class Pages_SiteMaster
                             If Not lbl_Oculta1 Is Nothing Then
                                 Select Case lbl_Oculta1.GetType()
                                     Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
-                                        Fila("OcultaCampo1") = lbl_Oculta1.Text & OcultaCampo4 & OcultaCampo5 & OcultaCampo6 & OcultaCampo7 & OcultaCampo8 & OcultaCampo9 & OcultaCampo10 & OcultaCampo11
+                                        Fila("OcultaCampo1") = lbl_Oculta1.Text & OcultaCampo4 & OcultaCampo5 & OcultaCampo6
                                     Case GetType(System.Web.UI.WebControls.DropDownList)
-                                        Fila("OcultaCampo1") = lbl_Oculta1.SelectedValue & OcultaCampo4 & OcultaCampo5 & OcultaCampo6 & OcultaCampo7 & OcultaCampo8 & OcultaCampo9 & OcultaCampo10 & OcultaCampo11
+                                        Fila("OcultaCampo1") = lbl_Oculta1.SelectedValue & OcultaCampo4 & OcultaCampo5 & OcultaCampo6
                                     Case GetType(System.Web.UI.WebControls.HiddenField)
-                                        Fila("OcultaCampo1") = lbl_Oculta1.Value & OcultaCampo4 & OcultaCampo5 & OcultaCampo6 & OcultaCampo7 & OcultaCampo8 & OcultaCampo9 & OcultaCampo10 & OcultaCampo11
+                                        Fila("OcultaCampo1") = lbl_Oculta1.Value & OcultaCampo4 & OcultaCampo5 & OcultaCampo6
                                     Case GetType(System.Web.UI.WebControls.CheckBox)
-                                        Fila("OcultaCampo1") = lbl_Oculta1.Checked & OcultaCampo4 & OcultaCampo5 & OcultaCampo6 & OcultaCampo7 & OcultaCampo8 & OcultaCampo9 & OcultaCampo10 & OcultaCampo11
+                                        Fila("OcultaCampo1") = lbl_Oculta1.Checked & OcultaCampo4 & OcultaCampo5 & OcultaCampo6
                                 End Select
                             End If
 
@@ -298,13 +309,13 @@ Partial Class Pages_SiteMaster
                             If Not lbl_Oculta3 Is Nothing Then
                                 Select Case lbl_Oculta3.GetType()
                                     Case GetType(System.Web.UI.WebControls.Label), GetType(System.Web.UI.WebControls.TextBox)
-                                        Fila("OcultaCampo3") = lbl_Oculta3.Text & OcultaCampo12
+                                        Fila("OcultaCampo3") = lbl_Oculta3.Text
                                     Case GetType(System.Web.UI.WebControls.DropDownList)
-                                        Fila("OcultaCampo3") = lbl_Oculta3.SelectedValue & OcultaCampo12
+                                        Fila("OcultaCampo3") = lbl_Oculta3.SelectedValue
                                     Case GetType(System.Web.UI.WebControls.HiddenField)
-                                        Fila("OcultaCampo3") = lbl_Oculta3.Value & OcultaCampo12
+                                        Fila("OcultaCampo3") = lbl_Oculta3.Value
                                     Case GetType(System.Web.UI.WebControls.CheckBox)
-                                        Fila("OcultaCampo3") = lbl_Oculta3.Checked & OcultaCampo12
+                                        Fila("OcultaCampo3") = lbl_Oculta3.Checked
                                 End Select
                             End If
 
@@ -369,7 +380,7 @@ Partial Class Pages_SiteMaster
                                     Dim gvd_Ctrl As GridView = DirectCast(cph_principal.FindControl(Controles(0)), GridView)
                                     Dim ItemCtrl = DirectCast(gvd_Ctrl.Rows(Controles(1)).FindControl(Controles(2)), Label)
                                     Dim Clave As String = "(" & Split(Datos(0), "~")(0) & ") "
-                                    Dim Descrip As String = Trim(Mid(Split(Datos(0), "~")(1), 1, InStr(Split(Datos(0), "~")(1), "(") - 1))
+                                    Dim Descrip As String = Split(Datos(0), "~")(1)
                                     ItemCtrl.Text = Clave & Descrip
                                 Else
                                     Dim txt_Clave As TextBox = DirectCast(cph_principal.FindControl(Controles(0)), TextBox)
@@ -832,6 +843,29 @@ Partial Class Pages_SiteMaster
             Else
                 ws.EliminaPolNoAC(id_pv, SubModWeb)
             End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub gvd_Tablero_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvd_Tablero.RowDataBound
+        Try
+            If e.Row.RowType = DataControlRowType.DataRow Then
+                Dim lbl_Estatus As Label = TryCast(e.Row.FindControl("lbl_Estatus"), Label)
+                If Split(lbl_Estatus.ClientID, "_")(4) <= 5 Then
+                    lbl_Estatus.BackColor = Drawing.Color.Yellow
+                Else
+                    lbl_Estatus.BackColor = Drawing.Color.LightGreen
+                End If
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Public Sub gvd_Tablero_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvd_Tablero.RowCommand
+        Try
+            RaiseEvent gv_Tablero_Rowcommand(Me, e)
         Catch ex As Exception
             Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
         End Try

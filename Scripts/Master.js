@@ -48,6 +48,22 @@ function PageLoadMaster() {
     });
 
 
+    $("[id*=btn_Cancelar_Catalogo]").click(function () {
+        event.preventDefault ? event.preventDefault() : event.returnValue = false;
+        $("input[id$='hid_Control']")[0].value = '';
+        $("input[id$='hid_Seleccion']")[0].value = '';
+        $("input[id$='hid_Prefijo']")[0].value = '';
+        fn_CerrarModal('#Catalogo');
+    });
+
+    $("#btn_Cerrar_Cat").click(function () {
+        event.preventDefault ? event.preventDefault() : event.returnValue = false;
+        $("input[id$='hid_Control']")[0].value = '';
+        $("input[id$='hid_Seleccion']")[0].value = '';
+        $("input[id$='hid_Prefijo']")[0].value = '';
+        fn_CerrarModal('#Catalogo');
+    });
+
     //Botón Mostrar Aclaración
     $("[id*=gvd_GrupoPolizas] .MuestraAclaracion").click(function () {
         event.preventDefault ? event.preventDefault() : event.returnValue = false;
@@ -269,15 +285,16 @@ function fn_CargaCatalogo(Catalogo, Condicion, Seleccion, Tipo, Control, Titulo)
 };
 
 //Función de Autocompletar
-function fn_Autocompletar(Catalogo, ControlClave, ControlBusqueda, ControlAdic, minChar) {
-    $("input[id$='" + ControlBusqueda + "']").css("color", "#555");
-    if (ControlAdic == "") {
-        var strSel = "";
-    }
-    else {
-        var strSel = $('[id$=' + ControlAdic + ']')[0].value;
+function fn_Autocompletar(Catalogo, ControlClave, ControlBusqueda, Condicion, minChar, caracter) {
+
+    if (caracter != 13 && caracter != 9 && caracter != -1 && caracter != 37 && caracter != 38 && caracter != 39 && caracter != 40 && caracter != 46) {
+        $("input[id$='" + ControlClave + "']")[0].value = '';
     }
 
+    $("input[id$='" + ControlBusqueda + "']").css("color", "#555");
+    
+    var strSel = Condicion;
+   
     $('[id$=' + ControlBusqueda + ']').autocomplete({
         minLength: minChar,
         source: function (request, response) {
@@ -296,7 +313,7 @@ function fn_Autocompletar(Catalogo, ControlClave, ControlBusqueda, ControlAdic, 
                     }))
                 },
                 error: function (response) {
-                    EvaluaMensaje('JSON', response.responseText);
+                    fn_MuestraMensaje('JSON', response.responseText, 2);
                 },
             });
         },
@@ -508,12 +525,17 @@ function fn_NoDesplazable(control, control_base) {
 }
 
 //Formato de comas a N posiciones decimales
-function fn_FormatoMonto(Monto, decimales) {
+function fn_FormatoMonto(Monto, decimales , porcentaje) {
     if (isNaN(Monto) == true) {
-        return '0.0000';
+        return '0.00';
     }
     else {
-        return Monto.toFixed(decimales).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+        if (porcentaje == undefined) {
+            return Monto.toFixed(decimales).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+        }
+        else {
+            return Monto.toFixed(decimales)
+        } 
     }
 }
 
@@ -532,4 +554,37 @@ function fn_EvaluaAutoComplete(ControlClave, ControlDescripcion) {
     else {
         $("input[id$='" + ControlDescripcion + "']").css("color", "#555");
     }
+}
+
+
+function fn_DateDiff(date1, date2, interval) {
+    var date = date1.split('/');
+    date1 = date[2] + '-' + date[1] + '-' + date[0]
+
+    var date = date2.split('/');
+    date2 = date[2] + '-' + date[1] + '-' + date[0]
+
+    var second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24, week = day * 7;
+    date1 = new Date(date1);
+    date2 = new Date(date2);
+    var timediff = date2 - date1;
+    if (isNaN(timediff)) return NaN;
+    switch (interval) {
+        case "year": return date2.getFullYear() - date1.getFullYear();
+        case "month": return (
+            (date2.getFullYear() * 12 + date2.getMonth())
+            -
+            (date1.getFullYear() * 12 + date1.getMonth())
+        );
+        case "week": return Math.floor(timediff / week);
+        case "day": return Math.floor(timediff / day);
+        case "hour": return Math.floor(timediff / hour);
+        case "minute": return Math.floor(timediff / minute);
+        case "second": return Math.floor(timediff / second);
+        default: return undefined;
+    }
+}
+
+function fn_IsDate(date) {
+    return (new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) )  ? true : false;
 }

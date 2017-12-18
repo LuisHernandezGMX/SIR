@@ -16,7 +16,7 @@ background-image:url(../Images/menu_fondo_pleca.png);
 }
 
 #logo{
-left:50px;
+left:4%;
 top:8px;
 float:left;
 position:absolute;
@@ -24,8 +24,8 @@ z-index:100;
 }
 
 #titulo{
-width:700px;
-left:300px;
+width:50%;
+left:25%;
 top:25px;
 float:left;
 position:absolute;
@@ -34,11 +34,11 @@ text-align:center;
 }
 
 #menu_principal{
-left:200px;
+left:16%;
 top:67px;
 float:left;
 position:absolute;
-z-index:100;
+z-index:200;
 color:white;
 font-family:Myriad Pro;
 font-size:12px;
@@ -46,7 +46,6 @@ font-weight:bold;
 }
 
 ul#menu {
- min-width: 900px;
  float:left;
  margin-top: 0px;
  list-style-type:none;
@@ -78,6 +77,7 @@ ul#menu li a:hover{
   
 ul#menu li a:active{
  color: rgb(170, 170, 170);
+
 }
 
 ul#menu ul {
@@ -89,6 +89,7 @@ ul#menu ul {
  box-shadow: 5px 10px 10px #aaa; 
  list-style-type:square;
  width:100px;
+ z-index:150;
  } 
 
 ul#menu ul li{
@@ -112,7 +113,6 @@ padding-top: 0px;
 padding-right:10px; 
 margin-top: 0px; 
 float: right;
-min-width: 100px; 
 color: white;
 }
 
@@ -126,27 +126,66 @@ height:23px;
 background-image:url(../Images/menu_sep-hz.png);
 }
 
-.principal-contenido
-{
-width:100%;
-min-width:1100px;
-padding-left:50px;
+.zona-logo{
+width:245px; 
+position:fixed; 
+top:110px;
+padding-left:10px;
+z-index:99;
+background-color: rgb(255, 255, 255); 
 }
 
-.zona-logo{
-width:150px; 
-min-width:150px; 
-top:120px;
-position:fixed;
-align-content:center;
+.zona-logo-ancha{
+width:350px; 
+position:fixed; 
+top:110px;
+padding-left:10px;
+z-index:90;
+background-color: rgb(255, 255, 255); 
 }
 
 .zona-form{
+padding-left:290px;
+padding-top:110px;
+z-index:99;
+}
+
+.zona-form-ancha{
+padding-left:360px;
+padding-top:110px;
+z-index:99;
+}
+
+#cuadro_imagen{
 width:100%;
-min-width:1000px;
-padding-left:200px;
-top:120px;
-padding-top:120px;
+text-align:center;
+}
+
+#cuadro_titulo{
+width:100%;
+padding-left:10px;
+border-bottom:inset;
+padding-bottom:5px;
+border-color:#003A5D;
+border-width:1px;
+}
+
+#cuadro_fecha{
+width:100%;
+padding-left:50px;
+border-bottom:inset;
+border-color:#003A5D;
+border-width:1px;
+padding-top:5px;
+padding-bottom:5px;
+}
+
+#cuadro_tablero{
+width:100%;
+border:inset;
+border-color:#003A5D;
+border-width:1px;
+border-radius: 0px 0px 8px 8px;  
 }
 
 .zona-form-empty{
@@ -154,17 +193,6 @@ width:100%;
 min-width:1000px;
 top:120px;
 padding-top:120px;
-}
-
-#cuadro_fecha{
-width:115px;
-text-align:left;
-border-bottom:inset;
-border-top:inset;
-border-color:#003A5D;
-border-width:1px;
-padding-top:5px;
-padding-bottom:5px;
 }
 /*--------------------------------------------------------------------------------------------------------*/
 
@@ -302,7 +330,7 @@ border-radius: 20px;
 }
 .padding1 {
 	line-height: 0; padding-top: 1px; font-size: 0px;
-}v
+}
 .padding3 {
 	line-height: 0; padding-top: 3px; font-size: 0px;
 }
@@ -330,7 +358,6 @@ border-radius: 20px;
 .padding100 {
 	line-height: 0; padding-top: 100px; font-size: 0px;
 }
-
 
 
 
@@ -370,7 +397,7 @@ left:0;
 height: 50px; 
 margin-right: auto; 
 margin-left: auto; 
-z-index: 3;
+z-index: 100;
 }
 
 #pie{
@@ -382,7 +409,7 @@ color: rgb(51, 51, 51);
 text-transform: uppercase; 
 font-size: 10pt; 
 font-weight: bold; 
-z-index: 3;
+z-index: 100;
 }
 
 #pie_menu {
@@ -520,6 +547,7 @@ opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px
 
 .modal-orden{
 border-radius: 11px; left: 29.5%; top: 0%; margin-left: -150px; position: fixed; z-index: 9980; background-color: rgb(255, 255, 255); 
+
 -moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
 opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; 
 }
@@ -531,7 +559,7 @@ box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color
 } 
 
 .modal-simple{
-border-radius: 11px; left: 28%; top: 15%;  margin-left: -150px;  position: fixed; z-index: 9981; background-color: rgb(255, 255, 255); 
+border-radius: 11px; left: 40%; top: 20%;  margin-left: -150px;  position: fixed; z-index: 9981; background-color: rgb(255, 255, 255); 
 -moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
 box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
 }
@@ -631,7 +659,7 @@ font-family: Myriad Pro;
 display:block;
 width:100%;
 height:25px;
-padding:3px 6px;
+padding:2px 2px;
 font-size:11px;
 font-family:Myriad Pro;
 line-height:1.42857143;
@@ -667,7 +695,7 @@ box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
 display:block;
 width:100%;
 height:22px;
-padding:3px 6px;
+padding:2px 2px;
 font-size:10px;
 font-family:Myriad Pro;
 line-height:1.42857143;
@@ -688,8 +716,11 @@ outline:0;
 box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
 }
 
-
-
+.Tablero{
+height:18px;
+padding:1px 1px;
+font-size:10px;
+}
 
 .botones{
 font-family:'Myriad Pro'; 
@@ -862,7 +893,7 @@ border: none 0px transparent;
 height: 20px;
 text-align: center;
 align-content: center;
-font-size: 12px;
+font-size: 11px;
 }
 
 .altern{
@@ -910,6 +941,31 @@ border-radius:50%;
 padding:5px 10px 5px 10px;
 }
 
+.GridviewScrollHeader TH, .GridviewScrollHeader TD 
+{ 
+    white-space: nowrap; 
+    border-right: 1px solid white; 
+    border-bottom: 1px solid white; 
+    text-align: left; 
+    vertical-align: bottom; 
+    background-color: #3B6882;
+    font-family: Myriad Pro;
+    color: White;
+    text-align: center;
+    align-content: center;
+    font-size: 11px;
+    height:20px;
+} 
+.GridviewScrollItem TD 
+{ 
+    white-space: nowrap; 
+    border-right: 1px solid #AAAAAA; 
+    border-bottom: 1px solid #AAAAAA; 
+    background-color: #FFFFFF; 
+} 
+
+
+
 .cuadro-postit{
 padding-right:5px;
 padding-top:5px;
@@ -942,6 +998,17 @@ border-radius: 10px 10px 10px 10px;
 line-height:12px;  
 }
 
+.cuadro-postit-detalle{
+border-style:inset;
+border-width:.5px;
+border-color:#003A5D;
+text-align:left;
+color:#003A5D;
+font-size:10px;
+font-family:Myriad Pro;
+border-radius: 5px 5px 5px 5px; 
+}
+
 .panel-seccion{
 border-radius: 0px 0px 10px 10px;  
 padding-bottom: 5px;
@@ -951,6 +1018,8 @@ border-width:.5px;
 border-color:#003A5D;
 box-shadow: 5px 5px 5px #aaa; 
 }
+
+
 
 /*-------------------------------------------------------------------------------------------*/
 
@@ -974,4 +1043,8 @@ box-shadow: 5px 5px 5px #aaa;
 .Lista{
     overflow-y:scroll;
     overflow-x:scroll;
+}
+
+.Espacio{
+    padding-top:5px;
 }
