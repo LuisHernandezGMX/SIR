@@ -851,11 +851,11 @@ Partial Class Pages_SiteMaster
     Private Sub gvd_Tablero_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvd_Tablero.RowDataBound
         Try
             If e.Row.RowType = DataControlRowType.DataRow Then
-                Dim lbl_Estatus As Label = TryCast(e.Row.FindControl("lbl_Estatus"), Label)
-                If Split(lbl_Estatus.ClientID, "_")(4) <= 5 Then
-                    lbl_Estatus.BackColor = Drawing.Color.Yellow
+                Dim lnk_Estatus As LinkButton = TryCast(e.Row.FindControl("lnk_Estatus"), LinkButton)
+                If Split(lnk_Estatus.ClientID, "_")(4) <= 5 Then
+                    lnk_Estatus.BackColor = Drawing.Color.Yellow
                 Else
-                    lbl_Estatus.BackColor = Drawing.Color.LightGreen
+                    lnk_Estatus.BackColor = Drawing.Color.LightGreen
                 End If
             End If
         Catch ex As Exception
