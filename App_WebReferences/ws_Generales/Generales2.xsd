@@ -86,6 +86,7 @@
       <xs:element minOccurs="0" name="nro_endoso" type="xs:decimal" />
       <xs:element minOccurs="0" name="nro_pol" type="xs:decimal" />
       <xs:element minOccurs="0" name="nro_reas" type="xs:int" />
+      <xs:element minOccurs="0" name="sn_NoAC" type="xs:int" />
       <xs:element minOccurs="0" name="sn_NoPago" type="xs:int" />
       <xs:element minOccurs="0" name="tSEL_Val" nillable="true" type="xs:boolean" />
     </xs:sequence>
@@ -229,4 +230,17 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="spS_EndososNoPagoOP_Result" nillable="true" type="tns:spS_EndososNoPagoOP_Result" />
+  <xs:complexType name="ArrayOfspS_TipoCambioxMes_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_TipoCambioxMes_Result" nillable="true" type="tns:spS_TipoCambioxMes_Result" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfspS_TipoCambioxMes_Result" nillable="true" type="tns:ArrayOfspS_TipoCambioxMes_Result" />
+  <xs:complexType name="spS_TipoCambioxMes_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Tc_Cie" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="Tc_Op" nillable="true" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="spS_TipoCambioxMes_Result" nillable="true" type="tns:spS_TipoCambioxMes_Result" />
 </xs:schema>

@@ -329,6 +329,17 @@ function fn_Autocompletar(Catalogo, ControlClave, ControlBusqueda, Condicion, mi
     });
 }
 
+//Funcion para Seleccionar o Deseleccionar todos los elementos
+function fn_SeleccionTodos(ControlGrid, chkControlAll, chkControl) {
+
+    var controles = $("[id*=" + ControlGrid + "]").find("[id*=" + chkControl + "]");
+    for (i = 0 ; i < controles.length ; i++) {
+        if (controles[i].isDisabled == false) {
+            controles[i].checked = chkControlAll.checked;
+        }
+    }
+}
+
 
 //Cambio de selección de elemento en Catalogo
 function fn_CambioSeleccion(ControlGrid, Control, TipoSeleccion, chkControl) {
@@ -359,7 +370,9 @@ function fn_SeleccionGread(Control, Valor, TargetChildControl) {
         //Checked/Unchecked all the checkBoxes in side the GridView.
         for (var n = 0; n < Inputs.length; ++n)
             if (Inputs[n].type == 'checkbox' && Inputs[n].id.indexOf(TargetChildControl, 0) >= 0)
-                Inputs[n].checked = Valor;
+                if (Inputs[n].disabled == false) {
+                    Inputs[n].checked = Valor;
+                }
     }
     return false;
 }
@@ -371,11 +384,13 @@ function fn_SeleccionarElemento(ControlGrid,rowIndex) {
         var row = $(this).closest("tr");
         if (row[0].rowIndex == rowIndex) {
             var Select = row.find('.Select');
-            if ($(Select)[0].checked != undefined) {
-                $(Select)[0].checked = true;
-            }
-            else {
-                $(Select)[0].childNodes[0].checked = true;
+            if (Select.length > 0) {
+                if ($(Select)[0].checked != undefined) {
+                    $(Select)[0].checked = true;
+                }
+                else {
+                    $(Select)[0].childNodes[0].checked = true;
+                }
             }
         }
     })
