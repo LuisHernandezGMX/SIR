@@ -3,12 +3,18 @@
         fn_EvaluaAutoComplete('txt_ClaveAseg', 'txt_SearchAse');
         fn_EvaluaAutoComplete('txt_ClaveOfi', 'txt_SearchOfi');
         fn_EvaluaAutoComplete('txt_ClaveSusc', 'txt_SearchSusc');
+
+        fn_EvaluaAutoComplete('txt_ClaveTag', 'txt_SearchTag');
+        fn_EvaluaAutoComplete('txt_ClaveAge', 'txt_SearchAge');
+
         fn_EvaluaAutoComplete('txt_ClaveGiro', 'txt_SearchGiro');
         fn_EvaluaAutoComplete('txt_ClaveGre', 'txt_SearchGre');
         fn_EvaluaAutoComplete('txt_ClaveTte', 'txt_SearchTte');
 
+        fn_EvaluaAutoComplete('txt_ClaveSuc', 'txt_SearchSuc');
+        fn_EvaluaAutoComplete('txt_ClaveRam', 'txt_SearchRam');
+
         fn_EvaluaAutoComplete('txt_ClaveResp', 'txt_SearchResp');
-        fn_EvaluaAutoComplete('txt_ClaveBro', 'txt_SearchBro');
     }
     
     LeftClick = 0;
@@ -55,12 +61,41 @@ $("body").on("mouseup", "", function (e) {
 
 
 $("body").on("click", ".Generales", function (e) {
+    if ($("input[id$='hid_Pestaña']")[0].value == 2) {
+        fn_CambiaEstado(15, "0");
+        fn_CambiaEstado(16, "1");
+    }
+    fn_CerrarModalSimple('#Comisiones');
+    fn_CerrarModalSimple('#Subjetividad');
     $("input[id$='hid_Pestaña']")[0].value = 0;
 });
+
 $("body").on("click", ".Colocacion", function (e) {
+    if ($("input[id$='hid_Pestaña']")[0].value == 2) {
+        fn_CambiaEstado(15, "0");
+        fn_CambiaEstado(16, "1");
+    }
+
+    var IndexBroker = $("input[id$='hid_IndiceBroker']")[0].value;
+
+    //SI existe Broker Seleccionado
+    if (IndexBroker > -1) {
+        if (($("[id*=gvd_Intermediario] .Clave")[IndexBroker].innerText == 0 && $("input[id$='hid_IndiceReas']")[0].value > -1) || ($("[id*=gvd_Intermediario] .Clave")[IndexBroker].innerText > 0)) {
+            fn_AbrirModalSimple('#Comisiones');
+            fn_AbrirModalSimple('#Subjetividad');
+        }
+    }
+
     $("input[id$='hid_Pestaña']")[0].value = 1;
 });
+
 $("body").on("click", ".Resumen", function (e) {
+    if ($("input[id$='hid_Pestaña']")[0].value == 0 || $("input[id$='hid_Pestaña']")[0].value == 1) {
+        fn_CambiaEstado(15, "1");
+        fn_CambiaEstado(16, "0");
+    }
+    fn_CerrarModalSimple('#Comisiones');
+    fn_CerrarModalSimple('#Subjetividad');
     $("input[id$='hid_Pestaña']")[0].value = 2;
 });
 
@@ -68,8 +103,31 @@ $("body").on("click", ".ModalEspera", function (e) {
     fn_AbrirModal('#EsperaModal');
 });
 
+$("body").on("click", ".AgruparRiesgo", function (e) {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var blnAgrupado = false;
+
+    var chk_Riesgo = $("[id*=gvd_Riesgo]").find(".Select");
+    
+    for (i = 0 ; i <= chk_Riesgo.length - 2 ; i++) {
+        if (chk_Riesgo[i].isDisabled == false) {
+            if (chk_Riesgo[i].childNodes[0].checked == true) {
+                blnAgrupado = true;
+                break;
+            }
+        }
+    }
+
+    if (blnAgrupado == true) {
+        fn_AbrirModal('#Agrupadores');
+    }
+    else {
+        fn_MuestraMensaje('Agrupadores', 'No se ha seleccionado ningún Riesgo para agrupar', 0);
+    }
+});
 
 ////////////////////////////////////////////////////////////////////EVENTO EXPANDIR-CONTRAER/////////////////////////////////////
+
 //Colapsar Ventana
 $("body").on("click", ".contraer", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
@@ -91,15 +149,24 @@ $("body").on("click", ".AgregaResponsable", function () {
 
 //Detecta la clase Agregar Broker y abre el Catalogo
 $("body").on("click", ".AgregaBroker", function () {
+    var strSel = fn_ElementosSeleccionados($("[id*=gvd_Intermediario]"), $('[id*=lbl_ClaveBro]'), $('[id*=chk_Sel]'), false);
+
     //*************fn_CargaCatalogo(PrefijoCatalogo,Condicion,Seleccion,TipoSeleccion,IdGrid,Titulo)***************
-    fn_CargaCatalogo("Bro", "", "", "Multiple", "", "INTERMEDIARIOS");
+    fn_CargaCatalogo("Bro", "", strSel, "Multiple", "", "INTERMEDIARIOS");
 });
 
 $("body").on("click", ".AgregaCia", function () {
-    //var strSel = fn_ElementosSeleccionados($("[id*=gvd_Compañia]"), $('[id*=lbl_ClaveCia]'), $('[id*=chk_SelCia]'), false);
-    var strSel = '';
+    var strSel = fn_ElementosSeleccionados($("[id*=gvd_Reasegurador]"), $('[id*=lbl_ClaveCia]'), $('[id*=chk_Sel]'), false);
+
     //*************fn_CargaCatalogo(PrefijoCatalogo,Condicion,Seleccion,TipoSeleccion,IdGrid,Titulo)***************
     fn_CargaCatalogo("Cia", "", strSel, "Multiple", "", "REASEGURADORES");
+});
+
+$("body").on("click", ".AgregaCoa", function () {
+    var strSel = fn_ElementosSeleccionados($("[id*=gvd_Reparto]"), $('[id*=lbl_ClaveCoa]'), $('[id*=chk_Sel]'), false);
+
+    //*************fn_CargaCatalogo(PrefijoCatalogo,Condicion,Seleccion,TipoSeleccion,IdGrid,Titulo)***************
+    fn_CargaCatalogo("Coa", "", strSel, "Multiple", "", "COASEGURADORES");
 });
 
 $("body").on("click", ".AgregaRiesgo", function () {
@@ -197,6 +264,7 @@ $("body").on("focusout", "[id$=txt_SearchAge]", function () {
         $("input[id$='txt_ClaveAge']")[0].value = ''
     }
     fn_EvaluaAutoComplete('txt_ClaveAge', 'txt_SearchAge');
+
 });
 
 
@@ -778,7 +846,7 @@ function fn_ActualizaGrupo(Grupo, inciso, ArrayClase, ArrayControl, AST) {
 
                         if (Control != undefined) {
                             elemento = parseFloat(Control.value);
-                            if (AST == 1) {
+                            if (AST == 1 && ArrayClase[i] == 'SumaAsegurada') {
                                 if ($("[id*=gvd_Riesgo]").find("[id*=opt_Adicional] input:checked")[rowAux[0].rowIndex - 2].value == 0) {
                                     elemento = 0;
                                 }
@@ -791,7 +859,7 @@ function fn_ActualizaGrupo(Grupo, inciso, ArrayClase, ArrayControl, AST) {
                             }
                             
                             Clase = $("[id*=gvd_Agrupacion] ." + ArrayClase[i])[row[0].rowIndex - 1];
-                            if (Control != undefined) {
+                            if (Clase != undefined) {
                                 Clase.value = fn_FormatoMonto(parseFloat(ArraySuma[i]), 2);
                             }
                         }
@@ -1113,25 +1181,41 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .ComFac", function (e) {
 });
 
 
-//Agrupaciones
-$("body").on("focusout", "[id*=gvd_Distribucion] .PrcPart", function (e) {
+//Reparto
+$("body").on("focusout", "[id*=gvd_Reparto] .PrcPart", function (e) {
     var row = $(this).closest("tr");
 
-    var ArrayCalculo = [0, 1, 2];
+    //Aplica para la Distribución GMX y Coaseguradores
+    fn_CalculaReparto(-1, row[0].rowIndex - 1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+    fn_CalculaDistribucionGMX(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+    fn_CalculaIntermediario(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+    fn_CalculaReasegurador(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
 
-    //Aplica para la Distribución de GMX y Coaseguradores
-    if (ArrayCalculo.indexOf(row[0].rowIndex - 1) != -1) {
-        fn_CalculaReparto(-1, row[0].rowIndex - 1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
-        fn_CalculaDistribucionGMX(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
-        fn_CalculaIntermediario(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
-        fn_CalculaReasegurador(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
-    }
     $('[id*=txt_PrcPartAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
     $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4, 1);
 
-    fn_SumaTotales('gvd_Distribucion', ['PrcPart'], ['txt_PrcPartAux'], 0, [3, 4, 5, 6, 7, 8, 9, 10], 3 , 100);
+    fn_SumaTotales('gvd_Reparto', ['PrcPart'], ['txt_PrcPartAux'], 0, [0], 0 , 100);
 });
 
+
+$("body").on("focusout", "[id*=gvd_Capas] .PrcPartGMXRET", function (e) {
+    var row = $(this).closest("tr");
+
+    fn_CalculaCapasGMX(-1, row[0].rowIndex - 1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA'], 'RET');
+
+    $('[id*=txt_PrcPartGMXRETAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
+    $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4, 1);
+});
+
+
+$("body").on("focusout", "[id*=gvd_Capas] .PrcPartGMX", function (e) {
+    var row = $(this).closest("tr");
+
+    fn_CalculaCapasGMX(-1, row[0].rowIndex - 1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA'], '');
+
+    $('[id*=txt_PrcPartGMXAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
+    $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4, 1);
+});
 
 
 $("body").on("focusout", "[id*=gvd_Distribucion] .PrcPartGMX", function (e) {
@@ -1142,7 +1226,7 @@ $("body").on("focusout", "[id*=gvd_Distribucion] .PrcPartGMX", function (e) {
     $('[id*=txt_PrcPartGMXAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
     $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4, 1);
 
-    fn_SumaTotales('gvd_Distribucion', ['PrcPartGMX'], ['txt_PrcPartGMXAux'], 0, [0, 1, 2, 3, 4, 10], 10 , 100);
+    fn_SumaTotales('gvd_Distribucion', ['PrcPartGMX'], ['txt_PrcPartGMXAux'], 0, [0], 0, 100);
 });
 
 
@@ -1157,37 +1241,93 @@ function fn_CalculaReparto(Inciso, Posicion, ArrayClase, ArrayControl) {
     //Si existe agrupación seleccionada
     if (Index > -1) {
         var Incisos = $("[id*=gvd_Agrupacion] .Incisos")[Index].value.split(',');
+        var inicio = 0;
+        var fin = -1;
 
         //Si se trata de la AGrupación en Pantalla
         if (Incisos.indexOf(Inciso.toString()) != -1 || Inciso == -1) {
             if (Posicion > -1) {
-                var ArrayCalculo = [Posicion];
+                inicio = Posicion;
+                fin = Posicion;
             }
             else {
-                var ArrayCalculo = [0, 1, 2];
+                inicio = 0;
+                fin = $("[id*=gvd_Reparto]")[0].rows.length - 2;
             }
 
-            for (pos = 0; pos < ArrayCalculo.length; pos++) {
-                Posicion = ArrayCalculo[pos];
-                var Prc = $("[id*=gvd_Distribucion] .PrcPart")[Posicion].value
+            for (Posicion = inicio; Posicion <= fin; Posicion++) {
+                var Prc = $("[id*=gvd_Reparto] .PrcPart")[Posicion].value
                 for (i = 0; i < ArrayClase.length; i++) {
 
                     Monto = $("[id*=gvd_Agrupacion]").find("[id*=" + ArrayControl[i] + "Aux]")[Index];
 
                     if (Monto != undefined) {
-                        Control = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[i] + "Aux]")[Posicion];
+                        Control = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[i] + "Aux]")[Posicion];
                         if (Control != undefined) {
                             Control.value = Monto.value * (Prc / 100);
                         }
 
-                        Clase = $("[id*=gvd_Distribucion] ." + ArrayClase[i])[Posicion];
+                        Clase = $("[id*=gvd_Reparto] ." + ArrayClase[i])[Posicion];
                         if (Clase != undefined) {
                             Clase.value = fn_FormatoMonto(parseFloat(Control.value), 2);
                         }
                     }
                 }
             }
-            fn_SumaTotales('gvd_Distribucion', ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimRespAux', 'txt_PrimaNetaAux', 'txt_PrimaINCAux', 'txt_PrimaTEVAux', 'txt_PrimaFHMAux', 'txt_PrimaRCAux', 'txt_PrimaCSCAux', 'txt_PrimaGRAAux'], 0, [3, 4, 5, 6, 7, 8, 9, 10], 3);
+            fn_SumaTotales('gvd_Reparto', ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimRespAux', 'txt_PrimaNetaAux', 'txt_PrimaINCAux', 'txt_PrimaTEVAux', 'txt_PrimaFHMAux', 'txt_PrimaRCAux', 'txt_PrimaCSCAux', 'txt_PrimaGRAAux'], 0, [0], 0);
+        }
+    }
+}
+
+//Calculo de las Capas correspondiente a GMX
+function fn_CalculaCapasGMX(Inciso, Posicion, ArrayClase, ArrayControl, Tipo) {
+    var Monto = undefined;
+    var Control = undefined;
+    var Clase = undefined;
+
+    var Index = $("input[id$='hid_IndiceGrupo']")[0].value;
+
+    //Si existe agrupación seleccionada
+    if (Index > -1) {
+        var Incisos = $("[id*=gvd_Agrupacion] .Incisos")[Index].value.split(',');
+        var inicio = 0;
+        var fin = -1;
+
+        if (Incisos.indexOf(Inciso.toString()) != -1 || Inciso == -1) {
+            if (Posicion > -1) {
+                inicio = Posicion;
+                fin = Posicion;
+            }
+            else {
+                inicio = 0;
+                fin = $("[id*=gvd_Capas]")[0].rows.length - 2;
+            }
+
+            for (Posicion = inicio; Posicion <= fin; Posicion++) {
+                var Prc = $("[id*=gvd_Capas] .PrcPartGMX" + Tipo)[Posicion].value
+
+                for (i = 0; i < ArrayClase.length; i++) {
+                    Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[i] + "Aux]")[1];
+                    if (Monto != undefined) {
+                        Control = $("[id*=gvd_Capas]").find("[id*=" + ArrayControl[i] + Tipo + "Aux]")[Posicion];
+                        if (Control != undefined) {
+                            Control.value = Monto.value * (Prc / 100);
+                        }
+
+                        Clase = $("[id*=gvd_Capas] ." + ArrayClase[i] + Tipo)[Posicion];
+                        if (Clase != undefined) {
+                            Clase.value = fn_FormatoMonto(parseFloat(Control.value), 2);
+                        }
+                    }
+                }
+
+                //Calcula el porcentaje sobre Coaseguro
+                Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
+                if (Monto != undefined) {
+                    Control = $("[id*=gvd_Capas]").find("[id*=" + ArrayControl[0] + Tipo + "Aux]")[Posicion];
+                    $("[id*=gvd_Capas] .PrcPart" + Tipo)[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
+                }
+            }
         }
     }
 }
@@ -1204,21 +1344,24 @@ function fn_CalculaDistribucionGMX(Inciso, Posicion, ArrayClase, ArrayControl) {
     //Si existe agrupación seleccionada
     if (Index > -1) {
         var Incisos = $("[id*=gvd_Agrupacion] .Incisos")[Index].value.split(',');
+        var inicio = 0;
+        var fin = -1;
 
         if (Incisos.indexOf(Inciso.toString()) != -1 || Inciso == -1) {
             if (Posicion > -1) {
-                var ArrayCalculo = [Posicion];
+                inicio = Posicion;
+                fin = Posicion;
             }
             else {
-                var ArrayCalculo = [5, 6, 7, 8, 9];
+                inicio = 0;
+                fin = $("[id*=gvd_Distribucion]")[0].rows.length - 2;
             }
 
-            for (pos = 0; pos < ArrayCalculo.length; pos++) {
-                Posicion = ArrayCalculo[pos];
+            for (Posicion = inicio; Posicion <= fin; Posicion++) {
                 var Prc = $("[id*=gvd_Distribucion] .PrcPartGMX")[Posicion].value
                 
                 for (i = 0; i < ArrayClase.length; i++) {
-                    Monto = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[i] + "Aux]")[0];
+                    Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[i] + "Aux]")[1];
                     if (Monto != undefined) {
                         Control = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[i] + "Aux]")[Posicion];
                         if (Control != undefined) {
@@ -1233,13 +1376,13 @@ function fn_CalculaDistribucionGMX(Inciso, Posicion, ArrayClase, ArrayControl) {
                 }
 
                 //Calcula el porcentaje sobre Coaseguro
-                Monto = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[0] + "Aux]")[3] 
+                Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0] 
                 if (Monto != undefined) {
                     Control = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
                     $("[id*=gvd_Distribucion] .PrcPart")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
                 }
             }
-            fn_SumaTotales('gvd_Distribucion', ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimRespAux', 'txt_PrimaNetaAux', 'txt_PrimaINCAux', 'txt_PrimaTEVAux', 'txt_PrimaFHMAux', 'txt_PrimaRCAux', 'txt_PrimaCSCAux', 'txt_PrimaGRAAux'], 0, [0, 1, 2, 3, 4, 10], 10);
+            fn_SumaTotales('gvd_Distribucion', ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimRespAux', 'txt_PrimaNetaAux', 'txt_PrimaINCAux', 'txt_PrimaTEVAux', 'txt_PrimaFHMAux', 'txt_PrimaRCAux', 'txt_PrimaCSCAux', 'txt_PrimaGRAAux'], 0, [0], 0);
         }
     }
 }
@@ -1391,63 +1534,65 @@ function fn_CalculoComision(Factor, ArrayTipo) {
     var Index = $("input[id$='hid_IndiceBroker']")[0].value;
     var grid = '';
 
-    //SI se trata de un Negocio Directo o por Intermediario
-    if ($("[id*=gvd_Intermediario] .Clave")[Index].innerText == 0) {
-        var Index = $("input[id$='hid_IndiceReas']")[0].value;
-        if (Index > -1) {
-            grid = "[id*=gvd_Reasegurador]";
+    if (Index > -1) {
+        //SI se trata de un Negocio Directo o por Intermediario
+        if ($("[id*=gvd_Intermediario] .Clave")[Index].innerText == 0) {
+            var Index = $("input[id$='hid_IndiceReas']")[0].value;
+            if (Index > -1) {
+                grid = "[id*=gvd_Reasegurador]";
+            }
         }
-    }
-    else {
-        grid = "[id*=gvd_Intermediario]";
-    }
-
-    if (grid != '') {
-        var Prima = undefined;
-        var Prc = 0;
-        var Comision = 0;
-        var PNR = 0;
-        var bln_Deglose = false;
-        for (i = 0; i <= ArrayTipo.length - 1; i++) {
-            Prima = $(grid).find("[id*=txt_Prima" + ArrayTipo[i] + "Aux]")[Index];
-            if (Prima != undefined) {
-                if (ArrayTipo[i] != 'Neta') {
-                    var bln_Deglose = true;
-                }
-                switch (Factor) {
-                    case 'prc':
-                        Prc = $(".PrcCom" + ArrayTipo[i])[0].value;
-                        Comision = Prima.value * (Prc / 100);
-                        PNR = Prima.value - Comision;
-                        break;
-                    case 'com':
-                        Comision = $(".Com" + ArrayTipo[i])[0].value.replace(/,/g, "");
-                        Prc = (Comision / Prima.value) * 100;
-                        PNR = Prima.value - Comision;
-                        break;
-                    case 'pnr':
-                        PNR = $(".Pnr" + ArrayTipo[i])[0].value.replace(/,/g, "");
-                        Comision = Prima.value - PNR;
-                        Prc = (Comision / Prima.value) * 100;
-                        break;
-                }
-                $(grid).find("[id*=txt_PrcCom" + ArrayTipo[i] + "]")[Index].value = Prc;
-                $(grid).find("[id*=txt_Com" + ArrayTipo[i] + "]")[Index].value = Comision;
-                $(grid).find("[id*=txt_Pnr" + ArrayTipo[i] + "]")[Index].value = PNR;
-
-                $(".PrcCom" + ArrayTipo[i])[0].value = fn_FormatoMonto(parseFloat(Prc), 4, 1)
-                $(".Com" + ArrayTipo[i])[0].value = fn_FormatoMonto(parseFloat(Comision), 2);
-                $("[id*=txt_Com" + ArrayTipo[i] + "Aux]")[0].value = Comision;
-                $(".Pnr" + ArrayTipo[i])[0].value = fn_FormatoMonto(parseFloat(PNR), 2);
-            } 
+        else {
+            grid = "[id*=gvd_Intermediario]";
         }
 
-        //Si se desglosa por Cobertura de Prima
-        if (bln_Deglose == true) {
-            $(".PrcComNeta")[0].value = fn_FormatoMonto(fn_TotalesComision('PrcCom', ['INC', 'TEV', 'FHM', 'RC', 'CSC', 'GRA']),4,1);
-            $("[id*=txt_ComNetaAux]")[0].value = fn_TotalesComision('Com', ['INC', 'TEV', 'FHM', 'RC', 'CSC', 'GRA']);
-            $(".ComNeta")[0].value = fn_FormatoMonto(parseFloat($("[id*=txt_ComNetaAux]")[0].value), 2);
-            $(".PnrNeta")[0].value = fn_FormatoMonto(fn_TotalesComision('Pnr', ['INC', 'TEV', 'FHM', 'RC', 'CSC', 'GRA']),2);
+        if (grid != '') {
+            var Prima = undefined;
+            var Prc = 0;
+            var Comision = 0;
+            var PNR = 0;
+            var bln_Deglose = false;
+            for (i = 0; i <= ArrayTipo.length - 1; i++) {
+                Prima = $(grid).find("[id*=txt_Prima" + ArrayTipo[i] + "Aux]")[Index];
+                if (Prima != undefined) {
+                    if (ArrayTipo[i] != 'Neta') {
+                        var bln_Deglose = true;
+                    }
+                    switch (Factor) {
+                        case 'prc':
+                            Prc = $(".PrcCom" + ArrayTipo[i])[0].value;
+                            Comision = Prima.value * (Prc / 100);
+                            PNR = Prima.value - Comision;
+                            break;
+                        case 'com':
+                            Comision = $(".Com" + ArrayTipo[i])[0].value.replace(/,/g, "");
+                            Prc = (Comision / Prima.value) * 100;
+                            PNR = Prima.value - Comision;
+                            break;
+                        case 'pnr':
+                            PNR = $(".Pnr" + ArrayTipo[i])[0].value.replace(/,/g, "");
+                            Comision = Prima.value - PNR;
+                            Prc = (Comision / Prima.value) * 100;
+                            break;
+                    }
+                    $(grid).find("[id*=txt_PrcCom" + ArrayTipo[i] + "]")[Index].value = Prc;
+                    $(grid).find("[id*=txt_Com" + ArrayTipo[i] + "]")[Index].value = Comision;
+                    $(grid).find("[id*=txt_Pnr" + ArrayTipo[i] + "]")[Index].value = PNR;
+
+                    $(".PrcCom" + ArrayTipo[i])[0].value = fn_FormatoMonto(parseFloat(Prc), 4, 1)
+                    $(".Com" + ArrayTipo[i])[0].value = fn_FormatoMonto(parseFloat(Comision), 2);
+                    $("[id*=txt_Com" + ArrayTipo[i] + "Aux]")[0].value = Comision;
+                    $(".Pnr" + ArrayTipo[i])[0].value = fn_FormatoMonto(parseFloat(PNR), 2);
+                }
+            }
+
+            //Si se desglosa por Cobertura de Prima
+            if (bln_Deglose == true) {
+                $(".PrcComNeta")[0].value = fn_FormatoMonto(fn_TotalesComision('PrcCom', ['INC', 'TEV', 'FHM', 'RC', 'CSC', 'GRA']), 4, 1);
+                $("[id*=txt_ComNetaAux]")[0].value = fn_TotalesComision('Com', ['INC', 'TEV', 'FHM', 'RC', 'CSC', 'GRA']);
+                $(".ComNeta")[0].value = fn_FormatoMonto(parseFloat($("[id*=txt_ComNetaAux]")[0].value), 2);
+                $(".PnrNeta")[0].value = fn_FormatoMonto(fn_TotalesComision('Pnr', ['INC', 'TEV', 'FHM', 'RC', 'CSC', 'GRA']), 2);
+            }
         }
     }
 }
@@ -1502,7 +1647,7 @@ function fn_CalculaIntermediario(Inciso, Posicion, ArrayClase , ArrayControl) {
                 var Prc = $("[id*=gvd_Intermediario] .PrcPart")[Posicion].value
 
                 for (i = 0; i < ArrayClase.length; i++) {
-                    Monto = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[i] + "Aux]")[10];
+                    Monto = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[i] + "Aux]")[0];
 
                     if (Monto != undefined) {
                         Control = $("[id*=gvd_Intermediario]").find("[id*=" + ArrayControl[i] + "Aux]")[Posicion];
@@ -1519,7 +1664,7 @@ function fn_CalculaIntermediario(Inciso, Posicion, ArrayClase , ArrayControl) {
                 }
 
                 //Calcula el porcentaje sobre Coaseguro
-                Monto = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[0] + "Aux]")[3]
+                Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
                 if (Monto != undefined) {
                     Control = $("[id*=gvd_Intermediario]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
                     $("[id*=gvd_Intermediario] .PrcPartCoas")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
@@ -1577,6 +1722,13 @@ function fn_CalculaReasegurador(Inciso, Posicion, ArrayClase, ArrayControl) {
                             Clase.value = fn_FormatoMonto(parseFloat(Control.value), 2);
                         }
                     }
+                }
+
+                //Calcula el porcentaje sobre Coaseguro
+                Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
+                if (Monto != undefined) {
+                    Control = $("[id*=gvd_Reasegurador]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
+                    $("[id*=gvd_Reasegurador] .PrcPart100")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
                 }
 
                 //Calculo de Comisiones
@@ -1749,6 +1901,12 @@ $("body").on("keydown", "[id$=txt_Endoso]", function (e) {
 
 $("body").on("focusout", "[id$=txt_SearchAse]", function (e) {
     fn_EvaluaAutoComplete('txt_ClaveAseg', 'txt_SearchAse');
+    $("input[id$='lbl_Asegurado']")[0].value = $(this)[0].value;
+});
+
+$("body").on("focusout", ".Moneda", function (e) {
+   
+    $("input[id$='txt_Moneda']")[0].value = $('option:selected', $(this)).text()
 });
 
 $("body").on("focusout", "[id$=txt_SearchGiro]", function (e) {
@@ -1758,6 +1916,20 @@ $("body").on("focusout", "[id$=txt_SearchGiro]", function (e) {
 $("body").on("focusout", "[id$=txt_SearchResp]", function (e) {
     fn_EvaluaAutoComplete('txt_ClaveResp', 'txt_SearchResp');
 });
+
+
+$("body").on("change", "[id$=txt_VigIni]", function (e) {
+    $("input[id$='txt_VigenciaIni']")[0].value = $(this)[0].value;
+});
+
+$("body").on("change", "[id$=txt_VigFin]", function (e) {
+    $("input[id$='txt_VigenciaFin']")[0].value = $(this)[0].value;
+});
+
+$("body").on("change", "[id$=txt_FecEmision]", function (e) {
+    $("input[id$='txt_FechaEmision']")[0].value = $(this)[0].value;
+});
+
 
 
 $("body").on("click", "[id*=gvd_Monitor] .Folio", function () {
@@ -1954,6 +2126,43 @@ $("body").on("mouseover", "[id*=gvd_Cobertura] .Seleccion", function (e) {
     fn_MouseOverGrid($(this).closest("tr"), 'Cob', e.which);
 });
 
+$("body").on("change", "[id*=gvd_Subjetividad] .Original", function () {
+    var row = $(this).closest("tr");
+    var Original = row.find('.Original');
+
+
+
+    if (fn_IsDate($(this)[0].value) == true && fn_IsDate($(Original)[0].value) == true) {
+
+        if (fn_DateDiff($(Original)[0].value, $(this)[0].value, 'day') >= 0) {
+            var chk_Subjetividad = row.find('.chk_Subjetividad');
+            $(chk_Subjetividad)[0].childNodes[0].checked = true;
+        }
+        else {
+            $(this)[0].value = '';
+            fn_MuestraMensaje('Subjetividad', 'La Fecha Cumplimiento no puede ser menor a la Fecha de Original', 0);
+        }
+    }
+});
+
+
+$("body").on("change", "[id*=gvd_Subjetividad] .Cumplimiento", function () {
+    var row = $(this).closest("tr");
+    var Original = row.find('.Original');
+
+    if (fn_IsDate($(this)[0].value) == true && fn_IsDate($(Original)[0].value) == true) {
+
+        if (fn_DateDiff($(Original)[0].value, $(this)[0].value, 'day') >= 0) {
+            var chk_Subjetividad = row.find('.chk_Subjetividad');
+            $(chk_Subjetividad)[0].childNodes[0].checked = true;
+        }
+        else {
+            $(this)[0].value = '';
+            fn_MuestraMensaje('Subjetividad', 'La Fecha Cumplimiento no puede ser menor a la Fecha de Original', 0);
+        }
+    }
+});
+
 
 function fn_EstadoSeleccionGrid(Grid,prefijo) {
     $("[id*=" + Grid + "] tr").each(function (e) {
@@ -1971,6 +2180,8 @@ function fn_EstadoSeleccionGrid(Grid,prefijo) {
         }
     });
 }
+
+
 
 
 

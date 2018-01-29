@@ -71,6 +71,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ObtieneReparto">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_folio" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneRepartoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneRepartoResult" nillable="true" type="q6:ArrayOfspS_RepartoMC_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ObtieneDistribucion">
     <xs:complexType>
       <xs:sequence>
@@ -81,7 +95,7 @@
   <xs:element name="ObtieneDistribucionResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneDistribucionResult" nillable="true" type="q6:ArrayOfspS_DistribucionMC_Result" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneDistribucionResult" nillable="true" type="q7:ArrayOfspS_DistribucionMC_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -95,7 +109,7 @@
   <xs:element name="ObtieneBrokersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneBrokersResult" nillable="true" type="q7:ArrayOfspS_IntermediarioMC_Result" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneBrokersResult" nillable="true" type="q8:ArrayOfspS_IntermediarioMC_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -109,7 +123,7 @@
   <xs:element name="ObtieneReaseguradoresResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneReaseguradoresResult" nillable="true" type="q8:ArrayOfspS_ReaseguradorMC_Result" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneReaseguradoresResult" nillable="true" type="q9:ArrayOfspS_ReaseguradorMC_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -123,7 +137,7 @@
   <xs:element name="ObtieneSubjetividadResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneSubjetividadResult" nillable="true" type="q9:ArrayOfspS_SubjetividadMC_Result" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneSubjetividadResult" nillable="true" type="q10:ArrayOfspS_SubjetividadMC_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -137,7 +151,7 @@
   <xs:element name="ObtienePolizasAsegResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtienePolizasAsegResult" nillable="true" type="q10:ArrayOfspS_PolizasAsegurado_Result" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtienePolizasAsegResult" nillable="true" type="q11:ArrayOfspS_PolizasAsegurado_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -149,13 +163,33 @@
         <xs:element minOccurs="0" name="nro_pol" type="xs:int" />
         <xs:element minOccurs="0" name="aaaa_endoso" type="xs:int" />
         <xs:element minOccurs="0" name="nro_endoso" type="xs:int" />
+        <xs:element minOccurs="0" name="cod_item" type="xs:int" />
+        <xs:element minOccurs="0" name="strSel" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ObtieneRiesgoPolizaResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneRiesgoPolizaResult" nillable="true" type="q11:ArrayOfspS_RiesgoPoliza_Result" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneRiesgoPolizaResult" nillable="true" type="q12:ArrayOfspS_RiesgoPoliza_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneUbicacionesPoliza">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cod_suc" type="xs:int" />
+        <xs:element minOccurs="0" name="cod_ramo" type="xs:int" />
+        <xs:element minOccurs="0" name="nro_pol" type="xs:int" />
+        <xs:element minOccurs="0" name="aaaa_endoso" type="xs:int" />
+        <xs:element minOccurs="0" name="nro_endoso" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneUbicacionesPolizaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneUbicacionesPolizaResult" nillable="true" type="q13:ArrayOfspS_UbicacionesPoliza_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

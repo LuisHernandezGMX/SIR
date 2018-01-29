@@ -347,6 +347,9 @@ border-radius: 20px;
 .padding1 {
 	line-height: 0; padding-top: 1px; font-size: 0px;
 }
+.padding2 {
+	line-height: 0; padding-top: 2px; font-size: 0px;
+}
 .padding3 {
 	line-height: 0; padding-top: 3px; font-size: 0px;
 }
