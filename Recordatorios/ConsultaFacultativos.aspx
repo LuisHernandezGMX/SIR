@@ -5,14 +5,12 @@
              <script src="../Scripts/jquery.maskedinput.js"></script>
              <script src="../Scripts/jquery.numeric.js"></script>
              <script src="../Scripts/Facultativos.js"></script>
+     
+            <asp:HiddenField runat="server" ID="hid_Ventanas" Value="0|1|1|1|1|1|1|" />
 
-      <%--   <script type="text/javascript"> 
-             Sys.WebForms.PageRequestManager.getInstance().add_endRequest(PageLoad);
-         </script>--%>
-
-            <div class="cuadro-titulo panel-encabezado">
+            <div class="cuadro-titulo panel-encabezado ventana0">
                 Consulta de Facultativos
-                 <asp:HiddenField runat="server" ID="hid_Ventanas" Value="0|0|0|" />
+ 
                  <asp:HiddenField runat="server" ID="hid_Clave" Value="" />
             </div>
             <div class="clear padding10"></div>
@@ -41,9 +39,11 @@
               <div class="row">
                     <div class="col-md-6">
                         <div class="cuadro-subtitulo">
+                                <input type="image" src="../Images/contraer_mini.png" id="coVentana1" class="contraer"  />
+                                <input type="image" src="../Images/expander_mini.png"   id="exVentana1" class="expandir"  />
                             Broker
                         </div>
-                        <div class="panel-subcontenido">
+                        <div class="panel-subcontenido ventana1">
                                 <asp:UpdatePanel runat="server" ID="upBroker">
                                     <ContentTemplate>
                                         <asp:Panel runat="server" ID="pnlBroker" Width="100%" Height="130px" ScrollBars="Both">
@@ -89,9 +89,11 @@
 
                    <div class="col-md-6">
                         <div class="cuadro-subtitulo">
+                            <input type="image" src="../Images/contraer_mini.png" id="coVentana2" class="contraer"  />
+                            <input type="image" src="../Images/expander_mini.png"   id="exVentana2" class="expandir"  />
                             Compañia
                         </div>
-                        <div class="panel-subcontenido">
+                        <div class="panel-subcontenido ventana2">
                             <asp:UpdatePanel runat="server" ID="upCia">
                             <ContentTemplate>
                                     <asp:Panel runat="server" ID="pnlCompañia" Width="100%" Height="130px" ScrollBars="Both">
@@ -136,14 +138,17 @@
 
                    </div>
               </div>
-
+            
+             <div class="clear padding10"></div>
             <%--Seccion 2--%>
               <div class="row">
                   <div class="col-md-6">
                         <div class="cuadro-subtitulo">
+                            <input type="image" src="../Images/contraer_mini.png" id="coVentana3" class="contraer"  />
+                            <input type="image" src="../Images/expander_mini.png"   id="exVentana3" class="expandir"  />
                             Ramo Contable
                         </div>
-                        <div class="panel-subcontenido">
+                        <div class="panel-subcontenido ventana3">
                              <asp:UpdatePanel runat="server" ID="upRamoContable">
                                 <ContentTemplate>
                                      <asp:Panel runat="server" ID="pn_RamoContable" Width="100%" Height="130px" ScrollBars="Both">
@@ -188,9 +193,11 @@
                   </div>
                    <div class="col-md-6">
                         <div class="cuadro-subtitulo">
+                            <input type="image" src="../Images/contraer_mini.png" id="coVentana4" class="contraer"  />
+                            <input type="image" src="../Images/expander_mini.png"   id="exVentana4" class="expandir"  />
                             Póliza
                         </div>
-                        <div class="panel-subcontenido">
+                        <div class="panel-subcontenido ventana4">
                                 <asp:UpdatePanel runat="server" ID="upPoliza">
                                     <ContentTemplate>
                                         <asp:HiddenField runat="server" ID="hid_Polizas" Value="" />
@@ -249,81 +256,18 @@
                                 </asp:UpdatePanel>       
                         </div>           
                   </div>
-<%--                  <div class="col-md-6">
-                        <div class="cuadro-subtitulo">
-                            Facultativos
-                        </div>
-                        <div class="panel-subcontenido">
-                            <asp:UpdatePanel runat="server" ID="upFechas">
-                            <ContentTemplate>
-
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <asp:label runat="server" class="col-md-1 etiqueta-control" Width="100px">Fec. Fac</asp:label>
-                                                <asp:TextBox runat="server" ID="txt_FechaDe" CssClass="estandar-control Fecha" Width="110px" Height="26px" ></asp:TextBox>
-                                            </td>
-                                            <td>
-                                                <asp:label runat="server" class="col-md-1 etiqueta-control" Width="38px">A</asp:label>
-                                                <asp:TextBox runat="server" ID="txt_FechaA" CssClass="estandar-control Fecha" Width="110px" Height="26px" ></asp:TextBox>
-                                            </td>
-                                        </tr>
-                                    </table>
-        
-                                </ContentTemplate>
-                            </asp:UpdatePanel>         
-                            <asp:UpdatePanel runat="server" ID="upContrato">
-                                <ContentTemplate>
-                                    <asp:Panel runat="server" ID="pnlContrato" Width="100%" Height="105px" ScrollBars="Both">
-                                        <asp:GridView runat="server" ID="gvd_Contrato" AutoGenerateColumns="false"  
-                                                      CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                      GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
-                                            <Columns>
-                                                <asp:TemplateField HeaderText="" ItemStyle-CssClass="SelCia">
-                                                    <ItemTemplate>
-                                                        <asp:HiddenField runat="server" ID="chk_SelFac" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Clave" ItemStyle-CssClass="ClaveCia">
-                                                    <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_ClaveFac" Text='<%# Eval("Clave") %>' Width="60px" Font-Size="9.5px" ></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Descripción" ItemStyle-CssClass="DescripcionCia">
-                                                    <ItemTemplate>
-                                                        <asp:Label runat="server" ID="lbl_Desc" Text='<%# Eval("Descripcion") %>' Width="300px" Font-Size="9.5px"></asp:Label>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                                <asp:TemplateField>
-                                                    <ItemTemplate>
-                                                        <asp:imagebutton ImageUrl="~/Images/delete_rojo.png" CommandName="Delete" Height="26" runat="server" CssClass="btn Delete" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                            </Columns>
-                                        </asp:GridView>
-                                    </asp:Panel>
-                                    <div style="width:100%;  text-align:right">
-                                        <asp:LinkButton id="btn_AddCtr" runat="server" class="btn botones AgregaContrato" data-toggle="modal" data-target="#EsperaModal">
-                                            <span>
-                                                <img class="btn-añadir"/>
-                                                Añadir
-                                            </span>
-                                        </asp:LinkButton>
-                                    </div>
-                                </ContentTemplate>
-                            </asp:UpdatePanel>
-                        </div>
-
-                   </div>--%>
                 </div>
-                 <div class="row">
+                            
+             <div class="clear padding10"></div>
 
-                
+              <div class="row">               
                    <div class="col-md-6">
                         <div class="cuadro-subtitulo">
+                            <input type="image" src="../Images/contraer_mini.png" id="coVentana5" class="contraer"  />
+                            <input type="image" src="../Images/expander_mini.png"   id="exVentana5" class="expandir"  />
                             Asegurados
                         </div>
-                        <div class="panel-subcontenido">
+                        <div class="panel-subcontenido ventana5">
                             <asp:UpdatePanel runat="server" ID="updAsegurado">
                                 <ContentTemplate>
                                    <div class="form-group">
@@ -373,71 +317,56 @@
                     </div>
                      <div class="col-md-6">
                         <div class="cuadro-subtitulo">
+                            <input type="image" src="../Images/contraer_mini.png" id="coVentana6" class="contraer"  />
+                            <input type="image" src="../Images/expander_mini.png"   id="exVentana6" class="expandir"  />
                             Adicionales
                         </div>
-                        <div class="panel-subcontenido">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <asp:UpdatePanel runat="server" ID="UpdatePanel1">
-                                    <ContentTemplate>
-                                       <br />
-                                        <div class="clear padding10"></div>
-                                        <table>
-                                            <tr>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <asp:label runat="server" class="col-md-1 etiqueta-control" Width="100px">No.Siniestro:</asp:label>
-                                                            <asp:TextBox runat="server" ID="txt_NoSiniestro" Text="" CssClass="form-control LetraDetalle Derecha" Width="100px" Height="22px"></asp:TextBox>
-                                                            <br />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width:160px"></td>
-                                                <td>
-                                                 <div style="width:100%;  text-align:right">
-                                                        <div class="clear padding30"></div>
-                                                        <div class="clear padding30"></div>
-                                                        <div class="clear padding30"></div>
-                                                     <div class="clear padding30"></div>
-                                                            <asp:LinkButton id="btn_Buscar" runat="server" class="btn botones">
-                                                                <span>
-                                                                    <img class="btn-buscar"/>
-                                                                    Consultar
-                                                                </span>
-                                                            </asp:LinkButton>
-                                                            <asp:LinkButton id="btn_GuardarCons" runat="server" class="btn botones">
-                                                                <span>
-                                                                    <img class="btn-guardar"/>
-                                                                    Guardar
-                                                                </span>
-                                                            </asp:LinkButton>
-                                                            <asp:LinkButton id="btn_CancelaFac" runat="server" class="btn botones">
-                                                                <span>
-                                                                    <img class="btn-cancelar"/>
-                                                                    Cancelar
-                                                                </span>
-                                                            </asp:LinkButton>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
-                                        </table>
-                                    </ContentTemplate>
-                                    </asp:UpdatePanel> 
-                                </div>
-                            </div>
+                        <div class="panel-subcontenido ventana6">
+                             <asp:UpdatePanel runat="server" ID="updAdicionales">
+                                <ContentTemplate>
+                                   <div class="form-group">
+                                    <div class="input-group">
+                                        <asp:Label runat="server" class="col-md-1 etiqueta-control" Width="80px">Siniestro: </asp:Label>
+                                         <asp:TextBox runat="server" ID="txt_NoSiniestro" CssClass="form-control LetraDetalle Derecha" Width="260px" Height="26px"></asp:TextBox>
+                                    </div>
+                                   </div>
+                                </ContentTemplate>
+                             </asp:UpdatePanel>
                          </div>
-
-                        </div>
+                    </div>
 
                   </div> 
-                <div>
 
+                <div class="clear padding20"></div>
+             <div style="width:100%; text-align:right; border-top-style:inset; border-width:1px; border-color:#003A5D">
+                    <asp:UpdatePanel runat="server" ID="upBotones">
+                        <ContentTemplate>
+                             <asp:LinkButton id="btn_Buscar" runat="server" class="btn botones">
+                                <span>
+                                    <img class="btn-buscar"/>
+                                    Consultar
+                                </span>
+                            </asp:LinkButton>
+                            <asp:LinkButton id="btn_GuardarCons" runat="server" class="btn botones">
+                                <span>
+                                    <img class="btn-guardar"/>
+                                    Guardar
+                                </span>
+                            </asp:LinkButton>
+                            <asp:LinkButton id="btn_CancelaFac" runat="server" class="btn botones">
+                                <span>
+                                    <img class="btn-cancelar"/>
+                                    Cancelar
+                                </span>
+                            </asp:LinkButton>
+                         </div>
+                     </ContentTemplate>
+                </asp:UpdatePanel>
+            </div> 
+               
+                <div class="clear padding10"></div>
+                <div>
                     <asp:label runat="server" class="col-md-1 etiqueta-control" Width="100px">VISTA PREVIA:</asp:label>
-                    <%--<asp:label runat="server" id="lbl_TotSin"  Width="200px"></asp:label>--%>
                 </div>
                 
                 <div class="row" >
@@ -672,9 +601,9 @@
                         <div class="clear padding30"></div>
                     </div>
                 </div>
-
+          </div>
                  <!-- Modal -->
-                <div id="DescartadasModal" style="width:920px; height:400px"  class="modalOrdenPago">
+                <div id="DescartadasModal" style="width:920px; height:400px"  class="modal-ajustes">
                         <div class="cuadro-titulo" style="height:40px">
                             <button type="button" class="close"  data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">
@@ -704,25 +633,25 @@
 
                                                     <asp:TemplateField HeaderText="Asegurado">
                                                         <ItemTemplate>
-                                                                <asp:textbox runat="server" ID="lbl_Asegurado" Enabled="false" Text='<%# Eval("Asegurado")   %>' Width="300px" CssClass="form-control" Font-Size="10px" Height="26px" ></asp:textbox>
+                                                                <asp:label runat="server" ID="lbl_Asegurado" Enabled="false" Text='<%# Eval("Asegurado")   %>' Width="300px" Font-Size="10px" Height="26px" ></asp:label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
 
                                                     <asp:TemplateField HeaderText="Grupo">
                                                         <ItemTemplate>
-                                                                <asp:textbox runat="server" ID="lbl_GrupoEndoso" Enabled="false" Text='<%# Eval("GrupoEndoso")   %>' Width="220px" CssClass="form-control" Font-Size="10px" Height="26px" ></asp:textbox>
+                                                                <asp:label runat="server" ID="lbl_GrupoEndoso" Enabled="false" Text='<%# Eval("GrupoEndoso")   %>' Width="220px" Font-Size="10px" Height="26px" ></asp:label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
 
                                                    <asp:TemplateField HeaderText="Tipo">
                                                         <ItemTemplate>
-                                                                <asp:textbox runat="server" ID="lbl_GrupoTipoEndoso" Enabled="false" Text='<%# Eval("TipoEndoso")   %>' Width="220px" CssClass="form-control" Font-Size="10px" Height="26px" ></asp:textbox>
+                                                                <asp:label runat="server" ID="lbl_GrupoTipoEndoso" Enabled="false" Text='<%# Eval("TipoEndoso")   %>' Width="220px" Font-Size="10px" Height="26px" ></asp:label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
 
                                                     <asp:TemplateField HeaderText="Usuario">
                                                         <ItemTemplate>
-                                                                <asp:textbox runat="server" ID="lbl_Usuario" Text='<%# Eval("Usuario")   %>' Enabled="false" Width="220px" CssClass="form-control" Font-Size="10px" Height="26px" ></asp:textbox>
+                                                                <asp:label runat="server" ID="lbl_Usuario" Text='<%# Eval("Usuario")   %>' Enabled="false" Width="220px" Font-Size="10px" Height="26px" ></asp:label>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
 
@@ -736,8 +665,20 @@
                                       </asp:Panel>
 
                                       <div style="width:100%; text-align:right;">
-                                         <asp:Button runat="server" id="btn_QuitarNoPago" class="btn btn-success" Text="Quitar"  style="height:30px; width:80px;" />
-                                         <asp:Button runat="server" id="btn_CerrarNoPago" class="btn btn-danger" Text="Cerrar" data-dismiss="modal"  style="height:30px; width:80px;" />
+                                         <%--<asp:Button runat="server" id="btn_QuitarNoPago" class="btn btn-success" Text="Quitar"  style="height:30px; width:80px;" />--%>
+                                           <asp:LinkButton id="btn_QuitarNoPago" runat="server" class="btn botones">
+                                                                <span>
+                                                                    <img class="btn-quitar"/>
+                                                                    Quitar
+                                                                </span>
+                                           </asp:LinkButton>
+                                         <%--<asp:Button runat="server" id="btn_CerrarNoPago" class="btn btn-danger" Text="Cerrar" data-dismiss="modal"  style="height:30px; width:80px;" />--%>
+                                           <asp:LinkButton id="btn_CerrarNoPago" runat="server" class="btn botones">
+                                                                <span>
+                                                                    <img class="btn-cancelar"/>
+                                                                    Cerrar
+                                                                </span>
+                                           </asp:LinkButton>
                                       </div>
                                    </ContentTemplate>
                                 </asp:UpdatePanel>
@@ -745,7 +686,7 @@
                       </div> 
                     <%-- fin de modal--%>
 
-      </div>
+      
 
 </asp:Content>
 
