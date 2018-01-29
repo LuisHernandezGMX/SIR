@@ -246,6 +246,45 @@ Partial Class Recordatorios_ConsultaFacultativos
     End Sub
 
     Private Sub btn_PolDescart_Click(sender As Object, e As EventArgs) Handles btn_PolDescart.Click
+        CargaDescartadas()
         Funciones.AbrirModal("#DescartadasModal")
+
+    End Sub
+
+    Private Sub btn_QuitarNoPago_Click(sender As Object, e As EventArgs) Handles btn_QuitarNoPago.Click
+        Dim ws_gmx As New ws_RecSiniestros.RecSiniestrosClient
+
+        If gvd_Descartadas.Rows.Count > 0 Then
+            For Each row In gvd_Descartadas.Rows
+                Dim Elemento = DirectCast(row.FindControl("chk_SelPol"), CheckBox)
+
+                If Elemento.Checked = True Then
+                    Dim Ident = DirectCast(row.FindControl("hid_idpv"), HiddenField)
+                    ws_gmx.EliminaPolNoAC(Ident.Value, Cons.Recordatorio.Siniestros)
+                    CargaDescartadas()
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub CargaDescartadas()
+        Dim ws_gmx As New ws_RecSiniestros.RecSiniestrosClient
+        Try
+            Dim Resultado As New DataTable
+
+            Resultado = Funciones.Lista_A_Datatable(ws_gmx.ObtienePolNoAC(Cons.Recordatorio.Siniestros).ToList)
+            If Resultado.Rows.Count > 0 Then
+                gvd_Descartadas.DataSource = Resultado
+                gvd_Descartadas.DataBind()
+            Else
+                Mensaje.MuestraMensaje("Busqueda", "No se encontraron registros con los criterios seleccionados", Mensaje.TipoMsg.Advertencia)
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Ocurrio un error", ex.Message, Mensaje.TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_CerrarNoPago_Click(sender As Object, e As EventArgs) Handles btn_CerrarNoPago.Click
+        Funciones.CerrarModal("#DescartadasModal")
     End Sub
 End Class
