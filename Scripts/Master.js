@@ -176,43 +176,49 @@ function PageLoadMaster() {
 
 //Ventana de Mensajes
 function fn_MuestraMensaje(Titulo, Mensaje, Tipo, boton) {
+    var lbl_TituloMensaje = document.getElementById('lbl_TituloMensaje');
 
-    document.getElementById('lbl_TituloMensaje').innerHTML = Titulo;
-    document.getElementById('lbl_Mensaje').innerHTML = Mensaje;
+    if (lbl_TituloMensaje != undefined) {
+        document.getElementById('lbl_TituloMensaje').innerHTML = Titulo;
+        document.getElementById('lbl_Mensaje').innerHTML = Mensaje;
 
-    document.getElementById('img_advertencia').style.display = 'none';
-    document.getElementById('img_confirma').style.display = 'none';
-    document.getElementById('img_error').style.display = 'none';
-    document.getElementById('img_pregunta').style.display = 'none';
+        document.getElementById('img_advertencia').style.display = 'none';
+        document.getElementById('img_confirma').style.display = 'none';
+        document.getElementById('img_error').style.display = 'none';
+        document.getElementById('img_pregunta').style.display = 'none';
 
-    document.getElementById('btn_Si').style.display = 'none';
-    document.getElementById('btn_No').style.display = 'none';
+        document.getElementById('btn_Si').style.display = 'none';
+        document.getElementById('btn_No').style.display = 'none';
 
-    //Almacena el control que desplego el Mensaje de Confirmación
-    if (boton != undefined) {
-        document.getElementById('hid_ControlASP').value = boton;
+        //Almacena el control que desplego el Mensaje de Confirmación
+        if (boton != undefined) {
+            document.getElementById('hid_ControlASP').value = boton;
+        }
+
+        //Evalua el tipo de Mensaje
+        switch (Tipo) {
+            case 0:
+                document.getElementById('img_advertencia').style.display = 'block';
+                break;
+            case 1:
+                document.getElementById('img_confirma').style.display = 'block';
+                break;
+            case 2:
+                document.getElementById('img_error').style.display = 'block';
+                break;
+            case 3:
+                document.getElementById('img_pregunta').style.display = 'block';
+                document.getElementById('btn_Si').style.display = 'inline-block';
+                document.getElementById('btn_No').style.display = 'inline-block';
+                break;
+        }
+
+        fn_AbrirModal('#Mensajes');
+        //$('#Mensajes').draggable();
     }
-
-    //Evalua el tipo de Mensaje
-    switch (Tipo) {
-        case 0:
-            document.getElementById('img_advertencia').style.display = 'block';
-            break;
-        case 1:
-            document.getElementById('img_confirma').style.display = 'block';
-            break;
-        case 2:
-            document.getElementById('img_error').style.display = 'block';
-            break;
-        case 3:
-            document.getElementById('img_pregunta').style.display = 'block';
-            document.getElementById('btn_Si').style.display = 'inline-block';
-            document.getElementById('btn_No').style.display = 'inline-block';
-            break;
+    else {
+        alert(Mensaje);
     }
-
-    fn_AbrirModal('#Mensajes');
-    //$('#Mensajes').draggable();
 }
 
 //Respuesta del Usuario en Mensaje de Confirmación
@@ -246,7 +252,7 @@ function fn_CargaCatalogo(Catalogo, Condicion, Seleccion, Tipo, Control, Titulo)
                 $("[id*=gvd_Catalogo] tr").not($("[id*=gvd_Catalogo] tr:first")).remove();
                 for (var i = 0; i < response.d.length; i++) {
                     $("[id*=gvd_Catalogo]").append('<tr>' +
-                                                        '<td><input type="checkbox" id="chk_Cat" class="Select" onclick="fn_CambioSeleccion(this,' + "'" + Tipo + "'" + ')" /></td>' +
+                                                        '<td><input type="checkbox" id="chk_Cat" class="Select" onclick="fn_CambioSeleccion(' + "'gvd_Catalogo'" + ',this,' + "'" + Tipo + "','chk_Cat'" + ')" /></td>' +
                                                         '<td><label id="lbl_ClaveCat" class="texto-catalogo" style="Width:75px;">' + response.d[i].Clave + '</label></td>' +
                                                         '<td><label id="lbl_DesCat" class="texto-catalogo" style="Width:205px;">' + response.d[i].Descripcion + '</label></td>' +
                                                         '<td><label id="lbl_Oculta1" style="display:none;">' + response.d[i].OcultaCampo1 + '</label></td>' +
@@ -323,28 +329,36 @@ function fn_Autocompletar(Catalogo, ControlClave, ControlBusqueda, Condicion, mi
     });
 }
 
+//Funcion para Seleccionar o Deseleccionar todos los elementos
+function fn_SeleccionTodos(ControlGrid, chkControlAll, chkControl) {
+
+    var controles = $("[id*=" + ControlGrid + "]").find("[id*=" + chkControl + "]");
+    for (i = 0 ; i < controles.length ; i++) {
+        if (controles[i].isDisabled == false) {
+            controles[i].checked = chkControlAll.checked;
+        }
+    }
+}
+
 
 //Cambio de selección de elemento en Catalogo
-function fn_CambioSeleccion(Control, TipoSeleccion) {
+function fn_CambioSeleccion(ControlGrid, Control, TipoSeleccion, chkControl) {
     //Get target base & child control.
 
     var row = $(Control).closest("tr");
 
-    var Gread = document.getElementById($('[id$=gvd_Catalogo]')[0].id)
+    var Grid = document.getElementById($('[id$=' + ControlGrid + ']')[0].id)
 
     //Evalua el tipo de seleccion
     if (TipoSeleccion == "Unica") {
-        fn_SeleccionGread(Gread, false)
-        fn_SeleccionarElemento(row[0].rowIndex)
+        fn_SeleccionGread(Grid, false, chkControl)
+        fn_SeleccionarElemento(ControlGrid, row[0].rowIndex)
     }
     return false;
 }
 
 
-function fn_SeleccionGread(Control, Valor) {
-    //Get target base & child control.
-    var TargetChildControl = "chk_Cat";
-
+function fn_SeleccionGread(Control, Valor, TargetChildControl) {
     if (Control == null) {
         fn_MuestraMensaje('no hay elementos', e.responseText, 2);
     }
@@ -356,19 +370,28 @@ function fn_SeleccionGread(Control, Valor) {
         //Checked/Unchecked all the checkBoxes in side the GridView.
         for (var n = 0; n < Inputs.length; ++n)
             if (Inputs[n].type == 'checkbox' && Inputs[n].id.indexOf(TargetChildControl, 0) >= 0)
-                Inputs[n].checked = Valor;
+                if (Inputs[n].disabled == false) {
+                    Inputs[n].checked = Valor;
+                }
     }
     return false;
 }
 
 
 //Selecciona solo un elemento en caso de ser seleccion Unica
-function fn_SeleccionarElemento(rowIndex) {
-    $("[id*=gvd_Catalogo] tr").each(function (e) {
+function fn_SeleccionarElemento(ControlGrid,rowIndex) {
+    $("[id*=" + ControlGrid + "] tr").each(function (e) {
         var row = $(this).closest("tr");
         if (row[0].rowIndex == rowIndex) {
             var Select = row.find('.Select');
-            $(Select)[0].checked = true;
+            if (Select.length > 0) {
+                if ($(Select)[0].checked != undefined) {
+                    $(Select)[0].checked = true;
+                }
+                else {
+                    $(Select)[0].childNodes[0].checked = true;
+                }
+            }
         }
     })
     return false;
