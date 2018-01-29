@@ -133,6 +133,40 @@ Public Class ConsultaBD
 
     <WebMethod()>
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function GetSucursal(ByVal Id As Integer) As String
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim dtResult As New DataTable
+        Dim Salida As String = vbNullString
+        Try
+            dtResult = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo("Suc", "AND cod_suc=" & Id.ToString(), "").ToList)
+            If Not dtResult Is Nothing Then
+                Salida = dtResult.Rows(0).ItemArray(2).ToString
+            End If
+        Catch ex As Exception
+            Salida = vbNullString
+        End Try
+        Return Salida
+    End Function
+
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function GetAgente(ByVal Id As Integer, ByVal Tipo As Integer) As String
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim dtResult As New DataTable
+        Dim Salida As String = vbNullString
+        Try
+            dtResult = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo("Age", "AND cod_agente=" & Id.ToString(), " AND cod_tipo_agente = " & Tipo.ToString).ToList)
+            If Not dtResult Is Nothing And dtResult.Rows.Count > 0 Then
+                Salida = dtResult.Rows(0).ItemArray(2).ToString
+            End If
+        Catch ex As Exception
+            Salida = vbNullString
+        End Try
+        Return Salida
+    End Function
+
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
     Public Function GetProducto(ByVal Id As Integer) As String
         Dim ws As New ws_Generales.GeneralesClient
         Dim dtResult As New DataTable

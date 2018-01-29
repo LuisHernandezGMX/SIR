@@ -10,8 +10,8 @@
         border-color:rgba(0,0,0,.2);
         z-index:100;
         width:980px;
-        background-color: rgb(255, 255, 255); 
-        position:fixed;
+        /*background-color: rgb(255, 255, 255); 
+        position:fixed;*/
     }
 
     .tab-content{
@@ -38,8 +38,8 @@
         border-color:rgba(0,0,0,.2);
         z-index:100;
         width:1200px;
-        background-color: rgb(255, 255, 255); 
-        position:fixed;
+        /*background-color: rgb(255, 255, 255);*/ 
+        /*position:fixed;*/
     }
 
     .tab-content{

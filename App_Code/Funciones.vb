@@ -96,6 +96,31 @@ Public Class Funciones
         End Try
     End Sub
 
+    Public Shared Sub LlenaDDL(DDL As DropDownList, ByRef dtDatos As DataTable,
+                                  Optional DataValue As String = "Clave", Optional DataText As String = "Descripcion", Optional SelCurrent As Integer = 0,
+                                  Optional optTodas As Boolean = True)
+        Try
+
+            DDL.DataValueField = DataValue
+            DDL.DataTextField = DataText
+            DDL.DataSource = dtDatos
+            DDL.DataBind()
+
+            If optTodas = True Then
+                Dim opcion As ListItem
+                opcion = New ListItem(". . .", "-1")
+                DDL.Items.Add(opcion)
+            End If
+
+            If SelCurrent <> 0 Then
+                DDL.SelectedValue = SelCurrent
+            End If
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Carga DDL", "Ocurrio un Error llenar DDL", TipoMsg.Falla)
+        End Try
+    End Sub
+
     Public Shared Sub LlenaGrid(ByRef gvd_Control As GridView, ByRef dtDatos As DataTable)
         gvd_Control.DataSource = dtDatos
         gvd_Control.DataBind()

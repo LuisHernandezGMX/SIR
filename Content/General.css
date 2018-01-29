@@ -311,6 +311,22 @@ font-weight:bold;
 text-align:left;
 }
 
+.cuadro-titulo-flotante{
+width:100%;
+padding-right:10px;
+padding-top:5px;
+padding-left:15px;
+border-bottom-style:inset;
+border-width:2px;
+border-color:red;
+text-align:center;
+background-color:#3B6882;
+color:white;
+font-size:13px;
+font-family:Myriad Pro;
+font-weight:bold;
+text-align:left;
+}
 
 
 .panel-encabezado{
@@ -330,6 +346,9 @@ border-radius: 20px;
 }
 .padding1 {
 	line-height: 0; padding-top: 1px; font-size: 0px;
+}
+.padding2 {
+	line-height: 0; padding-top: 2px; font-size: 0px;
 }
 .padding3 {
 	line-height: 0; padding-top: 3px; font-size: 0px;
@@ -547,7 +566,6 @@ opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px
 
 .modal-orden{
 border-radius: 11px; left: 29.5%; top: 0%; margin-left: -150px; position: fixed; z-index: 9980; background-color: rgb(255, 255, 255); 
-
 -moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
 opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; 
 }
@@ -1047,4 +1065,9 @@ box-shadow: 5px 5px 5px #aaa;
 
 .Espacio{
     padding-top:5px;
+}
+
+.Centrado{
+    align-content:center;
+    text-align:center;
 }

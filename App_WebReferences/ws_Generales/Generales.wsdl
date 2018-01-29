@@ -104,6 +104,12 @@
   <wsdl:message name="IGenerales_ObtieneParametro_OutputMessage">
     <wsdl:part name="parameters" element="tns:ObtieneParametroResponse" />
   </wsdl:message>
+  <wsdl:message name="IGenerales_ObtieneTiposdeCambio_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneTiposdeCambio" />
+  </wsdl:message>
+  <wsdl:message name="IGenerales_ObtieneTiposdeCambio_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneTiposdeCambioResponse" />
+  </wsdl:message>
   <wsdl:message name="IGenerales_ActualizaParametro_InputMessage">
     <wsdl:part name="parameters" element="tns:ActualizaParametro" />
   </wsdl:message>
@@ -174,6 +180,10 @@
     <wsdl:operation name="ObtieneParametro">
       <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/ObtieneParametro" message="tns:IGenerales_ObtieneParametro_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGenerales/ObtieneParametroResponse" message="tns:IGenerales_ObtieneParametro_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneTiposdeCambio">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/ObtieneTiposdeCambio" message="tns:IGenerales_ObtieneTiposdeCambio_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGenerales/ObtieneTiposdeCambioResponse" message="tns:IGenerales_ObtieneTiposdeCambio_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ActualizaParametro">
       <wsdl:input wsaw:Action="http://tempuri.org/IGenerales/ActualizaParametro" message="tns:IGenerales_ActualizaParametro_InputMessage" />
@@ -319,6 +329,15 @@
     </wsdl:operation>
     <wsdl:operation name="ObtieneParametro">
       <soap:operation soapAction="http://tempuri.org/IGenerales/ObtieneParametro" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneTiposdeCambio">
+      <soap:operation soapAction="http://tempuri.org/IGenerales/ObtieneTiposdeCambio" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
