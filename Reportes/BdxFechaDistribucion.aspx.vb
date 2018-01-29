@@ -80,15 +80,15 @@ Partial Class Reportes_Bdx_BdxFechaDistribucion
                         Dim RptFilters As String
                         RptFilters = "&fec_desde=" & CDate(txtFecGeneraDe.Text).ToString("yyyyMMdd")
                         RptFilters = RptFilters & "&fec_hasta=" & CDate(txtFecGeneraA.Text).ToString("yyyyMMdd")
-                        RptFilters = RptFilters & "&TipoReporte=" & ddl_tiporeporte.SelectedItem.Value
+                        RptFilters = RptFilters & "&Tipo_repo=" & ddl_tiporeporte.SelectedItem.Value
 
                         RptFilters = RptFilters & IIf(FiltroBroker <> "", "&cod_broker=" & FiltroBroker, "")
                         RptFilters = RptFilters & IIf(FiltroCia <> "", "&cod_cia=" & FiltroCia, "")
-                        RptFilters = RptFilters & IIf(ddl_TipoContrato.SelectedItem.Text <> ". . .", "&tipoContrato=" & ddl_TipoContrato.SelectedValue, "")
+                        RptFilters = RptFilters & IIf(ddl_TipoContrato.SelectedItem.Text <> ". . .", "&tipo_contrato=" & ddl_TipoContrato.SelectedValue, "")
                         RptFilters = RptFilters & "&sn_resumen=" & ddl_Agrupado.SelectedValue
                         RptFilters = RptFilters & IIf(FiltroNoStro <> "", "&nro_stro=" & FiltroNoStro, "")
                         RptFilters = RptFilters & IIf(FiltroRamC <> "", "&cod_ramo_conta=" & FiltroRamC, "")
-                        RptFilters = RptFilters & IIf(FiltroPoliza <> "", "&poliza=" & FiltroPoliza, "")
+                        RptFilters = RptFilters & IIf(FiltroPoliza <> "", "&poliza_idpv=" & FiltroPoliza, "")
                         RptFilters = RptFilters & IIf(FiltroEvento <> "", "&evento_cat=" & FiltroEvento, "")
                         RptFilters = RptFilters & IIf(FiltroAseg <> "", "&aseg=" & FiltroAseg, "")
                         RptFilters = RptFilters & IIf(FiltroCtoFinal <> "", "&contrato=" & FiltroCtoFinal, "")
@@ -99,6 +99,35 @@ Partial Class Reportes_Bdx_BdxFechaDistribucion
                         server = Replace(Replace(server, "@Reporte", "BdxMovFecDist"), "@Formato", "EXCEL")
 
                         server = server & RptFilters
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                         Funciones.EjecutaFuncion("window.open('" & server & "');")
                     Else
