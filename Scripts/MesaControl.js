@@ -2182,10 +2182,27 @@ function fn_EstadoSeleccionGrid(Grid,prefijo) {
 }
 
 
+$("body").on("focusout", "[id*=gvd_ProgramaCapas] .ValorCapa", function (e) {
+    var row = $(this).closest("tr");
+    $('[id*=txt_ValorCapaAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
+    $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
+});
 
+$("body").on("focusout", "[id*=gvd_ProgramaCapas] .ExcesoCapa", function (e) {
+    var row = $(this).closest("tr");
+    $('[id*=txt_ExcesoCapaAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
+    $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
+});
 
+$("body").on("focusout", "[id*=gvd_ProgramaCapas] .PrimaCapa", function (e) {
+    var row = $(this).closest("tr");
+    $('[id*=txt_PrimaCapaAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
+    $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
+});
 
-
+$("body").on("focusout", "[id*=gvd_ProgramaCapas] .PrcPart", function (e) {
+    $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4);
+});
 
 
 
