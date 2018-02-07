@@ -6,6 +6,9 @@ Imports System.Data.SqlClient
 Partial Class MesaControl_Gestion
     Inherits System.Web.UI.Page
 
+    Private ArrayLeft() As Boolean
+
+
     Private dtConsulta As DataTable
     Private dtConsultaMov As DataTable
 
@@ -329,6 +332,7 @@ Partial Class MesaControl_Gestion
             fn_ConsultaRiesgos(id_folio)
             fn_ConsultaGrupos(id_folio)
             fn_ConsultaReparto(id_folio)
+            fn_ConsultaProgramaCapas(id_folio)
             fn_ConsultaDistribucion(id_folio)
             fn_ConsultaIntermediario(id_folio)
             fn_ConsultaReasegurador(id_folio)
@@ -408,11 +412,29 @@ Partial Class MesaControl_Gestion
             'Llena Información de Reparto
             LlenaGridReparto(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
 
+            'Llena Información de PLOT
+            LlenaGridProgramaCapas(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+            If CType(gvd_Agrupacion.Rows(hid_IndiceGrupo.Value).FindControl("chk_NoProporcional"), CheckBox).Checked = True Then
+                btn_Capas.Attributes.Remove("disabled")
+            Else
+                btn_Capas.Attributes.Add("disabled", "true")
+            End If
+
+            Dim myRow() As Data.DataRow
+            myRow = dtAgrupacion.Select("cod_grupo = " & gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+
+            For Each item In myRow
+                div_Rangos.InnerHtml = item("html_rangos")
+                div_Capas.InnerHtml = item("html_capas")
+                div_Grafica.InnerHtml = item("html_grafica")
+            Next
+
+
             'Llena Información de Distribución
-            LlenaGridDistribucion(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+            LlenaGridDistribucion(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), 0)
 
             'Llena Información de Broker
-            LlenaGridBroker(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+            LlenaGridBroker(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), 0)
             hid_IndiceBroker.Value = IIf(gvd_Intermediario.Rows.Count > 0, 0, -1)
 
 
@@ -438,11 +460,12 @@ Partial Class MesaControl_Gestion
                 lbl_Reaseguradores.ToolTip = CType(gvd_Intermediario.Rows(hid_IndiceBroker.Value).FindControl("txt_Descripcion"), TextBox).Text
 
                 'Llena Información de Reaseguradores
-                LlenaGridReasegurador(False, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"), gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
+                LlenaGridReasegurador(False, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"), 0, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
 
                 ' Si es mediante Intermediario
                 If gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker") > 0 Then
                     LlenaGridSubjetividad(False, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"),
+                                          0,
                                           gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"), 0)
                     txt_Observaciones.Text = CType(gvd_Intermediario.Rows(hid_IndiceBroker.Value).FindControl("txt_Observaciones"), TextBox).Text
 
@@ -471,6 +494,7 @@ Partial Class MesaControl_Gestion
                         If gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker") = 0 Then
                             LlenaGridSubjetividad(False,
                                       gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"),
+                                      0,
                                       gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"),
                                       gvd_Reasegurador.DataKeys(hid_IndiceReas.Value)("cod_cia"))
 
@@ -675,33 +699,37 @@ Partial Class MesaControl_Gestion
         fn_InsertaMovimientos = False
 
         If fn_InsertaRegistros("rRMC_RiesgosMC", id_folio, fn_ObtieneDatos(dtRiesgo, {"cod_inciso", "sn_seleccionado:B", "cod_ramo", "cod_subramo", "cod_riesgo", "cod_ind_cob", "sn_facultativo:B",
-                                                                                           "sn_adicional:B", "valores_totales", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
-                                                                                           "prima_tev", "prima_rc", "prima_casco", "prima_guerra", "prc_com_age", "com_agente",
-                                                                                           "prc_com_adi_age", "com_adi_agente", "cuota", "prc_FeeGMX", "mnt_FeeGMX", "prc_ComFac", "mnt_ComFac"}, "cod_inciso > 0"), conexion, transaccion) Then
+                                                                                        "sn_adicional:B", "valores_totales", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
+                                                                                        "prima_tev", "prima_rc", "prima_casco", "prima_guerra", "prc_com_age", "com_agente",
+                                                                                        "prc_com_adi_age", "com_adi_agente", "cuota", "prc_FeeGMX", "mnt_FeeGMX", "prc_ComFac", "mnt_ComFac"}, "cod_inciso > 0"), conexion, transaccion) Then
 
-            If fn_InsertaRegistros("rGMC_GruposMC", id_folio, fn_ObtieneDatos(dtAgrupacion, {"cod_grupo", "cod_agrupador", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
-                                                                                          "prima_tev", "prima_rc", "prima_casco", "prima_guerra", "incisos:T", "ramos:T"}), conexion, transaccion) Then
+            If fn_InsertaRegistros("rGMC_GruposMC", id_folio, fn_ObtieneDatos(dtAgrupacion, {"cod_grupo", "cod_agrupador", "sn_no_proporcional:B", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
+                                                                                          "prima_tev", "prima_rc", "prima_casco", "prima_guerra", "incisos:T", "ramos:T", "html_rangos:T", "html_capas:T", "html_grafica:T"}), conexion, transaccion) Then
 
-                If fn_InsertaRegistros("rRMC_RepartoMC", id_folio, fn_ObtieneDatos(dtReparto, {"cod_grupo", "cod_reparto", "sn_lider:B", "prc_part", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
-                                                                                            "prima_tev", "prima_rc", "prima_casco", "prima_guerra"}, "cod_grupo > 0 AND cod_reparto > -1"), conexion, transaccion) Then
+                If fn_InsertaRegistros("rCMC_ProgramaCapasMC", id_folio, fn_ObtieneDatos(dtProgramaCapas, {"cod_grupo", "cod_capa", "valor_capa", "exceso_capa", "prima_capa", "prc_part"}, "cod_grupo > 0"), conexion, transaccion) Then
 
-                    If fn_InsertaRegistros("rDMC_DistribucionMC", id_folio, fn_ObtieneDatos(dtDistribucion, {"cod_grupo", "cod_distribucion", "prc_part", "prc_partGMX", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
-                                                                                                          "prima_tev", "prima_rc", "prima_casco", "prima_guerra"}, "cod_grupo > 0"), conexion, transaccion) Then
+                    If fn_InsertaRegistros("rRMC_RepartoMC", id_folio, fn_ObtieneDatos(dtReparto, {"cod_grupo", "cod_reparto", "sn_lider:B", "prc_part", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
+                                                                                               "prima_tev", "prima_rc", "prima_casco", "prima_guerra"}, "cod_grupo > 0 AND cod_reparto > -1"), conexion, transaccion) Then
 
-                        If fn_InsertaRegistros("rBMC_BrokersMC", id_folio, fn_ObtieneDatos(dtBroker, {"cod_grupo", "cod_broker", "prc_partCoas", "prc_part", "suma_asegurada", "prima_neta", "prc_com", "comision", "pnr",
+
+                        If fn_InsertaRegistros("rDMC_DistribucionMC", id_folio, fn_ObtieneDatos(dtDistribucion, {"cod_grupo", "cod_capa", "cod_distribucion", "prc_part", "prc_partGMX", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
+                                                                                                             "prima_tev", "prima_rc", "prima_casco", "prima_guerra"}, "cod_grupo > 0"), conexion, transaccion) Then
+
+                            If fn_InsertaRegistros("rBMC_BrokersMC", id_folio, fn_ObtieneDatos(dtBroker, {"cod_grupo", "cod_capa", "cod_broker", "prc_partCoas", "prc_part", "suma_asegurada", "prima_neta", "prc_com", "comision", "pnr",
                                                                                                    "prima_inc", "prc_com_inc", "com_inc", "pnr_inc", "prima_fhm", "prc_com_fhm", "com_fhm", "pnr_fhm",
                                                                                                    "prima_tev", "prc_com_tev", "com_tev", "pnr_tev", "prima_rc", "prc_com_rc", "com_rc", "pnr_rc", "prima_casco",
                                                                                                    "prc_com_casco", "com_casco", "pnr_casco", "prima_guerra", "prc_com_guerra", "com_guerra", "pnr_guerra", "prc_corretaje", "corretaje",
                                                                                                    "estatus", "observaciones:T"}), conexion, transaccion) Then
 
-                            If fn_InsertaRegistros("rRMC_ReaseguradoresMC", id_folio, fn_ObtieneDatos(dtReasegurador, {"cod_grupo", "cod_broker", "cod_cia", "prc_part100", "prc_part", "suma_asegurada", "prima_neta", "prc_com", "comision", "pnr",
+                                If fn_InsertaRegistros("rRMC_ReaseguradoresMC", id_folio, fn_ObtieneDatos(dtReasegurador, {"cod_grupo", "cod_capa", "cod_broker", "cod_cia", "prc_part100", "prc_part", "suma_asegurada", "prima_neta", "prc_com", "comision", "pnr",
                                                                                                                     "prima_inc", "prc_com_inc", "com_inc", "pnr_inc", "prima_fhm", "prc_com_fhm", "com_fhm", "pnr_fhm",
                                                                                                                     "prima_tev", "prc_com_tev", "com_tev", "pnr_tev", "prima_rc", "prc_com_rc", "com_rc", "pnr_rc", "prima_casco",
                                                                                                                     "prc_com_casco", "com_casco", "pnr_casco", "prima_guerra", "prc_com_guerra", "com_guerra", "pnr_guerra",
                                                                                                                     "estatus", "observaciones:T"}), conexion, transaccion) Then
 
-                                If fn_InsertaRegistros("rSMC_SubjetividadMC", id_folio, fn_ObtieneDatos(dtSubjetividad, {"cod_grupo", "cod_broker", "cod_cia", "num", "Fecha:F", "FechaReal:F", "Subjetividad:T", "sn_Subjetividad:B"}), conexion, transaccion) Then
-                                    fn_InsertaMovimientos = True
+                                    If fn_InsertaRegistros("rSMC_SubjetividadMC", id_folio, fn_ObtieneDatos(dtSubjetividad, {"cod_grupo", "cod_capa", "cod_broker", "cod_cia", "num", "Fecha:F", "FechaReal:F", "Subjetividad:T", "sn_Subjetividad:B"}), conexion, transaccion) Then
+                                        fn_InsertaMovimientos = True
+                                    End If
                                 End If
                             End If
                         End If
@@ -756,9 +784,9 @@ Partial Class MesaControl_Gestion
         LlenaGridProgramaCapas(True, 0)
         LlenaGridCapas(True, 0)
         LlenaGridDistribucion(True, 0)
-        LlenaGridBroker(True)
-        LlenaGridReasegurador(True)
-        LlenaGridSubjetividad(True, 0, 0)
+        LlenaGridBroker(True, 0, 0)
+        LlenaGridReasegurador(True, 0, 0, 0)
+        LlenaGridSubjetividad(True, 0, 0, 0, 0)
         LlenaGridIncisos(True)
 
         Master.mtx_Oferta.Text = vbNullString
@@ -856,6 +884,10 @@ Partial Class MesaControl_Gestion
 
         ddl_Subramo.DataSource = Nothing
         ddl_Subramo.DataBind()
+
+        div_Capas.InnerHtml = vbNullString
+        div_Grafica.InnerHtml = vbNullString
+        div_Rangos.InnerHtml = vbNullString
     End Sub
 
     Private Sub EdoControl(ByVal intOperacion As Integer)
@@ -936,8 +968,6 @@ Partial Class MesaControl_Gestion
                 txt_Departamento.Text = vbNullString
 
                 ddl_Avance.Enabled = False
-
-                chk_Proporcional.Enabled = False
 
                 btn_Nuevo.Visible = False
                 btn_Consultar.Visible = False
@@ -1020,8 +1050,6 @@ Partial Class MesaControl_Gestion
 
                 ddl_Avance.Enabled = True
 
-                chk_Proporcional.Enabled = True
-
                 btn_Nuevo.Visible = False
                 btn_Consultar.Visible = False
                 btn_Modificar.Visible = False
@@ -1082,23 +1110,20 @@ Partial Class MesaControl_Gestion
                 '--------------------------------------
 
                 btn_AddReparto.Attributes.Add("disabled", "true")
-                btn_AddCapa.Attributes.Add("disabled", "true")
+                'btn_AddCapa.Attributes.Add("disabled", "true")
                 btn_AddBroker.Attributes.Add("disabled", "true")
                 btn_AddCia.Attributes.Add("disabled", "true")
 
                 btn_RemoveGrupo.Attributes.Add("disabled", "true")
                 btn_RemoveReparto.Attributes.Add("disabled", "true")
-                btn_RemoveCapa.Attributes.Add("disabled", "true")
+                'btn_RemoveCapa.Attributes.Add("disabled", "true")
                 btn_RemoveBroker.Attributes.Add("disabled", "true")
                 btn_RemoveCia.Attributes.Add("disabled", "true")
                 '--------------------------------------
 
+                btn_Capas.Attributes.Add("disabled", "true")
+
                 ddl_Avance.Enabled = False
-
-                chk_Proporcional.Enabled = False
-                chk_Proporcional.Checked = False
-
-                gvd_Capas.Attributes.Add("style", "display:none")
 
                 ddl_Ramo.Enabled = False
                 ddl_Subramo.Enabled = False
@@ -1498,42 +1523,36 @@ Partial Class MesaControl_Gestion
         Dim Ramos() As String = Split(strRamos, ",")
 
         gvd_Reparto.Columns(6).Visible = IIf(Ramos.Contains(Ramo.Incendio), True, False)
-        gvd_Capas.Columns(7).Visible = IIf(Ramos.Contains(Ramo.Incendio), True, False)
         gvd_Distribucion.Columns(6).Visible = IIf(Ramos.Contains(Ramo.Incendio), True, False)
         gvd_Intermediario.Columns(7).Visible = IIf(Ramos.Contains(Ramo.Incendio), True, False)
         gvd_Reasegurador.Columns(10).Visible = IIf(Ramos.Contains(Ramo.Incendio), True, False)
         gvd_RiesgosGrupo.Columns(10).Visible = IIf(Ramos.Contains(Ramo.Incendio), True, False)
 
         gvd_Reparto.Columns(7).Visible = IIf(Ramos.Contains(Ramo.Hidro), True, False)
-        gvd_Capas.Columns(8).Visible = IIf(Ramos.Contains(Ramo.Hidro), True, False)
         gvd_Distribucion.Columns(7).Visible = IIf(Ramos.Contains(Ramo.Hidro), True, False)
         gvd_Intermediario.Columns(8).Visible = IIf(Ramos.Contains(Ramo.Hidro), True, False)
         gvd_Reasegurador.Columns(11).Visible = IIf(Ramos.Contains(Ramo.Hidro), True, False)
         gvd_RiesgosGrupo.Columns(11).Visible = IIf(Ramos.Contains(Ramo.Hidro), True, False)
 
         gvd_Reparto.Columns(8).Visible = IIf(Ramos.Contains(Ramo.Terremoto), True, False)
-        gvd_Capas.Columns(9).Visible = IIf(Ramos.Contains(Ramo.Terremoto), True, False)
         gvd_Distribucion.Columns(8).Visible = IIf(Ramos.Contains(Ramo.Terremoto), True, False)
         gvd_Intermediario.Columns(9).Visible = IIf(Ramos.Contains(Ramo.Terremoto), True, False)
         gvd_Reasegurador.Columns(12).Visible = IIf(Ramos.Contains(Ramo.Terremoto), True, False)
         gvd_RiesgosGrupo.Columns(12).Visible = IIf(Ramos.Contains(Ramo.Terremoto), True, False)
 
         gvd_Reparto.Columns(9).Visible = IIf(Ramos.Contains(Ramo.RCAviones), True, False)
-        gvd_Capas.Columns(10).Visible = IIf(Ramos.Contains(Ramo.RCAviones), True, False)
         gvd_Distribucion.Columns(9).Visible = IIf(Ramos.Contains(Ramo.RCAviones), True, False)
         gvd_Intermediario.Columns(10).Visible = IIf(Ramos.Contains(Ramo.RCAviones), True, False)
         gvd_Reasegurador.Columns(13).Visible = IIf(Ramos.Contains(Ramo.RCAviones), True, False)
         gvd_RiesgosGrupo.Columns(13).Visible = IIf(Ramos.Contains(Ramo.RCAviones), True, False)
 
         gvd_Reparto.Columns(10).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
-        gvd_Capas.Columns(11).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
         gvd_Distribucion.Columns(10).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
         gvd_Intermediario.Columns(11).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
         gvd_Reasegurador.Columns(14).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
         gvd_RiesgosGrupo.Columns(14).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
 
         gvd_Reparto.Columns(11).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
-        gvd_Capas.Columns(12).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
         gvd_Distribucion.Columns(11).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
         gvd_Intermediario.Columns(12).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
         gvd_Reasegurador.Columns(15).Visible = IIf(Ramos.Contains(Ramo.CascosAereos), True, False)
@@ -1598,9 +1617,9 @@ Partial Class MesaControl_Gestion
             fn_ConsultaGrupos = True
 
             For Each row In dtConsultaMov.Rows
-                dtAgrupacion.Rows.Add(row("cod_grupo"), row("cod_agrupador"), row("Descripcion"), row("suma_asegurada"), row("prima_neta"),
+                dtAgrupacion.Rows.Add(row("cod_grupo"), row("cod_agrupador"), row("Descripcion"), row("sn_no_proporcional"), row("suma_asegurada"), row("prima_neta"),
                                       row("prima_inc"), row("prima_fhm"), row("prima_tev"), row("prima_rc"), row("prima_casco"),
-                                      row("prima_guerra"), row("incisos"), row("ramos"))
+                                      row("prima_guerra"), row("incisos"), row("ramos"), row("html_rangos"), row("html_capas"), row("html_grafica"))
             Next
         End If
     End Function
@@ -1623,6 +1642,22 @@ Partial Class MesaControl_Gestion
         End If
     End Function
 
+    Private Function fn_ConsultaProgramaCapas(ByVal id_folio As Integer) As Boolean
+        fn_ConsultaProgramaCapas = False
+
+        Dim ws As New ws_MesaControl.MesaControlClient
+        dtConsultaMov = New DataTable
+        dtConsultaMov = Funciones.Lista_A_Datatable(ws.ObtieneProgramaCapas(id_folio).ToList)
+
+        If dtConsultaMov.Rows.Count > 0 Then
+            fn_ConsultaProgramaCapas = True
+
+            For Each row In dtConsultaMov.Rows
+                dtProgramaCapas.Rows.Add(row("cod_grupo"), row("cod_capa"), row("valor_capa"), row("exceso_capa"), row("prima_capa"), row("prc_part"))
+            Next
+        End If
+    End Function
+
     Private Function fn_ConsultaDistribucion(ByVal id_folio As Integer) As Boolean
         fn_ConsultaDistribucion = False
 
@@ -1634,7 +1669,7 @@ Partial Class MesaControl_Gestion
             fn_ConsultaDistribucion = True
 
             For Each row In dtConsultaMov.Rows
-                dtDistribucion.Rows.Add(row("cod_grupo"), row("cod_distribucion"), row("Descripcion"), row("prc_part"), row("prc_partGMX"),
+                dtDistribucion.Rows.Add(row("cod_grupo"), row("cod_capa"), row("cod_distribucion"), row("Descripcion"), row("prc_part"), row("prc_partGMX"),
                                         row("suma_asegurada"), row("prima_neta"), row("prima_inc"), row("prima_fhm"), row("prima_tev"),
                                         row("prima_rc"), row("prima_casco"), row("prima_guerra"))
             Next
@@ -1652,7 +1687,7 @@ Partial Class MesaControl_Gestion
             fn_ConsultaIntermediario = True
 
             For Each row In dtConsultaMov.Rows
-                dtBroker.Rows.Add(row("cod_grupo"), row("cod_broker"), row("Descripcion"), row("prc_partCoas"), row("prc_part"),
+                dtBroker.Rows.Add(row("cod_grupo"), row("cod_capa"), row("cod_broker"), row("Descripcion"), row("prc_partCoas"), row("prc_part"),
                                   row("suma_asegurada"), row("prima_neta"), row("prc_com"), row("comision"), row("pnr"),
                                   row("prima_inc"), row("prc_com_inc"), row("com_inc"), row("pnr_inc"),
                                   row("prima_fhm"), row("prc_com_fhm"), row("com_fhm"), row("pnr_fhm"),
@@ -1676,7 +1711,7 @@ Partial Class MesaControl_Gestion
             fn_ConsultaReasegurador = True
 
             For Each row In dtConsultaMov.Rows
-                dtReasegurador.Rows.Add(row("cod_grupo"), row("cod_broker"), row("cod_cia"), row("Descripcion"),
+                dtReasegurador.Rows.Add(row("cod_grupo"), row("cod_capa"), row("cod_broker"), row("cod_cia"), row("Descripcion"),
                                         row("cod_naic"), row("calif"), row("age_Calif"), row("prc_part100"), row("prc_part"),
                                         row("suma_asegurada"), row("prima_neta"), row("prc_com"), row("comision"), row("pnr"),
                                         row("prima_inc"), row("prc_com_inc"), row("com_inc"), row("pnr_inc"),
@@ -1701,7 +1736,7 @@ Partial Class MesaControl_Gestion
             fn_ConsultaSubjetividad = True
 
             For Each row In dtConsultaMov.Rows
-                dtSubjetividad.Rows.Add(row("cod_grupo"), row("cod_broker"), row("cod_cia"), row("Num"), row("Fecha"), row("FechaReal"),
+                dtSubjetividad.Rows.Add(row("cod_grupo"), row("cod_capa"), row("cod_broker"), row("cod_cia"), row("Num"), row("Fecha"), row("FechaReal"),
                                         row("Subjetividad"), row("sn_Subjetividad"))
             Next
         End If
@@ -1714,6 +1749,7 @@ Partial Class MesaControl_Gestion
             dtAgrupacion.Columns.Add("cod_grupo")
             dtAgrupacion.Columns.Add("cod_agrupador")
             dtAgrupacion.Columns.Add("Descripcion")
+            dtAgrupacion.Columns.Add("sn_no_proporcional")
             dtAgrupacion.Columns.Add("suma_asegurada", GetType(Decimal))
             dtAgrupacion.Columns.Add("prima_neta", GetType(Decimal))
             dtAgrupacion.Columns.Add("prima_inc", GetType(Decimal))
@@ -1724,6 +1760,9 @@ Partial Class MesaControl_Gestion
             dtAgrupacion.Columns.Add("prima_guerra", GetType(Decimal))
             dtAgrupacion.Columns.Add("incisos")
             dtAgrupacion.Columns.Add("ramos")
+            dtAgrupacion.Columns.Add("html_rangos")
+            dtAgrupacion.Columns.Add("html_capas")
+            dtAgrupacion.Columns.Add("html_grafica")
         End If
 
         Funciones.LlenaGrid(gvd_Agrupacion, dtAgrupacion)
@@ -1792,15 +1831,16 @@ Partial Class MesaControl_Gestion
             dtProgramaCapas.Columns.Add("cod_capa", GetType(Integer))
             dtProgramaCapas.Columns.Add("valor_capa", GetType(Decimal))
             dtProgramaCapas.Columns.Add("exceso_capa", GetType(Decimal))
+            dtProgramaCapas.Columns.Add("prima_capa", GetType(Decimal))
             dtProgramaCapas.Columns.Add("prc_part", GetType(Decimal))
 
-            dtProgramaCapas.Rows.Add(0, 1, 100000000, 0, 77)
-            dtProgramaCapas.Rows.Add(0, 2, 250000000, 0, 23)
-            dtProgramaCapas.Rows.Add(0, 3, 150000000, 100000000, 42)
-            dtProgramaCapas.Rows.Add(0, 4, 250000000, 250000000, 65)
-            dtProgramaCapas.Rows.Add(0, 5, 400000000, 100000000, 35)
-            dtProgramaCapas.Rows.Add(0, 6, 1500000000, 500000000, 100)
-            dtProgramaCapas.Rows.Add(0, 7, 1550000000, 2000000000, 100)
+            'dtProgramaCapas.Rows.Add(1, 1, 100000000, 0, 63869093.77, 77)
+            'dtProgramaCapas.Rows.Add(1, 2, 250000000, 0, 18251926.05, 23)
+            'dtProgramaCapas.Rows.Add(1, 3, 150000000, 100000000, 4761372.01, 42)
+            'dtProgramaCapas.Rows.Add(1, 4, 250000000, 250000000, 7659609.23, 65)
+            'dtProgramaCapas.Rows.Add(1, 5, 400000000, 100000000, 7259009.23, 35)
+            'dtProgramaCapas.Rows.Add(1, 6, 1500000000, 500000000, 16536338.74, 100)
+            'dtProgramaCapas.Rows.Add(1, 7, 1550000000, 2000000000, 9172033.51, 100)
         End If
 
         Dim qry = From c In dtProgramaCapas.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo Select c
@@ -1809,6 +1849,10 @@ Partial Class MesaControl_Gestion
             Funciones.LlenaGrid(gvd_ProgramaCapas, qry.CopyToDataTable())
         Else
             Funciones.LlenaGrid(gvd_ProgramaCapas, Nothing)
+            Funciones.LlenaGrid(gvd_Capas, Nothing)
+            div_Grafica.InnerHtml = vbNullString
+            div_Rangos.InnerHtml = vbNullString
+            div_Capas.InnerHtml = vbNullString
         End If
     End Sub
 
@@ -1817,26 +1861,9 @@ Partial Class MesaControl_Gestion
             dtCapas = New DataTable
             dtCapas.Columns.Add("cod_grupo", GetType(Integer))
             dtCapas.Columns.Add("cod_capa", GetType(Integer))
-            dtCapas.Columns.Add("prc_part_ret", GetType(Decimal))
+            dtCapas.Columns.Add("valor_capa", GetType(Decimal))
+            dtCapas.Columns.Add("prima_capa", GetType(Decimal))
             dtCapas.Columns.Add("prc_part", GetType(Decimal))
-            dtCapas.Columns.Add("prc_partGMX_ret", GetType(Decimal))
-            dtCapas.Columns.Add("prc_partGMX", GetType(Decimal))
-            dtCapas.Columns.Add("suma_asegurada_ret", GetType(Decimal))
-            dtCapas.Columns.Add("suma_asegurada", GetType(Decimal))
-            dtCapas.Columns.Add("prima_neta_ret", GetType(Decimal))
-            dtCapas.Columns.Add("prima_neta", GetType(Decimal))
-            dtCapas.Columns.Add("prima_inc_ret", GetType(Decimal))
-            dtCapas.Columns.Add("prima_inc", GetType(Decimal))
-            dtCapas.Columns.Add("prima_fhm_ret", GetType(Decimal))
-            dtCapas.Columns.Add("prima_fhm", GetType(Decimal))
-            dtCapas.Columns.Add("prima_tev_ret", GetType(Decimal))
-            dtCapas.Columns.Add("prima_tev", GetType(Decimal))
-            dtCapas.Columns.Add("prima_rc_ret", GetType(Decimal))
-            dtCapas.Columns.Add("prima_rc", GetType(Decimal))
-            dtCapas.Columns.Add("prima_casco_ret", GetType(Decimal))
-            dtCapas.Columns.Add("prima_casco", GetType(Decimal))
-            dtCapas.Columns.Add("prima_guerra_ret", GetType(Decimal))
-            dtCapas.Columns.Add("prima_guerra", GetType(Decimal))
         End If
 
         Dim qry = From c In dtCapas.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo Select c
@@ -1847,50 +1874,13 @@ Partial Class MesaControl_Gestion
             Funciones.LlenaGrid(gvd_Capas, Nothing)
         End If
 
-        Dim EstiloRetencion As String = "background-color: White;color: #3B6882;"
-        Dim EstiloFacultativo As String = "background-color: lightblue;color: #3B6882;"
-        For Each row In gvd_Capas.Rows
-            CType(row.FindControl("txt_Capa"), TextBox).Attributes("style") = "background-color: #3B6882;color: White;"
-
-            CType(row.FindControl("txt_Retencion"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_Facultativo"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_PrcPartRET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_PrcPart"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_PrcPartGMXRET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_PrcPartGMX"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_LimRespRET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_LimResp"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_PrimaNetaRET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_PrimaNeta"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_PrimaINCRET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_PrimaINC"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_PrimaFHMRET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_PrimaFHM"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_PrimaTEVRET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_PrimaTEV"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_PrimaRCRET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_PrimaRC"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_PrimaCSCRET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_PrimaCSC"), TextBox).Attributes("style") = EstiloFacultativo
-
-            CType(row.FindControl("txt_PrimaGRARET"), TextBox).Attributes("style") = EstiloRetencion
-            CType(row.FindControl("txt_PrimaGRA"), TextBox).Attributes("style") = EstiloFacultativo
-        Next
     End Sub
 
-    Private Sub LlenaGridDistribucion(ByVal bln_Nuevo As Boolean, Optional ByVal Grupo As Integer = 0)
+    Private Sub LlenaGridDistribucion(ByVal bln_Nuevo As Boolean, Optional ByVal Grupo As Integer = 0, Optional ByVal cod_capa As Integer = 0)
         If bln_Nuevo = True Then
             dtDistribucion = New DataTable
             dtDistribucion.Columns.Add("cod_grupo", GetType(Integer))
+            dtDistribucion.Columns.Add("cod_capa", GetType(Integer))
             dtDistribucion.Columns.Add("cod_distribucion", GetType(Integer))
             dtDistribucion.Columns.Add("Descripcion")
             dtDistribucion.Columns.Add("prc_part", GetType(Decimal))
@@ -1912,13 +1902,13 @@ Partial Class MesaControl_Gestion
             dtConsulta = Funciones.Lista_A_Datatable(ws.ObtieneDistribucion(0).ToList)
 
             For Each row In dtConsulta.Rows
-                dtDistribucion.Rows.Add(Grupo, row("cod_distribucion"), row("Descripcion"), row("prc_part"), row("prc_partGMX"),
+                dtDistribucion.Rows.Add(Grupo, row("cod_capa"), row("cod_distribucion"), row("Descripcion"), row("prc_part"), row("prc_partGMX"),
                                         row("suma_asegurada"), row("prima_neta"), row("prima_inc"), row("prima_fhm"), row("prima_tev"),
                                         row("prima_rc"), row("prima_casco"), row("prima_guerra"))
             Next
         End If
 
-        Funciones.LlenaGrid(gvd_Distribucion, (From c In dtDistribucion.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo Select c).CopyToDataTable)
+        Funciones.LlenaGrid(gvd_Distribucion, (From c In dtDistribucion.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo And c.Field(Of Integer)("cod_capa") = cod_capa Select c).CopyToDataTable)
 
         For Each row In gvd_Distribucion.Rows
             CType(row.FindControl("txt_Descripcion"), TextBox).Attributes("style") = "background-color: #3B6882;color: White;"
@@ -1943,11 +1933,12 @@ Partial Class MesaControl_Gestion
         Next
     End Sub
 
-    Private Sub LlenaGridBroker(ByVal bln_Nuevo As Boolean, Optional ByVal Grupo As Integer = 0)
+    Private Sub LlenaGridBroker(ByVal bln_Nuevo As Boolean, Optional ByVal Grupo As Integer = 0, Optional ByVal cod_capa As Integer = 0)
 
         If bln_Nuevo = True Then
             dtBroker = New DataTable
             dtBroker.Columns.Add("cod_grupo", GetType(Integer))
+            dtBroker.Columns.Add("cod_capa", GetType(Integer))
             dtBroker.Columns.Add("cod_broker", GetType(Integer))
             dtBroker.Columns.Add("Descripcion")
             dtBroker.Columns.Add("prc_partCoas", GetType(Decimal))
@@ -1988,7 +1979,7 @@ Partial Class MesaControl_Gestion
         End If
 
 
-        Dim qry = From c In dtBroker.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo Select c
+        Dim qry = From c In dtBroker.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo And c.Field(Of Integer)("cod_capa") = cod_capa Select c
 
         If qry.Count > 0 Then
             Funciones.LlenaGrid(gvd_Intermediario, qry.CopyToDataTable())
@@ -2008,11 +1999,12 @@ Partial Class MesaControl_Gestion
         Next
     End Sub
 
-    Private Sub LlenaGridReasegurador(ByVal bln_Nuevo As Boolean, Optional ByVal Grupo As Integer = 0, Optional ByVal cod_broker As Integer = 0)
+    Private Sub LlenaGridReasegurador(ByVal bln_Nuevo As Boolean, Optional ByVal Grupo As Integer = 0, Optional ByVal cod_capa As Integer = 0, Optional ByVal cod_broker As Integer = 0)
 
         If bln_Nuevo = True Then
             dtReasegurador = New DataTable
             dtReasegurador.Columns.Add("cod_grupo", GetType(Integer))
+            dtReasegurador.Columns.Add("cod_capa", GetType(Integer))
             dtReasegurador.Columns.Add("cod_broker", GetType(Integer))
             dtReasegurador.Columns.Add("cod_cia", GetType(Integer))
             dtReasegurador.Columns.Add("Descripcion")
@@ -2054,7 +2046,7 @@ Partial Class MesaControl_Gestion
             dtReasegurador.Columns.Add("observaciones")
         End If
 
-        Dim qry = From c In dtReasegurador.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo And c.Field(Of Integer)("cod_broker") = cod_broker Select c
+        Dim qry = From c In dtReasegurador.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo And c.Field(Of Integer)("cod_capa") = cod_capa And c.Field(Of Integer)("cod_broker") = cod_broker Select c
 
         If qry.Count > 0 Then
             Funciones.LlenaGrid(gvd_Reasegurador, qry.CopyToDataTable())
@@ -2083,11 +2075,12 @@ Partial Class MesaControl_Gestion
 
     End Sub
 
-    Private Sub LlenaGridSubjetividad(ByVal bln_Nuevo As Boolean, ByVal Grupo As Integer, ByVal cod_broker As Integer, Optional ByVal cod_cia As Integer = 0)
+    Private Sub LlenaGridSubjetividad(ByVal bln_Nuevo As Boolean, ByVal Grupo As Integer, ByVal cod_capa As Integer, ByVal cod_broker As Integer, Optional ByVal cod_cia As Integer = 0)
 
         If bln_Nuevo = True Then
             dtSubjetividad = New DataTable
             dtSubjetividad.Columns.Add("cod_grupo", GetType(Integer))
+            dtSubjetividad.Columns.Add("cod_capa", GetType(Integer))
             dtSubjetividad.Columns.Add("cod_broker", GetType(Decimal))
             dtSubjetividad.Columns.Add("cod_cia", GetType(Decimal))
             dtSubjetividad.Columns.Add("Num")
@@ -2097,7 +2090,7 @@ Partial Class MesaControl_Gestion
             dtSubjetividad.Columns.Add("sn_Subjetividad")
         End If
 
-        Dim qry = From c In dtSubjetividad.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo And c.Field(Of Decimal)("cod_broker") = cod_broker And c.Field(Of Decimal)("cod_cia") = cod_cia Select c
+        Dim qry = From c In dtSubjetividad.AsEnumerable() Where c.Field(Of Integer)("cod_grupo") = Grupo And c.Field(Of Integer)("cod_capa") = cod_capa And c.Field(Of Decimal)("cod_broker") = cod_broker And c.Field(Of Decimal)("cod_cia") = cod_cia Select c
 
         If qry.Count > 0 Then
             Funciones.LlenaGrid(gvd_Subjetividad, qry.CopyToDataTable())
@@ -2428,16 +2421,16 @@ Partial Class MesaControl_Gestion
                     LlenaGridReparto(False, 0)
 
                     'Llena Información de Distribución
-                    LlenaGridDistribucion(False, 0)
+                    LlenaGridDistribucion(False, 0, 0)
 
                     'Llena Información de Broker
-                    LlenaGridBroker(False, 0)
+                    LlenaGridBroker(False, 0, 0)
 
                     'Llena Información de Broker
-                    LlenaGridReasegurador(False, 0)
+                    LlenaGridReasegurador(False, 0, 0, 0)
 
                     'Llena Información de Broker
-                    LlenaGridSubjetividad(False, 0, 0)
+                    LlenaGridSubjetividad(False, 0, 0, 0, 0)
 
                     Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Subjetividad');", "CierraSubjetividad")
                     Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Comisiones')", "CierraComisiones")
@@ -2486,18 +2479,35 @@ Partial Class MesaControl_Gestion
         dtCapas.AcceptChanges()
     End Sub
 
-    Private Sub Renumera_Capa(ByVal Grupo As Integer)
+    Private Sub Renumera_Capa(ByRef dtTipoCapa As DataTable, ByVal Grupo As Integer)
         Dim Capa As Integer = 1
         Dim myRow() As Data.DataRow
         Dim strConsulta As String = vbNullString
 
-        myRow = dtCapas.Select("cod_grupo = " & Grupo)
+        myRow = dtTipoCapa.Select("cod_grupo = " & Grupo)
 
         For Each item In myRow
             item("cod_capa") = Capa
             Capa = Capa + 1
         Next
+    End Sub
 
+    Private Sub Quita_ProgramaCapa(ByVal Grupo As Integer, ByVal cod_capa As String)
+        Dim myRow() As Data.DataRow
+        Dim strConsulta As String = vbNullString
+
+        fn_ActualizaDataProgramaCapa(Grupo)
+
+        If Len(cod_capa) > 0 Then
+            strConsulta = " AND cod_capa IN (" & cod_capa & ")"
+        End If
+
+        myRow = dtProgramaCapas.Select("cod_grupo = " & Grupo & strConsulta)
+
+        For Each item In myRow
+            item.Delete()
+        Next
+        dtProgramaCapas.AcceptChanges()
     End Sub
 
     Private Sub Quita_Intermediario(ByVal Grupo As Integer, ByVal cod_brokers As String)
@@ -2525,7 +2535,7 @@ Partial Class MesaControl_Gestion
         Dim myRow() As Data.DataRow
         Dim strConsulta As String = vbNullString
 
-        fn_ActualizaDataReasegurador(Grupo, cod_brokers)
+        fn_ActualizaDataReasegurador(Grupo, 0, cod_brokers)
 
         If Len(cod_brokers) > 0 Then
             strConsulta = " AND cod_broker IN (" & cod_brokers & ")"
@@ -2550,7 +2560,7 @@ Partial Class MesaControl_Gestion
         Dim myRow() As Data.DataRow
         Dim strConsulta As String = vbNullString
 
-        fn_ActualizaDataSubjetividad(Grupo, cod_brokers, cod_cias)
+        fn_ActualizaDataSubjetividad(Grupo, 0, cod_brokers, cod_cias)
 
         If Len(cod_brokers) > 0 Then
             strConsulta = " AND cod_broker IN (" & cod_brokers & ")"
@@ -2653,6 +2663,7 @@ Partial Class MesaControl_Gestion
         For Each row In gvd_Agrupacion.Rows
             Dim txt_Incisos As TextBox = TryCast(row.FindControl("txt_Incisos"), TextBox)
             Dim txt_Ramos As TextBox = TryCast(row.FindControl("txt_Ramos"), TextBox)
+            Dim chk_NoProporcional As CheckBox = TryCast(row.FindControl("chk_NoProporcional"), CheckBox)
             Dim txt_LimResp As TextBox = TryCast(row.FindControl("txt_LimRespAux"), TextBox)
             Dim txt_PrimaNeta As TextBox = TryCast(row.FindControl("txt_PrimaNetaAux"), TextBox)
             Dim txt_PrimaINC As TextBox = TryCast(row.FindControl("txt_PrimaINCAux"), TextBox)
@@ -2668,6 +2679,7 @@ Partial Class MesaControl_Gestion
             If myRow.Length > 0 Then
                 myRow(0)("incisos") = txt_Incisos.Text
                 myRow(0)("ramos") = txt_Ramos.Text
+                myRow(0)("sn_no_proporcional") = IIf(chk_NoProporcional.Checked, 1, 0)
                 myRow(0)("suma_asegurada") = txt_LimResp.Text
                 myRow(0)("prima_neta") = txt_PrimaNeta.Text
                 myRow(0)("prima_inc") = IIf(txt_PrimaINC.Text = vbNullString, 0, txt_PrimaINC.Text)
@@ -2720,58 +2732,47 @@ Partial Class MesaControl_Gestion
         Dim myRow() As Data.DataRow
 
         For Each row In gvd_Capas.Rows
-            Dim txt_PrcPartRET As TextBox = TryCast(row.FindControl("txt_PrcPartRET"), TextBox)
+            Dim txt_ValorCapa As TextBox = TryCast(row.FindControl("txt_ValorCapaAux"), TextBox)
+            Dim txt_PrimaCapa As TextBox = TryCast(row.FindControl("txt_PrimaCapaAux"), TextBox)
             Dim txt_PrcPart As TextBox = TryCast(row.FindControl("txt_PrcPart"), TextBox)
-            Dim txt_PrcPartGMXRET As TextBox = TryCast(row.FindControl("txt_PrcPartGMXRET"), TextBox)
-            Dim txt_PrcPartGMX As TextBox = TryCast(row.FindControl("txt_PrcPartGMX"), TextBox)
-            Dim txt_LimRespRET As TextBox = TryCast(row.FindControl("txt_LimRespRETAux"), TextBox)
-            Dim txt_LimResp As TextBox = TryCast(row.FindControl("txt_LimRespAux"), TextBox)
-            Dim txt_PrimaNetaRET As TextBox = TryCast(row.FindControl("txt_PrimaNetaRETAux"), TextBox)
-            Dim txt_PrimaNeta As TextBox = TryCast(row.FindControl("txt_PrimaNetaAux"), TextBox)
-            Dim txt_PrimaINCRET As TextBox = TryCast(row.FindControl("txt_PrimaINCRETAux"), TextBox)
-            Dim txt_PrimaINC As TextBox = TryCast(row.FindControl("txt_PrimaINCAux"), TextBox)
-            Dim txt_PrimaFHMRET As TextBox = TryCast(row.FindControl("txt_PrimaFHMRETAux"), TextBox)
-            Dim txt_PrimaFHM As TextBox = TryCast(row.FindControl("txt_PrimaFHMAux"), TextBox)
-            Dim txt_PrimaTEVRET As TextBox = TryCast(row.FindControl("txt_PrimaTEVRETAux"), TextBox)
-            Dim txt_PrimaTEV As TextBox = TryCast(row.FindControl("txt_PrimaTEVAux"), TextBox)
-            Dim txt_PrimaRCRET As TextBox = TryCast(row.FindControl("txt_PrimaRCRETAux"), TextBox)
-            Dim txt_PrimaRC As TextBox = TryCast(row.FindControl("txt_PrimaRCAux"), TextBox)
-            Dim txt_PrimaCSCRET As TextBox = TryCast(row.FindControl("txt_PrimaCSCRETAux"), TextBox)
-            Dim txt_PrimaCSC As TextBox = TryCast(row.FindControl("txt_PrimaCSCAux"), TextBox)
-            Dim txt_PrimaGRARET As TextBox = TryCast(row.FindControl("txt_PrimaGRARETAux"), TextBox)
-            Dim txt_PrimaGRA As TextBox = TryCast(row.FindControl("txt_PrimaGRAAux"), TextBox)
+
 
             myRow = dtCapas.Select("cod_grupo ='" & Grupo & "' AND cod_capa = '" & gvd_Capas.DataKeys(row.RowIndex)("cod_capa") & "'")
 
             If myRow.Length > 0 Then
-                myRow(0)("prc_part_ret") = IIf(txt_PrcPartRET.Text = vbNullString, 0, txt_PrcPartRET.Text)
+                myRow(0)("valor_capa") = IIf(txt_ValorCapa.Text = vbNullString, 0, txt_ValorCapa.Text)
+                myRow(0)("prima_capa") = IIf(txt_PrimaCapa.Text = vbNullString, 0, txt_PrimaCapa.Text)
                 myRow(0)("prc_part") = IIf(txt_PrcPart.Text = vbNullString, 0, txt_PrcPart.Text)
-                myRow(0)("prc_partGMX_ret") = IIf(txt_PrcPartGMXRET.Text = vbNullString, 0, txt_PrcPartGMXRET.Text)
-                myRow(0)("prc_partGMX") = IIf(txt_PrcPartGMX.Text = vbNullString, 0, txt_PrcPartGMX.Text)
-                myRow(0)("suma_asegurada_ret") = txt_LimRespRET.Text
-                myRow(0)("suma_asegurada") = txt_LimResp.Text
-                myRow(0)("prima_neta_ret") = txt_PrimaNetaRET.Text
-                myRow(0)("prima_neta") = txt_PrimaNeta.Text
-                myRow(0)("prima_inc_ret") = IIf(txt_PrimaINCRET.Text = vbNullString, 0, txt_PrimaINCRET.Text)
-                myRow(0)("prima_inc") = IIf(txt_PrimaINC.Text = vbNullString, 0, txt_PrimaINC.Text)
-                myRow(0)("prima_fhm_ret") = IIf(txt_PrimaFHMRET.Text = vbNullString, 0, txt_PrimaFHMRET.Text)
-                myRow(0)("prima_fhm") = IIf(txt_PrimaFHM.Text = vbNullString, 0, txt_PrimaFHM.Text)
-                myRow(0)("prima_tev_ret") = IIf(txt_PrimaTEVRET.Text = vbNullString, 0, txt_PrimaTEVRET.Text)
-                myRow(0)("prima_tev") = IIf(txt_PrimaTEV.Text = vbNullString, 0, txt_PrimaTEV.Text)
-                myRow(0)("prima_rc_ret") = IIf(txt_PrimaRCRET.Text = vbNullString, 0, txt_PrimaRCRET.Text)
-                myRow(0)("prima_rc") = IIf(txt_PrimaRC.Text = vbNullString, 0, txt_PrimaRC.Text)
-                myRow(0)("prima_casco_ret") = IIf(txt_PrimaCSCRET.Text = vbNullString, 0, txt_PrimaCSCRET.Text)
-                myRow(0)("prima_casco") = IIf(txt_PrimaCSC.Text = vbNullString, 0, txt_PrimaCSC.Text)
-                myRow(0)("prima_guerra_ret") = IIf(txt_PrimaGRARET.Text = vbNullString, 0, txt_PrimaGRARET.Text)
-                myRow(0)("prima_guerra") = IIf(txt_PrimaGRA.Text = vbNullString, 0, txt_PrimaGRA.Text)
             End If
         Next
 
         Return dtCapas
     End Function
 
+    Private Function fn_ActualizaDataProgramaCapa(ByVal Grupo As Integer) As DataTable
+        Dim myRow() As Data.DataRow
 
-    Private Function fn_ActualizaDataDistribucion(ByVal Grupo As Integer) As DataTable
+        For Each row In gvd_ProgramaCapas.Rows
+            Dim txt_ValorCapa As TextBox = TryCast(row.FindControl("txt_ValorCapaAux"), TextBox)
+            Dim txt_ExcesoCapa As TextBox = TryCast(row.FindControl("txt_ExcesoCapaAux"), TextBox)
+            Dim txt_PrimaCapa As TextBox = TryCast(row.FindControl("txt_PrimaCapaAux"), TextBox)
+            Dim txt_PrcPart As TextBox = TryCast(row.FindControl("txt_PrcPart"), TextBox)
+
+
+            myRow = dtProgramaCapas.Select("cod_grupo ='" & Grupo & "' AND cod_capa = '" & gvd_ProgramaCapas.DataKeys(row.RowIndex)("cod_capa") & "'")
+
+            If myRow.Length > 0 Then
+                myRow(0)("valor_capa") = IIf(txt_ValorCapa.Text = vbNullString, 0, txt_ValorCapa.Text)
+                myRow(0)("exceso_capa") = IIf(txt_ExcesoCapa.Text = vbNullString, 0, txt_ExcesoCapa.Text)
+                myRow(0)("prima_capa") = IIf(txt_PrimaCapa.Text = vbNullString, 0, txt_PrimaCapa.Text)
+                myRow(0)("prc_part") = IIf(txt_PrcPart.Text = vbNullString, 0, txt_PrcPart.Text)
+            End If
+        Next
+
+        Return dtCapas
+    End Function
+
+    Private Function fn_ActualizaDataDistribucion(ByVal Grupo As Integer, Optional ByVal Capa As Integer = 0) As DataTable
         Dim myRow() As Data.DataRow
 
         For Each row In gvd_Distribucion.Rows
@@ -2786,7 +2787,7 @@ Partial Class MesaControl_Gestion
             Dim txt_PrimaCSC As TextBox = TryCast(row.FindControl("txt_PrimaCSCAux"), TextBox)
             Dim txt_PrimaGRA As TextBox = TryCast(row.FindControl("txt_PrimaGRAAux"), TextBox)
 
-            myRow = dtDistribucion.Select("cod_grupo ='" & Grupo & "' AND cod_distribucion = '" & gvd_Distribucion.DataKeys(row.RowIndex)("cod_distribucion") & "'")
+            myRow = dtDistribucion.Select("cod_grupo ='" & Grupo & "' AND cod_capa = '" & Capa & "' AND cod_distribucion = '" & gvd_Distribucion.DataKeys(row.RowIndex)("cod_distribucion") & "'")
 
             If myRow.Length > 0 Then
                 myRow(0)("prc_part") = IIf(txt_PrcPart.Text = vbNullString, 0, txt_PrcPart.Text)
@@ -2805,7 +2806,7 @@ Partial Class MesaControl_Gestion
         Return dtDistribucion
     End Function
 
-    Private Function fn_ActualizaDataBroker(ByVal Grupo As Integer) As DataTable
+    Private Function fn_ActualizaDataBroker(ByVal Grupo As Integer, Optional ByVal Capa As Integer = 0) As DataTable
         Dim myRow() As Data.DataRow
 
         For Each row In gvd_Intermediario.Rows
@@ -2854,7 +2855,7 @@ Partial Class MesaControl_Gestion
             Dim ddl_Estatus As DropDownList = TryCast(row.FindControl("ddl_Estatus"), DropDownList)
             Dim txt_Observaciones As TextBox = TryCast(row.FindControl("txt_Observaciones"), TextBox)
 
-            myRow = dtBroker.Select("cod_grupo ='" & Grupo & "' AND cod_broker = '" & gvd_Intermediario.DataKeys(row.RowIndex)("cod_broker") & "'")
+            myRow = dtBroker.Select("cod_grupo ='" & Grupo & "' AND cod_capa ='" & Capa & "' AND cod_broker = '" & gvd_Intermediario.DataKeys(row.RowIndex)("cod_broker") & "'")
 
             If myRow.Length > 0 Then
                 myRow(0)("prc_partCoas") = IIf(txt_PrcPartCoas.Text = vbNullString, 0, txt_PrcPartCoas.Text)
@@ -2898,7 +2899,7 @@ Partial Class MesaControl_Gestion
         Return dtBroker
     End Function
 
-    Private Function fn_ActualizaDataReasegurador(ByVal Grupo As Integer, ByVal cod_broker As Integer) As DataTable
+    Private Function fn_ActualizaDataReasegurador(ByVal Grupo As Integer, ByVal Capa As Integer, ByVal cod_broker As Integer) As DataTable
         Dim myRow() As Data.DataRow
 
         For Each row In gvd_Reasegurador.Rows
@@ -2944,7 +2945,7 @@ Partial Class MesaControl_Gestion
             Dim ddl_Estatus As DropDownList = TryCast(row.FindControl("ddl_Estatus"), DropDownList)
             Dim txt_Observaciones As TextBox = TryCast(row.FindControl("txt_Observaciones"), TextBox)
 
-            myRow = dtReasegurador.Select("cod_grupo ='" & Grupo & "' AND cod_broker = '" & cod_broker & "' AND cod_cia = '" & gvd_Reasegurador.DataKeys(row.RowIndex)("cod_cia") & "'")
+            myRow = dtReasegurador.Select("cod_grupo ='" & Grupo & "' AND cod_capa = '" & Capa & "' AND cod_broker = '" & cod_broker & "' AND cod_cia = '" & gvd_Reasegurador.DataKeys(row.RowIndex)("cod_cia") & "'")
 
             If myRow.Length > 0 Then
                 myRow(0)("prc_part100") = IIf(txt_PrcPart100.Text = vbNullString, 0, txt_PrcPart100.Text)
@@ -2986,7 +2987,7 @@ Partial Class MesaControl_Gestion
         Return dtReasegurador
     End Function
 
-    Private Function fn_ActualizaDataSubjetividad(ByVal Grupo As Integer, ByVal cod_broker As Integer, ByVal cod_cia As Integer) As DataTable
+    Private Function fn_ActualizaDataSubjetividad(ByVal Grupo As Integer, ByVal Capa As Integer, ByVal cod_broker As Integer, ByVal cod_cia As Integer) As DataTable
         Dim myRow() As Data.DataRow
 
         For Each row In gvd_Subjetividad.Rows
@@ -2995,7 +2996,7 @@ Partial Class MesaControl_Gestion
             Dim txt_Subjetividad As TextBox = TryCast(row.FindControl("txt_Subjetividad"), TextBox)
             Dim chk_Subjetividad As CheckBox = TryCast(row.FindControl("chk_Subjetividad"), CheckBox)
 
-            myRow = dtSubjetividad.Select("cod_grupo ='" & Grupo & "' AND cod_broker = '" & cod_broker & "' AND cod_cia = '" & cod_cia & "' AND Num = '" & gvd_Subjetividad.DataKeys(row.RowIndex)("Num") & "'")
+            myRow = dtSubjetividad.Select("cod_grupo ='" & Grupo & "' AND cod_capa = '" & Capa & "' AND cod_broker = '" & cod_broker & "' AND cod_cia = '" & cod_cia & "' AND Num = '" & gvd_Subjetividad.DataKeys(row.RowIndex)("Num") & "'")
 
             If myRow.Length > 0 Then
                 myRow(0)("Fecha") = txt_Fecha.Text
@@ -3117,11 +3118,12 @@ Partial Class MesaControl_Gestion
 
         If IndiceAnterior > -1 Then
             fn_ActualizaDataReparto(gvd_Agrupacion.DataKeys(IndiceAnterior)("cod_grupo"))
+            fn_ActualizaDataProgramaCapa(gvd_Agrupacion.DataKeys(IndiceAnterior)("cod_grupo"))
             fn_ActualizaDataDistribucion(gvd_Agrupacion.DataKeys(IndiceAnterior)("cod_grupo"))
             fn_ActualizaDataBroker(gvd_Agrupacion.DataKeys(IndiceAnterior)("cod_grupo"))
 
             If hid_IndiceBroker.Value > -1 Then
-                fn_ActualizaDataReasegurador(gvd_Agrupacion.DataKeys(IndiceAnterior)("cod_grupo"), gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
+                fn_ActualizaDataReasegurador(gvd_Agrupacion.DataKeys(IndiceAnterior)("cod_grupo"), 0, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
 
                 If gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker") > 0 Then
                     cod_cia = 0
@@ -3131,7 +3133,7 @@ Partial Class MesaControl_Gestion
                     End If
                 End If
 
-                fn_ActualizaDataSubjetividad(gvd_Agrupacion.DataKeys(IndiceAnterior)("cod_grupo"), gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"), cod_cia)
+                fn_ActualizaDataSubjetividad(gvd_Agrupacion.DataKeys(IndiceAnterior)("cod_grupo"), 0, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"), cod_cia)
             End If
         End If
 
@@ -3147,6 +3149,12 @@ Partial Class MesaControl_Gestion
 
             lbl_Distribucion.Text = CType(gvd_Agrupacion.Rows(Indice).FindControl("lnk_Descripcion"), LinkButton).Text
             lbl_Distribucion.ToolTip = CType(gvd_Agrupacion.Rows(Indice).FindControl("lnk_Descripcion"), LinkButton).Text
+
+            If CType(gvd_Agrupacion.Rows(Indice).FindControl("chk_NoProporcional"), CheckBox).Checked = True Then
+                btn_Capas.Attributes.Remove("disabled")
+            Else
+                btn_Capas.Attributes.Add("disabled", "true")
+            End If
 
             For Each row In gvd_Agrupacion.Rows
                 TryCast(row.FindControl("lnk_Descripcion"), LinkButton).Font.Bold = False
@@ -3171,16 +3179,29 @@ Partial Class MesaControl_Gestion
             'Llena Información de Reparto
             LlenaGridReparto(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"))
 
+            'Llena Información de Programa de Capas
+            LlenaGridProgramaCapas(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"))
+
+            Dim myRow() As Data.DataRow
+            myRow = dtAgrupacion.Select("cod_grupo = " & gvd_Agrupacion.DataKeys(Indice)("cod_grupo"))
+
+            For Each item In myRow
+                div_Rangos.InnerHtml = item("html_rangos")
+                div_Capas.InnerHtml = item("html_capas")
+                div_Grafica.InnerHtml = item("html_grafica")
+            Next
+
+
             'Llena Información de Distribución
-            LlenaGridDistribucion(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"))
+            LlenaGridDistribucion(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"), 0)
 
             'Llena Información de Broker
-            LlenaGridBroker(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"))
+            LlenaGridBroker(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"), 0)
             hid_IndiceBroker.Value = IIf(gvd_Intermediario.Rows.Count > 0, 0, -1)
 
-            LlenaGridReasegurador(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"), 0)
+            LlenaGridReasegurador(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"), 0, 0)
 
-            LlenaGridSubjetividad(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"), 0, 0)
+            LlenaGridSubjetividad(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"), 0, 0, 0)
 
             btn_AddCia.Attributes.Add("disabled", "true")
 
@@ -3241,7 +3262,7 @@ Partial Class MesaControl_Gestion
             btn_AddCia.Attributes.Remove("disabled")
 
             If IndiceAnterior > -1 Then
-                fn_ActualizaDataReasegurador(gvd_Intermediario.DataKeys(IndiceAnterior)("cod_grupo"), gvd_Intermediario.DataKeys(IndiceAnterior)("cod_broker"))
+                fn_ActualizaDataReasegurador(gvd_Intermediario.DataKeys(IndiceAnterior)("cod_grupo"), 0, gvd_Intermediario.DataKeys(IndiceAnterior)("cod_broker"))
 
                 If gvd_Intermediario.DataKeys(IndiceAnterior)("cod_broker") > 0 Then
                     cod_cia = 0
@@ -3251,7 +3272,7 @@ Partial Class MesaControl_Gestion
                     End If
                 End If
 
-                fn_ActualizaDataSubjetividad(gvd_Intermediario.DataKeys(IndiceAnterior)("cod_grupo"), gvd_Intermediario.DataKeys(IndiceAnterior)("cod_broker"), cod_cia)
+                fn_ActualizaDataSubjetividad(gvd_Intermediario.DataKeys(IndiceAnterior)("cod_grupo"), 0, gvd_Intermediario.DataKeys(IndiceAnterior)("cod_broker"), cod_cia)
             End If
 
             hid_IndiceBroker.Value = Indice
@@ -3278,11 +3299,12 @@ Partial Class MesaControl_Gestion
             lbl_Reaseguradores.ToolTip = CType(gvd_Intermediario.Rows(Indice).FindControl("txt_Descripcion"), TextBox).Text
 
             'Llena Información de Reaseguradores
-            LlenaGridReasegurador(False, gvd_Intermediario.DataKeys(Indice)("cod_grupo"), gvd_Intermediario.DataKeys(Indice)("cod_broker"))
+            LlenaGridReasegurador(False, gvd_Intermediario.DataKeys(Indice)("cod_grupo"), 0, gvd_Intermediario.DataKeys(Indice)("cod_broker"))
 
             ' Si es mediante Intermediario
             If gvd_Intermediario.DataKeys(Indice)("cod_broker") > 0 Then
                 LlenaGridSubjetividad(False, gvd_Intermediario.DataKeys(Indice)("cod_grupo"),
+                                      0,
                                       gvd_Intermediario.DataKeys(Indice)("cod_broker"), 0)
                 txt_Observaciones.Text = CType(gvd_Intermediario.Rows(Indice).FindControl("txt_Observaciones"), TextBox).Text
 
@@ -3303,7 +3325,7 @@ Partial Class MesaControl_Gestion
                     hid_IndiceReas.Value = 0
                     SeleccionaReasegurador(-1, hid_IndiceReas.Value)
                 Else
-                    LlenaGridSubjetividad(False, 0, 0, 0)
+                    LlenaGridSubjetividad(False, 0, 0, 0, 0)
                     txt_Observaciones.Text = vbNullString
 
                     txt_PrcComNeta.Text = "0.0000"
@@ -3349,6 +3371,7 @@ Partial Class MesaControl_Gestion
                 'Solo si es Negocio Directo
                 If gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker") = 0 Then
                     fn_ActualizaDataSubjetividad(gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"),
+                                                 0,
                                                  gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"),
                                                  gvd_Reasegurador.DataKeys(IndiceAnterior)("cod_cia"))
                 End If
@@ -3382,6 +3405,7 @@ Partial Class MesaControl_Gestion
             If gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker") = 0 Then
                 LlenaGridSubjetividad(False,
                                       gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"),
+                                      0,
                                       gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"),
                                       gvd_Reasegurador.DataKeys(Indice)("cod_cia"))
 
@@ -3650,7 +3674,7 @@ Partial Class MesaControl_Gestion
                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "")
                     Next
 
-                    LlenaGridBroker(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+                    LlenaGridBroker(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), 0)
                     SeleccionaBroker(hid_IndiceBroker.Value, gvd_Intermediario.Rows.Count - 1)
                 End If
             End If
@@ -3663,7 +3687,7 @@ Partial Class MesaControl_Gestion
         Try
             'Si existe agrupación activa
             If hid_IndiceBroker.Value > -1 Then
-                fn_ActualizaDataReasegurador(gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"), gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
+                fn_ActualizaDataReasegurador(gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"), 0, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
                 Dim Datos() As String
                 Dim Seleccionados As String = Master.mSeleccionados
 
@@ -3676,7 +3700,7 @@ Partial Class MesaControl_Gestion
                                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "")
                     Next
 
-                    LlenaGridReasegurador(False, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"), gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
+                    LlenaGridReasegurador(False, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"), 0, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
 
                     SeleccionaReasegurador(hid_IndiceReas.Value, gvd_Reasegurador.Rows.Count - 1)
                 End If
@@ -3720,6 +3744,7 @@ Partial Class MesaControl_Gestion
                     cod_cia = gvd_Reasegurador.DataKeys(hid_IndiceReas.Value)("cod_cia")
                 End If
                 fn_ActualizaDataSubjetividad(gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"),
+                                             0,
                                              gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"),
                                              cod_cia)
 
@@ -3735,6 +3760,7 @@ Partial Class MesaControl_Gestion
                                         "", "", "", 0)
 
                 LlenaGridSubjetividad(False, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"),
+                                      0,
                                       gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"),
                                       cod_cia)
 
@@ -3744,7 +3770,7 @@ Partial Class MesaControl_Gestion
         End Try
     End Sub
 
-    Private Sub Agrega_Capa()
+    Private Sub Agrega_Capa(ByVal ValorCapa As Double, ByVal PrimaCapa As Double, ByVal Participacion As Double)
         Dim Capa As Integer = 1
 
         'Si existe agrupación activa
@@ -3756,7 +3782,7 @@ Partial Class MesaControl_Gestion
             End If
 
             dtCapas.Rows.Add(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"),
-                             Capa, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                             Capa, ValorCapa, PrimaCapa, Participacion)
 
             LlenaGridCapas(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
         End If
@@ -3797,15 +3823,15 @@ Partial Class MesaControl_Gestion
             If Len(strSel) > 0 Then
                 Quita_Intermediario(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), strSel)
 
-                LlenaGridBroker(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+                LlenaGridBroker(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), 0)
 
                 hid_IndiceBroker.Value = IIf(gvd_Intermediario.Rows.Count > 0, 0, -1)
 
                 'Llena Información de Broker
-                LlenaGridReasegurador(False, 0)
+                LlenaGridReasegurador(False, 0, 0, 0)
 
                 'Llena Información de Broker
-                LlenaGridSubjetividad(False, 0, 0)
+                LlenaGridSubjetividad(False, 0, 0, 0, 0)
 
                 SeleccionaBroker(hid_IndiceBroker.Value, gvd_Intermediario.Rows.Count - 1)
             Else
@@ -3826,13 +3852,14 @@ Partial Class MesaControl_Gestion
                                    strSel)
 
                 LlenaGridReasegurador(False, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"),
+                                      0,
                                       gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
 
                 hid_IndiceReas.Value = IIf(gvd_Reasegurador.Rows.Count > 0, 0, -1)
 
                 'Si se trata de un Negocio Directo
                 If gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker") = 0 Then
-                    LlenaGridSubjetividad(False, 0, 0)
+                    LlenaGridSubjetividad(False, 0, 0, 0, 0)
                 End If
 
                 SeleccionaReasegurador(hid_IndiceReas.Value, gvd_Reasegurador.Rows.Count - 1)
@@ -3865,6 +3892,7 @@ Partial Class MesaControl_Gestion
 
 
                 LlenaGridSubjetividad(False, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"),
+                                      0,
                                       gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"),
                                       cod_cia)
             Else
@@ -4098,7 +4126,7 @@ Partial Class MesaControl_Gestion
 
             If blnFacultativo = True Then
 
-                dtAgrupacion.Rows.Add(grupo, ddl_Agrupador.SelectedValue, ddl_Agrupador.SelectedItem.Text, suma_asegurada, prima_neta, prima_inc, prima_fhm, prima_tev, prima_rc, prima_casco, prima_guerra, strRiesgos, strRamos)
+                dtAgrupacion.Rows.Add(grupo, ddl_Agrupador.SelectedValue, ddl_Agrupador.SelectedItem.Text, suma_asegurada, prima_neta, prima_inc, prima_fhm, prima_tev, prima_rc, prima_casco, prima_guerra, strRiesgos, strRamos, vbNullString, vbNullString, vbNullString)
 
                 LlenaGridAgrupacion(False)
 
@@ -4157,38 +4185,299 @@ Partial Class MesaControl_Gestion
         End Try
     End Sub
 
-    Private Sub chk_Proporcional_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Proporcional.CheckedChanged
+
+    'Private Sub btn_AddCapa_Click(sender As Object, e As EventArgs) Handles btn_AddCapa.Click
+    '    Try
+    '        Agrega_Capa(0, 0, 0)
+    '    Catch ex As Exception
+    '        Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+    '    End Try
+    'End Sub
+
+    'Private Sub btn_RemoveCapa_Click(sender As Object, e As EventArgs) Handles btn_RemoveCapa.Click
+    '    Try
+    '        Dim strSel As String = ObtieneSeleccionados(gvd_Capas, "chk_Sel", "cod_capa")
+
+    '        If Len(strSel) > 0 Then
+    '            Quita_Capa(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), strSel)
+    '            Renumera_Capa(dtCapas, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+    '            LlenaGridCapas(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+    '        Else
+    '            Mensaje.MuestraMensaje("Mesa de Control", "No se ha seleccionado ningun elemento", TipoMsg.Advertencia)
+    '        End If
+    '    Catch ex As Exception
+    '        Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+    '    End Try
+    'End Sub
+
+    Private Sub Programa_Capas()
+        Dim ArrayColor() As String = {"blanchedalmond", "lightgoldenrodyellow", "khaki", "cornflowerblue", "darkkhaki", "darkorange", "lightblue",
+                                      "burlywood", "chartreuse", "crimson", "cyan", "darkgray", "darkgreen", "deeppink", "firebrick", "lightgreen",
+                                      "mediumpurple", "olivedrab", "magenta"}
+
+        Dim Estilo As String = "position:absolute;border-style: dashed inset none inset;border-color: green black black black;border-width: 3px 1px 1px 1px;color:black;font-weight:bold;font-family:Myriad Pro;font-size:9.5px;"
+        Dim EstiloRangos As String = "position:absolute;border-style: dashed none none none;border-color: green;border-width: 3px;color:black;font-weight:bold;font-family:Myriad Pro;font-size:11px;"
+        Dim ValorTotal As Double = 0
+        Dim ValorEscala As Double = 600
+        Dim ValorCapa As Double = 0
+        Dim ExcesoCapa As Double = 0
+        Dim Prima As Double = 0
+        Dim PrimaTotal As Double = 0
+        Dim prcPart As Double = 0
+        Dim Capa As Integer = 0
+        Dim CapaAux As Integer = 0
+
+        Dim Top As Double = 0
+        Dim Bottom As Double = 0
+        Dim Height As Double = 0
+        Dim Left As Double = 0
+
+        If hid_IndiceGrupo.Value > -1 Then
+            Quita_Capa(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), vbNullString)
+            LlenaGridCapas(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+
+            ReDim ArrayLeft(gvd_ProgramaCapas.Rows.Count - 1)
+
+            Dim CadenaHTMLGrafica As String = vbNullString
+            Dim CadenaHTMLRangos As String = vbNullString
+            Dim CadenaHTMLCapas As String = vbNullString
+            Dim CadenaHTMLSubCapa As String = vbNullString
+            Dim ArrayPrimas() As String
+            Dim ArrayRangoPrimas(0) As Double
+            Dim ValorSubCapa As Double = 0
+            Dim VealorPrimaReal As Double = 0
+            Dim DiferenciaPrima As Double = 0
+            Dim blnCapaDividida As Boolean
+
+            ValorTotal = (CType(gvd_ProgramaCapas.Rows(gvd_ProgramaCapas.Rows.Count - 1).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000) +
+                         (CType(gvd_ProgramaCapas.Rows(gvd_ProgramaCapas.Rows.Count - 1).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000)
+
+
+            Dim ArrayRangos() As Double = {ValorTotal}
+            Dim intRango As Integer = 0
+
+            For Fila = gvd_ProgramaCapas.Rows.Count - 1 To 0 Step -1
+                ArrayLeft(Fila) = False
+
+                Capa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_Capa"), TextBox).Text
+                ValorCapa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
+                ExcesoCapa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+                Prima = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_PrimaCapaAux"), TextBox).Text / 1000
+                prcPart = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_PrcPart"), TextBox).Text
+
+                Bottom = (ExcesoCapa * ValorEscala) / ValorTotal
+                Height = (ValorCapa * ValorEscala) / ValorTotal
+
+                Left = fn_PosicionCapa(Fila, ExcesoCapa + ValorCapa)
+
+                If Left = 0 Then
+                    ArrayLeft(Fila) = True
+                End If
+
+                CadenaHTMLGrafica = CadenaHTMLGrafica & "<div runat=""server"" ID=""div_capa_" & Capa & """ style=""width:" & prcPart & "%;height:" & Height & "px;bottom:" & Bottom & "px;Left:" & Left & "%;background-color:" & ArrayColor(Fila) & ";" & Estilo & """>" &
+                                                              "<label>CAPA " & Capa & " --> $" & String.Format("{0:#,#0.00}", CDbl(ValorCapa * 1000)) & " XS $" & String.Format("{0:#,#0.00}", CDbl(ExcesoCapa * 1000)) & "</label>" &
+                                                              "<div style=""position:absolute;bottom:0px;right:10px;"">" &
+                                                                    prcPart & "%" &
+                                                              "</div>" &
+                                                              "<div style=""position:absolute;left:0px;bottom:0px;color:blueviolet;"">" &
+                                                                    String.Format("{0:#,#0.00}", CDbl(Prima * 1000)) &
+                                                              "</div>" &
+                                                              "@Capa" & Capa &
+                                                        "</div>"
+
+
+                If Not ArrayRangos.Contains(ExcesoCapa) Then
+                    intRango = intRango + 1
+                    ReDim Preserve ArrayRangos(intRango)
+                    ArrayRangos(intRango) = ExcesoCapa
+                End If
+
+                PrimaTotal = PrimaTotal + Prima
+            Next
+
+            Array.Sort(ArrayRangos)
+
+            'Se toma el primer elemento
+            Bottom = (ArrayRangos(0) * ValorEscala) / ValorTotal
+            ExcesoCapa = ArrayRangos(0)
+            Capa = 1
+
+            ReDim ArrayPrimas(UBound(ArrayRangos))
+
+            For i = 1 To UBound(ArrayRangos)
+                Height = ((ArrayRangos(i) * ValorEscala) / ValorTotal) - Bottom
+                CadenaHTMLRangos = CadenaHTMLRangos & "<div style=""width:100%;height:" & Height & "px;bottom:" & Bottom & "px;" & EstiloRangos & """> $" & String.Format("{0:#,#0.00}", CDbl(ArrayRangos(i) * 1000)) & " </div>"
+                CadenaHTMLCapas = CadenaHTMLCapas & "<div style=""width:100%;height:" & Height & "px;bottom:" & Bottom & "px;" & EstiloRangos & """> CAPA " & Capa & " </div>"
+                Bottom = (ArrayRangos(i) * ValorEscala) / ValorTotal
+                ExcesoCapa = ArrayRangos(i)
+
+                VealorPrimaReal = 0
+
+                For Each row In gvd_ProgramaCapas.Rows
+                    CapaAux = CType(row.FindControl("txt_Capa"), TextBox).Text
+                    ValorCapa = CType(row.FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
+                    ExcesoCapa = CType(row.FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+                    Prima = CType(row.FindControl("txt_PrimaCapaAux"), TextBox).Text / 1000
+
+                    If ArrayRangos(i) > ExcesoCapa And ArrayRangos(i) <= ExcesoCapa + ValorCapa Then
+
+                        If Val(Split(ArrayPrimas(i), "|")(0)) <> CapaAux Then
+                            ArrayPrimas(i) = CapaAux & "|" & Prima
+                        End If
+
+                        ValorSubCapa = (ValorCapa + ExcesoCapa) - ArrayRangos(i)
+                        ValorSubCapa = ValorCapa - ValorSubCapa
+
+                        blnCapaDividida = False
+                        For j = i - 1 To 0 Step -1
+                            If ValorCapa + ExcesoCapa >= ArrayRangos(j) And ExcesoCapa < ArrayRangos(j) Then
+                                ValorSubCapa = ValorSubCapa - ArrayRangos(j)
+                                blnCapaDividida = True
+                            End If
+                        Next
+
+                        If blnCapaDividida = True Then
+                            ValorSubCapa = ValorSubCapa + ExcesoCapa
+                        End If
+
+
+                        VealorPrimaReal = VealorPrimaReal + ((ValorSubCapa * Prima) / ValorCapa)
+                        DiferenciaPrima = Math.Round(CDbl(Split(ArrayPrimas(i), "|")(1)), 2) - Math.Round(((ValorSubCapa * Prima) / ValorCapa), 2)
+                        If DiferenciaPrima = 0 Then
+                            ArrayPrimas(i) = CapaAux & "|" & DiferenciaPrima
+                        Else
+                            ArrayPrimas(i) = CapaAux & "|" & 0
+                            If i < UBound(ArrayPrimas) Then
+                                ArrayPrimas(i + 1) = CapaAux & "|" & DiferenciaPrima
+                            End If
+                        End If
+                    End If
+                Next
+
+                Agrega_Capa((ArrayRangos(i) - ArrayRangos(i - 1)) * 1000, VealorPrimaReal, IIf(VealorPrimaReal = 0, 0, (VealorPrimaReal * 100) / PrimaTotal))
+                Capa = Capa + 1
+            Next
+
+            For Each row In gvd_ProgramaCapas.Rows
+                Capa = CType(row.FindControl("txt_Capa"), TextBox).Text
+                ValorCapa = CType(row.FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
+                ExcesoCapa = CType(row.FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+                Prima = CType(row.FindControl("txt_PrimaCapaAux"), TextBox).Text / 1000
+
+                intRango = 0
+                ArrayRangoPrimas(intRango) = ExcesoCapa
+                For i = 1 To UBound(ArrayRangos)
+                    If ArrayRangos(i) > ExcesoCapa And ArrayRangos(i) < ExcesoCapa + ValorCapa Then
+                        intRango = intRango + 1
+                        ReDim Preserve ArrayRangoPrimas(intRango)
+                        ArrayRangoPrimas(intRango) = ArrayRangos(i)
+                    End If
+                Next
+                ReDim Preserve ArrayRangoPrimas(intRango + 1)
+                ArrayRangoPrimas(intRango + 1) = ExcesoCapa + ValorCapa
+                CadenaHTMLSubCapa = vbNullString
+
+                Height = (ValorCapa * ValorEscala) / ValorTotal
+
+                For i = UBound(ArrayRangoPrimas) To 0 Step -1
+                    If (i - 1) >= 0 Then
+                        ValorSubCapa = ArrayRangoPrimas(i) - ArrayRangoPrimas(i - 1)
+                        VealorPrimaReal = ((ValorSubCapa * Prima) / ValorCapa)
+
+                        Top = (((ValorSubCapa * Height) / ArrayRangoPrimas(i))) - 20
+
+                        CadenaHTMLSubCapa = CadenaHTMLSubCapa & "<div style=""position:absolute;left:60%;top:" & Top & "px;color:blueviolet;background-color:yellow;"">" &
+                                                                    String.Format("{0:#,#0.00}", CDbl(VealorPrimaReal * 1000)) &
+                                                                "</div>"
+                    End If
+                Next
+
+                CadenaHTMLGrafica = Replace(CadenaHTMLGrafica, "@Capa" & Capa, CadenaHTMLSubCapa)
+            Next
+
+            div_Grafica.InnerHtml = CadenaHTMLGrafica
+            div_Rangos.InnerHtml = CadenaHTMLRangos
+            div_Capas.InnerHtml = CadenaHTMLCapas
+
+            Dim myRow() As Data.DataRow
+            myRow = dtAgrupacion.Select("cod_grupo = " & gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+
+            For Each item In myRow
+                item("html_rangos") = div_Rangos.InnerHtml
+                item("html_capas") = div_Capas.InnerHtml
+                item("html_grafica") = div_Grafica.InnerHtml
+            Next
+        End If
+    End Sub
+
+    Private Sub btn_ConfirmaPrograma_Click(sender As Object, e As EventArgs) Handles btn_ConfirmaPrograma.Click
         Try
-            If sender.checked = True Then
-                gvd_Capas.Attributes.Add("style", "display:block")
-                btn_AddCapa.Attributes.Remove("disabled")
-                btn_RemoveCapa.Attributes.Remove("disabled")
-            Else
-                gvd_Capas.Attributes.Add("style", "display:none")
-                btn_AddCapa.Attributes.Add("disabled", "true")
-                btn_RemoveCapa.Attributes.Add("disabled", "true")
+            Programa_Capas()
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Function fn_PosicionCapa(ByVal Fila As Integer, ByVal RangoInicio As Double) As Double
+        Dim ValorCapa As Double = 0
+        Dim ExcesoCapa As Double = 0
+        Dim prcPart As Double = 0
+        Dim blnLeft As Boolean = False
+
+        For i = Fila + 1 To gvd_ProgramaCapas.Rows.Count - 1
+            ValorCapa = CType(gvd_ProgramaCapas.Rows(i).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
+            ExcesoCapa = CType(gvd_ProgramaCapas.Rows(i).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+
+            If RangoInicio > ExcesoCapa And RangoInicio <= (ExcesoCapa + ValorCapa) Then
+                prcPart = prcPart + CType(gvd_ProgramaCapas.Rows(i).FindControl("txt_PrcPart"), TextBox).Text
+                If ArrayLeft(i) = True Then
+                    blnLeft = True
+                End If
             End If
+        Next
+
+        If blnLeft = False Then
+            prcPart = 0
+        End If
+
+        Return prcPart
+    End Function
+
+    Private Sub Agrega_ProgramaCapa()
+        Dim Capa As Integer = 1
+
+        'Si existe agrupación activa
+        If hid_IndiceGrupo.Value > -1 Then
+            fn_ActualizaDataProgramaCapa(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+
+            If gvd_ProgramaCapas.Rows.Count > 0 Then
+                Capa = gvd_ProgramaCapas.DataKeys(gvd_ProgramaCapas.Rows.Count - 1)("cod_capa") + 1
+            End If
+
+            dtProgramaCapas.Rows.Add(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"),
+                                     Capa, 0, 0, 0, 0)
+
+            LlenaGridProgramaCapas(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+        End If
+    End Sub
+
+    Private Sub btn_AddCapaPrograma_Click(sender As Object, e As EventArgs) Handles btn_AddCapaPrograma.Click
+        Try
+            Agrega_ProgramaCapa()
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
-    Private Sub btn_AddCapa_Click(sender As Object, e As EventArgs) Handles btn_AddCapa.Click
+    Private Sub btn_RemoveCapaPrograma_Click(sender As Object, e As EventArgs) Handles btn_RemoveCapaPrograma.Click
         Try
-            Agrega_Capa()
-        Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
-        End Try
-    End Sub
-
-    Private Sub btn_RemoveCapa_Click(sender As Object, e As EventArgs) Handles btn_RemoveCapa.Click
-        Try
-            Dim strSel As String = ObtieneSeleccionados(gvd_Capas, "chk_Sel", "cod_capa")
+            Dim strSel As String = ObtieneSeleccionados(gvd_ProgramaCapas, "chk_Sel", "cod_capa")
 
             If Len(strSel) > 0 Then
-                Quita_Capa(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), strSel)
-                Renumera_Capa(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
-                LlenaGridCapas(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+                Quita_ProgramaCapa(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), strSel)
+                Renumera_Capa(dtProgramaCapas, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
+                LlenaGridProgramaCapas(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
             Else
                 Mensaje.MuestraMensaje("Mesa de Control", "No se ha seleccionado ningun elemento", TipoMsg.Advertencia)
             End If
@@ -4197,17 +4486,22 @@ Partial Class MesaControl_Gestion
         End Try
     End Sub
 
-    Private Sub btn_ConfirmaPrograma_Click(sender As Object, e As EventArgs) Handles btn_ConfirmaPrograma.Click
+    Private Sub btn_Capas_Click(sender As Object, e As EventArgs) Handles btn_Capas.Click
         Try
-            Dim Estilo As String = "position:absolute;border:inset;border-color:black;border-width:1px;color:black;font-weight:bold;font-family:Myriad Pro;font-size:14px;"
-
-            div_Capas.InnerHtml = "<div style=""width:100%;height:100px;top:0px;background-color:lightblue;" & Estilo & """> CAPA 7 --> $1,550,000,000 XS 2,000,000,000</div>" &
-                                  "<div style=""width:100%;height:100px;top:100px;background-color:orange;" & Estilo & """>CAPA 6 --> $1,500,000,000 XS 500,000,000</div>" &
-                                  "<div style=""width:35%;height:200px;top:200px;background-color:darkkhaki;" & Estilo & """>CAPA 5 --> $400,000,000 XS 100,000,000</div>" &
-                                  "<div style=""width:65%;height:100px;top:200px;left:36.5%;background-color:blueviolet;" & Estilo & """>CAPA 4 --> $250,000,000 XS 250,000,000</div>" &
-                                  "<div style=""width:42%;height:100px;top:300px;left:36.5%;background-color:khaki;" & Estilo & """>CAPA 3 --> $150,000,000 XS 100,000,000</div>" &
-                                  "<div style=""width:23%;height:200px;top:300px;left:78.5%;background-color:yellowgreen;" & Estilo & """>CAPA 2 --> $250,000,000 XS DEDUCIBLES ORIGINALES</div>" &
-                                  "<div style=""width:77%;height:100px;top:400px;background-color:lightcoral;" & Estilo & """>CAPA 1 --> $100,000,000 XS DEDUCIBLES ORIGINALES</div>"
+            Funciones.AbrirModal("#ProgramaCapas")
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+    Protected Sub chk_NoProporcional_CheckedChanged(sender As Object, e As EventArgs)
+        Try
+            If hid_IndiceGrupo.Value = sender.NamingContainer.rowIndex Then
+                If sender.checked = True Then
+                    btn_Capas.Attributes.Remove("disabled")
+                Else
+                    btn_Capas.Attributes.Add("disabled", "true")
+                End If
+            End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
         End Try

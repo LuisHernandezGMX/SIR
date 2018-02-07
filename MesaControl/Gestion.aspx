@@ -506,6 +506,11 @@
                                                     <asp:ImageButton runat="server" ID="btn_Inicisos" ToolTip="Riesgos Agrupados (Listado de Riesgos que conforman la Agrupación)" CommandName="Incisos" ImageUrl="~/Images/selectall_mini.png"/>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="No_Prop." HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centrado">
+                                                <ItemTemplate>
+                                                    <asp:CheckBox runat="server" ID="chk_NoProporcional" Checked='<%# Eval("sn_no_proporcional") %>' AutoPostBack="true" OnCheckedChanged="chk_NoProporcional_CheckedChanged" />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Lím. Max. Resp" HeaderStyle-CssClass="Centro">
                                                 <ItemTemplate>
                                                     <asp:TextBox runat="server" ID="txt_LimResp" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("suma_asegurada")))%>' Font-Bold="true" Enabled="false" CssClass="estandar-control Tablero Monto SumaAsegurada" Width="100px"></asp:TextBox>
@@ -572,12 +577,11 @@
                                 </div>
                                 <div class="clear padding4"></div>
                                 <div class="cuadro-titulo">
-                                    <asp:CheckBox runat="server" ID="chk_Proporcional" AutoPostBack="true" />
-                                    [No Proporcional]
+                                    [Distribución de Capas]
                                     <asp:label runat="server" ID="lbl_Capas"></asp:label>
                                 </div>
-                                <asp:Panel runat="server" ID="pnlCapas" Width="100%" Height="180px" ScrollBars="Horizontal">
-                                    <asp:GridView runat="server" ID="gvd_Capas" AutoGenerateColumns="false" 
+                                <asp:Panel runat="server" ID="pnlCapasColocacion" Width="100%" Height="150px" ScrollBars="Horizontal">
+                                    <asp:GridView runat="server" ID="gvd_CapasColocacion" AutoGenerateColumns="false" 
                                                     CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
                                                     GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_capa" >
                                         <Columns>
@@ -588,131 +592,34 @@
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Capa" ItemStyle-CssClass="Centrado">
                                                 <ItemTemplate>
-                                                    <asp:TextBox runat="server" ID="txt_Capa" Text='<%# Eval("cod_capa") %>'  Enabled="false" CssClass="estandar-control Tablero Centro" Width="30px"></asp:TextBox>
+                                                    <asp:LinkButton runat="server" ID="txt_Capa" Text='<%# Eval("cod_capa") %>' CssClass="estandar-control Tablero Centro" Width="40px"></asp:LinkButton>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                             <asp:TemplateField HeaderText="">
+                                            <asp:TemplateField HeaderText="Valor Capa" HeaderStyle-CssClass="Centro">
                                                 <ItemTemplate>
-                                                    <div style="width:65px">
-                                                         <asp:TextBox ID="txt_Retencion" runat="server" CssClass="estandar-control Tablero" Enabled="false" Width="65px" >RETENCIÓN</asp:TextBox>
-                                                         <asp:TextBox ID="txt_Facultativo" runat="server" CssClass="estandar-control Tablero" Enabled="false" Width="65px" >FACULTATIVO</asp:TextBox>
-                                                    </div>                                          
+                                                    <asp:TextBox runat="server" ID="txt_ValorCapa" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("valor_capa")))%>' CssClass="estandar-control Tablero" Width="100px"></asp:TextBox>
+                                                    <asp:TextBox runat="server" ID="txt_ValorCapaAux"  Text='<%# Eval("valor_capa") %>' CssClass="NoDisplay"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Sob/Coas" HeaderStyle-CssClass="Centro">
+                                            <asp:TemplateField HeaderText="Prima" HeaderStyle-CssClass="Centro">
                                                 <ItemTemplate>
-                                                    <div style="width:75px">
-                                                        <asp:TextBox runat="server" ID="txt_PrcPartRET" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_part_ret")))%>' CssClass="estandar-control Tablero Seleccion Monto PrcPartRET" Enabled="false" Width="75px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrcPartRETAux"  Text='<%# Eval("prc_part_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrcPart" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_part")))%>' CssClass="estandar-control Tablero Seleccion Monto PrcPart" Enabled="false" Width="75px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrcPartAux"  Text='<%# Eval("prc_part") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>
+                                                    <asp:TextBox runat="server" ID="txt_PrimaCapa" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_capa")))%>' CssClass="estandar-control Tablero" Width="90px"></asp:TextBox>
+                                                    <asp:TextBox runat="server" ID="txt_PrimaCapaAux"  Text='<%# Eval("prima_capa") %>' CssClass="NoDisplay"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Sob/100%" HeaderStyle-CssClass="Centro">
+                                            <asp:TemplateField HeaderText="Participación" HeaderStyle-CssClass="Centro">
                                                 <ItemTemplate>
-                                                    <div style="width:75px">
-                                                        <asp:TextBox runat="server" ID="txt_PrcPartGMXRET" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_partGMX_ret")))%>' CssClass="estandar-control col-md-1 Tablero Seleccion Monto PrcPartGMXRET" Width="75px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrcPartGMXRETAux" Text='<%# Eval("prc_partGMX_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrcPartGMX" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_partGMX")))%>' CssClass="estandar-control col-md-1 Tablero Seleccion Monto PrcPartGMX" Width="75px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrcPartGMXAux" Text='<%# Eval("prc_partGMX") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Lím. Max. Resp" HeaderStyle-CssClass="Centro">
-                                                <ItemTemplate>
-                                                    <div style="width:100px">
-                                                        <asp:TextBox runat="server" ID="txt_LimRespRET" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("suma_asegurada_ret")))%>'  Enabled="false" CssClass="estandar-control Tablero Monto SumaAseguradaRET" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_LimRespRETAux" Text='<%# Eval("suma_asegurada_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_LimResp" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("suma_asegurada")))%>'  Enabled="false" CssClass="estandar-control Tablero Monto SumaAsegurada" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_LimRespAux" Text='<%# Eval("suma_asegurada") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Prima Neta" HeaderStyle-CssClass="Centro">
-                                                <ItemTemplate>
-                                                    <div style="width:100px">
-                                                        <asp:TextBox runat="server" ID="txt_PrimaNetaRET" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_neta_ret")))%>' Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrimaNetaRET" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaNetaRETAux" Text='<%# Eval("prima_neta_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaNeta" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_neta")))%>' Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrimaNeta" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaNetaAux" Text='<%# Eval("prima_neta") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Prima INC" HeaderStyle-CssClass="Centro">
-                                                <ItemTemplate>
-                                                    <div style="width:100px">
-                                                        <asp:TextBox runat="server" ID="txt_PrimaINCRET" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_inc_ret")))%>'  Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrimaINCRET" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaINCRETAux" Text='<%# Eval("prima_inc_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaINC" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_inc")))%>'  Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrimaINC" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaINCAux" Text='<%# Eval("prima_inc") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Prima FHM" HeaderStyle-CssClass="columna-scroll Centro">
-                                                <ItemTemplate>
-                                                    <div style="width:100px">
-                                                        <asp:TextBox runat="server" ID="txt_PrimaFHMRET" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_fhm_ret")))%>' Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrimaFHMRET" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaFHMRETAux" Text='<%# Eval("prima_fhm_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaFHM" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_fhm")))%>' Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrimaFHM" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaFHMAux" Text='<%# Eval("prima_fhm") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>                                                   
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Prima TEV" HeaderStyle-CssClass="Centro">
-                                                <ItemTemplate>
-                                                    <div style="width:100px">
-                                                        <asp:TextBox runat="server" ID="txt_PrimaTEVRET" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_tev_ret")))%>' Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrimaTEVRET" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaTEVRETAux" Text='<%# Eval("prima_tev_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaTEV" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_tev")))%>' Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrimaTEV" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaTEVAux" Text='<%# Eval("prima_tev") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Prima RC" HeaderStyle-CssClass="Centro">
-                                                <ItemTemplate>
-                                                    <div style="width:100px">
-                                                        <asp:TextBox runat="server" ID="txt_PrimaRCRET" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_rc_ret")))%>' Enabled="false"  CssClass="estandar-control Tablero Seleccion Monto PrimaRCRET"  Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaRCRETAux" Text='<%# Eval("prima_rc_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaRC" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_rc")))%>' Enabled="false"  CssClass="estandar-control Tablero Seleccion Monto PrimaRC"  Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaRCAux" Text='<%# Eval("prima_rc") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Prima Casco" HeaderStyle-CssClass="Centro">
-                                                <ItemTemplate>
-                                                    <div style="width:100px">
-                                                        <asp:TextBox runat="server" ID="txt_PrimaCSCRET" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_casco_ret")))%>' Enabled="false"  CssClass="estandar-control Tablero Seleccion Monto PrimaCSCRET"  Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaCSCRETAux" Text='<%# Eval("prima_casco_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaCSC" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_casco")))%>' Enabled="false"  CssClass="estandar-control Tablero Seleccion Monto PrimaCSC"  Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaCSCAux" Text='<%# Eval("prima_casco") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Prima Guerra" HeaderStyle-CssClass="Centro">
-                                                <ItemTemplate>
-                                                    <div style="width:100px">
-                                                        <asp:TextBox runat="server" ID="txt_PrimaGRARET" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_guerra_ret")))%>' Enabled="false"  CssClass="estandar-control Tablero Seleccion Monto PrimaGRARET" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaGRARETAux" Text='<%# Eval("prima_guerra_ret") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaGRA" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_guerra")))%>' Enabled="false"  CssClass="estandar-control Tablero Seleccion Monto PrimaGRA" Width="100px"></asp:TextBox>
-                                                        <asp:TextBox runat="server" ID="txt_PrimaGRAAux" Text='<%# Eval("prima_guerra") %>' CssClass="NoDisplay"></asp:TextBox>
-                                                    </div>                                           
+                                                    <asp:TextBox runat="server" ID="txt_PrcPart" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_part")))%>' CssClass="estandar-control Tablero" Width="75px"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                         </Columns>
                                     </asp:GridView>
                                 </asp:Panel>
                                 <div style="width:100%;  text-align:right">
-                                    <asp:LinkButton id="btn_AddCapa" runat="server" class="btn botones AgregaCapa" data-toggle="modal" data-target="#ProgramaCapas">
+                                    <asp:LinkButton id="btn_Capas" runat="server" class="btn botones boton-mediano">
                                         <span>
                                             <img class="btn-añadir"/>
-                                            Añadir
-                                        </span>
-                                    </asp:LinkButton>
-                                    <asp:LinkButton id="btn_RemoveCapa" runat="server" class="btn botones">
-                                        <span>
-                                            <img class="btn-quitar"/>
-                                            Quitar
+                                            PLOT PLAN
                                         </span>
                                     </asp:LinkButton>
                                 </div> 
@@ -748,7 +655,7 @@
                                                     <asp:TextBox runat="server" ID="txt_PrcPartAux"  Text='<%# Eval("prc_part") %>' CssClass="NoDisplay"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                             <asp:TemplateField HeaderText="Lider" HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centrado">
+                                            <asp:TemplateField HeaderText="Lider" HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centrado">
                                                 <ItemTemplate>
                                                     <asp:CheckBox runat="server" ID="chk_Lider" Checked='<%# Eval("sn_lider") %>' CssClass="Select" onclick="fn_CambioSeleccion('gvd_Reparto',this,'Unica','chk_Lider')" />
                                                 </ItemTemplate>
@@ -825,7 +732,7 @@
                                 <asp:Panel runat="server" ID="pnlDistribucion" Width="100%" Height="180px" ScrollBars="Horizontal">
                                     <asp:GridView runat="server" ID="gvd_Distribucion" AutoGenerateColumns="false" 
                                                     CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                    GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_distribucion" >
+                                                    GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_capa,cod_distribucion" >
                                         <Columns>
                                             <asp:TemplateField HeaderText="" HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centrado">
                                                 <ItemTemplate>
@@ -924,7 +831,7 @@
                                    <asp:Panel runat="server" ID="pnlBrokers" Width="100%" Height="150px" ScrollBars="Vertical">
                                         <asp:GridView runat="server" ID="gvd_Intermediario" AutoGenerateColumns="false" 
                                                         CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                        GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_broker,Estatus" >
+                                                        GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_capa,cod_broker,Estatus" >
                                             <Columns>
                                                 <asp:TemplateField HeaderText="" HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centrado">
                                                     <HeaderTemplate>
@@ -1088,7 +995,7 @@
                                    <asp:Panel runat="server" ID="pnlCompañia" Width="100%" Height="150px" ScrollBars="Vertical">
                                         <asp:GridView runat="server" ID="gvd_Reasegurador" AutoGenerateColumns="false" 
                                                         CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                        GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_broker,cod_cia,Estatus">
+                                                        GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_capa,cod_broker,cod_cia,Estatus">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="" HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centrado">
                                                     <HeaderTemplate>
@@ -1740,7 +1647,7 @@
                         <asp:Panel runat="server" ID="pnlSubJetividad" Width="100%" Height="180px" ScrollBars="Both">
                             <asp:GridView runat="server" ID="gvd_Subjetividad" AutoGenerateColumns="false" 
                                         CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                        GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_broker,cod_cia,Num">
+                                        GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_capa,cod_broker,cod_cia,Num">
                                 <Columns>
                                     <asp:TemplateField  HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centrado">
                                         <HeaderTemplate>
@@ -2603,13 +2510,16 @@
                     <div class="cuadro-titulo-flotante" style="height:30px">
                         <input type="image" src="../Images/contraer_mini_inv.png" id="coVentana17" class="contraer"  />
                         <input type="image" src="../Images/expander_mini_inv.png"   id="exVentana17" class="expandir"  />
-                        <asp:label runat="server">[DIstribución de Capas]</asp:label>
+                        <asp:label runat="server">[PLOT PLAN]</asp:label>
                         <asp:label runat="server" ID="lbl_DistCapas"></asp:label>
                     </div>
                     <div class="panel-subcontenido ventana17">
                         <div class="row">
                             <div class="col-md-4">
-                                <asp:Panel runat="server" ID="pnlProgramaCapas" Width="100%" Height="200px" ScrollBars="Vertical">
+                                <div class="cuadro-titulo">
+                                    [DIstribución de Primas por Capa]
+                                </div>
+                                <asp:Panel runat="server" ID="pnlProgramaCapas" Width="100%" Height="245px" ScrollBars="Vertical">
                                     <asp:GridView runat="server" ID="gvd_ProgramaCapas" AutoGenerateColumns="false" 
                                                             CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
                                                             GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_capa" >
@@ -2626,40 +2536,127 @@
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Valor Capa" HeaderStyle-CssClass="Centro">
                                                 <ItemTemplate>
-                                                    <asp:TextBox runat="server" ID="txt_ValorCapa" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("valor_capa")))%>' CssClass="estandar-control Tablero Seleccion Monto ValorCapa" Width="110px"></asp:TextBox>
+                                                    <asp:TextBox runat="server" ID="txt_ValorCapa" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("valor_capa")))%>' CssClass="estandar-control Tablero Seleccion Monto ValorCapa" Width="100px"></asp:TextBox>
                                                     <asp:TextBox runat="server" ID="txt_ValorCapaAux"  Text='<%# Eval("valor_capa") %>' CssClass="NoDisplay"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="En Exceso" HeaderStyle-CssClass="Centro">
                                                 <ItemTemplate>
-                                                    <asp:TextBox runat="server" ID="txt_ExcesoCapa" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("exceso_capa")))%>' CssClass="estandar-control Tablero Seleccion Monto ExcesoCapa" Width="110px"></asp:TextBox>
+                                                    <asp:TextBox runat="server" ID="txt_ExcesoCapa" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("exceso_capa")))%>' CssClass="estandar-control Tablero Seleccion Monto ExcesoCapa" Width="100px"></asp:TextBox>
                                                     <asp:TextBox runat="server" ID="txt_ExcesoCapaAux"  Text='<%# Eval("exceso_capa") %>' CssClass="NoDisplay"></asp:TextBox>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Prima" HeaderStyle-CssClass="Centro">
+                                                <ItemTemplate>
+                                                    <asp:TextBox runat="server" ID="txt_PrimaCapa" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_capa")))%>' CssClass="estandar-control Tablero Seleccion Monto PrimaCapa" Width="90px"></asp:TextBox>
+                                                    <asp:TextBox runat="server" ID="txt_PrimaCapaAux"  Text='<%# Eval("prima_capa") %>' CssClass="NoDisplay"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Participación" HeaderStyle-CssClass="Centro">
                                                 <ItemTemplate>
                                                     <asp:TextBox runat="server" ID="txt_PrcPart" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_part")))%>' CssClass="estandar-control Tablero Seleccion Monto PrcPart" Width="75px"></asp:TextBox>
-                                                    <asp:TextBox runat="server" ID="txt_PrcPartAux" Text='<%# Eval("prc_part") %>' CssClass="NoDisplay"></asp:TextBox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                         </Columns>
                                     </asp:GridView>
                                 </asp:Panel>
+                                <div style="width:99%;  text-align:right">
+                                    <asp:LinkButton id="btn_AddCapaPrograma" runat="server" class="btn botones">
+                                        <span>
+                                            <img class="btn-añadir"/>
+                                            Añadir
+                                        </span>
+                                    </asp:LinkButton>
+                                    <asp:LinkButton id="btn_RemoveCapaPrograma" runat="server" class="btn botones">
+                                        <span>
+                                            <img class="btn-cancelar"/>
+                                            Quitar
+                                        </span>
+                                    </asp:LinkButton>
+                                </div>
+                                <div class="clear padding4"></div>
+                                <div style="width:99%; text-align:right; border-top:inset;border-color:#003A5D;border-width:1px;">
+                                    <asp:LinkButton id="btn_ConfirmaPrograma" runat="server" class="btn botones">
+                                        <span>
+                                            <img class="btn-aceptar"/>
+                                            Capas
+                                        </span>
+                                    </asp:LinkButton>
+                                </div>
+
+
+                                <div class="clear padding10"></div>
+                                <div class="cuadro-titulo">
+                                    [Capas]
+                                </div>
+                                <asp:Panel runat="server" ID="pnlCapas" Width="100%" Height="230px" ScrollBars="Horizontal">
+                                    <asp:GridView runat="server" ID="gvd_Capas" AutoGenerateColumns="false" 
+                                                    CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
+                                                    GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="cod_grupo,cod_capa" >
+                                        <Columns>
+                                            <asp:TemplateField HeaderText="" HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centrado">
+                                                <ItemTemplate>
+                                                    <asp:CheckBox runat="server" ID="chk_Sel"/>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Capa" ItemStyle-CssClass="Centrado">
+                                                <ItemTemplate>
+                                                    <asp:TextBox runat="server" ID="txt_Capa" Text='<%# Eval("cod_capa") %>'  Enabled="false" CssClass="estandar-control Tablero Centro" Width="40px"></asp:TextBox>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Valor Capa" HeaderStyle-CssClass="Centro">
+                                                <ItemTemplate>
+                                                    <asp:TextBox runat="server" ID="txt_ValorCapa" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("valor_capa")))%>' Enabled="false" CssClass="estandar-control Tablero Seleccion Monto ValorCapa" Width="100px"></asp:TextBox>
+                                                    <asp:TextBox runat="server" ID="txt_ValorCapaAux"  Text='<%# Eval("valor_capa") %>' CssClass="NoDisplay"></asp:TextBox>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Prima" HeaderStyle-CssClass="Centro">
+                                                <ItemTemplate>
+                                                    <asp:TextBox runat="server" ID="txt_PrimaCapa" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_capa")))%>' Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrimaCapa" Width="90px"></asp:TextBox>
+                                                    <asp:TextBox runat="server" ID="txt_PrimaCapaAux"  Text='<%# Eval("prima_capa") %>' CssClass="NoDisplay"></asp:TextBox>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Participación" HeaderStyle-CssClass="Centro">
+                                                <ItemTemplate>
+                                                    <asp:TextBox runat="server" ID="txt_PrcPart" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_part")))%>' Enabled="false" CssClass="estandar-control Tablero Seleccion Monto PrcPart" Width="75px"></asp:TextBox>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                                </asp:Panel>
+                                <%--<div style="width:100%;  text-align:right">
+                                    <asp:LinkButton id="btn_AddCapa" runat="server" class="btn botones">
+                                        <span>
+                                            <img class="btn-añadir"/>
+                                            Añadir
+                                        </span>
+                                    </asp:LinkButton>
+                                    <asp:LinkButton id="btn_RemoveCapa" runat="server" class="btn botones">
+                                        <span>
+                                            <img class="btn-quitar"/>
+                                            Quitar
+                                        </span>
+                                    </asp:LinkButton>
+                                </div> --%>
                             </div>
-                            <div class="col-md-8">
-                                <div runat="server" id="div_Capas" style="width:80%;height:500px;">
+                            <div class="col-md-1">
+                                <div runat="server" id="div_Capas" style="width:100%;height:600px;vertical-align:central;text-align:center;">
+
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div runat="server" id="div_Rangos" style="width:100%;height:600px;text-align:right;">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div runat="server" id="div_Grafica" style="width:100%;height:600px;border:inset;border-width:2px;border-color:black;text-align:center;">
 
                                 </div>
                             </div>
                         </div>
                         <div style="width:100%;  text-align:right">
-                            <asp:LinkButton id="btn_ConfirmaPrograma" runat="server" class="btn botones">
-                                <span>
-                                    <img class="btn-añadir"/>
-                                    Aceptar
-                                </span>
-                            </asp:LinkButton>
-                            <asp:LinkButton id="btn_CerrarPrograma" runat="server" class="btn botones">
+                            <asp:LinkButton id="btn_CerrarPrograma" runat="server" class="btn botones" data-dismiss="modal">
                                 <span>
                                     <img class="btn-cancelar"/>
                                     Cerrar
