@@ -1,4 +1,5 @@
 ﻿Imports System.Data
+Imports Mensaje
 Partial Class MesaControl_Tablero
     Inherits System.Web.UI.Page
 
@@ -55,40 +56,23 @@ Partial Class MesaControl_Tablero
                 LlenaGridColocacion(True)
                 LlenaGridNegocioXRamo(True)
                 LlenaGridNegocioXOficina(True)
-                LlenaGridNegocios(True)
             End If
         Catch ex As Exception
 
         End Try
     End Sub
 
-    Private Sub LlenaGridNegocios(ByVal bln_Nuevo As Boolean)
+    Private Sub ConsultaNegocios()
+        Dim id_folio As Integer = IIf(Len(txt_Folio.Text) = 0, -1, Replace(txt_Folio.Text, "REAS-", ""))
 
-        If bln_Nuevo = True Then
-            dtNegocios = New DataTable
-            dtNegocios.Columns.Add("Folio")
-            dtNegocios.Columns.Add("Oferta")
-            dtNegocios.Columns.Add("Oficina")
-            dtNegocios.Columns.Add("Asegurado")
-            dtNegocios.Columns.Add("Moneda")
-            dtNegocios.Columns.Add("Fec_VigIni")
-            dtNegocios.Columns.Add("Fec_VigFin")
-            dtNegocios.Columns.Add("Fec_Emi")
-            dtNegocios.Columns.Add("Agente")
-            dtNegocios.Columns.Add("Suscriptor")
-            dtNegocios.Columns.Add("Poliza")
-            dtNegocios.Columns.Add("Giro")
-            dtNegocios.Columns.Add("Tipo_Endoso")
-            dtNegocios.Columns.Add("Movimiento")
-            dtNegocios.Columns.Add("Responsable")
-        End If
-
-        If dtNegocios.Rows.Count = 0 Then
-            dtNegocios.Rows.Add("FOLIO", "OFERTA", "SUCURSAL", "ASEGURADO", "DOLARES", "30/01/2018", "30/01/2019", "30/01/2018", "AGENTE", "SUSCRIPTOR", "POLIZA", "GIRO", "TIPO ENDOSO", "MOVIMIENTO", "RESPONSABLE")
-        End If
+        Dim ws As New ws_MesaControl.MesaControlClient
+        dtNegocios = Funciones.Lista_A_Datatable(ws.ObtieneNegocio(id_folio, -1, vbNullString, vbNullString, -1, vbNullString, -1,
+                                                                   vbNullString, vbNullString, vbNullString, vbNullString, vbNullString,
+                                                                   vbNullString).ToList)
 
         Funciones.LlenaGrid(gvd_Monitor, dtNegocios)
     End Sub
+
 
     Private Sub LlenaGridEstatus(ByVal bln_Nuevo As Boolean)
 
@@ -189,4 +173,11 @@ Partial Class MesaControl_Tablero
         Funciones.LlenaGrid(gvd_NegocioXOficina, dtNegocioXOficina)
     End Sub
 
+    Private Sub btn_Monitor_Click(sender As Object, e As EventArgs) Handles btn_Monitor.Click
+        Try
+            ConsultaNegocios()
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
 End Class

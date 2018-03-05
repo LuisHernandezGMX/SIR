@@ -20,7 +20,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <asp:label runat="server" class="col-md-1 etiqueta-control" Width="30%">Folio</asp:label>
-                                        <asp:TextBox runat="server" ID="txt_Folio" CssClass="estandar-control" placeholder="Ejem. Reas-136-17,Reas-137-17" Width="70%"></asp:TextBox>
+                                        <asp:TextBox runat="server" ID="txt_Folio" CssClass="estandar-control" placeholder="Ejem. Reas-20181,Reas-201810" Width="70%"></asp:TextBox>
                                     </div>    
                                     <div class="col-md-4">
                                         <asp:label runat="server" class="col-md-1 etiqueta-control" Width="30%">Oficina</asp:label>
@@ -62,7 +62,7 @@
                             </ContentTemplate>
                         </asp:UpdatePanel>
 
-                        <div class="row NoDisplay">
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="cuadro-subtitulo">
                                     <input type="image" src="../Images/contraer_mini.png" id="coVentana1" class="contraer"  />
@@ -72,10 +72,10 @@
                                 <div class="panel-subcontenido ventana1">
                                         <asp:UpdatePanel runat="server" ID="upAgrupador">
                                         <ContentTemplate>
-                                                <asp:Panel runat="server" ID="pn_Agrupador" Width="100%" Height="80px" ScrollBars="Both">
+                                                <asp:Panel runat="server" ID="pn_Agrupador" Width="100%" Height="120px" ScrollBars="Both">
                                                 <asp:GridView runat="server" ID="gvd_Agrupador" AutoGenerateColumns="false" 
                                                                 CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                                GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
+                                                                GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="Clave" >
                                                     <Columns>
                                                         <asp:TemplateField HeaderText="">
                                                             <ItemTemplate>
@@ -122,7 +122,7 @@
                                 <div class="panel-subcontenido ventana2">
                                         <asp:UpdatePanel runat="server" ID="up_Producto">
                                         <ContentTemplate>
-                                                <asp:Panel runat="server" ID="pnl_Producto" Width="99.5%" Height="80px" ScrollBars="Both">
+                                                <asp:Panel runat="server" ID="pnl_Producto" Width="99.5%" Height="120px" ScrollBars="Both">
                                                 <asp:GridView runat="server" ID="gvd_Producto" AutoGenerateColumns="false" 
                                                                 CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
                                                                 GridLines="Horizontal"  ShowHeaderWhenEmpty="true" >
@@ -308,84 +308,79 @@
                             </div>
                             <div>
                                 <div class="clear padding10"></div>
-                                <asp:Panel runat="server" ID="pnl_Monitor" Width="100%" Height="420px" ScrollBars="Both">
+                                <asp:Panel runat="server" ID="pnl_Monitor" Width="99%" Height="300px" ScrollBars="Both">
                                     <asp:GridView runat="server" ID="gvd_Monitor" AutoGenerateColumns="false" 
                                                     CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
-                                                    GridLines="Horizontal"  ShowHeaderWhenEmpty="true">
+                                                    GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="id_folio,cod_moneda">
                                         <Columns>
                                             <asp:TemplateField HeaderText="Folio">
                                                 <ItemTemplate>
-                                                    <asp:linkbutton runat="server" ID="lnk_Folio" Text='<%# Eval("Folio") %>' CssClass="estandar-control Tablero Folio Centro" Width="150px" ></asp:linkbutton>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Oferta">
-                                                <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Oferta" Text='<%# Eval("Oferta") %>' Enabled="false" CssClass="estandar-control Tablero" Width="150px" ></asp:textbox>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Oficina">
-                                                <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Oficina" Text='<%# Eval("Oficina") %>' Enabled="false" CssClass="estandar-control Tablero" Width="90px" ></asp:textbox>
+                                                    <asp:linkbutton runat="server" ID="lnk_Folio" Text='<%# Eval("folio") %>' CssClass="estandar-control Tablero Folio Centro" Width="150px" ></asp:linkbutton>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Asegurado">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Asegurado" Text='<%# Eval("Asegurado") %>' Enabled="false" CssClass="estandar-control Tablero" Width="300px" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_Asegurado" Text='<%# Eval("nombre_asegurado") %>' Enabled="false" CssClass="estandar-control Tablero" Width="300px" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Moneda">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Moneda" Text='<%# Eval("Moneda") %>' Enabled="false" CssClass="estandar-control Tablero" Width="80" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_Moneda" Text='<%# Eval("Moneda") %>' Enabled="false" CssClass="estandar-control Tablero" Width="100" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Inicio Vig.">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_VigIni" Text='<%# Eval("Fec_VigIni") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="70" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_VigIni" Text='<%# Eval("fec_inivig") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="70" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Fin Vig.">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_VigFin" Text='<%# Eval("Fec_VigFin") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="70" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_VigFin" Text='<%# Eval("fec_finvig") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="70" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Emisión">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Emision" Text='<%# Eval("Fec_Emi") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="70" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_Emision" Text='<%# Eval("fec_emi") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="70" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Regional">
+                                                <ItemTemplate>
+                                                    <asp:textbox runat="server" ID="txt_Regional" Text='<%# Eval("sucursal_ofi") %>' Enabled="false" CssClass="estandar-control Tablero" Width="90px" ></asp:textbox>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>                                           
                                             <asp:TemplateField HeaderText="Agente">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Agente" Text='<%# Eval("Agente") %>' Enabled="false" CssClass="estandar-control Tablero" Width="200" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_Agente" Text='<%# Eval("agente") %>' Enabled="false" CssClass="estandar-control Tablero" Width="200" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Suscriptor">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Suscriptor" Text='<%# Eval("Suscriptor") %>' Enabled="false" CssClass="estandar-control Tablero" Width="200" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_Suscriptor" Text='<%# Eval("suscriptor") %>' Enabled="false" CssClass="estandar-control Tablero" Width="200" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Poliza">
+                                            <asp:TemplateField HeaderText="Giro Negocio">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Poliza" Text='<%# Eval("Poliza") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="80" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_Giro" Text='<%# Eval("giro_negocio") %>' Enabled="false" CssClass="estandar-control Tablero" Width="300" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="Giro">
+                                            <asp:TemplateField HeaderText="Giro Asegurado">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Giro" Text='<%# Eval("Giro") %>' Enabled="false" CssClass="estandar-control Tablero" Width="200" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_GiroAseg" Text='<%# Eval("giro_asegurado") %>' Enabled="false" CssClass="estandar-control Tablero" Width="200" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Tipo Endoso">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Endoso" Text='<%# Eval("Tipo_Endoso") %>' Enabled="false" CssClass="estandar-control Tablero" Width="150" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_Endoso" Text='<%# Eval("grupo_endoso") %>' Enabled="false" CssClass="estandar-control Tablero" Width="150" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                              <asp:TemplateField HeaderText="Movimiento">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Movimiento" Text='<%# Eval("Movimiento") %>' Enabled="false" CssClass="estandar-control Tablero" Width="150" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_Movimiento" Text='<%# Eval("tipo_endoso") %>' Enabled="false" CssClass="estandar-control Tablero" Width="150" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                             <asp:TemplateField HeaderText="Responsable">
                                                 <ItemTemplate>
-                                                    <asp:textbox runat="server" ID="txt_Responsable" Text='<%# Eval("Responsable") %>' Enabled="false" CssClass="estandar-control Tablero" Width="200" ></asp:textbox>
+                                                    <asp:textbox runat="server" ID="txt_Responsable" Text='<%# Eval("cod_usuario_crea") %>' Enabled="false" CssClass="estandar-control Tablero" Width="200" ></asp:textbox>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                         </Columns>
@@ -665,7 +660,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </asp:Content>

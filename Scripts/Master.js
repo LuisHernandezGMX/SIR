@@ -171,6 +171,11 @@ function PageLoadMaster() {
         }
     });
 
+    $("[id*=btn_buscaFolio]").click(function () {
+        event.preventDefault ? event.preventDefault() : event.returnValue = false;
+        fn_CargaCatalogo("Fol", "", "", "Unica", "", "FOLIOS");
+    });
+
 }
 
 
@@ -611,3 +616,4 @@ function fn_DateDiff(date1, date2, interval) {
 function fn_IsDate(date) {
     return (new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) )  ? true : false;
 }
+

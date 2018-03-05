@@ -23,6 +23,14 @@ $("body").on("click", ".AgregaResponsable", function () {
     fn_CargaCatalogo("Usu", "", "", "Unica", "txt_ClaveResp|txt_SearchResp", "USUARIOS");
 });
 
+//Detecta la clase Agregar Agrupador y abre el Catalogo
+$("body").on("click", ".AgregaAgrupadores", function () {
+    var strSel = fn_ElementosSeleccionados($("[id*=gvd_Agrupador]"), $('[id*=lbl_ClaveAgr]'), $('[id*=chk_SelAgr]'), false);
+
+    //*************fn_CargaCatalogo(PrefijoCatalogo,Condicion,Seleccion,TipoSeleccion,IdGrid,Titulo)***************
+    fn_CargaCatalogo("Agr", "", strSel, "Multiple", "gvd_Agrupador", "AGRUPADORES");
+});
+
 //Detecta la clase Agregar Broker y abre el Catalogo
 $("body").on("click", ".AgregaProducto", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Producto]"), $('[id*=lbl_ClavePro]'), $('[id*=chk_SelPro]'), false);
