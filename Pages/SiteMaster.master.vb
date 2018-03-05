@@ -117,6 +117,15 @@ Partial Class Pages_SiteMaster
         End Set
     End Property
 
+    Public Property mtx_BuscaFolio() As ImageButton
+        Get
+            Return btn_buscaFolio
+        End Get
+        Set(ByVal value As ImageButton)
+            btn_buscaFolio = value
+        End Set
+    End Property
+
     Public WriteOnly Property Clase_Logo() As String
         Set(ByVal value As String)
             div_Logo.Attributes("class") = value
@@ -870,5 +879,7 @@ Partial Class Pages_SiteMaster
             Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
+
+
 End Class
 
