@@ -143,10 +143,6 @@ $("body").on("click", ".expandir", function () {
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$("body").on("click", ".AgregaResponsable", function () {
-    fn_CargaCatalogo("Usu", "", "", "Unica", "txt_ClaveResp|txt_SearchResp", "USUARIOS");
-});
-
 //Detecta la clase Agregar Broker y abre el Catalogo
 $("body").on("click", ".AgregaBroker", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Intermediario]"), $('[id*=lbl_ClaveBro]'), $('[id*=chk_Sel]'), false);
@@ -181,6 +177,26 @@ $("body").on("keydown", "[id$=txt_SearchAse]", function (e) {
     fn_Autocompletar("Ase", "txt_ClaveAseg", "txt_SearchAse", "", 3, e.which)
 });
 
+
+//Suscriptor
+$("body").on("keydown", "[id$=txt_SearchResp]", function (e) {
+    fn_Autocompletar("Usu", "txt_ClaveResp", "txt_SearchResp", "", 0, e.which)
+});
+
+$("body").on("focusout", "[id$=txt_SearchResp]", function () {
+    if ($(this)[0].value == '') {
+        $("input[id$='txt_ClaveResp']")[0].value = ''
+    }
+    fn_EvaluaAutoComplete('txt_ClaveResp', 'txt_SearchResp');
+});
+
+$("body").on("focus", "[id$=txt_SearchResp]", function () {
+    fn_Autocompletar("Usu", "txt_ClaveResp", "txt_SearchResp", "", 0, -1)
+    $(this).trigger({
+        type: "keydown",
+        which: 46
+    });
+});
 
 
 //Oficina
@@ -1346,6 +1362,8 @@ function fn_CalculaDistribucionGMX(Inciso, Posicion, ArrayClase, ArrayControl) {
         var Incisos = $("[id*=gvd_Agrupacion] .Incisos")[Index].value.split(',');
         var inicio = 0;
         var fin = -1;
+        var Gread = 'gvd_Reparto';
+        var IndiceCapa = 1;
 
         if (Incisos.indexOf(Inciso.toString()) != -1 || Inciso == -1) {
             if (Posicion > -1) {
@@ -1357,11 +1375,19 @@ function fn_CalculaDistribucionGMX(Inciso, Posicion, ArrayClase, ArrayControl) {
                 fin = $("[id*=gvd_Distribucion]")[0].rows.length - 2;
             }
 
+            var chk_NoProporcional = $("[id*=gvd_Agrupacion] .chk_NoProporcional")[Index];
+            if ($(chk_NoProporcional)[0].childNodes[0].checked == true) {
+                Gread = 'gvd_CapasColocacion';
+                IndiceCapa = $("input[id$='hid_IndiceCapa']")[0].value;
+            }
+
             for (Posicion = inicio; Posicion <= fin; Posicion++) {
                 var Prc = $("[id*=gvd_Distribucion] .PrcPartGMX")[Posicion].value
                 
                 for (i = 0; i < ArrayClase.length; i++) {
-                    Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[i] + "Aux]")[1];
+
+                    Monto = $("[id*=" + Gread).find("[id*=" + ArrayControl[i] + "Aux]")[IndiceCapa];
+
                     if (Monto != undefined) {
                         Control = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[i] + "Aux]")[Posicion];
                         if (Control != undefined) {
@@ -1375,12 +1401,17 @@ function fn_CalculaDistribucionGMX(Inciso, Posicion, ArrayClase, ArrayControl) {
                     }
                 }
 
-                //Calcula el porcentaje sobre Coaseguro
-                Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0] 
-                if (Monto != undefined) {
-                    Control = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
-                    $("[id*=gvd_Distribucion] .PrcPart")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
+                if ($(chk_NoProporcional)[0].childNodes[0].checked == false) {
+                    //Calcula el porcentaje sobre Coaseguro
+                    Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
+                    if (Monto != undefined) {
+                        Control = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
+                        $("[id*=gvd_Distribucion] .PrcPart")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
+                    }
                 }
+                else {
+                    $("[id*=gvd_Distribucion] .PrcPart")[Posicion].value = fn_FormatoMonto(parseFloat(Prc), 4);
+                } 
             }
             fn_SumaTotales('gvd_Distribucion', ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimRespAux', 'txt_PrimaNetaAux', 'txt_PrimaINCAux', 'txt_PrimaTEVAux', 'txt_PrimaFHMAux', 'txt_PrimaRCAux', 'txt_PrimaCSCAux', 'txt_PrimaGRAAux'], 0, [0], 0);
         }
@@ -1663,13 +1694,18 @@ function fn_CalculaIntermediario(Inciso, Posicion, ArrayClase , ArrayControl) {
                     }
                 }
 
-                //Calcula el porcentaje sobre Coaseguro
-                Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
-                if (Monto != undefined) {
-                    Control = $("[id*=gvd_Intermediario]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
-                    $("[id*=gvd_Intermediario] .PrcPartCoas")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
+                var chk_NoProporcional = $("[id*=gvd_Agrupacion] .chk_NoProporcional")[Index];
+                if ($(chk_NoProporcional)[0].childNodes[0].checked == false) {
+                    //Calcula el porcentaje sobre Coaseguro
+                    Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
+                    if (Monto != undefined) {
+                        Control = $("[id*=gvd_Intermediario]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
+                        $("[id*=gvd_Intermediario] .PrcPartCoas")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
+                    }
                 }
-
+                else {
+                    $("[id*=gvd_Intermediario] .PrcPartCoas")[Posicion].value = fn_FormatoMonto(parseFloat(Prc), 4);
+                }
 
                 //Calculo de Corretaje
                 fn_CalculaCorretaje(Posicion, $("[id*=gvd_Intermediario] .PrcCorretaje")[Posicion]);
@@ -1724,13 +1760,19 @@ function fn_CalculaReasegurador(Inciso, Posicion, ArrayClase, ArrayControl) {
                     }
                 }
 
-                //Calcula el porcentaje sobre Coaseguro
-                Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
-                if (Monto != undefined) {
-                    Control = $("[id*=gvd_Reasegurador]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
-                    $("[id*=gvd_Reasegurador] .PrcPart100")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
+                var chk_NoProporcional = $("[id*=gvd_Agrupacion] .chk_NoProporcional")[Index];
+                if ($(chk_NoProporcional)[0].childNodes[0].checked == false) {
+                    //Calcula el porcentaje sobre Coaseguro
+                    Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
+                    if (Monto != undefined) {
+                        Control = $("[id*=gvd_Reasegurador]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
+                        $("[id*=gvd_Reasegurador] .PrcPart100")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
+                    }
                 }
-
+                else {
+                    $("[id*=gvd_Reasegurador] .PrcPart100")[Posicion].value = fn_FormatoMonto(parseFloat(Prc), 4);
+                }
+                
                 //Calculo de Comisiones
                 fn_CalculoComision('prc', ['INC', 'TEV', 'FHM', 'RC', 'CSC', 'GRA', 'Neta']);
             }
@@ -1739,15 +1781,6 @@ function fn_CalculaReasegurador(Inciso, Posicion, ArrayClase, ArrayControl) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-//Responsable
-$("body").on("keydown", "[id$=txt_SearchResp]", function (e) {
-    if (e.which == 9) {
-        $('.Esquema').focus();
-        return false;
-    }
-    fn_Autocompletar("Usu", "txt_ClaveResp", "txt_SearchResp", "", 2, e.which)
-});
 
 //----------------------------------------------------------------------------------------------------------------------
 $("body").on("focus", ".Seleccion", function (e) {
@@ -1912,11 +1945,6 @@ $("body").on("focusout", ".Moneda", function (e) {
 $("body").on("focusout", "[id$=txt_SearchGiro]", function (e) {
     fn_EvaluaAutoComplete('txt_ClaveGiro', 'txt_SearchGiro');
 });
-
-$("body").on("focusout", "[id$=txt_SearchResp]", function (e) {
-    fn_EvaluaAutoComplete('txt_ClaveResp', 'txt_SearchResp');
-});
-
 
 $("body").on("change", "[id$=txt_VigIni]", function (e) {
     $("input[id$='txt_VigenciaIni']")[0].value = $(this)[0].value;
