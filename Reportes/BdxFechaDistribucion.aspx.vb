@@ -158,4 +158,28 @@ Partial Class Reportes_Bdx_BdxFechaDistribucion
     Protected Sub ddlEjercicio_SelectedIndexChanged(sender As Object, e As EventArgs)
         hidEjercicio.Value = ddlEjercicio.SelectedItem.Text
     End Sub
+
+    Private Sub btn_HistAJ_Click(sender As Object, e As EventArgs) Handles btn_HistAJ.Click
+        CargaModalHist(CDate(txtFecDesde.Text).ToString("yyyyMMdd"), CDate(txtFecHasta.Text).ToString("yyyyMMdd"))
+        Funciones.AbrirModal("#HistoricoModal")
+
+    End Sub
+    Private Sub CargaModalHist(Fecha_desde As String, fecha_hasta As String)
+        Dim wsGmx As New ws_Reportes.BordereauxClient
+        Dim Resultado As New DataTable
+        Try
+
+            Resultado = Funciones.Lista_A_Datatable(wsGmx.GetAjustesHist(Fecha_desde, fecha_hasta).ToList)
+            gvd_Historicos.DataSource = Resultado
+            gvd_Historicos.DataBind()
+        Catch ex As Exception
+            Resultado = Nothing
+        End Try
+    End Sub
+
+    Private Sub btn_CerrarModHist_Click(sender As Object, e As EventArgs) Handles btn_CerrarModHist.Click
+        gvd_Historicos.DataSource = Nothing
+        gvd_Historicos.DataBind()
+        Funciones.CerrarModal("#HistoricoModal")
+    End Sub
 End Class

@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="VB"  MasterPageFile="~/Pages/SiteMaster.master" AutoEventWireup="false"  CodeFile="Inicio.aspx.vb" Inherits="Pages_Inicio" %>
 
-<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
 <%@ MasterType VirtualPath="~/Pages/SiteMaster.master" %>
 
 
