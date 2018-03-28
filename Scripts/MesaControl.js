@@ -67,6 +67,7 @@ $("body").on("click", ".Generales", function (e) {
     }
     fn_CerrarModalSimple('#Comisiones');
     fn_CerrarModalSimple('#Subjetividad');
+    fn_CerrarModalSimple('#Pagos');
     $("input[id$='hid_Pestaña']")[0].value = 0;
 });
 
@@ -83,6 +84,7 @@ $("body").on("click", ".Colocacion", function (e) {
         if (($("[id*=gvd_Intermediario] .Clave")[IndexBroker].innerText == 0 && $("input[id$='hid_IndiceReas']")[0].value > -1) || ($("[id*=gvd_Intermediario] .Clave")[IndexBroker].innerText > 0)) {
             fn_AbrirModalSimple('#Comisiones');
             fn_AbrirModalSimple('#Subjetividad');
+            fn_AbrirModalSimple('#Pagos');
         }
     }
 
@@ -96,6 +98,7 @@ $("body").on("click", ".Resumen", function (e) {
     }
     fn_CerrarModalSimple('#Comisiones');
     fn_CerrarModalSimple('#Subjetividad');
+    fn_CerrarModalSimple('#Pagos');
     $("input[id$='hid_Pestaña']")[0].value = 2;
 });
 
@@ -1528,6 +1531,20 @@ $("body").on("focusout", ".PnrGRA", function (e) {
 });
 
 
+//Porcentaje
+$("body").on("focusout", "[id*=gvd_Pagos] .Prc", function (e) {
+    var row = $(this).closest("tr");
+    fn_CalculoPago('prc', row[0].rowIndex - 1);
+});
+
+
+//Importe
+$("body").on("focusout", "[id*=gvd_Pagos] .Importe", function (e) {
+    var row = $(this).closest("tr");
+    fn_CalculoPago('mnt', row[0].rowIndex - 1);
+});
+
+
 //Porcentaje de Participación Intermediarios
 $("body").on("focusout", "[id*=gvd_Intermediario] .PrcPart", function (e) {
     var row = $(this).closest("tr");
@@ -1628,6 +1645,7 @@ function fn_CalculoComision(Factor, ArrayTipo) {
     }
 }
 
+
 function fn_TotalesComision(Clase, ArrayTipo) {
     var suma = 0;
     var Elemento = undefined;
@@ -1648,6 +1666,24 @@ function fn_CalculaCorretaje(Posicion, Prc) {
         Prc.value = fn_FormatoMonto(parseFloat(Prc.value), 4, 1)
     }
 }
+
+function fn_CalculoPago(Factor,Posicion) {
+    var Index = $("input[id$='hid_IndiceBroker']")[0].value;
+    var PNR = $(".PnrNeta")[0].value.replace(/,/g, "");
+
+    if (Index > -1) {
+        var Prc = $("[id*=gvd_Pagos] .Prc")[Posicion];
+        var Importe = $("[id*=gvd_Pagos] .Importe")[Posicion];
+
+        switch (Factor) {
+            case 'prc':
+                Importe.value = fn_FormatoMonto(parseFloat(PNR * (Prc.value / 100)), 2);
+            case 'mnt':
+                Prc.value = fn_FormatoMonto(parseFloat((Importe.value / PNR) * 100), 4, 1);
+        }
+    }
+}
+
 
 //Calculo de la Distribución correspondiente a GMX
 function fn_CalculaIntermediario(Inciso, Posicion, ArrayClase , ArrayControl) {

@@ -9,7 +9,6 @@ Partial Class Pages_SiteMaster
     Private dtPolizas As DataTable
     Private DetalleUsuario() As String
 
-    Public Event gv_Tablero_Rowcommand(sender As Object, e As GridViewCommandEventArgs)
 
     Public ReadOnly Property Contenedor() As ContentPlaceHolder
         Get
@@ -90,14 +89,6 @@ Partial Class Pages_SiteMaster
         End Set
     End Property
 
-    Public Property mgv_Tablero() As GridView
-        Get
-            Return gvd_Tablero
-        End Get
-        Set(ByVal value As GridView)
-            gvd_Tablero = value
-        End Set
-    End Property
 
     Public Property mtx_Folio() As TextBox
         Get
@@ -857,28 +848,7 @@ Partial Class Pages_SiteMaster
         End Try
     End Sub
 
-    Private Sub gvd_Tablero_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvd_Tablero.RowDataBound
-        Try
-            If e.Row.RowType = DataControlRowType.DataRow Then
-                Dim lnk_Estatus As LinkButton = TryCast(e.Row.FindControl("lnk_Estatus"), LinkButton)
-                If Split(lnk_Estatus.ClientID, "_")(4) <= 5 Then
-                    lnk_Estatus.BackColor = Drawing.Color.Yellow
-                Else
-                    lnk_Estatus.BackColor = Drawing.Color.LightGreen
-                End If
-            End If
-        Catch ex As Exception
-            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
-        End Try
-    End Sub
 
-    Public Sub gvd_Tablero_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvd_Tablero.RowCommand
-        Try
-            RaiseEvent gv_Tablero_Rowcommand(Me, e)
-        Catch ex As Exception
-            Mensaje.MuestraMensaje("Master Page", ex.Message, TipoMsg.Falla)
-        End Try
-    End Sub
 
 
 End Class
