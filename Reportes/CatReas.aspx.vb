@@ -6,7 +6,7 @@ Partial Class Reportes_CatReas
         Dim ws As New ws_Generales.GeneralesClient
 
         Try
-            Dim server As String = ws.ObtieneParametro(9)
+            Dim server As String = ws.ObtieneParametro(8)
             server = Replace(Replace(server, "@Reporte", "CatalogoReas"), "@Formato", "EXCEL")
             Funciones.EjecutaFuncion("window.open('" & server & "');")
 
