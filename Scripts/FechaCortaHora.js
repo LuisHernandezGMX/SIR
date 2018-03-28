@@ -4,6 +4,7 @@
     if (control != undefined) {
         control.innerHTML = f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear();
     }
+    
 }
 
 function startTime() {
@@ -20,6 +21,8 @@ function startTime() {
         control.innerHTML = h + ":" + m + ":" + s;
     }
     t = setTimeout('startTime()', 500);
+
+    startDateShort();
 }
 
 function checkTime(i)
@@ -27,4 +30,4 @@ function checkTime(i)
 
 
 
-window.onload = function () { startDateShort(); startTime(); }
+window.onload = function () { startTime(); }

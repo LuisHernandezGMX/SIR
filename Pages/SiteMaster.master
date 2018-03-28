@@ -126,10 +126,9 @@
                                         </table>
                                     </div>
                             
+                                    <div class="clear padding4"></div>
+
                                     <div runat="server" id="cuadro_tablero" visible="false">
-                                        <div class="cuadro-titulo">
-                                            Tablero de Avance
-                                        </div>
                                     
                                          <div class="clear padding4"></div>
 
@@ -140,71 +139,8 @@
                                         <div class="clear padding4"></div>
 
                                         <asp:label runat="server" class="col-md-1 etiqueta-control" Width="23%">Oferta</asp:label>
-                                        <asp:TextBox runat="server" ID="txt_Oferta" CssClass="col-md-1 estandar-control Tablero" Width="75%"></asp:TextBox>
-
-
-                                        <asp:Panel runat="server" ID="pnl_Tablero" Width="100%" ScrollBars="None">
-                                            <asp:GridView runat="server"  ID="gvd_Tablero" AutoGenerateColumns="false" 
-                                                          GridLines="None"  ShowHeaderWhenEmpty="true" CssClass="grid-view"
-                                                          HeaderStyle-CssClass="header" DataKeyNames="cod_proceso">
-                                                <Columns>
-                                                    <asp:TemplateField HeaderText="">
-                                                        <ItemTemplate>
-                                                            <asp:textbox runat="server" ID="txt_Fase" CssClass="estandar-control Tablero2" Text='<%# Eval("fase") %>' Width="63px"></asp:textbox>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="">
-                                                        <ItemTemplate>
-                                                            <asp:linkbutton runat="server" ID="lnk_Estatus" Text='<%# Eval("proceso") %>' CssClass="estandar-control Tablero2 Proceso" Width="130px" ></asp:linkbutton>
-                                                            <asp:textbox runat="server" ID="txt_Nota" CssClass="NoDisplay Nota" Text='<%# Eval("notas") %>'></asp:textbox>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="INICIO">
-                                                        <ItemTemplate>
-                                                            <asp:textbox runat="server" ID="txt_FecInicio" CssClass="estandar-control Tablero Fecha Centro FecIni" TextMode="Date" Text='<%# Eval("fecha_inicio") %>' PlaceHolder="dia/mes/año"  Width="60px"></asp:textbox>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="TERMINO">
-                                                        <ItemTemplate>
-                                                            <asp:textbox runat="server" ID="txt_FecTermino" CssClass="estandar-control Tablero Fecha Centro FecFin" TextMode="Date" Text='<%# Eval("fecha_fin") %>' PlaceHolder="dia/mes/año"  Width="60px"></asp:textbox>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField HeaderText="LAP">
-                                                        <ItemTemplate>
-                                                            <asp:Label runat="server" ID="lbl_Lapso" Text='<%# Eval("lapso") %>' CssClass="Centro Lapso" Width="25px"></asp:Label>
-                                                            <asp:TextBox runat="server" ID="lbl_LapsoAux" Text='<%# Eval("lapso") %>' CssClass="NoDisplay LapsoAux"></asp:TextBox>
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                    <%--<asp:TemplateField HeaderText="">
-                                                        <ItemTemplate>
-                                                            <asp:linkbutton runat="server" ID="lnk_Notas" CommandName="Notas" Text="Notas" Width="30px"></asp:linkbutton>
-                                                            
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>--%>
-                                                </Columns>
-                                            </asp:GridView>
-
-                                            <div class="clear padding4"></div>
-
-                                            <div class="row">
-                                                <div class="col-md-1"  >
-                                               
-                                                </div>
-                                                <div class="col-md-1" style="height:20px;background-color:yellow;"">
-
-                                                </div>
-                                                <div class="col-md-4">
-                                                     <asp:label runat="server" class="etiqueta-control">Proyecto</asp:label> 
-                                                </div>
-                                                <div class="col-md-1" style="height:20px;background-color:lightgreen;"">
-
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <asp:label runat="server" class="etiqueta-control">En Firme</asp:label> 
-                                                </div>
-                                            </div>
-                                        </asp:Panel>
-                                        
+                                        <asp:TextBox runat="server" ID="txt_Oferta" CssClass="estandar-control Tablero" Width="75%"></asp:TextBox>
+                                    
                                         <div class="clear padding4"></div>
                                     </div>
                                 </ContentTemplate>
