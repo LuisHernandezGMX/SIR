@@ -1,5 +1,6 @@
 ﻿Imports Mensaje
 Imports System.Data
+Imports System.Data.SqlClient
 
 Partial Class MesaControl_Memoria
     Inherits System.Web.UI.Page
@@ -10,6 +11,33 @@ Partial Class MesaControl_Memoria
         End Get
         Set(ByVal value As DataTable)
             Session("dtRiesgo") = value
+        End Set
+    End Property
+
+    Public Property dtPolizasAseg() As DataTable
+        Get
+            Return Session("dtPolizasAseg")
+        End Get
+        Set(ByVal value As DataTable)
+            Session("dtPolizasAseg") = value
+        End Set
+    End Property
+
+    Public Property dtRiesgosPol() As DataTable
+        Get
+            Return Session("dtRiesgosPol")
+        End Get
+        Set(ByVal value As DataTable)
+            Session("dtRiesgosPol") = value
+        End Set
+    End Property
+
+    Public Property dtUbicaciones() As DataTable
+        Get
+            Return Session("dtUbicaciones")
+        End Get
+        Set(ByVal value As DataTable)
+            Session("dtUbicaciones") = value
         End Set
     End Property
 
@@ -33,8 +61,13 @@ Partial Class MesaControl_Memoria
     Private Sub MesaControl_Memoria_Load(sender As Object, e As EventArgs) Handles Me.Load
         Try
             If Not IsPostBack Then
+
+                Funciones.LlenaCatDDL(ddl_Moneda, "Mon",,,,,, False)
+
                 Funciones.LlenaCatGrid(gvd_RamoSbr, "Ras", "", "")
                 LlenaGridRiesgo(True)
+
+
             End If
         Catch ex As Exception
 
@@ -74,7 +107,7 @@ Partial Class MesaControl_Memoria
                 TryCast(row.FindControl(Replace(sender.ID, "btn", "txt")), TextBox).Width = pixeles
             Next
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
@@ -145,13 +178,13 @@ Partial Class MesaControl_Memoria
             If hid_SelRam.Value <> "" Then
 
                 If dtRiesgo.Rows.Count = 0 Then
-                    dtRiesgo.Rows.Add(0, 0, "0", "TOTAL", "", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                    dtRiesgo.Rows.Add(0, 0, "0", "TOTAL", "", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 End If
 
                 If Len(hid_SelRie.Value) = 0 Then
                     For Each ramo In Ramos
                         If ramo <> "" Then
-                            dtRiesgo.Rows.Add(0, inciso, Split(ramo, "~")(0), Split(ramo, "~")(1), Split(ramo, "~")(2), Split(ramo, "~")(3), "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                            dtRiesgo.Rows.Add(0, inciso, Split(ramo, "~")(0), Split(ramo, "~")(1), Split(ramo, "~")(2), Split(ramo, "~")(3), "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                             inciso = inciso + 1
                         End If
                     Next
@@ -159,14 +192,14 @@ Partial Class MesaControl_Memoria
                     If Len(hid_SelCob.Value) = 0 Then
                         For Each seccion In Secciones
                             If seccion <> "" Then
-                                dtRiesgo.Rows.Add(0, inciso, Split(Ramos(1), "~")(0), Split(Ramos(1), "~")(1), Split(Ramos(1), "~")(2), Split(Ramos(1), "~")(3), Split(seccion, "~")(0), Split(seccion, "~")(1), "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                                dtRiesgo.Rows.Add(0, inciso, Split(Ramos(1), "~")(0), Split(Ramos(1), "~")(1), Split(Ramos(1), "~")(2), Split(Ramos(1), "~")(3), Split(seccion, "~")(0), Split(seccion, "~")(1), "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                                 inciso = inciso + 1
                             End If
                         Next
                     Else
                         For Each cobertura In Coberturas
                             If cobertura <> "" Then
-                                dtRiesgo.Rows.Add(0, inciso, Split(Ramos(1), "~")(0), Split(Ramos(1), "~")(1), Split(Ramos(1), "~")(2), Split(Ramos(1), "~")(3), Split(Secciones(1), "~")(0), Split(Secciones(1), "~")(1), Split(cobertura, "~")(0), Split(cobertura, "~")(1), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                                dtRiesgo.Rows.Add(0, inciso, Split(Ramos(1), "~")(0), Split(Ramos(1), "~")(1), Split(Ramos(1), "~")(2), Split(Ramos(1), "~")(3), Split(Secciones(1), "~")(0), Split(Secciones(1), "~")(1), Split(cobertura, "~")(0), Split(cobertura, "~")(1), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                                 inciso = inciso + 1
                             End If
                         Next
@@ -184,7 +217,7 @@ Partial Class MesaControl_Memoria
 
             LlenaGridRiesgo(False)
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
@@ -215,17 +248,6 @@ Partial Class MesaControl_Memoria
             Dim txt_PrimaCSC As TextBox = TryCast(row.FindControl("txt_PrimaCSCAux"), TextBox)
             Dim txt_PrimaGRA As TextBox = TryCast(row.FindControl("txt_PrimaGRAAux"), TextBox)
 
-            Dim txt_PrcComAge As TextBox = TryCast(row.FindControl("txt_PrcComAge"), TextBox)
-            Dim txt_ComAge As TextBox = TryCast(row.FindControl("txt_ComAgeAux"), TextBox)
-            Dim txt_PrcComAdiAge As TextBox = TryCast(row.FindControl("txt_PrcComAdiAge"), TextBox)
-            Dim txt_ComAdiAge As TextBox = TryCast(row.FindControl("txt_ComAdiAgeAux"), TextBox)
-            Dim txt_Cuota As TextBox = TryCast(row.FindControl("txt_Cuota"), TextBox)
-
-            Dim txt_PrcFeeGmx As TextBox = TryCast(row.FindControl("txt_PrcFeeGmx"), TextBox)
-            Dim txt_FeeGmx As TextBox = TryCast(row.FindControl("txt_FeeGmxAux"), TextBox)
-            Dim txt_PrcComFac As TextBox = TryCast(row.FindControl("txt_PrcComFac"), TextBox)
-            Dim txt_ComFac As TextBox = TryCast(row.FindControl("txt_ComFacAux"), TextBox)
-
             Dim myRow() As Data.DataRow
             myRow = dtRiesgo.Select("cod_inciso ='" & gvd_Riesgo.DataKeys(row.RowIndex)("cod_inciso") & "'")
 
@@ -250,15 +272,6 @@ Partial Class MesaControl_Memoria
                 myRow(0)("prima_rc") = IIf(txt_PrimaRC.Text = vbNullString, 0, txt_PrimaRC.Text)
                 myRow(0)("prima_casco") = IIf(txt_PrimaCSC.Text = vbNullString, 0, txt_PrimaCSC.Text)
                 myRow(0)("prima_guerra") = IIf(txt_PrimaGRA.Text = vbNullString, 0, txt_PrimaGRA.Text)
-                myRow(0)("prc_com_age") = IIf(txt_PrcComAge.Text = vbNullString, 0, txt_PrcComAge.Text)
-                myRow(0)("com_agente") = IIf(txt_ComAge.Text = vbNullString, 0, txt_ComAge.Text)
-                myRow(0)("prc_com_adi_age") = IIf(txt_PrcComAdiAge.Text = vbNullString, 0, txt_PrcComAdiAge.Text)
-                myRow(0)("com_adi_agente") = IIf(txt_ComAdiAge.Text = vbNullString, 0, txt_ComAdiAge.Text)
-                myRow(0)("cuota") = txt_Cuota.Text
-                myRow(0)("prc_FeeGMX") = IIf(txt_PrcFeeGmx.Text = vbNullString, 0, txt_PrcFeeGmx.Text)
-                myRow(0)("mnt_FeeGMX") = IIf(txt_FeeGmx.Text = vbNullString, 0, txt_FeeGmx.Text)
-                myRow(0)("prc_ComFac") = IIf(txt_PrcComFac.Text = vbNullString, 0, txt_PrcComFac.Text)
-                myRow(0)("mnt_ComFac") = IIf(txt_ComFac.Text = vbNullString, 0, txt_ComFac.Text)
             End If
         Next
         Return dtRiesgo
@@ -293,15 +306,6 @@ Partial Class MesaControl_Memoria
             dtRiesgo.Columns.Add("prima_rc", GetType(Decimal))
             dtRiesgo.Columns.Add("prima_casco", GetType(Decimal))
             dtRiesgo.Columns.Add("prima_guerra", GetType(Decimal))
-            dtRiesgo.Columns.Add("prc_com_age", GetType(Decimal))
-            dtRiesgo.Columns.Add("com_agente", GetType(Decimal))
-            dtRiesgo.Columns.Add("prc_com_adi_age", GetType(Decimal))
-            dtRiesgo.Columns.Add("com_adi_agente", GetType(Decimal))
-            dtRiesgo.Columns.Add("cuota", GetType(Decimal))
-            dtRiesgo.Columns.Add("prc_FeeGMX", GetType(Decimal))
-            dtRiesgo.Columns.Add("mnt_FeeGMX", GetType(Decimal))
-            dtRiesgo.Columns.Add("prc_ComFac", GetType(Decimal))
-            dtRiesgo.Columns.Add("mnt_ComFac", GetType(Decimal))
         End If
 
         Funciones.LlenaGrid(gvd_Riesgo, dtRiesgo)
@@ -317,8 +321,8 @@ Partial Class MesaControl_Memoria
             Dim txt_SearchCobertura As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_SearchCobertura"), TextBox)
             Dim opt_Adicional As RadioButtonList = CType(gvd_Riesgo.Rows(0).FindControl("opt_Adicional"), RadioButtonList)
             Dim opt_Facultativo As RadioButtonList = CType(gvd_Riesgo.Rows(0).FindControl("opt_Facultativo"), RadioButtonList)
+            Dim opt_1erRiesgo As RadioButtonList = CType(gvd_Riesgo.Rows(0).FindControl("opt_1erRiesgo"), RadioButtonList)
 
-            Dim txt_1erRiesgo As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_1erRiesgo"), TextBox)
             Dim txt_TasaBase As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_TasaBase"), TextBox)
             Dim txt_Descuento As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_Descuento"), TextBox)
             Dim txt_Recargo As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_Recargo"), TextBox)
@@ -333,15 +337,6 @@ Partial Class MesaControl_Memoria
             Dim txt_PrimaCSC As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_PrimaCSC"), TextBox)
             Dim txt_PrimaGRA As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_PrimaGRA"), TextBox)
 
-            Dim txt_PrcComAge As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_PrcComAge"), TextBox)
-            Dim txt_ComAge As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_ComAge"), TextBox)
-            Dim txt_PrcComAdiAge As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_PrcComAdiAge"), TextBox)
-            Dim txt_ComAdiAge As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_ComAdiAge"), TextBox)
-
-            Dim txt_PrcFeeGmx As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_PrcFeeGmx"), TextBox)
-            Dim txt_FeeGmx As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_FeeGmx"), TextBox)
-            Dim txt_PrcComFac As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_PrcComFac"), TextBox)
-            Dim txt_ComFac As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_ComFac"), TextBox)
 
             chk_Riesgo.Visible = False
             lbl_Inciso.Text = ""
@@ -351,8 +346,8 @@ Partial Class MesaControl_Memoria
             txt_SearchCobertura.Enabled = False
             opt_Facultativo.Visible = False
             opt_Adicional.Visible = False
+            opt_1erRiesgo.Visible = False
 
-            txt_1erRiesgo.Enabled = False
             txt_TasaBase.Enabled = False
             txt_Descuento.Enabled = False
             txt_Recargo.Enabled = False
@@ -368,15 +363,6 @@ Partial Class MesaControl_Memoria
             txt_PrimaCSC.Enabled = False
             txt_PrimaGRA.Enabled = False
 
-            txt_PrcComAge.Visible = False
-            txt_ComAge.Enabled = False
-            txt_PrcComAdiAge.Visible = False
-            txt_ComAdiAge.Enabled = False
-            txt_PrcFeeGmx.Visible = False
-            txt_FeeGmx.Enabled = False
-            txt_PrcComFac.Visible = False
-            txt_ComFac.Enabled = False
-
             txt_SearchRamo.Font.Bold = True
             txt_ValoresTotales.Font.Bold = True
             txt_LimResp.Font.Bold = True
@@ -388,10 +374,6 @@ Partial Class MesaControl_Memoria
             txt_PrimaCSC.Font.Bold = True
             txt_PrimaGRA.Font.Bold = True
 
-            txt_ComAge.Font.Bold = True
-            txt_ComAdiAge.Font.Bold = True
-            txt_FeeGmx.Font.Bold = True
-            txt_ComFac.Font.Bold = True
 
             txt_SearchRamo.BackColor = Drawing.Color.LightGray
             txt_SearchSubramo.BackColor = Drawing.Color.LightGray
@@ -406,12 +388,6 @@ Partial Class MesaControl_Memoria
             txt_PrimaRC.BackColor = Drawing.Color.LightGray
             txt_PrimaCSC.BackColor = Drawing.Color.LightGray
             txt_PrimaGRA.BackColor = Drawing.Color.LightGray
-
-
-            txt_ComAge.BackColor = Drawing.Color.LightGray
-            txt_ComAdiAge.BackColor = Drawing.Color.LightGray
-            txt_FeeGmx.BackColor = Drawing.Color.LightGray
-            txt_ComFac.BackColor = Drawing.Color.LightGray
 
 
             Dim Ajustes() As String = Split(hid_Ajuste.Value, "|")
@@ -539,7 +515,7 @@ Partial Class MesaControl_Memoria
                 Funciones.LlenaCatGrid(gvd_Cobertura, "Cob", "", " AND cod_ramo = " & lbl_ClaveRamo.Text & " AND cod_subramo = " & lbl_ClaveSubramo.Text)
             End If
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
@@ -558,6 +534,227 @@ Partial Class MesaControl_Memoria
 
                 Funciones.LlenaCatGrid(gvd_Cobertura, "Cob", "", " AND cod_ramo = " & lbl_ClaveRamo.Text & " AND cod_subramo = " & lbl_ClaveSubramo.Text)
             End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub gvd_Riesgo_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvd_Riesgo.RowDataBound
+        Try
+
+            If e.Row.RowType = DataControlRowType.DataRow Then
+                Dim Tamaño() As String = Split(hid_Tamaño.Value, "|")
+
+                TryCast(e.Row.FindControl("opt_Facultativo"), RadioButtonList).SelectedValue = sender.DataKeys(e.Row.RowIndex)("sn_facultativo")
+                TryCast(e.Row.FindControl("opt_Adicional"), RadioButtonList).SelectedValue = sender.DataKeys(e.Row.RowIndex)("sn_adicional")
+
+                TryCast(e.Row.FindControl("txt_SearchRamo"), TextBox).Width = Tamaño(0)
+                TryCast(e.Row.FindControl("txt_SearchSubramo"), TextBox).Width = Tamaño(1)
+                TryCast(e.Row.FindControl("txt_SearchSeccion"), TextBox).Width = Tamaño(2)
+                TryCast(e.Row.FindControl("txt_SearchCobertura"), TextBox).Width = Tamaño(3)
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_buscaPol_Click(sender As Object, e As ImageClickEventArgs) Handles btn_buscaPol.Click
+        Try
+            Dim ws As New ws_MesaControl.MesaControlClient
+            dtPolizasAseg = New DataTable
+            dtPolizasAseg = Funciones.Lista_A_Datatable(ws.ObtienePolizasAseg(txt_SearchAse.Text).ToList)
+            If dtPolizasAseg.Rows.Count > 0 Then
+                Funciones.LlenaGrid(gvd_AsegPolizas, dtPolizasAseg)
+                Funciones.EjecutaFuncion("fn_AbrirModal('#PolizasAsegurado')", "Polizas")
+            Else
+                Mensaje.MuestraMensaje("Mesa de Control", "No existen Pólizas para el Asegurado", TipoMsg.Falla)
+            End If
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Function ObtieneSeleccionados(ByRef gvd_Control As GridView, ByVal chk_Control As String, ByVal Clave As String, Optional ByVal Checked As Boolean = True) As String
+        Dim strSel = "-1"
+        For Each row In gvd_Control.Rows
+            Dim chk_Sel As CheckBox = TryCast(row.FindControl(chk_Control), CheckBox)
+            If chk_Sel.Checked = Checked And chk_Sel.Enabled = True Then
+                strSel = strSel & "," & gvd_Control.DataKeys(row.RowIndex)(Clave)
+            End If
+        Next
+        strSel = Replace(strSel, "-1,", "")
+        ObtieneSeleccionados = IIf(strSel = "-1", vbNullString, strSel)
+    End Function
+
+    Private Sub btn_AceptarPol_Click(sender As Object, e As EventArgs) Handles btn_AceptarPol.Click
+        Try
+            Dim strSel = ObtieneSeleccionados(gvd_AsegPolizas, "chk_sel", "id_pv")
+            If Len(strSel) > 0 Then
+
+                Dim myRow() As Data.DataRow
+                myRow = dtPolizasAseg.Select("id_pv IN (" & strSel & ")")
+
+                If myRow.Length > 0 Then
+                    txt_ClaveOfi.Text = myRow(0)("cod_suc")
+                    txt_SearchOfi.Text = myRow(0)("sucursal")
+
+                    txt_ClaveAseg.Text = myRow(0)("cod_aseg")
+                    txt_SearchAse.Text = myRow(0)("asegurado")
+                    txt_RFC.Text = myRow(0)("rfc")
+                    ddl_Moneda.SelectedValue = myRow(0)("cod_moneda")
+                    txt_ClaveTag.Text = myRow(0)("cod_tipo_agente")
+                    txt_ClaveTagAux.Text = myRow(0)("cod_tipo_agente")
+                    txt_SearchTag.Text = myRow(0)("tipo_agente")
+                    txt_ClaveAge.Text = myRow(0)("cod_agente")
+                    txt_SearchAge.Text = myRow(0)("agente")
+
+                    txt_ClaveSusc.Text = myRow(0)("cod_usuario_suscriptor")
+                    txt_SearchSusc.Text = myRow(0)("suscriptor")
+
+                    txt_ClaveSuc.Text = myRow(0)("cod_suc")
+                    txt_SearchSuc.Text = myRow(0)("sucursal")
+                    txt_ClaveRam.Text = myRow(0)("cod_ramo")
+                    txt_SearchRam.Text = myRow(0)("ramo")
+                    txt_NroPoliza.Text = myRow(0)("nro_pol")
+                    txt_Sufijo.Text = myRow(0)("aaaa_endoso")
+                    txt_Endoso.Text = 0
+
+                    txt_ClaveGre.Text = myRow(0)("cod_grupo_endo")
+                    txt_ClaveGreAux.Text = myRow(0)("cod_grupo_endo")
+                    txt_SearchGre.Text = myRow(0)("grupo_endoso")
+                    txt_ClaveTte.Text = myRow(0)("cod_tipo_endo")
+                    txt_SearchTte.Text = myRow(0)("tipo_endoso")
+
+                    Funciones.EjecutaFuncion("fn_CerrarModal('#PolizasAsegurado')", "Polizas")
+                End If
+            End If
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_CerraPol_Click(sender As Object, e As EventArgs) Handles btn_CerraPol.Click
+        Try
+            dtPolizasAseg = Nothing
+            Funciones.LlenaGrid(gvd_AsegPolizas, dtPolizasAseg)
+            Funciones.EjecutaFuncion("fn_CerrarModal('#PolizasAsegurado')", "Polizas")
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_InfoRiesgos_Click(sender As Object, e As ImageClickEventArgs) Handles btn_InfoRiesgos.Click
+        Try
+            Dim ws As New ws_MesaControl.MesaControlClient
+            Dim sCnn As String = ""
+            Dim sSel As String
+            sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
+
+            dtUbicaciones = New DataTable
+            dtUbicaciones = Funciones.Lista_A_Datatable(ws.ObtieneUbicacionesPoliza(txt_ClaveSuc.Text, txt_ClaveRam.Text, txt_NroPoliza.Text, txt_Sufijo.Text, txt_Endoso.Text).ToList)
+
+            If dtUbicaciones.Rows.Count > 0 Then
+                dtRiesgosPol = New DataTable
+
+                sSel = "spS_FactoresPoliza " & txt_ClaveSuc.Text & "," & txt_ClaveRam.Text & "," & txt_NroPoliza.Text & "," & txt_Sufijo.Text & "," & txt_Endoso.Text & "," & dtUbicaciones.Rows(0)("cod_item")
+
+                Dim da As SqlDataAdapter
+
+                da = New SqlDataAdapter(sSel, sCnn)
+
+                da.Fill(dtRiesgosPol)
+
+
+
+                If dtRiesgosPol.Rows.Count > 0 Then
+                    Funciones.LlenaGrid(gvd_RiesgosPoliza, dtRiesgosPol)
+                    ValidaRamosRiesgo(gvd_RiesgosPoliza, -1, {18, 19, 20, 21, 22, 23})
+
+                    Dim ddl_Ubicacion As DropDownList = TryCast(gvd_RiesgosPoliza.HeaderRow.FindControl("ddl_Ubicacion"), DropDownList)
+                    Funciones.LlenaDDL(ddl_Ubicacion, dtUbicaciones, "cod_item", "cod_item",)
+
+                    lbl_RiesgoPoliza.Text = txt_ClaveSuc.Text & "-" & txt_ClaveRam.Text & "-" & txt_NroPoliza.Text & "-" & txt_Sufijo.Text & "-" & "0 >>> (" & txt_SearchAse.Text & ")"
+
+                    Funciones.EjecutaFuncion("fn_AbrirModal('#RiesgosPoliza')", "Riesgos")
+                Else
+                    Mensaje.MuestraMensaje("Mesa de Control", "No existen Riesgos asociados a la Póliza", TipoMsg.Falla)
+                End If
+            End If
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_AceptarRie_Click(sender As Object, e As EventArgs) Handles btn_AceptarRie.Click
+        Try
+            Dim inciso As Integer = 1
+            If dtRiesgo.Rows.Count > 0 Then
+                inciso = gvd_Riesgo.DataKeys(gvd_Riesgo.Rows.Count - 1)("cod_inciso") + 1
+            End If
+
+            fn_ActualizaDataRiesgo()
+
+            Dim strSel = ObtieneSeleccionados(gvd_RiesgosPoliza, "chk_sel", "id")
+
+            If Len(strSel) > 0 Then
+                Dim myRow() As Data.DataRow
+                myRow = dtRiesgosPol.Select("id IN (" & strSel & ")")
+                For Each Row In myRow
+                    dtRiesgo.Rows.Add(0, inciso, Row("cod_ramo"), Row("ramo_desc"), Row("cod_subramo"), Row("subramo_desc"),
+                                      Row("cod_riesgo"), Row("riesgo_desc"), Row("cod_ind_cob"), Row("cobertura_desc"),
+                                      Row("sn_facultativo"), Row("sn_adicional"), 0, Row("suma_asegurada"), Row("prima_neta"),
+                                      Row("prima_inc"), Row("prima_fhm"), Row("prima_tev"), Row("prima_rc"), Row("prima_casco"), Row("prima_guerra"),
+                                      Row("prc_com_age"), Row("com_agente"), Row("prc_com_adi_age"), Row("com_adi_agente"), Row("Cuota"), 0, 0, 0, 0)
+                    inciso = inciso + 1
+                Next
+                LlenaGridRiesgo(False)
+                Funciones.EjecutaFuncion("fn_CerrarModal('#RiesgosPoliza')", "Riesgos")
+
+                Funciones.EjecutaFuncion("fn_SumaTotales('gvd_Riesgo', ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA', 'Cuota'], ['txt_LimRespAux', 'txt_PrimaNetaAux', 'txt_PrimaINCAux', 'txt_PrimaTEVAux', 'txt_PrimaFHMAux', 'txt_PrimaRCAux', 'txt_PrimaCSCAux', 'txt_PrimaGRAAux', 'txt_CuotaAux'], 1, [0], 0);", "Sumatoria")
+            End If
+
+            Funciones.EjecutaFuncion("fn_CerrarModal('#EsperaModal');", "CerrarModal")
+        Catch ex As Exception
+            Funciones.EjecutaFuncion("fn_CerrarModal('#EsperaModal');", "CerrarModal")
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_CerrarRie_Click(sender As Object, e As EventArgs) Handles btn_CerrarRie.Click
+        Try
+            dtRiesgosPol = Nothing
+            dtUbicaciones = Nothing
+            Funciones.LlenaGrid(gvd_RiesgosPoliza, dtRiesgosPol)
+            Funciones.EjecutaFuncion("fn_CerrarModal('#RiesgosPoliza')", "Riesgos")
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Protected Sub ddl_Ubicacion_SelectedIndexChanged(sender As Object, e As EventArgs)
+        Try
+            Dim sCnn As String = ""
+            Dim sSel As String
+            sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
+
+
+            dtRiesgosPol = New DataTable
+            sSel = "spS_FactoresPoliza " & txt_ClaveSuc.Text & "," & txt_ClaveRam.Text & "," & txt_NroPoliza.Text & "," & txt_Sufijo.Text & "," & txt_Endoso.Text & "," & sender.selectedValue
+
+            Dim da As SqlDataAdapter
+
+            da = New SqlDataAdapter(sSel, sCnn)
+
+            da.Fill(dtRiesgosPol)
+
+            Funciones.LlenaGrid(gvd_RiesgosPoliza, dtRiesgosPol)
+            ValidaRamosRiesgo(gvd_RiesgosPoliza, -1, {18, 19, 20, 21, 22, 23})
+
+            Dim ddl_Ubicacion As DropDownList = TryCast(gvd_RiesgosPoliza.HeaderRow.FindControl("ddl_Ubicacion"), DropDownList)
+            Funciones.LlenaDDL(ddl_Ubicacion, dtUbicaciones, "cod_item", "cod_item", sender.selectedValue)
+
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
         End Try

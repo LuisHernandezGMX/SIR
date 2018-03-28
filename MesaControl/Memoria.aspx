@@ -1,141 +1,222 @@
 ﻿<%@ Page Title="" Language="VB" MasterPageFile="~/Pages/SiteMaster.master" AutoEventWireup="false" CodeFile="Memoria.aspx.vb" Inherits="MesaControl_Memoria" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cph_principal" Runat="Server">
+    <asp:HiddenField runat="server" ID="hid_Ventanas" Value="0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|1|0|" />
     <script src="../Scripts/Memoria.js"></script>
+
     <script type="text/javascript"> 
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(PageLoadMemoria);
     </script> 
 
-    <asp:HiddenField runat="server" ID="hid_Ventanas" Value="0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|1|0|" />
     <div class="zona-principal">
-        <div class="cuadro-titulo">
-             Memoria de Cálculo
-        </div>
-        <div class="clear padding4"></div>
 
-              <asp:UpdatePanel runat="server" ID="upDatosRiesgo">
-                <ContentTemplate>
 
-                    <table>
-                        <tr>
-                            <td>
-                                <div class="panel-seccion-fija Encabezado">
-                                    <div class="ventana15">
-                                            <asp:UpdatePanel runat="server" ID="upGenerales">
-                                                <ContentTemplate>
-                                                    <asp:HiddenField runat="server" ID="hid_Operacion" Value="0" />
-                                                    <div class="cuadro-titulo">
-                                                        Datos Generales
+
+        <table>
+            <tr>
+                <td>
+                    <div class="panel-seccion-fija Encabezado">
+                        <div class="ventana0">
+                                <asp:UpdatePanel runat="server" ID="upGenerales">
+                                    <ContentTemplate>
+                                        <asp:HiddenField runat="server" ID="hid_Operacion" Value="0" />
+                                        <div class="cuadro-titulo">
+                                            Datos Generales
+                                        </div>
+                                        <div class="clear padding4"></div>
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="16%">Prospecto</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_ClaveAseg" CssClass="NoDisplay"></asp:TextBox>
+                                                <asp:TextBox runat="server" ID="txt_AsegCorto" CssClass="col-md-1 estandar-control Tablero Seleccion" PlaceHolder="Nombre Corto" Width="25%"></asp:TextBox> 
+                                                <asp:TextBox runat="server" ID="txt_SearchAse" CssClass="col-md-1 estandar-control Tablero Seleccion" PlaceHolder="Nombre" Width="56%"></asp:TextBox> 
+                                                <asp:ImageButton runat="server" ID="btn_buscaPol" ImageUrl="~/Images/buscar_mini_inv.png" Height="17" Width="17" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="40%">RFC</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_RFC" CssClass="estandar-control Seleccion Tablero" PlaceHolder="RFC" Width="58%"></asp:TextBox>
+                                            </div>    
+                                        </div>
+                                        <div class="clear padding4"></div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="12%">Domicilio Fiscal</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_DomicilioFiscal" CssClass="estandar-control Seleccion Tablero" PlaceHolder="Domicilio Fiscal Prospecto" Width="87.5%"></asp:TextBox> 
+                                            </div>                                        
+                                        </div>
+                                        <div class="clear padding4"></div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="12%">Ubicación Riesgo</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_DomicilioRiesgo" CssClass="estandar-control Seleccion Tablero" PlaceHolder="Domicilio del Riesgo" Width="87.5%"></asp:TextBox> 
+                                            </div>
+                                        </div>
+                                        <div class="clear padding4"></div>
+<%--                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="12%">Giro</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_ClaveGiro" CssClass="NoDisplay"></asp:TextBox>
+                                                <asp:TextBox runat="server" ID="txt_SearchGiro" CssClass="estandar-control Tablero Seleccion" PlaceHolder="Giro GMX" Width="87.5%"></asp:TextBox> 
+                                            </div>
+                                        </div>
+                                        <div class="clear padding4"></div>--%>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="12%">Giro</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_GiroAsegurado" CssClass="estandar-control Tablero Seleccion" PlaceHolder="Giro Especifico Prospecto" Width="87.5%"></asp:TextBox> 
+                                            </div>
+                                        </div>
+                                        <div class="clear padding4"></div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="col-md-1 etiqueta-control" Width="38%">Moneda</asp:label>
+                                                <asp:DropDownList runat="server" ID="ddl_Moneda" CssClass="estandar-control Tablero Moneda" Width="58%"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="38%">Tipo End.</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_ClaveGre" CssClass="NoDisplay"></asp:TextBox>
+                                                <asp:TextBox runat="server" ID="txt_ClaveGreAux" CssClass="NoDisplay"></asp:TextBox>
+                                                <asp:TextBox runat="server" ID="txt_SearchGre" CssClass="estandar-control Tablero Seleccion" PlaceHolder="Tipo de Endoso" Width="58%"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="col-md-1 etiqueta-control" Width="38%">Descripción</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_ClaveTte" CssClass="NoDisplay"></asp:TextBox>
+                                                <asp:TextBox runat="server" ID="txt_SearchTte" CssClass="estandar-control Tablero Seleccion" PlaceHolder="Descripción del Endoso" Width="60%"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="clear padding4"></div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="38%">Inicio Vig. Orig.</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_VigIniOri" CssClass="estandar-control Tablero Fecha Seleccion Derecha" PlaceHolder="dia/mes/año"  TextMode="Date" Width="58%"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="38%">Fin Vig. Orig.</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_VigFinOri" CssClass="estandar-control Tablero Fecha Seleccion Derecha" PlaceHolder="dia/mes/año" TextMode="Date" Width="58%"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="38%">Dias Vigencia</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_DiasVigOri" CssClass="estandar-control Tablero Seleccion Derecha" Width="60%"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="clear padding4"></div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="38%">Inicio Vig. Mov.</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_VigIniMov" CssClass="estandar-control Tablero Fecha Seleccion Derecha" PlaceHolder="dia/mes/año"  TextMode="Date" Width="58%"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="38%">Fin Vig. Mov.</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_VigFinMov" CssClass="estandar-control Tablero Fecha Seleccion Derecha" PlaceHolder="dia/mes/año" TextMode="Date" Width="58%"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <asp:label runat="server" class="col-md-1  etiqueta-control" Width="38%">Dias Vigencia</asp:label>
+                                                <asp:TextBox runat="server" ID="txt_DiasVigMov" CssClass="estandar-control Tablero Seleccion Derecha" Width="60%"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+
+                                <div class="clear padding4"></div>
+
+                                <asp:UpdatePanel runat="server" ID="upPoliza">
+                                    <ContentTemplate>
+                                        <div class="panel-seccion">
+                                            <div class="cuadro-titulo">
+                                            </div>
+                                            <div class="ventana2">
+                                                <div class="clear padding4"></div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <asp:label runat="server" class="col-md-1  etiqueta-control" Width="30%">Regional</asp:label>
+                                                        <asp:TextBox runat="server" ID="txt_ClaveOfi" CssClass="col-md-1 estandar-control Tablero Seleccion cod Centro"  PlaceHolder="Id" Width="15%"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="txt_SearchOfi" CssClass="estandar-control Tablero Seleccion" PlaceHolder="Oficina Regional" Width="52.5%"></asp:TextBox>
                                                     </div>
-                                                    <div class="clear padding4"></div>
-                                                    <div class="row">
-                                                        <div class="col-md-9">
-                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="16%">Asegurado</asp:label>
-                                                            <asp:TextBox runat="server" ID="txt_ClaveAseg" CssClass="NoDisplay"></asp:TextBox>
-                                                            <asp:TextBox runat="server" ID="txt_AsegCorto" CssClass="col-md-1 estandar-control Tablero Seleccion" PlaceHolder="Nombre Corto" Width="25%"></asp:TextBox> 
-                                                            <asp:TextBox runat="server" ID="txt_SearchAse" CssClass="col-md-1 estandar-control Tablero Seleccion" PlaceHolder="Nombre" Width="56%"></asp:TextBox> 
-                                                            <asp:ImageButton runat="server" ID="btn_buscaPol" ImageUrl="~/Images/buscar_mini_inv.png" Height="17" Width="17" />
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="40%">RFC</asp:label>
-                                                            <asp:TextBox runat="server" ID="txt_RFC" CssClass="estandar-control Seleccion Tablero" PlaceHolder="RFC" Width="58%"></asp:TextBox>
+                                                    <div class="col-md-4">
+                                                        <asp:label runat="server" class="col-md-1 etiqueta-control" Width="30%">Tipo Age.</asp:label>
+                                                        <asp:TextBox runat="server" ID="txt_ClaveTag" CssClass="col-md-1 estandar-control Tablero Seleccion cod Centro" Enabled="false" PlaceHolder="Id" Width="15%"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="txt_ClaveTagAux" CssClass="NoDisplay"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="txt_SearchTag" CssClass="estandar-control Tablero Seleccion" PlaceHolder="Tipo de Agente" Width="55%"></asp:TextBox>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:label runat="server" class="col-md-1  etiqueta-control" Width="30%">Agente</asp:label>
+                                                        <asp:TextBox runat="server" ID="txt_ClaveAge" CssClass="col-md-1 estandar-control Tablero Seleccion cod Centro" Enabled="false" PlaceHolder="Id" Width="20%"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="txt_SearchAge" CssClass="estandar-control Tablero Seleccion" PlaceHolder="Nombre Agente" Width="48%"></asp:TextBox> 
+                                                    </div>
+                                                </div>
+                                                <div class="clear padding4"></div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <asp:label runat="server" class="col-md-1 etiqueta-control" Width="30%">Suscriptor</asp:label>
+                                                        <asp:TextBox runat="server" ID="txt_ClaveSusc" CssClass="col-md-1 estandar-control Tablero Seleccion Centro" PlaceHolder="Id" Enabled="false" Width="15%"></asp:TextBox>
+                                                        <asp:TextBox runat="server" ID="txt_SearchSusc" CssClass="estandar-control Tablero Seleccion" PlaceHolder="Nombre Suscriptor" Width="52.5%"></asp:TextBox>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:label runat="server" class="col-md-1 etiqueta-control" Width="30%">Forma de Pago</asp:label>
+                                                        <asp:DropDownList runat="server" ID="ddl_FormaPago" CssClass="estandar-control Tablero Moneda" Width="70%"></asp:DropDownList>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:label runat="server" class="col-md-1 etiqueta-control" Width="30%">Ubicaciones</asp:label>
+                                                        <asp:TextBox runat="server" ID="txt_Ubicaciones" CssClass="estandar-control Tablero Monto"  Width="68%" PlaceHolder="Número de Ubicaciones"></asp:TextBox>  
+                                                    </div>
+                                                </div>
+                                                <div class="clear padding2"></div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div style="border-right:inset;border-bottom:inset;border-top:inset;border-color:#003A5D;border-width:1px;">
+                                                            <div class="clear padding2"></div>
+                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="30%">Sucursal</asp:label>
+                                                            <asp:TextBox runat="server" ID="txt_ClaveSuc" CssClass="col-md-1 estandar-control Tablero cod Seleccion"  Width="15%" PlaceHolder="Id"></asp:TextBox>
+                                                            <asp:TextBox runat="server" ID="txt_SearchSuc" CssClass="estandar-control Tablero Seleccion" Width="52.5%" PlaceHolder="Sucursal de la Poliza"></asp:TextBox>
+                                                            <div class="clear padding4"></div>
+                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="30%">Producto</asp:label>
+                                                            <asp:TextBox runat="server" ID="txt_ClaveRam" CssClass="col-md-1 estandar-control Tablero Centro cod Seleccion" Width="15%" PlaceHolder="Id"></asp:TextBox>    
+                                                            <asp:TextBox runat="server" ID="txt_SearchRam" CssClass="estandar-control Tablero Seleccion" Width="52.5%" PlaceHolder="Ramo de la Póliza"></asp:TextBox>   
+                                                            <div class="clear padding4"></div>
+                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="30%" ToolTip="Número de Póliza - Sufijo - Endoso">Poliza</asp:label>
+                                                            <asp:TextBox runat="server" ID="txt_NroPoliza" CssClass="col-md-1 estandar-control Tablero Centro nro_pol Seleccion"  Width="25%" ToolTip="Número de Póliza" PlaceHolder="No. Poliza"></asp:TextBox>       
+                                                            <asp:TextBox runat="server" ID="txt_Sufijo" CssClass="col-md-1 estandar-control Tablero Centro cod Seleccion"  Width="18%" ToolTip="Sufijo" PlaceHolder="Sufijo"></asp:TextBox>       
+                                                            <asp:TextBox runat="server" ID="txt_Endoso" CssClass="col-md-1 estandar-control Tablero Centro cod Seleccion"  Width="20%" ToolTip="Número de Endoso" PlaceHolder="Endoso"></asp:TextBox>
+                                                            <asp:ImageButton runat="server" ID="btn_InfoRiesgos"  ImageUrl="~/Images/buscar_mini_inv.png" Height="17" Width="17" />
                                                         </div>    
+                                                    </div>                                
+                                                    <div class="col-md-8">
+                                                        
                                                     </div>
-                                                    <div class="clear padding4"></div>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="24.5%">Domicilio Fiscal</asp:label>
-                                                            <asp:TextBox runat="server" ID="txt_DomicilioFiscal" CssClass="estandar-control Seleccion Tablero" PlaceHolder="Domicilio Fiscal del Asegurado" Width="75.5%"></asp:TextBox> 
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="25%">Domicilio Riesgo</asp:label>
-                                                            <asp:TextBox runat="server" ID="txt_DomicilioRiesgo" CssClass="estandar-control Seleccion Tablero" PlaceHolder="Domicilio del Riesgo" Width="74%"></asp:TextBox> 
-                                                        </div>
+                                                    <div class="col-md-8">
+                                                        <div class="clear padding4"></div>
+                                                        
                                                     </div>
-                                                    <div class="clear padding4"></div>
-                                                    <div class="row">
-                                                        <div class="col-md-3">
-                                                            <asp:label runat="server" class="col-md-1 etiqueta-control" Width="52%">Moneda</asp:label>
-                                                            <asp:DropDownList runat="server" ID="ddl_Moneda" CssClass="estandar-control Tablero Moneda" Width="48%"></asp:DropDownList>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="48%">Inicio Vigencia</asp:label>
-                                                            <asp:TextBox runat="server" ID="txt_VigIni" CssClass="estandar-control Tablero Fecha Seleccion Derecha" PlaceHolder="dia/mes/año"  TextMode="Date" Width="52%"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="53%">Fin Vigencia</asp:label>
-                                                            <asp:TextBox runat="server" ID="txt_VigFin" CssClass="estandar-control Tablero Fecha Seleccion Derecha" PlaceHolder="dia/mes/año" TextMode="Date" Width="47%"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <asp:label runat="server" class="col-md-1  etiqueta-control" Width="40%">Emision</asp:label>
-                                                            <asp:TextBox runat="server" ID="txt_FecEmision" CssClass="estandar-control Tablero Fecha Seleccion Derecha" PlaceHolder="dia/mes/año" TextMode="Date" Width="58%"></asp:TextBox>
-                                                        </div>
+                                                    <div class="col-md-8">
+                                                        <asp:label runat="server" class="col-md-1  etiqueta-control" Width="14.5%">Observaciones</asp:label>
+                                                        <asp:TextBox runat="server" ID="txt_Notas" CssClass="estandar-control Tablero Seleccion ObservacionesGral" Width="84.5%" Height="65px" TextMode="MultiLine" PlaceHolder="Observaciones"></asp:TextBox>
                                                     </div>
-                                                    <div class="clear padding4"></div>
-                                                </ContentTemplate>
-                                            </asp:UpdatePanel>
-                                    </div>
-                                    <div class="ventana16">
-                                            <asp:UpdatePanel runat="server" ID="upEncabezado">
-                                                <ContentTemplate>
-                                                    <div class="cuadro-titulo">
-                                                        [Detalle de Colocación]
-                                                    </div>
-                                                    <div class="cuadro-subtitulo-grid">
-                                                        DISTRIBUCIÓN DE REASEGURO
-                                                    </div>     
-                                                    <div class="clear padding2"></div>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div style="width:100%;  text-align:right">
-                                                                <asp:label runat="server" class="col-md-1  etiqueta-control Tablero" Width="15%">FECHA</asp:label>
-                                                                <asp:TextBox runat="server" ID="txt_Fecha" CssClass="estandar-control Tablero" Enabled="false" Width="85%"></asp:TextBox> 
-                                                            </div>
-                                                        </div>    
-                                                    </div>
-                                                    <div class="clear padding2"></div>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div style="width:100%;  text-align:right">
-                                                                <asp:label runat="server" class="col-md-1  etiqueta-control Tablero" Width="15%">FOLIO</asp:label>
-                                                                <asp:TextBox runat="server" ID="txt_Folio" CssClass="estandar-control Tablero" Enabled="false" Width="85%"></asp:TextBox> 
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="clear padding2"></div>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div style="width:100%;  text-align:right">
-                                                                <asp:label runat="server" class="col-md-1  etiqueta-control Tablero" Width="15%">CONF.</asp:label>
-                                                                <asp:TextBox runat="server" ID="txt_Conf" CssClass="estandar-control Tablero" Enabled="false" Width="85%"></asp:TextBox> 
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="clear padding2"></div>
-                                                </ContentTemplate>
-                                            </asp:UpdatePanel>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <div class="panel-seccion">
-                        <div class="cuadro-titulo">
-                            <input type="image" src="../Images/contraer_mini_inv.png" id="coVentana3" class="contraer"  />
-                            <input type="image" src="../Images/expander_mini_inv.png"   id="exVentana3" class="expandir"  />
-                            <asp:Label runat="server" Text="Datos del Riesgo" Width="65%"></asp:Label>                  
+                                                </div>
+                                            </div>
+                                        </div>      
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
                         </div>
-                        <div class="ventana3">
+                    </div>
+                </td>
+            </tr>
+        </table>
+      
+        <div class="clear padding4"></div>
+        
+        <div class="cuadro-titulo">
+            <asp:Label runat="server" Text="Datos del Riesgo" Width="65%"></asp:Label>                  
+        </div>
+
+        <div class="tab-memoria">
+            <asp:UpdatePanel runat="server" ID="upRiesgo">
+                <ContentTemplate>
+                    <div class="panel-seccion">
+                        
+                        <div class="ventana1">
                             <asp:HiddenField runat="server" ID="hid_Tamaño" Value="200|200|200|200" />
                             <asp:HiddenField runat="server" ID="hid_Ajuste" Value="0|0|0|0" />
-                            <div style="width:100%;">
+                            <div style="width:100%;overflow-x:scroll;">
                                 <asp:GridView runat="server"  ID="gvd_Riesgo" AutoGenerateColumns="false"
                                             GridLines="Horizontal"  ShowHeaderWhenEmpty="true" CssClass="grid-view" DataKeyNames="cod_inciso,sn_adicional,sn_facultativo"
                                             HeaderStyle-CssClass="header" >
@@ -171,8 +252,8 @@
                                         <asp:TemplateField HeaderText="">
                                             <HeaderTemplate>
                                                 <div>
-                                                        <asp:ImageButton runat="server" ID="btn_SearchSubramo" AlternateText="1" OnClick="AjusteTamaño" ImageUrl="~/Images/quitar_mini.png" data-toggle="tooltip" data-placement="right" title="Subramo"/>
-                                                        <asp:Label runat="server" ID="lbl_SearchSubramo"  Text="Subramo" Width="60px"></asp:Label>
+                                                    <asp:ImageButton runat="server" ID="btn_SearchSubramo" AlternateText="1" OnClick="AjusteTamaño" ImageUrl="~/Images/quitar_mini.png" data-toggle="tooltip" data-placement="right" title="Subramo"/>
+                                                    <asp:Label runat="server" ID="lbl_SearchSubramo"  Text="Subramo" Width="60px"></asp:Label>
                                                 </div>
                                             </HeaderTemplate>
                                             <ItemTemplate>
@@ -184,8 +265,8 @@
                                         <asp:TemplateField HeaderText="Sección">
                                             <HeaderTemplate>
                                                 <div>
-                                                        <asp:ImageButton runat="server" ID="btn_SearchSeccion" AlternateText="2" OnClick="AjusteTamaño" ImageUrl="~/Images/quitar_mini.png" data-toggle="tooltip" data-placement="right" title="Sección"/>
-                                                        <asp:Label runat="server" ID="lbl_SearchSeccion" Text="Sección" Width="60px"></asp:Label>
+                                                    <asp:ImageButton runat="server" ID="btn_SearchSeccion" AlternateText="2" OnClick="AjusteTamaño" ImageUrl="~/Images/quitar_mini.png" data-toggle="tooltip" data-placement="right" title="Sección"/>
+                                                    <asp:Label runat="server" ID="lbl_SearchSeccion" Text="Sección" Width="60px"></asp:Label>
                                                 </div>
                                             </HeaderTemplate>
                                             <ItemTemplate>
@@ -224,8 +305,10 @@
                                         </asp:TemplateField>
                                         <asp:TemplateField HeaderText="1er Riesgo" HeaderStyle-CssClass="Centro">
                                             <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="txt_1erRiesgo" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("1erRiesgo")))%>' CssClass="estandar-control Tablero Seleccion Monto ValoresTotales" Width="100px"></asp:TextBox>
-                                                <asp:TextBox runat="server" ID="txt_1erRiesgoAux" Text='<%# Eval("1erRiesgo") %>' CssClass="NoDisplay"></asp:TextBox>
+                                                <asp:RadioButtonList runat="server" ID="opt_1erRiesgo" CssClass="Centro" RepeatDirection="Horizontal" Width="80px">
+                                                    <asp:ListItem Text="Si" Selected="True" Value="1"></asp:ListItem>
+                                                    <asp:ListItem Text="No" Selected="False" Value="0" ></asp:ListItem>
+                                                </asp:RadioButtonList>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField HeaderText="Valores Totales" HeaderStyle-CssClass="Centro">
@@ -300,56 +383,6 @@
                                                 <asp:TextBox runat="server" ID="txt_PrimaGRAAux" Text='<%# Eval("prima_guerra") %>' CssClass="NoDisplay"></asp:TextBox>
                                             </ItemTemplate>
                                         </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="% Com. Age." HeaderStyle-CssClass="Centro">
-                                            <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="txt_PrcComAge" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_com_age")))%>' CssClass="estandar-control Tablero Seleccion Monto PrcComAge" Width="100px"></asp:TextBox>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Com. Agente" HeaderStyle-CssClass="Centro">
-                                            <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="txt_ComAge" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("com_agente")))%>' CssClass="estandar-control Tablero Seleccion Monto ComAge" Width="100px"></asp:TextBox>
-                                                <asp:TextBox runat="server" ID="txt_ComAgeAux" Text='<%# Eval("com_agente") %>' CssClass="NoDisplay"></asp:TextBox>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="% Com. Adi. Age." HeaderStyle-CssClass="Centro">
-                                            <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="txt_PrcComAdiAge" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_com_adi_age")))%>' CssClass="estandar-control Tablero Seleccion Monto PrcComAdiAge" Width="90px"></asp:TextBox>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Com. Adi. Age." HeaderStyle-CssClass="Centro">
-                                            <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="txt_ComAdiAge" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("com_adi_agente")))%>' CssClass="estandar-control Tablero Seleccion Monto ComAdiAge" Width="100px"></asp:TextBox>
-                                                <asp:TextBox runat="server" ID="txt_ComAdiAgeAux" Text='<%# Eval("com_adi_agente") %>' CssClass="NoDisplay"></asp:TextBox>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Cuota" HeaderStyle-CssClass="Centro">
-                                            <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="txt_Cuota" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("cuota")))%>' Font-Bold="true" Enabled="false" BackColor="LightGray" CssClass="estandar-control Tablero Monto Cuota" Width="90px"></asp:TextBox>
-                                                <asp:TextBox runat="server" ID="txt_CuotaAux" Text='<%# Eval("cuota") %>' CssClass="NoDisplay"></asp:TextBox>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="% Costo GMX" HeaderStyle-CssClass="Centro">
-                                            <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="txt_PrcFeeGMX" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_FeeGMX")))%>' CssClass="estandar-control Tablero Seleccion Monto PrcFeeGMX" Width="100px"></asp:TextBox>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Costo GMX" HeaderStyle-CssClass="Centro">
-                                            <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="txt_FeeGMX" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("mnt_FeeGMX")))%>' CssClass="estandar-control Tablero Seleccion Monto FeeGMX" Width="100px"></asp:TextBox>
-                                                <asp:TextBox runat="server" ID="txt_FeeGMXAux" Text='<%# Eval("mnt_FeeGMX") %>' CssClass="NoDisplay"></asp:TextBox>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="% Com. Fac." HeaderStyle-CssClass="Centro">
-                                            <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="txt_PrcComFac" Text='<%# String.Format("{0:#,#0.0000}", CDbl(Eval("prc_ComFac")))%>'  CssClass="estandar-control Tablero Seleccion Monto PrcComFac" Enabled="false" Width="100px"></asp:TextBox>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Com. Fac." HeaderStyle-CssClass="Centro">
-                                            <ItemTemplate> 
-                                                <asp:TextBox runat="server" ID="txt_ComFac" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("mnt_ComFac")))%>' CssClass="estandar-control Tablero Seleccion Monto ComFac" Enabled="false" Width="100px"></asp:TextBox>
-                                                <asp:TextBox runat="server" ID="txt_ComFacAux" Text='<%# Eval("mnt_ComFac") %>' CssClass="NoDisplay"></asp:TextBox>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
                                     </Columns>
                                     <HeaderStyle CssClass="GridviewScrollHeader" /> 
                                     <RowStyle CssClass="GridviewScrollItem" /> 
@@ -374,8 +407,10 @@
 
                         </div>
                     </div>
+                    <div class="clear padding50"></div>
                 </ContentTemplate>
-              </asp:UpdatePanel>          
+            </asp:UpdatePanel>          
+        </div>
     </div>
 
     <div id="Riesgos" style="width:90%;" class="modal-poliza" >
@@ -518,6 +553,279 @@
                             </asp:LinkButton>
                         </div> 
                         <div class="clear padding3"></div>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+        </div>
+
+        <div id="PolizasAsegurado" style="width:90%;" class="modal-poliza" >
+            <asp:UpdatePanel runat="server" ID="upPolizas" >
+                <ContentTemplate>
+                    <div class="cuadro-titulo-flotante" style="height:30px">
+                        <div class="row" >
+                            <div class="col-md-1">
+                                <input type="image" src="../Images/contraer_mini_inv.png" id="coVentana13" class="contraer"  />
+                                <input type="image" src="../Images/expander_mini_inv.png"   id="exVentana13" class="expandir"  />
+                            </div>
+                            <div class="col-md-9">
+                                <asp:label runat="server">[Pólizas del Asegurado]</asp:label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-subcontenido ventana13">
+                        <asp:Panel runat="server" ID="pnl_PolizasAsegurado" Width="100%" Height="300px" ScrollBars="Both">
+                            <asp:GridView runat="server" ID="gvd_AsegPolizas" AutoGenerateColumns="false" AllowPaging="true" PageSize="50"
+                                        CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
+                                        GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="id_pv">
+                                <Columns>
+                                    <asp:TemplateField  HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:CheckBox runat="server" ID="chk_Sel" CssClass="Select" onclick="fn_CambioSeleccion('gvd_AsegPolizas',this,'Unica','chk_Sel')" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_codSuc" Text='<%# Eval("cod_suc") %>' CssClass="estandar-control Tablero Centro" Enabled="false" Width="30px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Sucursal" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_Sucursal" Text='<%# Eval("sucursal") %>' CssClass="estandar-control Tablero" Enabled="false" Width="120px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_codRamo" Text='<%# Eval("cod_ramo") %>' CssClass="estandar-control Tablero Centro" Enabled="false" Width="40px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Ramo" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_Ramo" Text='<%# Eval("ramo") %>' CssClass="estandar-control Tablero" Enabled="false" Width="200px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Número" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_nroPol" Text='<%# Eval("nro_pol") %>' CssClass="estandar-control Tablero Centro" Enabled="false" Width="50px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                     <asp:TemplateField HeaderText="Sufijo" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_Sufijo" Text='<%# Eval("aaaa_endoso") %>' CssClass="estandar-control Tablero Centro" Enabled="false" Width="50px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Asegurado" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_Asegurado" Text='<%# Eval("asegurado") %>' CssClass="estandar-control Tablero" Enabled="false" Width="350px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                     <asp:TemplateField HeaderText="Tipo Endoso" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_TipoEndoso" Text='<%# Eval("grupo_endoso") %>' CssClass="estandar-control Tablero" Enabled="false" Width="200px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                     <asp:TemplateField HeaderText="Descripción" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_Descripcion" Text='<%# Eval("tipo_endoso") %>' CssClass="estandar-control Tablero" Enabled="false" Width="200px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Vigencia Desde" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_IniVig" Text='<%# Eval("fec_vig_desde") %>' CssClass="estandar-control Tablero Centro" Enabled="false" Width="60px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Vigencia Hasta" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_FinVig" Text='<%# Eval("fec_vig_hasta") %>' CssClass="estandar-control Tablero Centro" Enabled="false" Width="60px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Emisión" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_Emision" Text='<%# Eval("fec_emi") %>' CssClass="estandar-control Tablero Centro" Enabled="false" Width="60px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+                        </asp:Panel>
+                        <div style="width:100%;  text-align:right">
+                            <asp:LinkButton id="btn_AceptarPol" runat="server" class="btn botones">
+                                <span>
+                                    <img class="btn-añadir"/>
+                                    Aceptar
+                                </span>
+                            </asp:LinkButton>
+                            <asp:LinkButton id="btn_CerraPol" runat="server" class="btn botones">
+                                <span>
+                                    <img class="btn-cancelar"/>
+                                    Cerrar
+                                </span>
+                            </asp:LinkButton>
+                        </div>
+                        <div class="clear padding5"></div>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+        </div>
+
+        <div id="RiesgosPoliza" style="width:90%;" class="modal-poliza">
+            <asp:UpdatePanel runat="server" ID="upRiesgosPoliza" >
+                <ContentTemplate>
+                    <div class="cuadro-titulo-flotante" style="height:30px">
+                                <input type="image" src="../Images/contraer_mini_inv.png" id="coVentana14" class="contraer"  />
+                                <input type="image" src="../Images/expander_mini_inv.png"   id="exVentana14" class="expandir"  />
+                                <asp:label runat="server">[Riesgos de la Póliza]</asp:label>
+                                <asp:label runat="server" ID="lbl_RiesgoPoliza"></asp:label>
+                    </div>
+                    <div class="panel-subcontenido ventana14">
+                        <asp:Panel runat="server" ID="pnlRiesgosPoliza" Width="100%" Height="500px" ScrollBars="Both">
+                            <asp:GridView runat="server" ID="gvd_RiesgosPoliza" AutoGenerateColumns="false" AllowPaging="true" PageSize="50"
+                                        CssClass="grid-view" HeaderStyle-CssClass="header" AlternatingRowStyle-CssClass="altern"
+                                        GridLines="Horizontal"  ShowHeaderWhenEmpty="true" DataKeyNames="id">
+                                <Columns>
+                                    <asp:TemplateField HeaderText="" HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centrado">
+                                        <HeaderTemplate>
+                                            <asp:CheckBox runat="server" ID="chk_SelAll" Width="20px" onclick="fn_SeleccionTodos('gvd_RiesgosPoliza', this, 'chk_Sel')" /> 
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <asp:CheckBox runat="server" ID="chk_Sel" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Poliza" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_Poliza" Text='<%# Eval("poliza") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="90px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Inciso" HeaderStyle-CssClass="Centrado Centro">
+                                        <HeaderTemplate>
+                                            <asp:label runat="server" class="col-md-1" Width="65px">Inciso</asp:label>
+                                            <asp:DropDownList runat="server" ID="ddl_Ubicacion" CssClass="estandar-control Tablero Centro" AutoPostBack="true" OnSelectedIndexChanged="ddl_Ubicacion_SelectedIndexChanged" Width="45px"></asp:DropDownList>
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_Ubicacion" Text='<%# Eval("cod_item") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="110px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Ubicación" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_SearchUbicacion" Text='<%# Eval("ubicacion") %>' CssClass="estandar-control Tablero" Enabled="false" Width="200px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="cod" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_ClaveRamo" Text='<%# Eval("cod_ramo") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="50px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Ramo" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_SearchRamo" Text='<%# Eval("ramo_desc") %>' CssClass="estandar-control Tablero" Enabled="false" Width="200px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="cod" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_ClaveSubRamo" Text='<%# Eval("cod_subramo") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="40px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Subramo" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_SearchSubramo" Text='<%# Eval("subramo_desc") %>' CssClass="estandar-control Tablero" Enabled="false" Width="150px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="cod" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_ClaveSeccion" Text='<%# Eval("cod_riesgo") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="40px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Sección" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_SearchSeccion" Text='<%# Eval("riesgo_desc") %>' CssClass="estandar-control Tablero" Enabled="false" Width="200px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="cod" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_ClaveCobertura" Text='<%# Eval("cod_ind_cob") %>' Enabled="false" CssClass="estandar-control Tablero Centro" Width="50px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Cobertura" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_SearchCobertura" Text='<%# Eval("cobertura_desc") %>' CssClass="estandar-control Tablero" Enabled="false" Width="200px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Acumula Suma" HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:CheckBox runat="server" ID="chk_AdicionalSuma" Checked='<%# Eval("sn_adicional_suma") %>' Enabled="false" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Lím. Max. Resp" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_LimResp" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("suma_asegurada")))%>' CssClass="estandar-control Tablero Monto" Enabled="false" Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Acumula Prima" HeaderStyle-CssClass="Centro" ItemStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:CheckBox runat="server" ID="chk_AdicionalPrima" Checked='<%# Eval("sn_adicional_prima") %>' Enabled="false" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Prima Neta" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_PrimaNeta" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_neta")))%>' CssClass="estandar-control Tablero Monto" Enabled="false" Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="% Factor" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_PrcFactor" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("pje_factor")))%>' CssClass="estandar-control Tablero Monto" Enabled="false" Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="% Tasa" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_PrcTasa" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("pje_tasa")))%>' CssClass="estandar-control Tablero Monto" Enabled="false" Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Prima INC" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_PrimaINC" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_inc")))%>' Enabled="false" CssClass="estandar-control Tablero Monto" Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Prima FHM" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_PrimaFHM" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_fhm")))%>' Enabled="false" CssClass="estandar-control Tablero Monto" Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Prima TEV" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_PrimaTEV" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_tev")))%>' Enabled="false" CssClass="estandar-control Tablero Monto" Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Prima RC" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_PrimaRC" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_rc")))%>' Enabled="false"  CssClass="estandar-control Tablero Monto"  Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Prima Casco" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_PrimaCSC" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_casco")))%>' Enabled="false"  CssClass="estandar-control Tablero Monto"  Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Prima Guerra" HeaderStyle-CssClass="Centro">
+                                        <ItemTemplate>
+                                            <asp:TextBox runat="server" ID="txt_PrimaGRA" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("prima_guerra")))%>' Enabled="false"  CssClass="estandar-control Tablero Monto" Width="100px"></asp:TextBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+                        </asp:Panel>
+                        <div style="width:100%;  text-align:right">
+                            <asp:LinkButton id="btn_AceptarRie" runat="server" class="btn botones ModalEspera">
+                                <span>
+                                    <img class="btn-añadir"/>
+                                    Aceptar
+                                </span>
+                            </asp:LinkButton>
+                            <asp:LinkButton id="btn_CerrarRie" runat="server" class="btn botones">
+                                <span>
+                                    <img class="btn-cancelar"/>
+                                    Cerrar
+                                </span>
+                            </asp:LinkButton>
+                        </div>
+                        <div class="clear padding5"></div>
                     </div>
                 </ContentTemplate>
             </asp:UpdatePanel>

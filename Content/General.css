@@ -582,6 +582,36 @@ border-radius: 11px; left: 40%; top: 20%;  margin-left: -150px;  position: fixed
 box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
 }
 
+
+.modal-tablero{
+border-radius: 11px; left: 160px; top: 325px;  margin-left: -150px;  position: fixed; z-index: 9984; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
+}
+
+
+.modal-subjetividad{
+border-radius: 11px; left: 160px; top: 360px;  margin-left: -150px;  position: fixed; z-index: 9983; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
+}
+
+.modal-comision{
+border-radius: 11px; left: 160px; top: 395px;  margin-left: -150px;  position: fixed; z-index: 9982; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
+}
+
+.modal-pagos{
+border-radius: 11px; left: 160px; top: 430px;  margin-left: -150px;  position: fixed; z-index: 9981; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px; display:none;  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
+}
+
+
+
+
+
 .modal-ajustes {
 border-radius: 11px; left: 30%; top: 10%; margin-left: -150px;  position: fixed; z-index: 10000; background-color: rgb(255, 255, 255); 
 -moz-border-radius: 11px; -webkit-border-radius: 11px;  display:none; overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
