@@ -76,7 +76,11 @@
                         </div>
 
                     </div>
-                    
+                    <div class="row">
+                         <div class="col-md-4">
+                             <asp:CheckBox runat="server" id="chk_NoFilter" visible="false" width="200px" class="col-md-1 etiqueta-control" text="No filtrar por distribución"></asp:CheckBox>
+                         </div> 
+                    </div>
 
                      <div class="row">
                         <div class="col-md-6">
