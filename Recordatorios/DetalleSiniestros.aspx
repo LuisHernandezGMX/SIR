@@ -237,11 +237,11 @@
                                                         <asp:Textbox runat="server" ID="Label14" CssClass="Derecha estandar-control" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("MONTO_REASEGURO"))) %>' Width="80px" Font-Size="10px"></asp:Textbox>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Monto Ret">
+                                                <%--<asp:TemplateField HeaderText="Monto Ret">
                                                     <ItemTemplate>
                                                         <asp:Textbox runat="server" ID="Label14" CssClass="Derecha estandar-control" Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("MONTO_RETENIDA"))) %>' Width="80px" Font-Size="10px"></asp:Textbox>
                                                     </ItemTemplate>
-                                                </asp:TemplateField>
+                                                </asp:TemplateField>--%>
                                                  <asp:TemplateField HeaderText="Monto MovEQ">
                                                     <ItemTemplate>
                                                         <asp:label runat="server" ID="Label15" CssClass="Derecha " Text='<%# String.Format("{0:#,#0.00}", CDbl(Eval("MONTO_MOVIMIENTO_EQ"))) %>' Width="80px" Font-Size="10px"></asp:label>
