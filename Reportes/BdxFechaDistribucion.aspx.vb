@@ -93,41 +93,11 @@ Partial Class Reportes_Bdx_BdxFechaDistribucion
                         RptFilters = RptFilters & IIf(FiltroAseg <> "", "&aseg=" & FiltroAseg, "")
                         RptFilters = RptFilters & IIf(FiltroCtoFinal <> "", "&contrato=" & FiltroCtoFinal, "")
                         RptFilters = RptFilters & IIf(FiltroCtoLFinal <> "", "&contrato_local=" & FiltroCtoLFinal, "")
-
-
+                        RptFilters = RptFilters & IIf(chk_NoFilter.Checked = True And ddl_tiporeporte.SelectedItem.Value = 0, "&filtrofd=1", "&filtrofd=0")
 
                         server = Replace(Replace(server, "@Reporte", "BdxMovFecDist"), "@Formato", "EXCEL")
 
                         server = server & RptFilters
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         Funciones.EjecutaFuncion("window.open('" & server & "');")
                     Else
@@ -181,5 +151,14 @@ Partial Class Reportes_Bdx_BdxFechaDistribucion
         gvd_Historicos.DataSource = Nothing
         gvd_Historicos.DataBind()
         Funciones.CerrarModal("#HistoricoModal")
+    End Sub
+
+    Private Sub ddl_tiporeporte_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddl_tiporeporte.SelectedIndexChanged
+        If ddl_tiporeporte.SelectedItem.Value = 0 Then
+            chk_NoFilter.Visible = True
+        Else
+            chk_NoFilter.Visible = False
+
+        End If
     End Sub
 End Class
