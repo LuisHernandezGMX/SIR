@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/MesaControl/MesaControl.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
+  <xs:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/MesaControl/MesaControl.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
   <xs:element name="ObtieneIndicadores">
     <xs:complexType>
       <xs:sequence>
@@ -32,7 +32,19 @@
   <xs:element name="ObtieneNegocio">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="id_folio" type="xs:int" />
+        <xs:element minOccurs="0" name="id_folio" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cod_suc_ofi" type="xs:int" />
+        <xs:element minOccurs="0" name="fec_corte_ini" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fec_corte_fin" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cod_moneda" type="xs:int" />
+        <xs:element minOccurs="0" name="cod_usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="estatus" type="xs:int" />
+        <xs:element minOccurs="0" name="strAsegurado" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="strGiro" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="strAgrupador" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="strRamo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="strBroker" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="strCia" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -85,6 +97,34 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ObtieneProgramaCapas">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_folio" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneProgramaCapasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneProgramaCapasResult" nillable="true" type="q7:ArrayOfspS_ProgramaCapasMC_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneCapas">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_folio" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneCapasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneCapasResult" nillable="true" type="q8:ArrayOfspS_CapasMC_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ObtieneDistribucion">
     <xs:complexType>
       <xs:sequence>
@@ -95,7 +135,7 @@
   <xs:element name="ObtieneDistribucionResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneDistribucionResult" nillable="true" type="q7:ArrayOfspS_DistribucionMC_Result" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneDistribucionResult" nillable="true" type="q9:ArrayOfspS_DistribucionMC_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -109,7 +149,7 @@
   <xs:element name="ObtieneBrokersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneBrokersResult" nillable="true" type="q8:ArrayOfspS_IntermediarioMC_Result" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneBrokersResult" nillable="true" type="q10:ArrayOfspS_IntermediarioMC_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -123,7 +163,7 @@
   <xs:element name="ObtieneReaseguradoresResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneReaseguradoresResult" nillable="true" type="q9:ArrayOfspS_ReaseguradorMC_Result" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneReaseguradoresResult" nillable="true" type="q11:ArrayOfspS_ReaseguradorMC_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -137,7 +177,21 @@
   <xs:element name="ObtieneSubjetividadResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneSubjetividadResult" nillable="true" type="q10:ArrayOfspS_SubjetividadMC_Result" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneSubjetividadResult" nillable="true" type="q12:ArrayOfspS_SubjetividadMC_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtienePagos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_folio" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtienePagosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtienePagosResult" nillable="true" type="q13:ArrayOfspS_PagosMC_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -151,7 +205,7 @@
   <xs:element name="ObtienePolizasAsegResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtienePolizasAsegResult" nillable="true" type="q11:ArrayOfspS_PolizasAsegurado_Result" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtienePolizasAsegResult" nillable="true" type="q14:ArrayOfspS_PolizasAsegurado_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -171,7 +225,7 @@
   <xs:element name="ObtieneRiesgoPolizaResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneRiesgoPolizaResult" nillable="true" type="q12:ArrayOfspS_RiesgoPoliza_Result" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneRiesgoPolizaResult" nillable="true" type="q15:ArrayOfspS_RiesgoPoliza_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -189,7 +243,7 @@
   <xs:element name="ObtieneUbicacionesPolizaResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneUbicacionesPolizaResult" nillable="true" type="q13:ArrayOfspS_UbicacionesPoliza_Result" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneUbicacionesPolizaResult" nillable="true" type="q16:ArrayOfspS_UbicacionesPoliza_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

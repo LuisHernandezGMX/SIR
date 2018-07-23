@@ -20,11 +20,12 @@
       <xs:element minOccurs="0" name="ENDOSO" type="xs:decimal" />
       <xs:element minOccurs="0" name="ESTIMACION" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="EVENTO_CAT" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="FECHA_OCURRENCIA" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="FEC_AVISO" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="FEC_FIN_VIG" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="FEC_INI_VIG" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="FEC_MOV" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="FECHA_OCURRENCIA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FEC_AVISO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FEC_FIN_VIG" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FEC_INI_VIG" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FEC_MOV" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ID_PV" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="MONEDA" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MONTO_MOVIMIENTO" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="MONTO_MOVIMIENTO_EQ" nillable="true" type="xs:decimal" />
@@ -34,6 +35,7 @@
       <xs:element minOccurs="0" name="MOVIMIENTO" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="NRO_CORRELA_ESTIM" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="NUM" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="NUMREN" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="PAIS" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="POLIZA" type="xs:decimal" />
       <xs:element minOccurs="0" name="RAMO" nillable="true" type="xs:string" />
@@ -54,4 +56,48 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="sp_rptMovSinxReas_Result" nillable="true" type="tns:sp_rptMovSinxReas_Result" />
+  <xs:complexType name="ArrayOfspS_EndososNoAC_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_EndososNoAC_Result" nillable="true" type="tns:spS_EndososNoAC_Result" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfspS_EndososNoAC_Result" nillable="true" type="tns:ArrayOfspS_EndososNoAC_Result" />
+  <xs:complexType name="spS_EndososNoAC_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Asegurado" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Fecha" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GrupoEndoso" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Poliza" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TipoEndoso" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Usuario" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cod_aseg" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_grupo_endo" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_tipo_endo" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_usuario" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id_pv" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="spS_EndososNoAC_Result" nillable="true" type="tns:spS_EndososNoAC_Result" />
+  <xs:complexType name="ArrayOfsp_RepartoReaFac_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="sp_RepartoReaFac_Result" nillable="true" type="tns:sp_RepartoReaFac_Result" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfsp_RepartoReaFac_Result" nillable="true" type="tns:ArrayOfsp_RepartoReaFac_Result" />
+  <xs:complexType name="sp_RepartoReaFac_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Gastos_Hon" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Perdida_Pagada" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Salvamento" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Total" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cia_cod_naic" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cod_cia_reas" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_cia_reas_brok" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="pcte_participa" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="sumc" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="txt_broker" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="txt_razon_social" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="sp_RepartoReaFac_Result" nillable="true" type="tns:sp_RepartoReaFac_Result" />
 </xs:schema>

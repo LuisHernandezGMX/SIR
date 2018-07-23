@@ -2,10 +2,10 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="RecSiniestros" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
-      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
+      <xsd:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IRecSiniestros_ActualizaFaseRecup_InputMessage">
@@ -98,6 +98,36 @@
   <wsdl:message name="IRecSiniestros_ObtieneSiniestros_OutputMessage">
     <wsdl:part name="parameters" element="tns:ObtieneSiniestrosResponse" />
   </wsdl:message>
+  <wsdl:message name="IRecSiniestros_GuardaAjustes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GuardaAjustes" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_GuardaAjustes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GuardaAjustesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_InsertaPolNoAC_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertaPolNoAC" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_InsertaPolNoAC_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertaPolNoACResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_EliminaPolNoAC_InputMessage">
+    <wsdl:part name="parameters" element="tns:EliminaPolNoAC" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_EliminaPolNoAC_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EliminaPolNoACResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_ObtienePolNoAC_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtienePolNoAC" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_ObtienePolNoAC_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtienePolNoACResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_ObtieneRepartoFac_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneRepartoFac" />
+  </wsdl:message>
+  <wsdl:message name="IRecSiniestros_ObtieneRepartoFac_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneRepartoFacResponse" />
+  </wsdl:message>
   <wsdl:portType name="IRecSiniestros">
     <wsdl:operation name="ActualizaFaseRecup">
       <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/ActualizaFaseRecup" message="tns:IRecSiniestros_ActualizaFaseRecup_InputMessage" />
@@ -158,6 +188,26 @@
     <wsdl:operation name="ObtieneSiniestros">
       <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/ObtieneSiniestros" message="tns:IRecSiniestros_ObtieneSiniestros_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IRecSiniestros/ObtieneSiniestrosResponse" message="tns:IRecSiniestros_ObtieneSiniestros_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GuardaAjustes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/GuardaAjustes" message="tns:IRecSiniestros_GuardaAjustes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRecSiniestros/GuardaAjustesResponse" message="tns:IRecSiniestros_GuardaAjustes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertaPolNoAC">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/InsertaPolNoAC" message="tns:IRecSiniestros_InsertaPolNoAC_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRecSiniestros/InsertaPolNoACResponse" message="tns:IRecSiniestros_InsertaPolNoAC_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EliminaPolNoAC">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/EliminaPolNoAC" message="tns:IRecSiniestros_EliminaPolNoAC_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRecSiniestros/EliminaPolNoACResponse" message="tns:IRecSiniestros_EliminaPolNoAC_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtienePolNoAC">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/ObtienePolNoAC" message="tns:IRecSiniestros_ObtienePolNoAC_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRecSiniestros/ObtienePolNoACResponse" message="tns:IRecSiniestros_ObtienePolNoAC_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneRepartoFac">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRecSiniestros/ObtieneRepartoFac" message="tns:IRecSiniestros_ObtieneRepartoFac_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRecSiniestros/ObtieneRepartoFacResponse" message="tns:IRecSiniestros_ObtieneRepartoFac_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IRecSiniestros" type="tns:IRecSiniestros">
@@ -297,10 +347,55 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GuardaAjustes">
+      <soap:operation soapAction="http://tempuri.org/IRecSiniestros/GuardaAjustes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertaPolNoAC">
+      <soap:operation soapAction="http://tempuri.org/IRecSiniestros/InsertaPolNoAC" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EliminaPolNoAC">
+      <soap:operation soapAction="http://tempuri.org/IRecSiniestros/EliminaPolNoAC" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtienePolNoAC">
+      <soap:operation soapAction="http://tempuri.org/IRecSiniestros/ObtienePolNoAC" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneRepartoFac">
+      <soap:operation soapAction="http://tempuri.org/IRecSiniestros/ObtieneRepartoFac" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="RecSiniestros">
     <wsdl:port name="BasicHttpBinding_IRecSiniestros" binding="tns:BasicHttpBinding_IRecSiniestros">
-      <soap:address location="http://siigmxapp02/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc" />
+      <soap:address location="http://gmxwebservice01/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

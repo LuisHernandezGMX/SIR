@@ -10,6 +10,8 @@ function PageLoadMaster() {
     fn_EstadoGrid("gvd_Poliza", "chk_SelPol");
     fn_EstadoGrid("gvd_RamoContable", "chk_SelRamC");
     fn_EstadoGrid("gvd_Producto", "chk_SelPro");
+    fn_EstadoGrid("gvd_Ramo", "chk_SelRam");
+    fn_EstadoGrid("gvd_Agrupador", "chk_SelAgr");
 
     $(".Fecha").mask("99/99/9999");
 
@@ -24,7 +26,8 @@ function PageLoadMaster() {
                         'Octubre', 'Noviembre', 'Diciembre'],
         monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
                             'May', 'Jun', 'Jul', 'Ago',
-                            'Sep', 'Oct', 'Nov', 'Dic']
+                            'Sep', 'Oct', 'Nov', 'Dic'],
+        autoclose: true
     });
 
 
@@ -170,11 +173,6 @@ function PageLoadMaster() {
             $('[id$=gvd_Catalogo]').tablePagination({});
         }
     });
-
-    $("[id*=btn_buscaFolio]").click(function () {
-        event.preventDefault ? event.preventDefault() : event.returnValue = false;
-        fn_CargaCatalogo("Fol", "", "", "Unica", "", "FOLIOS");
-    });
 }
 
 
@@ -239,7 +237,8 @@ function fn_Repuesta_Autoriza() {
 }
 
 //Funciones de Consulta--------------------------------------------------------------------------------------------------------------------------------
-function fn_CargaCatalogo(Catalogo, Condicion, Seleccion, Tipo, Control, Titulo) {
+function fn_CargaCatalogo(Catalogo, Condicion, Seleccion, Tipo, Control, Titulo, display_adicional) {
+
     $.ajax({
         type: 'POST',
         contentType: "application/json; charset=utf-8",
@@ -253,15 +252,19 @@ function fn_CargaCatalogo(Catalogo, Condicion, Seleccion, Tipo, Control, Titulo)
                 $("input[id$='hid_Prefijo']")[0].value = Catalogo;
                 fn_AbrirModal('#Catalogo');
 
+                if (display_adicional == undefined){
+                    display_adicional = 'none';
+                }
+
                 $("[id*=gvd_Catalogo] tr").not($("[id*=gvd_Catalogo] tr:first")).remove();
                 for (var i = 0; i < response.d.length; i++) {
                     $("[id*=gvd_Catalogo]").append('<tr>' +
                                                         '<td><input type="checkbox" id="chk_Cat" class="Select" onclick="fn_CambioSeleccion(' + "'gvd_Catalogo'" + ',this,' + "'" + Tipo + "','chk_Cat'" + ')" /></td>' +
                                                         '<td><label id="lbl_ClaveCat" class="texto-catalogo" style="Width:75px;">' + response.d[i].Clave + '</label></td>' +
                                                         '<td><label id="lbl_DesCat" class="texto-catalogo" style="Width:205px;">' + response.d[i].Descripcion + '</label></td>' +
-                                                        '<td><label id="lbl_Oculta1" style="display:none;">' + response.d[i].OcultaCampo1 + '</label></td>' +
-                                                        '<td><label id="lbl_Oculta2" style="display:none;">' + response.d[i].OcultaCampo2 + '</label></td>' +
-                                                        '<td><label id="lbl_Oculta3" style="display:none;">' + response.d[i].OcultaCampo3 + '</label></td>' +
+                                                        '<td><label id="lbl_Oculta1" class="texto-catalogo" style="display:' + display_adicional + ';Width:105px">' + response.d[i].OcultaCampo1 + '</label></td>' +
+                                                        '<td><label id="lbl_Oculta2" class="texto-catalogo" style="display:' + display_adicional + ';Width:105px">' + response.d[i].OcultaCampo2 + '</label></td>' +
+                                                        '<td><label id="lbl_Oculta3" class="texto-catalogo" style="display:' + display_adicional + ';Width:105px">' + response.d[i].OcultaCampo3 + '</label></td>' +
                                                    '</tr>')
                 };
                 //Reference the GridView.
@@ -467,9 +470,11 @@ function fn_EstadoGrid(Grid, Control) {
     if ($("[id*=" + Grid + "]")[0] != undefined) {
         var Rows = $("[id*=" + Grid + "]")[0].rows;
         for (i = 0; i <= Rows.length - 2; i++) {
-            if ($('[id*=' + Control + ']')[i].value == "true") {
-                var row = $('[id*=' + Control + ']')[i].parentNode.parentNode;
-                row.style.display = "none";
+            if ($('[id*=' + Control + ']')[i] != undefined) {
+                if ($('[id*=' + Control + ']')[i].value == "true") {
+                    var row = $('[id*=' + Control + ']')[i].parentNode.parentNode;
+                    row.style.display = "none";
+                }
             }
         }
     }
@@ -616,3 +621,43 @@ function fn_IsDate(date) {
     return (new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) )  ? true : false;
 }
 
+
+function fn_MovimientoFlechas(tecla, ctrIzq, ctrDer, ctrAba, ctrArr) {
+    if ((tecla == 37 && ctrIzq != undefined) || (tecla == 38 && ctrArr != undefined) || (tecla == 39 && ctrDer != undefined) || (tecla == 40 && ctrAba != undefined)) {
+        switch (tecla) {
+            case 37:
+                $("[id$='" + ctrIzq + "']").focus();
+                break;
+            case 38:
+                $("[id$='" + ctrArr + "']").focus();
+                break;
+            case 39:
+                $("[id$='" + ctrDer + "']").focus();
+                break;
+            case 40:
+                $("[id$='" + ctrAba + "']").focus();
+                break;
+        }
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+//function fn_MovimientoFlechasGrid(tecla, ctrIzq, ctrDer) {
+//    if ((tecla == 37 && ctrIzq != undefined) ||  (tecla == 39 && ctrDer != undefined)) {
+//        switch (tecla) {
+//            case 37:
+//                ctrIzq.focus();
+//                break;
+//            case 39:
+//                ctrDer.focus();
+//                break;
+//        }
+//        return 1;
+//    }
+//    else {
+//        return 0;
+//    }
+//}

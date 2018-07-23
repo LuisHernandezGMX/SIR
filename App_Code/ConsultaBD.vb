@@ -201,6 +201,21 @@ Public Class ConsultaBD
         Return ArrAsegurado.ToArray()
     End Function
 
-
+    <WebMethod()>
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Function GetFacultativo(ByVal Id As String) As String
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim dtResult As New DataTable
+        Dim Salida As String = vbNullString
+        Try
+            dtResult = Funciones.Lista_A_Datatable(ws.ObtieneCatalogo("Fac", " AND id_contrato= '" & Id & "'", "").ToList)
+            If Not dtResult Is Nothing Then
+                Salida = dtResult.Rows(0).ItemArray(2).ToString
+            End If
+        Catch ex As Exception
+            Salida = vbNullString
+        End Try
+        Return Salida
+    End Function
 
 End Class

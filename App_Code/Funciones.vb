@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Data
+Imports System.Data.SqlClient
 Imports Mensaje
 Imports Microsoft.VisualBasic
 
@@ -146,5 +147,57 @@ Public Class Funciones
 
         Return strDatos
     End Function
+
+    Public Shared Function InsertaBitacora(ByVal cod_modulo As Integer, ByVal cod_submodulo As Integer, ByVal cod_usuario As String, ByVal descripcion As String) As Boolean
+        'Dim ws As New ws_Generales.GeneralesClient
+        'InsertaBitacora = ws.InsertaBitacora(cod_modulo, cod_submodulo, cod_usuario, descripcion)
+
+        Dim sCnn As String = ""
+        Dim sSel As String
+        sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
+        sSel = "spI_Bitacora " & cod_modulo & "," & cod_submodulo & ",'" & cod_usuario & "','" & Mid(Replace(descripcion, "'", "|"), 1, 8000) & "'"
+
+        Dim da As SqlDataAdapter
+
+        Dim dtBitacora As DataTable
+        dtBitacora = New DataTable
+
+        da = New SqlDataAdapter(sSel, sCnn)
+        da.Fill(dtBitacora)
+        Return True
+    End Function
+
+    Public Shared Function InsertaExcepcion(ByVal cod_modulo As Integer, ByVal cod_submodulo As Integer, ByVal cod_usuario As String, ByVal descripcion As String) As Boolean
+        Dim sCnn As String = ""
+        Dim sSel As String
+        sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
+        sSel = "spI_ErrorWeb " & cod_modulo & "," & cod_submodulo & ",'" & cod_usuario & "','" & Mid(Replace(descripcion, "'", "|"), 1, 8000) & "'"
+
+        Dim da As SqlDataAdapter
+
+        Dim dtError As DataTable
+        dtError = New DataTable
+
+        da = New SqlDataAdapter(sSel, sCnn)
+        da.Fill(dtError)
+        Return True
+    End Function
+
+    Public Shared Function InsertaTransaccion(ByVal cod_modulo As Integer, ByVal cod_submodulo As Integer, ByVal Tabla As String, ByVal Key As String, ByVal Datos As String, ByVal cod_usuario As String) As Boolean
+        Dim sCnn As String = ""
+        Dim sSel As String
+        sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
+        sSel = "spI_Transaccion " & cod_modulo & "," & cod_submodulo & ",'" & Tabla & "','" & Replace(Key, "'", "|") & "','" & Mid(Replace(Datos, "'", "|"), 1, 8000) & "','" & cod_usuario & "'"
+
+        Dim da As SqlDataAdapter
+
+        Dim dtTransaccion As DataTable
+        dtTransaccion = New DataTable
+
+        da = New SqlDataAdapter(sSel, sCnn)
+        da.Fill(dtTransaccion)
+        Return True
+    End Function
+
 
 End Class

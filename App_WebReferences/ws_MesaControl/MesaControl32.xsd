@@ -43,6 +43,7 @@
       <xs:element minOccurs="0" name="agente" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_agente" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="cod_aseg" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_avance" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="cod_giro_negocio" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="cod_grupo_endo" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="cod_moneda" nillable="true" type="xs:decimal" />
@@ -55,6 +56,7 @@
       <xs:element minOccurs="0" name="cod_usuario_baja" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_usuario_crea" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_usuario_modifica" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cod_usuario_resp" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="domicilio_fiscal" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="domicilio_riesgo" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="fec_baja" nillable="true" type="xs:string" />
@@ -76,6 +78,7 @@
       <xs:element minOccurs="0" name="num_oferta" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="observaciones" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ramo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="responsable" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="rfc" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="sucursal" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="sucursal_ofi" nillable="true" type="xs:string" />
@@ -137,6 +140,9 @@
       <xs:element minOccurs="0" name="Descripcion" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_agrupador" type="xs:int" />
       <xs:element minOccurs="0" name="cod_grupo" type="xs:int" />
+      <xs:element minOccurs="0" name="html_capas" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="html_grafica" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="html_rangos" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="incisos" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="prima_casco" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="prima_fhm" nillable="true" type="xs:decimal" />
@@ -146,6 +152,7 @@
       <xs:element minOccurs="0" name="prima_rc" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="prima_tev" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="ramos" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="sn_no_proporcional" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="suma_asegurada" nillable="true" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>
@@ -174,6 +181,41 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="spS_RepartoMC_Result" nillable="true" type="tns:spS_RepartoMC_Result" />
+  <xs:complexType name="ArrayOfspS_ProgramaCapasMC_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_ProgramaCapasMC_Result" nillable="true" type="tns:spS_ProgramaCapasMC_Result" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfspS_ProgramaCapasMC_Result" nillable="true" type="tns:ArrayOfspS_ProgramaCapasMC_Result" />
+  <xs:complexType name="spS_ProgramaCapasMC_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cod_capa" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_grupo" type="xs:int" />
+      <xs:element minOccurs="0" name="exceso_capa" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="prc_part" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="prima_capa" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="valor_capa" nillable="true" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="spS_ProgramaCapasMC_Result" nillable="true" type="tns:spS_ProgramaCapasMC_Result" />
+  <xs:complexType name="ArrayOfspS_CapasMC_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_CapasMC_Result" nillable="true" type="tns:spS_CapasMC_Result" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfspS_CapasMC_Result" nillable="true" type="tns:ArrayOfspS_CapasMC_Result" />
+  <xs:complexType name="spS_CapasMC_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cod_capa" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_grupo" type="xs:int" />
+      <xs:element minOccurs="0" name="comision_reas" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="prc_com_reas" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="prc_part" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="prima_capa" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="valor_capa" nillable="true" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="spS_CapasMC_Result" nillable="true" type="tns:spS_CapasMC_Result" />
   <xs:complexType name="ArrayOfspS_DistribucionMC_Result">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_DistribucionMC_Result" nillable="true" type="tns:spS_DistribucionMC_Result" />
@@ -183,8 +225,10 @@
   <xs:complexType name="spS_DistribucionMC_Result">
     <xs:sequence>
       <xs:element minOccurs="0" name="Descripcion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cod_capa" type="xs:int" />
       <xs:element minOccurs="0" name="cod_distribucion" type="xs:int" />
       <xs:element minOccurs="0" name="cod_grupo" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_ramo" type="xs:decimal" />
       <xs:element minOccurs="0" name="prc_part" type="xs:decimal" />
       <xs:element minOccurs="0" name="prc_partGMX" type="xs:decimal" />
       <xs:element minOccurs="0" name="prima_casco" type="xs:decimal" />
@@ -208,7 +252,9 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Descripcion" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_broker" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_capa" type="xs:int" />
       <xs:element minOccurs="0" name="cod_grupo" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_ramo" type="xs:decimal" />
       <xs:element minOccurs="0" name="com_casco" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="com_fhm" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="com_guerra" nillable="true" type="xs:decimal" />
@@ -259,9 +305,11 @@
       <xs:element minOccurs="0" name="age_Calif" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="calif" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_broker" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_capa" type="xs:int" />
       <xs:element minOccurs="0" name="cod_cia" type="xs:decimal" />
       <xs:element minOccurs="0" name="cod_grupo" type="xs:int" />
       <xs:element minOccurs="0" name="cod_naic" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cod_ramo" type="xs:decimal" />
       <xs:element minOccurs="0" name="com_casco" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="com_fhm" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="com_guerra" nillable="true" type="xs:decimal" />
@@ -311,12 +359,34 @@
       <xs:element minOccurs="0" name="Num" type="xs:int" />
       <xs:element minOccurs="0" name="Subjetividad" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="cod_broker" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_capa" type="xs:int" />
       <xs:element minOccurs="0" name="cod_cia" type="xs:decimal" />
       <xs:element minOccurs="0" name="cod_grupo" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_ramo" type="xs:decimal" />
       <xs:element minOccurs="0" name="sn_Subjetividad" nillable="true" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="spS_SubjetividadMC_Result" nillable="true" type="tns:spS_SubjetividadMC_Result" />
+  <xs:complexType name="ArrayOfspS_PagosMC_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_PagosMC_Result" nillable="true" type="tns:spS_PagosMC_Result" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfspS_PagosMC_Result" nillable="true" type="tns:ArrayOfspS_PagosMC_Result" />
+  <xs:complexType name="spS_PagosMC_Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cod_broker" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_capa" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_cia" type="xs:decimal" />
+      <xs:element minOccurs="0" name="cod_grupo" type="xs:int" />
+      <xs:element minOccurs="0" name="cod_ramo" type="xs:decimal" />
+      <xs:element minOccurs="0" name="fecha" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="importe" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="nro_cuota" type="xs:int" />
+      <xs:element minOccurs="0" name="pje_importe" nillable="true" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="spS_PagosMC_Result" nillable="true" type="tns:spS_PagosMC_Result" />
   <xs:complexType name="ArrayOfspS_PolizasAsegurado_Result">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="spS_PolizasAsegurado_Result" nillable="true" type="tns:spS_PolizasAsegurado_Result" />

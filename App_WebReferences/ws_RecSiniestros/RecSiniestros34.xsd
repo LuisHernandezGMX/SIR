@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
-  <xs:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
+  <xs:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/Recordatorios/Siniestros/RecSiniestros.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
   <xs:element name="ActualizaFaseRecup">
     <xs:complexType>
       <xs:sequence>
@@ -232,6 +232,99 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneSiniestrosResult" nillable="true" type="q15:ArrayOfsp_rptMovSinxReas_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GuardaAjustes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="siniestro" type="xs:int" />
+        <xs:element minOccurs="0" name="consecutivo" type="xs:int" />
+        <xs:element minOccurs="0" name="reasegurador_ant" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="reasegurador" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="corredor_ant" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="corredor" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="reg_rea_ant" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="reg_rea" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fec_ini_vig_ant" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fec_ini_vig" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fec_fin_vig_ant" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fec_fin_vig" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="causa_stro_ant" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="causa_stro" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dir_stro_ant" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dir_stro" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ajustador_ant" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ajustador" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fecha_ajuste" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="usuarioLog" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GuardaAjustesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="GuardaAjustesResult" nillable="true" type="q16:ArrayOfNullableOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertaPolNoAC">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_pv" type="xs:int" />
+        <xs:element minOccurs="0" name="cod_usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cod_submod_web" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InsertaPolNoACResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="InsertaPolNoACResult" nillable="true" type="q17:ArrayOfNullableOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EliminaPolNoAC">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_pv" type="xs:int" />
+        <xs:element minOccurs="0" name="cod_submod_web" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EliminaPolNoACResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="EliminaPolNoACResult" nillable="true" type="q18:ArrayOfNullableOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtienePolNoAC">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cod_submod_web" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtienePolNoACResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtienePolNoACResult" nillable="true" type="q19:ArrayOfspS_EndososNoAC_Result" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneRepartoFac">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id_pv" type="xs:int" />
+        <xs:element minOccurs="0" name="nro_stro" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ObtieneRepartoFacResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/WS_GMX" minOccurs="0" name="ObtieneRepartoFacResult" nillable="true" type="q20:ArrayOfsp_RepartoReaFac_Result" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

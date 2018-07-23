@@ -32,6 +32,15 @@ Partial Class MesaControl_Memoria
         End Set
     End Property
 
+    Public Property dtListaUbicaciones() As DataTable
+        Get
+            Return Session("dtListaUbicaciones")
+        End Get
+        Set(ByVal value As DataTable)
+            Session("dtListaUbicaciones") = value
+        End Set
+    End Property
+
     Public Property dtUbicaciones() As DataTable
         Get
             Return Session("dtUbicaciones")
@@ -65,8 +74,20 @@ Partial Class MesaControl_Memoria
                 Funciones.LlenaCatDDL(ddl_Moneda, "Mon",,,,,, False)
 
                 Funciones.LlenaCatGrid(gvd_RamoSbr, "Ras", "", "")
+
+                Funciones.LlenaCatDDL(ddl_Pais, "Pai",,,,, 10, False)
+
+                Funciones.LlenaCatDDL(ddl_Estado, "Edo", " AND cod_pais = " & ddl_Pais.SelectedValue,,,, 0, False)
+
+                Funciones.LlenaCatDDL(ddl_Ciudad, "Ciu", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & ddl_Estado.SelectedValue,,,, 0, False)
+
+                Funciones.LlenaCatDDL(ddl_Municipio, "Mun", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & ddl_Estado.SelectedValue,,,, 0, False)
+
+                Funciones.LlenaCatDDL(ddl_Colonia, "Col", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & ddl_Estado.SelectedValue & " AND cod_ciudad = " & ddl_Ciudad.SelectedValue & " AND cod_municipio = " & ddl_Municipio.SelectedValue,,,, 0, False)
+
                 LlenaGridRiesgo(True)
 
+                LlenaGridUbicacion(True)
 
             End If
         Catch ex As Exception
@@ -567,10 +588,10 @@ Partial Class MesaControl_Memoria
                 Funciones.LlenaGrid(gvd_AsegPolizas, dtPolizasAseg)
                 Funciones.EjecutaFuncion("fn_AbrirModal('#PolizasAsegurado')", "Polizas")
             Else
-                Mensaje.MuestraMensaje("Mesa de Control", "No existen Pólizas para el Asegurado", TipoMsg.Falla)
+                Mensaje.MuestraMensaje("Memoria de Calculo", "No existen Pólizas para el Asegurado", TipoMsg.Falla)
             End If
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
@@ -595,8 +616,6 @@ Partial Class MesaControl_Memoria
                 myRow = dtPolizasAseg.Select("id_pv IN (" & strSel & ")")
 
                 If myRow.Length > 0 Then
-                    txt_ClaveOfi.Text = myRow(0)("cod_suc")
-                    txt_SearchOfi.Text = myRow(0)("sucursal")
 
                     txt_ClaveAseg.Text = myRow(0)("cod_aseg")
                     txt_SearchAse.Text = myRow(0)("asegurado")
@@ -622,15 +641,13 @@ Partial Class MesaControl_Memoria
                     txt_ClaveGre.Text = myRow(0)("cod_grupo_endo")
                     txt_ClaveGreAux.Text = myRow(0)("cod_grupo_endo")
                     txt_SearchGre.Text = myRow(0)("grupo_endoso")
-                    txt_ClaveTte.Text = myRow(0)("cod_tipo_endo")
-                    txt_SearchTte.Text = myRow(0)("tipo_endoso")
 
                     Funciones.EjecutaFuncion("fn_CerrarModal('#PolizasAsegurado')", "Polizas")
                 End If
             End If
 
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
@@ -640,24 +657,24 @@ Partial Class MesaControl_Memoria
             Funciones.LlenaGrid(gvd_AsegPolizas, dtPolizasAseg)
             Funciones.EjecutaFuncion("fn_CerrarModal('#PolizasAsegurado')", "Polizas")
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
-    Private Sub btn_InfoRiesgos_Click(sender As Object, e As ImageClickEventArgs) Handles btn_InfoRiesgos.Click
+    Private Sub btn_InfoRiesgos_Click(sender As Object, e As EventArgs) Handles btn_InfoRiesgos.Click
         Try
             Dim ws As New ws_MesaControl.MesaControlClient
             Dim sCnn As String = ""
             Dim sSel As String
             sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
 
-            dtUbicaciones = New DataTable
-            dtUbicaciones = Funciones.Lista_A_Datatable(ws.ObtieneUbicacionesPoliza(txt_ClaveSuc.Text, txt_ClaveRam.Text, txt_NroPoliza.Text, txt_Sufijo.Text, txt_Endoso.Text).ToList)
+            dtListaUbicaciones = New DataTable
+            dtListaUbicaciones = Funciones.Lista_A_Datatable(ws.ObtieneUbicacionesPoliza(txt_ClaveSuc.Text, txt_ClaveRam.Text, txt_NroPoliza.Text, txt_Sufijo.Text, txt_Endoso.Text).ToList)
 
-            If dtUbicaciones.Rows.Count > 0 Then
+            If dtListaUbicaciones.Rows.Count > 0 Then
                 dtRiesgosPol = New DataTable
 
-                sSel = "spS_FactoresPoliza " & txt_ClaveSuc.Text & "," & txt_ClaveRam.Text & "," & txt_NroPoliza.Text & "," & txt_Sufijo.Text & "," & txt_Endoso.Text & "," & dtUbicaciones.Rows(0)("cod_item")
+                sSel = "spS_FactoresPoliza " & txt_ClaveSuc.Text & "," & txt_ClaveRam.Text & "," & txt_NroPoliza.Text & "," & txt_Sufijo.Text & "," & txt_Endoso.Text & "," & dtListaUbicaciones.Rows(0)("cod_item")
 
                 Dim da As SqlDataAdapter
 
@@ -672,18 +689,18 @@ Partial Class MesaControl_Memoria
                     ValidaRamosRiesgo(gvd_RiesgosPoliza, -1, {18, 19, 20, 21, 22, 23})
 
                     Dim ddl_Ubicacion As DropDownList = TryCast(gvd_RiesgosPoliza.HeaderRow.FindControl("ddl_Ubicacion"), DropDownList)
-                    Funciones.LlenaDDL(ddl_Ubicacion, dtUbicaciones, "cod_item", "cod_item",)
+                    Funciones.LlenaDDL(ddl_Ubicacion, dtListaUbicaciones, "cod_item", "cod_item",)
 
                     lbl_RiesgoPoliza.Text = txt_ClaveSuc.Text & "-" & txt_ClaveRam.Text & "-" & txt_NroPoliza.Text & "-" & txt_Sufijo.Text & "-" & "0 >>> (" & txt_SearchAse.Text & ")"
 
                     Funciones.EjecutaFuncion("fn_AbrirModal('#RiesgosPoliza')", "Riesgos")
                 Else
-                    Mensaje.MuestraMensaje("Mesa de Control", "No existen Riesgos asociados a la Póliza", TipoMsg.Falla)
+                    Mensaje.MuestraMensaje("Memoria de Calculo", "No existen Riesgos asociados a la Póliza", TipoMsg.Falla)
                 End If
             End If
 
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
@@ -699,14 +716,19 @@ Partial Class MesaControl_Memoria
             Dim strSel = ObtieneSeleccionados(gvd_RiesgosPoliza, "chk_sel", "id")
 
             If Len(strSel) > 0 Then
+
+                If dtRiesgo.Rows.Count = 0 Then
+                    dtRiesgo.Rows.Add(0, 0, "0", "TOTAL", "", "", "", "", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                End If
+
+
                 Dim myRow() As Data.DataRow
                 myRow = dtRiesgosPol.Select("id IN (" & strSel & ")")
                 For Each Row In myRow
                     dtRiesgo.Rows.Add(0, inciso, Row("cod_ramo"), Row("ramo_desc"), Row("cod_subramo"), Row("subramo_desc"),
                                       Row("cod_riesgo"), Row("riesgo_desc"), Row("cod_ind_cob"), Row("cobertura_desc"),
-                                      Row("sn_facultativo"), Row("sn_adicional"), 0, Row("suma_asegurada"), Row("prima_neta"),
-                                      Row("prima_inc"), Row("prima_fhm"), Row("prima_tev"), Row("prima_rc"), Row("prima_casco"), Row("prima_guerra"),
-                                      Row("prc_com_age"), Row("com_agente"), Row("prc_com_adi_age"), Row("com_adi_agente"), Row("Cuota"), 0, 0, 0, 0)
+                                      0, Row("sn_adicional_suma"), 0, 0, Row("suma_asegurada"), Row("prima_neta"), 0, 0, 0,
+                                      Row("prima_inc"), Row("prima_fhm"), Row("prima_tev"), Row("prima_rc"), Row("prima_casco"), Row("prima_guerra"))
                     inciso = inciso + 1
                 Next
                 LlenaGridRiesgo(False)
@@ -718,18 +740,17 @@ Partial Class MesaControl_Memoria
             Funciones.EjecutaFuncion("fn_CerrarModal('#EsperaModal');", "CerrarModal")
         Catch ex As Exception
             Funciones.EjecutaFuncion("fn_CerrarModal('#EsperaModal');", "CerrarModal")
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
     Private Sub btn_CerrarRie_Click(sender As Object, e As EventArgs) Handles btn_CerrarRie.Click
         Try
             dtRiesgosPol = Nothing
-            dtUbicaciones = Nothing
             Funciones.LlenaGrid(gvd_RiesgosPoliza, dtRiesgosPol)
             Funciones.EjecutaFuncion("fn_CerrarModal('#RiesgosPoliza')", "Riesgos")
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 
@@ -753,10 +774,225 @@ Partial Class MesaControl_Memoria
             ValidaRamosRiesgo(gvd_RiesgosPoliza, -1, {18, 19, 20, 21, 22, 23})
 
             Dim ddl_Ubicacion As DropDownList = TryCast(gvd_RiesgosPoliza.HeaderRow.FindControl("ddl_Ubicacion"), DropDownList)
-            Funciones.LlenaDDL(ddl_Ubicacion, dtUbicaciones, "cod_item", "cod_item", sender.selectedValue)
+            Funciones.LlenaDDL(ddl_Ubicacion, dtListaUbicaciones, "cod_item", "cod_item", sender.selectedValue)
 
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub LlenaGridUbicacion(ByVal bln_Nuevo As Boolean)
+        If bln_Nuevo = True Then
+            dtUbicaciones = New DataTable
+            dtUbicaciones.Columns.Add("cod_item")
+            dtUbicaciones.Columns.Add("cod_giro_negocio")
+            dtUbicaciones.Columns.Add("giro")
+            dtUbicaciones.Columns.Add("cod_sgiro")
+            dtUbicaciones.Columns.Add("subgiro")
+            dtUbicaciones.Columns.Add("cod_aseg")
+            dtUbicaciones.Columns.Add("asegurado")
+            dtUbicaciones.Columns.Add("actividad")
+            dtUbicaciones.Columns.Add("domicilio")
+            dtUbicaciones.Columns.Add("calle")
+            dtUbicaciones.Columns.Add("nro_exterior")
+            dtUbicaciones.Columns.Add("nro_interior")
+            dtUbicaciones.Columns.Add("cod_pais")
+            dtUbicaciones.Columns.Add("pais")
+            dtUbicaciones.Columns.Add("cod_dpto")
+            dtUbicaciones.Columns.Add("estado")
+            dtUbicaciones.Columns.Add("cod_ciudad")
+            dtUbicaciones.Columns.Add("cod_municipio")
+            dtUbicaciones.Columns.Add("cod_colonia")
+            dtUbicaciones.Columns.Add("cod_postal")
+            dtUbicaciones.Columns.Add("zona_fhm")
+            dtUbicaciones.Columns.Add("zona_tev")
+            dtUbicaciones.Columns.Add("coaseguro_fhm", GetType(Decimal))
+            dtUbicaciones.Columns.Add("coaseguro_tev", GetType(Decimal))
+            dtUbicaciones.Columns.Add("cuota_inc", GetType(Decimal))
+            dtUbicaciones.Columns.Add("cuota_fhm", GetType(Decimal))
+            dtUbicaciones.Columns.Add("cuota_tev", GetType(Decimal))
+            dtUbicaciones.Columns.Add("suma_asegurada_edificio", GetType(Decimal))
+            dtUbicaciones.Columns.Add("suma_asegurada_contenidos", GetType(Decimal))
+            dtUbicaciones.Columns.Add("suma_asegurada_perdidas", GetType(Decimal))
+            dtUbicaciones.Columns.Add("prima_inc_edificio", GetType(Decimal))
+            dtUbicaciones.Columns.Add("prima_inc_contenidos", GetType(Decimal))
+            dtUbicaciones.Columns.Add("prima_inc_perdidas", GetType(Decimal))
+            dtUbicaciones.Columns.Add("prima_fhm_edificio", GetType(Decimal))
+            dtUbicaciones.Columns.Add("prima_fhm_contenidos", GetType(Decimal))
+            dtUbicaciones.Columns.Add("prima_fhm_perdidas", GetType(Decimal))
+            dtUbicaciones.Columns.Add("prima_tev_edificio", GetType(Decimal))
+            dtUbicaciones.Columns.Add("prima_tev_contenidos", GetType(Decimal))
+            dtUbicaciones.Columns.Add("prima_tev_perdidas", GetType(Decimal))
+        End If
+
+        Funciones.LlenaGrid(gvd_Ubicaciones, dtUbicaciones)
+    End Sub
+
+    Private Sub btn_AceptarUbi_Click(sender As Object, e As EventArgs) Handles btn_AceptarUbi.Click
+        Try
+            Dim ubicacion As Integer
+            Dim cod_item As Integer = 1
+
+            If gvd_Ubicaciones.Rows.Count > 0 Then
+                cod_item = gvd_Ubicaciones.DataKeys(gvd_Ubicaciones.Rows.Count - 1)("cod_item") + 1
+            End If
+
+            For ubicacion = 1 To txt_NroUbicacion.Text
+                dtUbicaciones.Rows.Add(cod_item, 0, "", 0, "", 0, "", "", "", "", 0, 0, 0, "", 0, "", 0, 0, 0, 0,
+                                       "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                cod_item = cod_item + 1
+            Next
+
+            LlenaGridUbicacion(False)
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub ddl_Pais_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddl_Pais.SelectedIndexChanged
+        Try
+            Funciones.LlenaCatDDL(ddl_Estado, "Edo", " AND cod_pais = " & ddl_Pais.SelectedValue,,,, 0, False)
+
+            Funciones.LlenaCatDDL(ddl_Ciudad, "Ciu", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & IIf(ddl_Estado.SelectedValue = "", 0, ddl_Estado.SelectedValue),,,, 0, False)
+
+            Funciones.LlenaCatDDL(ddl_Municipio, "Mun", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & IIf(ddl_Estado.SelectedValue = "", 0, ddl_Estado.SelectedValue),,,, 0, False)
+
+            Funciones.LlenaCatDDL(ddl_Colonia, "Col", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & IIf(ddl_Estado.SelectedValue = "", 0, ddl_Estado.SelectedValue) & " AND cod_ciudad = " & IIf(ddl_Ciudad.SelectedValue = "", 0, ddl_Ciudad.SelectedValue) & " AND cod_municipio = " & IIf(ddl_Municipio.SelectedValue = "", 0, ddl_Municipio.SelectedValue),,,, 0, False)
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub ddl_Estado_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddl_Estado.SelectedIndexChanged
+        Try
+            Funciones.LlenaCatDDL(ddl_Ciudad, "Ciu", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & IIf(ddl_Estado.SelectedValue = "", 0, ddl_Estado.SelectedValue),,,, 0, False)
+
+            Funciones.LlenaCatDDL(ddl_Municipio, "Mun", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & IIf(ddl_Estado.SelectedValue = "", 0, ddl_Estado.SelectedValue),,,, 0, False)
+
+            Funciones.LlenaCatDDL(ddl_Colonia, "Col", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & IIf(ddl_Estado.SelectedValue = "", 0, ddl_Estado.SelectedValue) & " AND cod_ciudad = " & IIf(ddl_Ciudad.SelectedValue = "", 0, ddl_Ciudad.SelectedValue) & " AND cod_municipio = " & IIf(ddl_Municipio.SelectedValue = "", 0, ddl_Municipio.SelectedValue),,,, 0, False)
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub ddl_Ciudad_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddl_Ciudad.SelectedIndexChanged
+        Try
+            Funciones.LlenaCatDDL(ddl_Colonia, "Col", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & IIf(ddl_Estado.SelectedValue = "", 0, ddl_Estado.SelectedValue) & " AND cod_ciudad = " & IIf(ddl_Ciudad.SelectedValue = "", 0, ddl_Ciudad.SelectedValue) & " AND cod_municipio = " & IIf(ddl_Municipio.SelectedValue = "", 0, ddl_Municipio.SelectedValue),,,, 0, False)
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub ddl_Municipio_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddl_Municipio.SelectedIndexChanged
+        Try
+            Funciones.LlenaCatDDL(ddl_Colonia, "Col", " AND cod_pais = " & ddl_Pais.SelectedValue & " AND cod_dpto = " & IIf(ddl_Estado.SelectedValue = "", 0, ddl_Estado.SelectedValue) & " AND cod_ciudad = " & ddl_Ciudad.SelectedValue & " AND cod_municipio = " & ddl_Municipio.SelectedValue,,,, 0, False)
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_AceptarDir_Click(sender As Object, e As EventArgs) Handles btn_AceptarDir.Click
+        Try
+            Dim index As Integer = 0
+            For Each Row In gvd_Ubicaciones.Rows
+                Dim lnk_Ubicacion As LinkButton = TryCast(Row.FindControl("lnk_Ubicacion"), LinkButton)
+                If lnk_Ubicacion.Text = txt_cod_item.Text Then
+                    index = Row.RowIndex
+                    Exit For
+                End If
+            Next
+
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_cod_aseg"), TextBox).Text = txt_ClaveAseg.Text
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_asegurado"), TextBox).Text = txt_Asegurado.Text
+
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_actividad"), TextBox).Text = txt_Actividad.Text
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_calle"), TextBox).Text = txt_Calle.Text
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_nro_exterior"), TextBox).Text = txt_NroExt.Text
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_nro_interior"), TextBox).Text = txt_NroInt.Text
+
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_cod_ciudad"), TextBox).Text = ddl_Ciudad.SelectedValue
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_cod_municipio"), TextBox).Text = ddl_Municipio.SelectedValue
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_cod_colonia"), TextBox).Text = ddl_Colonia.SelectedValue
+
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_domicilio"), TextBox).Text = txt_Calle.Text & " Nro. Ext:" & txt_NroExt.Text & " Int: " & txt_NroInt.Text
+
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_cod_pais"), TextBox).Text = ddl_Pais.SelectedValue
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_pais"), TextBox).Text = ddl_Pais.SelectedItem.Text
+
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_cod_dpto"), TextBox).Text = ddl_Estado.SelectedValue
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_estado"), TextBox).Text = ddl_Estado.SelectedItem.Text
+
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_cod_postal"), TextBox).Text = txt_CP.Text
+
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_cod_giro"), TextBox).Text = txt_ClaveGiro.Text
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_giro"), TextBox).Text = txt_Giro.Text
+
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_cod_sgiro"), TextBox).Text = txt_ClaveSubgiro.Text
+            CType(gvd_Ubicaciones.Rows(index).FindControl("txt_subgiro"), TextBox).Text = txt_Subgiro.Text
+
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_RecuperaUbicacion_Click(sender As Object, e As EventArgs) Handles btn_RecuperaUbicacion.Click
+        Try
+            Dim sCnn As String = ""
+            Dim sSel As String
+            Dim dtInfoUbicacion As DataTable
+            dtInfoUbicacion = New DataTable
+
+            sCnn = ConfigurationManager.ConnectionStrings("CadenaConexion").ConnectionString
+
+            sSel = "spS_RecuperaUbicaciones " & txt_ClaveSuc.Text & "," & txt_ClaveRam.Text & "," & txt_NroPoliza.Text & "," & txt_Sufijo.Text & "," & txt_Endoso.Text
+
+            Dim da As SqlDataAdapter
+
+            da = New SqlDataAdapter(sSel, sCnn)
+
+            da.Fill(dtInfoUbicacion)
+
+            Funciones.LlenaGrid(gvd_UbicacionPoliza, dtInfoUbicacion)
+
+            Funciones.AbrirModal("#UbicacionPoliza")
+
+
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
+        End Try
+    End Sub
+
+    Private Sub btn_AceptarItem_Click(sender As Object, e As EventArgs) Handles btn_AceptarItem.Click
+        Try
+            Dim cod_item As Integer = 1
+
+            If gvd_Ubicaciones.Rows.Count > 0 Then
+                cod_item = gvd_Ubicaciones.DataKeys(gvd_Ubicaciones.Rows.Count - 1)("cod_item") + 1
+            End If
+
+            For Each Row In gvd_UbicacionPoliza.Rows
+                Dim chk_Sel As CheckBox = TryCast(Row.FindControl("chk_Sel"), CheckBox)
+                If chk_Sel.Checked = True Then
+                    dtUbicaciones.Rows.Add(cod_item, 0, "", 0, "", TryCast(Row.FindControl("txt_cod_aseg"), TextBox).Text, TryCast(Row.FindControl("txt_asegurado"), TextBox).Text,
+                                           "", TryCast(Row.FindControl("txt_domicilio"), TextBox).Text, TryCast(Row.FindControl("txt_calle"), TextBox).Text, 0, 0,
+                                           TryCast(Row.FindControl("txt_cod_pais"), TextBox).Text, TryCast(Row.FindControl("txt_pais"), TextBox).Text,
+                                           TryCast(Row.FindControl("txt_cod_dpto"), TextBox).Text, TryCast(Row.FindControl("txt_estado"), TextBox).Text,
+                                           TryCast(Row.FindControl("txt_cod_ciudad"), TextBox).Text, TryCast(Row.FindControl("txt_cod_municipio"), TextBox).Text,
+                                           TryCast(Row.FindControl("txt_cod_colonia"), TextBox).Text, TryCast(Row.FindControl("txt_cod_postal"), TextBox).Text,
+                                           "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+                    cod_item = cod_item + 1
+                End If
+            Next
+
+            LlenaGridUbicacion(False)
+
+            Funciones.LlenaGrid(gvd_UbicacionPoliza, Nothing)
+
+            Funciones.EjecutaFuncion("fn_CerrarModal('#UbicacionPoliza')", "Cierra")
+        Catch ex As Exception
+            Mensaje.MuestraMensaje("Memoria de Calculo", ex.Message, TipoMsg.Falla)
         End Try
     End Sub
 End Class

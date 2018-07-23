@@ -2,9 +2,9 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MesaControl" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/MesaControl/MesaControl.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/MesaControl/MesaControl.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://siigmxapp02/WS_GMX/Reaseguro/MesaControl/MesaControl.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
+      <xsd:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/MesaControl/MesaControl.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/MesaControl/MesaControl.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://gmxwebservice01/WS_GMX/Reaseguro/MesaControl/MesaControl.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WS_GMX" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IMesaControl_ObtieneIndicadores_InputMessage">
@@ -43,6 +43,18 @@
   <wsdl:message name="IMesaControl_ObtieneReparto_OutputMessage">
     <wsdl:part name="parameters" element="tns:ObtieneRepartoResponse" />
   </wsdl:message>
+  <wsdl:message name="IMesaControl_ObtieneProgramaCapas_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneProgramaCapas" />
+  </wsdl:message>
+  <wsdl:message name="IMesaControl_ObtieneProgramaCapas_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneProgramaCapasResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMesaControl_ObtieneCapas_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneCapas" />
+  </wsdl:message>
+  <wsdl:message name="IMesaControl_ObtieneCapas_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtieneCapasResponse" />
+  </wsdl:message>
   <wsdl:message name="IMesaControl_ObtieneDistribucion_InputMessage">
     <wsdl:part name="parameters" element="tns:ObtieneDistribucion" />
   </wsdl:message>
@@ -66,6 +78,12 @@
   </wsdl:message>
   <wsdl:message name="IMesaControl_ObtieneSubjetividad_OutputMessage">
     <wsdl:part name="parameters" element="tns:ObtieneSubjetividadResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMesaControl_ObtienePagos_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtienePagos" />
+  </wsdl:message>
+  <wsdl:message name="IMesaControl_ObtienePagos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtienePagosResponse" />
   </wsdl:message>
   <wsdl:message name="IMesaControl_ObtienePolizasAseg_InputMessage">
     <wsdl:part name="parameters" element="tns:ObtienePolizasAseg" />
@@ -110,6 +128,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IMesaControl/ObtieneReparto" message="tns:IMesaControl_ObtieneReparto_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMesaControl/ObtieneRepartoResponse" message="tns:IMesaControl_ObtieneReparto_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ObtieneProgramaCapas">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMesaControl/ObtieneProgramaCapas" message="tns:IMesaControl_ObtieneProgramaCapas_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMesaControl/ObtieneProgramaCapasResponse" message="tns:IMesaControl_ObtieneProgramaCapas_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneCapas">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMesaControl/ObtieneCapas" message="tns:IMesaControl_ObtieneCapas_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMesaControl/ObtieneCapasResponse" message="tns:IMesaControl_ObtieneCapas_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ObtieneDistribucion">
       <wsdl:input wsaw:Action="http://tempuri.org/IMesaControl/ObtieneDistribucion" message="tns:IMesaControl_ObtieneDistribucion_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMesaControl/ObtieneDistribucionResponse" message="tns:IMesaControl_ObtieneDistribucion_OutputMessage" />
@@ -125,6 +151,10 @@
     <wsdl:operation name="ObtieneSubjetividad">
       <wsdl:input wsaw:Action="http://tempuri.org/IMesaControl/ObtieneSubjetividad" message="tns:IMesaControl_ObtieneSubjetividad_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMesaControl/ObtieneSubjetividadResponse" message="tns:IMesaControl_ObtieneSubjetividad_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtienePagos">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMesaControl/ObtienePagos" message="tns:IMesaControl_ObtienePagos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMesaControl/ObtienePagosResponse" message="tns:IMesaControl_ObtienePagos_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ObtienePolizasAseg">
       <wsdl:input wsaw:Action="http://tempuri.org/IMesaControl/ObtienePolizasAseg" message="tns:IMesaControl_ObtienePolizasAseg_InputMessage" />
@@ -195,6 +225,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ObtieneProgramaCapas">
+      <soap:operation soapAction="http://tempuri.org/IMesaControl/ObtieneProgramaCapas" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtieneCapas">
+      <soap:operation soapAction="http://tempuri.org/IMesaControl/ObtieneCapas" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ObtieneDistribucion">
       <soap:operation soapAction="http://tempuri.org/IMesaControl/ObtieneDistribucion" style="document" />
       <wsdl:input>
@@ -224,6 +272,15 @@
     </wsdl:operation>
     <wsdl:operation name="ObtieneSubjetividad">
       <soap:operation soapAction="http://tempuri.org/IMesaControl/ObtieneSubjetividad" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtienePagos">
+      <soap:operation soapAction="http://tempuri.org/IMesaControl/ObtienePagos" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -261,7 +318,7 @@
   </wsdl:binding>
   <wsdl:service name="MesaControl">
     <wsdl:port name="BasicHttpBinding_IMesaControl" binding="tns:BasicHttpBinding_IMesaControl">
-      <soap:address location="http://siigmxapp02/WS_GMX/Reaseguro/MesaControl/MesaControl.svc" />
+      <soap:address location="http://gmxwebservice01/WS_GMX/Reaseguro/MesaControl/MesaControl.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

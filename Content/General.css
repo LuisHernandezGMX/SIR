@@ -40,7 +40,7 @@ float:left;
 position:absolute;
 z-index:200;
 color:white;
-font-family:Myriad Pro;
+font-family:Arial;
 font-size:12px;
 font-weight:bold;
 }
@@ -66,7 +66,7 @@ ul#menu li:hover {
 
 ul#menu li a {
  display: block;
- font-family:Myriad Pro;
+ font-family:Arial;
  font-weight:bold;
  color: white;
 }
@@ -205,7 +205,7 @@ min-width:450px;
 border-width:1px; 
 height:250px; 
 min-height:250px;
-font-family: Myriad Pro;
+font-family: Arial;
 }
 
 #Autorizacion{
@@ -216,18 +216,18 @@ min-width:450px;
 border-width:1px; 
 height:250px; 
 min-height:250px;
-font-family: Myriad Pro;
+font-family: Arial;
 }
 
 
 .titulo-pagina{
-font-family:Myriad Pro;
+font-family:Arial;
 font-size:22px;
 color:white;
 }
 
 .titulo-seccion{
-font-family:Myriad Pro;
+font-family:Arial;
 font-size:15px;
 color:#003A5D;
 font-weight:bold;
@@ -245,7 +245,7 @@ text-align:left;
 background-color:white;
 color:#003A5D;
 font-size:12px;
-font-family:Myriad Pro;
+font-family:Arial;
 font-weight:bold;
 box-shadow: 5px 5px 5px #003A5D; 
 border-radius: 0px 0px 20px 20px;  
@@ -263,7 +263,7 @@ text-align:left;
 background-color:white;
 color:#003A5D;
 font-size:12px;
-font-family:Myriad Pro;
+font-family:Arial;
 font-weight:bold;
 }
 
@@ -305,8 +305,8 @@ border-bottom-color:#003A5D;
 text-align:center;
 background-color:#003A5D;
 color:white;
-font-size:13px;
-font-family:Myriad Pro;
+font-size:14px;
+font-family:Arial;
 font-weight:bold;
 text-align:left;
 }
@@ -318,12 +318,12 @@ padding-top:5px;
 padding-left:15px;
 border-bottom-style:inset;
 border-width:2px;
-border-color:red;
+border-color:#003A5D;
 text-align:center;
-background-color:#3B6882;
+background-color:Highlight;
 color:white;
-font-size:13px;
-font-family:Myriad Pro;
+font-size:14px;
+font-family:Arial;
 font-weight:bold;
 text-align:left;
 }
@@ -525,14 +525,14 @@ border-color:#9c9c9c;
 
 .titulo-modal{
 font-size:12px;
-font-family: Myriad Pro;
+font-family: Arial;
 color:white;
 font-weight:bold;
 }
 
 .texto-mensaje{
 font-size:12px;
-font-family: Myriad Pro;
+font-family: Arial;
 color:#9c9c9c; 
 overflow-y:scroll;
 overflow-x:hidden;
@@ -547,7 +547,7 @@ border-color:#9c9c9c;
 
 .texto-catalogo{
 font-size:10px;
-font-family: Myriad Pro;
+font-family: Arial;
 font-weight:normal;
 color:#003A5D;
 }
@@ -574,6 +574,12 @@ opacity: 0.95; filter: alpha(opacity=95); -moz-opacity: 0.8; box-shadow: 2px 2px
 border-radius: 11px; left: 30%; top: 20%;  margin-left: -150px;  position: fixed; z-index: 9981; background-color: rgb(255, 255, 255); 
 -moz-border-radius: 11px; -webkit-border-radius: 11px; /*display:none;*/  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
 box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c; width:400px;
+} 
+
+.modal-fija {
+border-radius: 11px;  z-index: 9981; background-color: rgb(255, 255, 255); 
+-moz-border-radius: 11px; -webkit-border-radius: 11px; /*display:none;*/  overflow:hidden;-webkit-overflow-scrolling:touch;outline:0;
+box-shadow: 2px 2px 2px #aaa; border-style:inset; border-width:1px; border-color:#9c9c9c;
 } 
 
 .modal-simple{
@@ -620,51 +626,51 @@ border-color:#9c9c9c;
 }
 
 .generales{
-    left: 400px; top: 160px;
+    left: 450px; top: 160px;
 }
 
 .reaseguro{
-    left: 400px; top: 195px;
+    left: 450px; top: 195px;
 }
 
 .siniestros{
-    left: 400px; top: 230px;
+    left: 450px; top: 230px;
 }
 
 .cumulos{
-    left: 400px; top: 265px;
+    left: 450px; top: 265px;
 }
 
 .cobranzas{
-    left: 400px; top: 300px;
+    left: 450px; top: 300px;
 }
 
 .contabilidad{
-    left: 400px; top: 335px;
+    left: 450px; top: 335px;
 }
 
 .poliza{
-    left: 830px; top: 160px;
+    left: 880px; top: 160px;
 }
 
 .broker{
-    left: 830px; top: 195px;
+    left: 880px; top: 195px;
 }
 
 .compañia{
-    left: 830px; top: 230px;
+    left: 880px; top: 230px;
 }
 
 .ramo_contable{
-    left: 830px; top: 265px;
+    left: 880px; top: 265px;
 }
 
 .producto{
-    left: 830px; top: 300px;
+    left: 880px; top: 300px;
 }
 
 .adicionales{
-    left: 830px; top: 335px;
+    left: 880px; top: 335px;
 }
 /*------------------------------------*/
 
@@ -682,14 +688,14 @@ border-color:#9c9c9c;
 
 .etiqueta-control{
 font-size:12px;
-font-family: Myriad Pro;
+font-family: Arial;
 color:#003A5D;
 }
 
 .etiqueta-simple{
 font-size:12px;
 color:#003A5D;
-font-family: Myriad Pro;
+font-family: Arial;
 }
 
 .etiqueta{
@@ -700,7 +706,7 @@ font-weight:bold;
 .texto-body{
 font-size:11px;
 color:#555;
-font-family: Myriad Pro;
+font-family: Arial;
 }
 
 .estandar-control{
@@ -709,7 +715,7 @@ width:100%;
 height:25px;
 padding:2px 2px;
 font-size:11px;
-font-family:Myriad Pro;
+font-family:Arial;
 line-height:1.42857143;
 color:#555;
 background-color:#fff;
@@ -745,7 +751,7 @@ width:100%;
 height:22px;
 padding:2px 2px;
 font-size:10px;
-font-family:Myriad Pro;
+font-family:Arial;
 line-height:1.42857143;
 color:#003A5D;
 border:1px solid #ccc;
@@ -777,10 +783,10 @@ font-size:9px;
 }
 
 .botones{
-font-family:'Myriad Pro'; 
-font-size:12px; 
+font-family:Arial; 
+font-size:13px; 
 height:30px;
-width:80px;
+width:90px;
 background-color:#003A5D;
 color:white;
 }
@@ -820,7 +826,7 @@ width:150px;
 }
 
 .botones span{
-font-family:'Myriad Pro'; 
+font-family:'Arial'; 
 font-size:12px; 
 color:white;
 vertical-align:top; 
@@ -932,7 +938,7 @@ width: 14px; height: 14px;
 
 /*-------------------------------------GRIDVIEW----------------------------------------------*/
 .grid-view{
-font-family: Myriad Pro;
+font-family: Arial;
 color:#003A5D;
 font-size:10px;
 background-color: #F7F6F3;
@@ -941,7 +947,7 @@ background-color: #F7F6F3;
 .header
 {
 background-color: #3B6882;
-font-family: Myriad Pro;
+font-family: Arial;
 color: White;
 border: none 0px transparent;
 height: 20px;
@@ -966,7 +972,7 @@ margin:2% auto;
 margin:auto 1%;
 border-radius:50%;
 background-color:white;
-font-family: Myriad Pro;
+font-family: Arial;
 font-weight:bold;
 padding:5px 10px 5px 10px;
 color:#003A5D;
@@ -1003,7 +1009,7 @@ padding:5px 10px 5px 10px;
     text-align: left; 
     vertical-align: bottom; 
     background-color: #3B6882;
-    font-family: Myriad Pro;
+    font-family: Arial;
     color: White;
     text-align: center;
     align-content: center;
@@ -1031,7 +1037,7 @@ border-color:#003A5D;
 text-align:left;
 color:#003A5D;
 font-size:11.5px;
-font-family:Myriad Pro;
+font-family:Arial;
 border-radius: 10px 10px 10px 10px;
 line-height:12px;  
 }
@@ -1047,7 +1053,7 @@ text-align:left;
 color:white;
 background-color:#003A5D;
 font-size:12px;
-font-family:Myriad Pro;
+font-family:Arial;
 border-radius: 10px 10px 10px 10px;
 line-height:12px;  
 }
@@ -1059,14 +1065,14 @@ border-color:#003A5D;
 text-align:left;
 color:#003A5D;
 font-size:10px;
-font-family:Myriad Pro;
+font-family:Arial;
 border-radius: 5px 5px 5px 5px; 
 }
 
 .panel-seccion{
 border-radius: 0px 0px 10px 10px;  
 padding-bottom: 5px;
-font-family:Myriad Pro;
+font-family:Arial;
 border-style:inset;
 border-width:.5px;
 border-color:#003A5D;

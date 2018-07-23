@@ -476,8 +476,9 @@
                 </div>
             </div>
 
-            <div id="hid_poliza" class="modal-flotante poliza NoDisplay"></div>
+            
             <div class="col-md-6">
+                <div id="hid_poliza" class="modal-flotante poliza NoDisplay"></div>
                 <div id="div_poliza" class="modal-flotante poliza">
                     <asp:UpdatePanel runat="server" ID="upPoliza">
                         <ContentTemplate>

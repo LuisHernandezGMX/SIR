@@ -8,9 +8,10 @@ Partial Class MesaControl_Gestion
 
     Private ArrayLeft() As Boolean
 
-
     Private dtConsulta As DataTable
     Private dtConsultaMov As DataTable
+
+    Private PermisosAsignacion() As String = {"DSOLIS", "OSANDOVAL", "GLAMAR", "IAGUILAR"}
 
     Private Enum Operacion
         Ninguna
@@ -237,38 +238,101 @@ Partial Class MesaControl_Gestion
                 'Master.Clase_Logo = "zona-logo-ancha"
                 'Master.Clase_Form = "zona-form-ancha"
 
-                Master.tablero_visible = True
-                Master.fecha_visible = False
+                Master.fecha_visible = True
 
                 Limpia_Control()
 
+                ddl_Año.selectedvalue = Now.ToString("yyyy")
+
+                Dim Folio As String = Request.QueryString("Folio")
+                If Not Folio Is Nothing Then
+                    ddl_Año.selectedvalue = Mid(Replace(UCase(Folio), "REAS-", ""), 1, 4)
+                    txt_FolioNegocio.Text = UCase(Folio)
+                    btn_Consultar_Click(Me, Nothing)
+                End If
+
             End If
 
-            If Master.mPrefijo = "Bro" And Len(Master.mSeleccionados) > 0 Then
-                Agrega_Intermediario()
-                Master.mPrefijo = vbNullString
-            ElseIf Master.mPrefijo = "Cia" And Len(Master.mSeleccionados) > 0 Then
-                Agrega_Reasegurador()
-                Master.mPrefijo = vbNullString
-            ElseIf Master.mPrefijo = "Coa" And Len(Master.mSeleccionados) > 0 Then
-                Agrega_Coasegurador()
-                Master.mPrefijo = vbNullString
-            ElseIf Master.mPrefijo = "Fol" And Len(Master.mSeleccionados) > 0 Then
-                Agrega_Folio()
-                Master.mPrefijo = vbNullString
+            If Len(Master.mPrefijo) > 0 Then
+                If Master.mPrefijo = "Bro" And Len(Master.mSeleccionados) > 0 Then
+                    Agrega_Intermediario()
+                    Master.mPrefijo = vbNullString
+                ElseIf Master.mPrefijo = "Cia" And Len(Master.mSeleccionados) > 0 Then
+                    Agrega_Reasegurador()
+                    Master.mPrefijo = vbNullString
+                ElseIf Master.mPrefijo = "Coa" And Len(Master.mSeleccionados) > 0 Then
+                    Agrega_Coasegurador()
+                    Master.mPrefijo = vbNullString
+                    'ElseIf Master.mPrefijo = "Fol" And Len(Master.mSeleccionados) > 0 Then
+                    '    Agrega_Folio()
+                    '    Master.mPrefijo = vbNullString
+                End If
             End If
 
 
+            Dim Riesgos() = Split(txt_Riesgo.Text, "|")
+            Dim Coberturas() = Split(txt_Cobertura.Text, "|")
+            For Each row In gvd_Riesgo.Rows
+                TryCast(row.FindControl("txt_ClaveSeccion"), TextBox).Text = Split(Riesgos(row.rowIndex), "~")(0)
+                TryCast(row.FindControl("txt_SearchSeccion"), TextBox).Text = Split(Riesgos(row.rowIndex), "~")(1)
+
+                TryCast(row.FindControl("txt_ClaveCobertura"), TextBox).Text = Split(Coberturas(row.rowIndex), "~")(0)
+                TryCast(row.FindControl("txt_SearchCobertura"), TextBox).Text = Split(Coberturas(row.rowIndex), "~")(1)
+            Next
 
             If Session("Session") Is Nothing Then
                 FormsAuthentication.SignOut()
                 Response.Redirect("../Pages/Login.aspx")
                 Mensaje.MuestraMensaje("Mesa de Control", "La sesión ha finalizado por inactividad", TipoMsg.Falla)
+                Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "La sesión ha finalizado por inactividad")
             End If
+
+
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "MesaControl_Gestion_Load: " & ex.Message)
         End Try
     End Sub
+
+    Private Function ArmaLinkMail(Folio As String) As String
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim strLink As String = ws.ObtieneParametro(10) & "/MesaControl/Gestion.aspx"
+        Dim strParametros As String
+        strParametros = "?Folio=" & Folio
+        strLink += strParametros
+        Return strLink
+    End Function
+
+    Private Function FormatoCorreo(Folio As String, Asegurado As String, UsuarioAsigna As String) As String
+        Dim ws As New ws_Generales.GeneralesClient
+        Dim strBody As String = ""
+        strBody = "<table style = 'margin: 0px; border: medium; border-image: none; border-collapse: collapse;' border='1' cellspacing='0' cellpadding='0'>"
+        strBody += "<tbody> <tr style = 'mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes' >"
+        strBody += "<td width='395' valign='top' style='margin: 0px; padding: 0cm 5.4pt; border: 1px solid rgb(0, 0, 0); border-image: none; width: 296pt; background-color: transparent;'>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96);'><img width='74' height='74' src='" & ws.ObtieneParametro(10) & "\Images\Firmas\logo_gmx.jpg' v:shapes='Imagen_x0020_2'></span><span style='margin: 0px; color: rgb(0, 32, 96);'><span style='margin: 0px;'><font face='Calibri'>&nbsp;&nbsp;&nbsp;&nbsp; </font></span><span style='margin: 0px;'><font face='Calibri'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></span></span><b style='mso-bidi-font-weight:&#10;  normal'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif'; font-size: 16pt;'>GMX Seguros</span></b></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'>Asignación"
+        strBody += " de Negocio.</span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'>&nbsp;</span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'>Se solicita por parte de <b style='mso-bidi-font-weight:normal'>" & UsuarioAsigna & " </b>, se le de seguimiento"
+        strBody += " al siguiente Folio de Negocio: </span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'><b style='mso-bidi-font-weight:normal'>" & Folio & "</b></span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'>Asegurado:</span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'><b style='mso-bidi-font-weight:normal'>" & Asegurado & "</b></span></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><span style='margin: 0px; color: rgb(0, 32, 96); font-family: ' Myriad Pro',' sans-serif';'>Para"
+        strBody += " visualizar el detalle del Negocio debe dar clic en el enlace debajo:</span></p>"
+        strBody += "<p align='center' style='margin: 0px; text-align: center; line-height: normal;'><a href='"
+        strBody += ArmaLinkMail(Folio)
+        strBody += "'><font color='#0000ff' face='Calibri'>Click Aqui</font></a></p>"
+        strBody += "<p style='margin: 0px; line-height: normal;'><font face='Calibri'>&nbsp;</font></p>"
+        strBody += "</td>"
+        strBody += "<td width = '204' valign='top' style='background: rgb(15, 36, 62); border-width: 1px 1px 1px 0px; border-style: solid solid solid none; border-color: rgb(0, 0, 0); margin: 0px; padding: 0cm 5.4pt; border-image: none; width: 152.9pt;'>"
+        strBody += "<p align='center' style='margin 0px; text-align: center; line-height: normal;'><img width='62' height='62' src='" & ws.ObtieneParametro(10) & "\Images\Firmas\logomail.png' v:shapes='_x0000_i1025'></p>"
+        strBody += "</td>"
+        strBody += "</tr>"
+        strBody += "</tbody></table>"
+
+        Return strBody
+    End Function
 
     Private Function fn_ObtieneDatos(ByRef dtDatos As DataTable, ByVal ArrayCampos() As String, Optional ByVal Condicion As String = vbNullString) As String()
         Dim id_Datos As Integer = 0
@@ -332,11 +396,9 @@ Partial Class MesaControl_Gestion
 
         If Len(txt_SearchAse.Text) = 0 Then
             Mensaje.MuestraMensaje("Mesa de Control", "No se ha especificado el Asegurado", TipoMsg.Falla)
-            txt_SearchAse.Focus()
             Exit Function
         ElseIf Len(txt_ClaveOfi.Text) = 0 Then
             Mensaje.MuestraMensaje("Mesa de Control", "No se ha especificado Oficina Regional", TipoMsg.Falla)
-            txt_SearchOfi.Focus()
             Exit Function
         End If
 
@@ -347,7 +409,7 @@ Partial Class MesaControl_Gestion
 
         fn_Consulta = False
 
-        Dim id_folio As Integer = CInt(Replace(Master.mtx_Folio.Text, "REAS-", ""))
+        Dim id_folio As Integer = CInt(Replace(txt_FolioNegocio.Text, "REAS-", ""))
 
         dtConsulta = New DataTable
         dtConsulta = fn_ConsultaNegocio(id_folio)
@@ -370,7 +432,9 @@ Partial Class MesaControl_Gestion
 
     Private Sub LLena_Control()
         With dtConsulta
-            Master.mtx_Oferta.Text = IIf(IsDBNull(.Rows(0)("num_oferta")), "", .Rows(0)("num_oferta"))
+            txt_FechaRegistro.Text = IIf(IsDBNull(.Rows(0)("fec_creacion")), "", .Rows(0)("fec_creacion"))
+
+            txt_Oferta.Text = IIf(IsDBNull(.Rows(0)("num_oferta")), "", .Rows(0)("num_oferta"))
 
             txt_ClaveAseg.Text = IIf(IsDBNull(.Rows(0)("cod_aseg")), "", .Rows(0)("cod_aseg"))
             txt_AsegCorto.Text = IIf(IsDBNull(.Rows(0)("nom_corto_aseg")), "", .Rows(0)("nom_corto_aseg"))
@@ -383,6 +447,7 @@ Partial Class MesaControl_Gestion
             txt_VigFin.Text = IIf(IsDBNull(.Rows(0)("fec_finvig")), "", .Rows(0)("fec_finvig"))
             txt_FecEmision.Text = IIf(IsDBNull(.Rows(0)("fec_emi")), "", .Rows(0)("fec_emi"))
 
+            txt_ClaveRespAux.Text = IIf(IsDBNull(.Rows(0)("cod_usuario_resp")), "", .Rows(0)("cod_usuario_resp"))
             txt_ClaveResp.Text = IIf(IsDBNull(.Rows(0)("cod_usuario_resp")), "", .Rows(0)("cod_usuario_resp"))
             txt_SearchResp.Text = IIf(IsDBNull(.Rows(0)("responsable")), "", .Rows(0)("responsable"))
 
@@ -415,6 +480,7 @@ Partial Class MesaControl_Gestion
 
 
         LlenaGridRiesgo(False)
+
         LlenaGridAgrupacion(False)
 
         hid_IndiceGrupo.Value = IIf(gvd_Agrupacion.Rows.Count > 0, 0, -1)
@@ -464,7 +530,7 @@ Partial Class MesaControl_Gestion
             LlenaGridCapas(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
 
             If CType(gvd_Agrupacion.Rows(hid_IndiceGrupo.Value).FindControl("chk_NoProporcional"), CheckBox).Checked = True Then
-                btn_Capas.Attributes.Remove("disabled")
+                'btn_Capas.Attributes.Remove("disabled")
                 LlenaListaRamosGrupo(CType(gvd_Agrupacion.Rows(hid_IndiceGrupo.Value).FindControl("txt_Ramos"), TextBox).Text)
 
                 hid_IndiceCapa.Value = IIf(gvd_CapasColocacion.Rows.Count > 0, 0, -1)
@@ -472,7 +538,7 @@ Partial Class MesaControl_Gestion
                 EstadoColumnasAgrupacion()
                 ValidaRamosGrupo(CType(gvd_Agrupacion.Rows(hid_IndiceGrupo.Value).FindControl("txt_Ramos"), TextBox).Text)
             Else
-                btn_Capas.Attributes.Add("disabled", "true")
+                'btn_Capas.Attributes.Add("disabled", "true")
                 LlenaListaRamosGrupo(vbNullString)
 
                 hid_IndiceCapa.Value = -1
@@ -585,6 +651,8 @@ Partial Class MesaControl_Gestion
         Dim Fec_Ini As String = "NULL"
         Dim FecFin As String = "NULL"
         Dim FecEmi As String = "NULL"
+        Dim FecReg As String = "'" & Now.ToString("yyyyMMdd") & "'"
+
         fn_Inserta = False
 
         fn_ActualizaDataRiesgo()
@@ -611,9 +679,15 @@ Partial Class MesaControl_Gestion
             If IsDate(txt_FecEmision.Text) Then
                 FecEmi = "'" & CDate(txt_FecEmision.Text).ToString("yyyyMMdd") & "'"
             End If
+            If IsDate(txt_FechaRegistro.Text) Then
+                FecReg = "'" & CDate(txt_FechaRegistro.Text).ToString("yyyyMMdd") & "'"
+            Else
+                txt_FechaRegistro.Text = Now.ToString("dd/MM/yyyy")
+            End If
 
             sSel = "DECLARE @intResultado int " &
-                   "EXEC spI_MesaControl  " & IIf(Len(Master.mtx_Oferta.Text) = 0, "NULL", "'" & Master.mtx_Oferta.Text & "'") & "," &
+                   "EXEC spI_MesaControl  " & ddl_Año.SelectedValue & "," &
+                                               IIf(Len(txt_Oferta.Text) = 0, "NULL", "'" & txt_Oferta.Text & "'") & "," &
                                                IIf(Len(txt_ClaveAseg.Text) = 0, "NULL", txt_ClaveAseg.Text) & "," &
                                                IIf(Len(txt_AsegCorto.Text) = 0, "NULL", "'" & txt_AsegCorto.Text & "'") & "," &
                                                IIf(Len(txt_SearchAse.Text) = 0, "NULL", "'" & txt_SearchAse.Text & "'") & "," &
@@ -640,7 +714,16 @@ Partial Class MesaControl_Gestion
                                                IIf(Len(txt_Notas.Text) = 0, "NULL", "'" & txt_Notas.Text & "'") & "," &
                                                "'" & Master.cod_usuario & "'," &
                                                "0," & ddl_Avance.SelectedValue & "," &
-                                               IIf(Len(txt_ClaveResp.Text) = 0, "NULL", "'" & txt_ClaveResp.Text & "'")
+                                               IIf(Len(txt_ClaveResp.Text) = 0, "NULL", "'" & txt_ClaveResp.Text & "'") & "," &
+                                               FecReg
+
+            'Transacción de Respaldo de Datos-----------------------------------------------------------------------------------------------------------------------
+            Try
+                Funciones.InsertaTransaccion(16, 11, "aMCR_MesaControl", "", sSel, Master.cod_usuario)
+            Catch ex As Exception
+                Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "fn_Inserta: " & ex.Message)
+            End Try
+            '-------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
             Comando = New SqlClient.SqlCommand(sSel, conn)
@@ -650,21 +733,35 @@ Partial Class MesaControl_Gestion
             If id_folio > 0 Then
                 If fn_InsertaMovimientos(id_folio, conn, trOP) Then
                     Mensaje.MuestraMensaje("Mesa de Control", "El Folio se registro correctamente : REAS-" & id_folio, TipoMsg.Confirma)
-                    Master.mtx_Folio.Text = "REAS-" & id_folio
+                    txt_FolioNegocio.Text = "REAS-" & id_folio
                     trOP.Commit()
                     conn.Close()
                     fn_Inserta = True
+
+                    If txt_ClaveResp.Text <> txt_ClaveRespAux.Text And Len(txt_ClaveResp.Text) > 0 Then
+                        Dim ws As New ws_Generales.GeneralesClient
+                        Dim strBody As String = FormatoCorreo(txt_FolioNegocio.Text, txt_SearchAse.Text, Master.usuario)
+                        Dim dtUsuario As New DataTable
+                        dtUsuario = Funciones.Lista_A_Datatable(ws.ObtieneUsuario(txt_ClaveResp.Text).ToList)
+                        ws.EnviaCorreo(dtUsuario.Rows(0)("mail"), strBody, "Mesa de Control: Asignación de Negocio", "", "")
+                    End If
+                    txt_ClaveRespAux.Text = txt_ClaveResp.Text
+
+                    Funciones.InsertaBitacora(16, 11, Master.cod_usuario, "El Folio se registro correctamente : REAS-" & id_folio)
+
                 End If
             Else
-                Mensaje.MuestraMensaje("Mesa de Control", "El Folio no fue registrado, Error en la información general", TipoMsg.Falla)
                 trOP.Rollback()
                 conn.Close()
+                Mensaje.MuestraMensaje("Mesa de Control", "El Folio no fue registrado, Error en la información general", TipoMsg.Falla)
+                Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "El Folio no fue registrado, Error en la información general")
             End If
 
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
             trOP.Rollback()
             conn.Close()
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "fn_Inserta: " & ex.Message)
         End Try
 
     End Function
@@ -675,6 +772,7 @@ Partial Class MesaControl_Gestion
         Dim Fec_Ini As String = "NULL"
         Dim FecFin As String = "NULL"
         Dim FecEmi As String = "NULL"
+        Dim FecReg As String = "'" & Now.ToString("yyyyMMdd") & "'"
         Dim id_folio As Integer
 
         fn_Actualiza = False
@@ -702,11 +800,16 @@ Partial Class MesaControl_Gestion
             If IsDate(txt_FecEmision.Text) Then
                 FecEmi = "'" & CDate(txt_FecEmision.Text).ToString("yyyyMMdd") & "'"
             End If
+            If IsDate(txt_FechaRegistro.Text) Then
+                FecReg = "'" & CDate(txt_FechaRegistro.Text).ToString("yyyyMMdd") & "'"
+            Else
+                txt_FechaRegistro.Text = Now.ToString("dd/MM/yyyy")
+            End If
 
-            id_folio = CInt(Replace(Master.mtx_Folio.Text, "REAS-", ""))
+            id_folio = CInt(Replace(txt_FolioNegocio.Text, "REAS-", ""))
 
             sSel = "EXEC spU_MesaControl  " & id_folio & "," &
-                                               IIf(Len(Master.mtx_Oferta.Text) = 0, "NULL", "'" & Master.mtx_Oferta.Text & "'") & "," &
+                                               IIf(Len(txt_Oferta.Text) = 0, "NULL", "'" & txt_Oferta.Text & "'") & "," &
                                                IIf(Len(txt_ClaveAseg.Text) = 0, "NULL", txt_ClaveAseg.Text) & "," &
                                                IIf(Len(txt_AsegCorto.Text) = 0, "NULL", "'" & txt_AsegCorto.Text & "'") & "," &
                                                IIf(Len(txt_SearchAse.Text) = 0, "NULL", "'" & txt_SearchAse.Text & "'") & "," &
@@ -733,7 +836,16 @@ Partial Class MesaControl_Gestion
                                                IIf(Len(txt_Notas.Text) = 0, "NULL", "'" & txt_Notas.Text & "'") & "," &
                                                "'" & Master.cod_usuario & "'," &
                                                "0," & ddl_Avance.SelectedValue & "," &
-                                               IIf(Len(txt_ClaveResp.Text) = 0, "NULL", "'" & txt_ClaveResp.Text & "'")
+                                               IIf(Len(txt_ClaveResp.Text) = 0, "NULL", "'" & txt_ClaveResp.Text & "'") & "," &
+                                               FecReg
+
+            'Transacción de Respaldo de Datos-----------------------------------------------------------------------------------------------------------------------
+            Try
+                Funciones.InsertaTransaccion(16, 11, "aMCR_MesaControl", id_folio, sSel, Master.cod_usuario)
+            Catch ex As Exception
+                Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "fn_Actualiza: " & ex.Message)
+            End Try
+            '-------------------------------------------------------------------------------------------------------------------------------------------------------
 
             Comando = New SqlClient.SqlCommand(sSel, conn)
             Comando.Transaction = trOP
@@ -741,22 +853,36 @@ Partial Class MesaControl_Gestion
             If Convert.ToInt32(Comando.ExecuteScalar()) = 1 Then
                 If fn_InsertaMovimientos(id_folio, conn, trOP) Then
                     Mensaje.MuestraMensaje("Mesa de Control", "Se ha actualizado correctamente el Folio : REAS-" & id_folio, TipoMsg.Confirma)
-                    Master.mtx_Folio.Text = "REAS-" & id_folio
+                    txt_FolioNegocio.Text = "REAS-" & id_folio
                     trOP.Commit()
                     conn.Close()
 
                     fn_Actualiza = True
+
+                    If txt_ClaveResp.Text <> txt_ClaveRespAux.Text And Len(txt_ClaveResp.Text) > 0 Then
+                        Dim ws As New ws_Generales.GeneralesClient
+                        Dim strBody As String = FormatoCorreo(txt_FolioNegocio.Text, txt_SearchAse.Text, Master.usuario)
+                        Dim dtUsuario As New DataTable
+                        dtUsuario = Funciones.Lista_A_Datatable(ws.ObtieneUsuario(txt_ClaveResp.Text).ToList)
+                        ws.EnviaCorreo(dtUsuario.Rows(0)("mail"), strBody, "Mesa de Control: Asignación de Negocio", "", "")
+                        Funciones.InsertaBitacora(16, 11, Master.cod_usuario, "Se ha asignado el Negocio: " & id_folio & " a " & txt_ClaveResp.Text)
+                    End If
+                    txt_ClaveRespAux.Text = txt_ClaveResp.Text
+
+                    Funciones.InsertaBitacora(16, 11, Master.cod_usuario, "Se ha actualizado correctamente el Folio : REAS-" & id_folio)
                 End If
             Else
-                Mensaje.MuestraMensaje("Mesa de Control", "El Folio " & id_folio & " no fue actualizado, error en la información general", TipoMsg.Falla)
                 trOP.Rollback()
                 conn.Close()
+                Mensaje.MuestraMensaje("Mesa de Control", "El Folio " & id_folio & " no fue actualizado, error en la información general", TipoMsg.Falla)
+                Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "El Folio " & id_folio & " no fue actualizado, error en la información general")
             End If
 
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
             trOP.Rollback()
             conn.Close()
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "fn_Actualiza: " & ex.Message)
         End Try
     End Function
 
@@ -766,36 +892,37 @@ Partial Class MesaControl_Gestion
 
         fn_InsertaMovimientos = False
 
+
         If fn_InsertaRegistros("rRMC_RiesgosMC", id_folio, fn_ObtieneDatos(dtRiesgo, {"cod_inciso", "sn_seleccionado:B", "cod_ramo", "cod_subramo", "cod_riesgo", "cod_ind_cob", "sn_facultativo:B",
-                                                                                        "sn_adicional:B", "valores_totales", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
-                                                                                        "prima_tev", "prima_rc", "prima_casco", "prima_guerra", "prc_com_age", "com_agente",
-                                                                                        "prc_com_adi_age", "com_adi_agente", "cuota", "prc_FeeGMX", "mnt_FeeGMX", "prc_ComFac", "mnt_ComFac"}, "cod_inciso > 0"), conexion, transaccion) Then
+                                                                                      "sn_adicional:B", "valores_totales", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
+                                                                                      "prima_tev", "prima_rc", "prima_casco", "prima_guerra", "prc_com_age", "com_agente",
+                                                                                      "prc_com_adi_age", "com_adi_agente", "cuota", "prc_FeeGMX", "mnt_FeeGMX", "prc_ComFac", "mnt_ComFac"}, "cod_inciso > 0"), conexion, transaccion) Then
 
             If fn_InsertaRegistros("rGMC_GruposMC", id_folio, fn_ObtieneDatos(dtAgrupacion, {"cod_grupo", "cod_agrupador", "sn_no_proporcional:B", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
-                                                                                          "prima_tev", "prima_rc", "prima_casco", "prima_guerra", "incisos:T", "ramos:T", "html_rangos:T", "html_capas:T", "html_grafica:T"}), conexion, transaccion) Then
+                                                                                             "prima_tev", "prima_rc", "prima_casco", "prima_guerra", "incisos:T", "ramos:T", "html_rangos:T", "html_capas:T", "html_grafica:T"}), conexion, transaccion) Then
 
                 If fn_InsertaRegistros("rCMC_ProgramaCapasMC", id_folio, fn_ObtieneDatos(dtProgramaCapas, {"cod_grupo", "cod_capa", "valor_capa", "exceso_capa", "prima_capa", "prc_part"}, "cod_grupo > 0"), conexion, transaccion) Then
 
                     If fn_InsertaRegistros("rCMC_CapasMC", id_folio, fn_ObtieneDatos(dtCapas, {"cod_grupo", "cod_capa", "valor_capa", "prima_capa", "prc_part", "prc_com_reas", "comision_reas"}, "cod_grupo > 0"), conexion, transaccion) Then
 
                         If fn_InsertaRegistros("rRMC_RepartoMC", id_folio, fn_ObtieneDatos(dtReparto, {"cod_grupo", "cod_reparto", "sn_lider:B", "prc_part", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
-                                                                                               "prima_tev", "prima_rc", "prima_casco", "prima_guerra"}, "cod_grupo > 0 AND cod_reparto > -1"), conexion, transaccion) Then
+                                                                                                       "prima_tev", "prima_rc", "prima_casco", "prima_guerra"}, "cod_grupo > 0 AND cod_reparto > -1"), conexion, transaccion) Then
 
 
                             If fn_InsertaRegistros("rDMC_DistribucionMC", id_folio, fn_ObtieneDatos(dtDistribucion, {"cod_grupo", "cod_capa", "cod_ramo", "cod_distribucion", "prc_part", "prc_partGMX", "suma_asegurada", "prima_neta", "prima_inc", "prima_fhm",
-                                                                                                             "prima_tev", "prima_rc", "prima_casco", "prima_guerra"}, "cod_grupo > 0"), conexion, transaccion) Then
+                                                                                                                     "prima_tev", "prima_rc", "prima_casco", "prima_guerra"}, "cod_grupo > 0"), conexion, transaccion) Then
 
                                 If fn_InsertaRegistros("rBMC_BrokersMC", id_folio, fn_ObtieneDatos(dtBroker, {"cod_grupo", "cod_capa", "cod_ramo", "cod_broker", "prc_partCoas", "prc_part", "suma_asegurada", "prima_neta", "prc_com", "comision", "pnr",
-                                                                                                   "prima_inc", "prc_com_inc", "com_inc", "pnr_inc", "prima_fhm", "prc_com_fhm", "com_fhm", "pnr_fhm",
-                                                                                                   "prima_tev", "prc_com_tev", "com_tev", "pnr_tev", "prima_rc", "prc_com_rc", "com_rc", "pnr_rc", "prima_casco",
-                                                                                                   "prc_com_casco", "com_casco", "pnr_casco", "prima_guerra", "prc_com_guerra", "com_guerra", "pnr_guerra", "prc_corretaje", "corretaje",
-                                                                                                   "estatus", "observaciones:T"}), conexion, transaccion) Then
+                                                                                                              "prima_inc", "prc_com_inc", "com_inc", "pnr_inc", "prima_fhm", "prc_com_fhm", "com_fhm", "pnr_fhm",
+                                                                                                              "prima_tev", "prc_com_tev", "com_tev", "pnr_tev", "prima_rc", "prc_com_rc", "com_rc", "pnr_rc", "prima_casco",
+                                                                                                              "prc_com_casco", "com_casco", "pnr_casco", "prima_guerra", "prc_com_guerra", "com_guerra", "pnr_guerra", "prc_corretaje", "corretaje",
+                                                                                                              "estatus", "observaciones:T"}), conexion, transaccion) Then
 
                                     If fn_InsertaRegistros("rRMC_ReaseguradoresMC", id_folio, fn_ObtieneDatos(dtReasegurador, {"cod_grupo", "cod_capa", "cod_ramo", "cod_broker", "cod_cia", "prc_part100", "prc_part", "suma_asegurada", "prima_neta", "prc_com", "comision", "pnr",
-                                                                                                                    "prima_inc", "prc_com_inc", "com_inc", "pnr_inc", "prima_fhm", "prc_com_fhm", "com_fhm", "pnr_fhm",
-                                                                                                                    "prima_tev", "prc_com_tev", "com_tev", "pnr_tev", "prima_rc", "prc_com_rc", "com_rc", "pnr_rc", "prima_casco",
-                                                                                                                    "prc_com_casco", "com_casco", "pnr_casco", "prima_guerra", "prc_com_guerra", "com_guerra", "pnr_guerra",
-                                                                                                                    "estatus", "observaciones:T"}), conexion, transaccion) Then
+                                                                                                                               "prima_inc", "prc_com_inc", "com_inc", "pnr_inc", "prima_fhm", "prc_com_fhm", "com_fhm", "pnr_fhm",
+                                                                                                                               "prima_tev", "prc_com_tev", "com_tev", "pnr_tev", "prima_rc", "prc_com_rc", "com_rc", "pnr_rc", "prima_casco",
+                                                                                                                               "prc_com_casco", "com_casco", "pnr_casco", "prima_guerra", "prc_com_guerra", "com_guerra", "pnr_guerra",
+                                                                                                                               "estatus", "observaciones:T"}), conexion, transaccion) Then
 
                                         If fn_InsertaRegistros("rSMC_SubjetividadMC", id_folio, fn_ObtieneDatos(dtSubjetividad, {"cod_grupo", "cod_capa", "cod_ramo", "cod_broker", "cod_cia", "num", "Fecha:F", "FechaReal:F", "Subjetividad:T", "sn_Subjetividad:B"}), conexion, transaccion) Then
 
@@ -818,7 +945,6 @@ Partial Class MesaControl_Gestion
                                       Optional ByVal conexion As SqlConnection = Nothing,
                                       Optional ByVal transaccion As SqlTransaction = Nothing) As Boolean
         fn_InsertaRegistros = True
-
         Dim intResultado As Integer
         Dim Comando As SqlClient.SqlCommand
         Dim conn As SqlConnection = conexion
@@ -827,6 +953,15 @@ Partial Class MesaControl_Gestion
                 For pagina = 0 To UBound(Datos)
                     If Len(Datos(pagina)) > 0 Then
                         Datos(pagina) = Mid(Datos(pagina), 1, Len(Datos(pagina)) - 1)
+
+                        'Transacción de Respaldo de Datos-----------------------------------------------------------------------------------------------------------------------
+                        Try
+                            Funciones.InsertaTransaccion(16, 11, Tabla, Key, Datos(pagina), Master.cod_usuario)
+                        Catch ex As Exception
+                            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "fn_InsertaRegistros: " & ex.Message)
+                        End Try
+                        '-------------------------------------------------------------------------------------------------------------------------------------------------------
+
                         Comando = New SqlClient.SqlCommand("spI_OfGread '" & Tabla & "','" & Key & "','" & Datos(pagina) & "'", conn)
                         Comando.Transaction = transaccion
                         intResultado = Convert.ToInt32(Comando.ExecuteScalar())
@@ -834,12 +969,14 @@ Partial Class MesaControl_Gestion
                 Next
             End If
         Catch ex As Exception
-            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
             transaccion.Rollback()
             conn.Close()
+            Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "fn_InsertaRegistros: " & ex.Message)
             Return False
         End Try
     End Function
+
 
     Private Sub Limpia_Control()
         hid_IndiceNota.Value = -1
@@ -870,7 +1007,9 @@ Partial Class MesaControl_Gestion
         LlenaGridPagos(True, 0, 0, 0, 0, 0)
         LlenaGridIncisos(True)
 
-        Master.mtx_Oferta.Text = vbNullString
+        txt_FechaRegistro.Text = Now.ToString("dd/MM/yyyy")
+
+        txt_Oferta.Text = vbNullString
         txt_NotaProceso.Text = vbNullString
         txt_SearchAse.Text = vbNullString
         txt_AsegCorto.Text = vbNullString
@@ -962,6 +1101,7 @@ Partial Class MesaControl_Gestion
         txt_ObservacionesResumen.Text = vbNullString
         txt_GarantiasPago.Text = vbNullString
 
+        txt_ClaveRespAux.Text = vbNullString
         txt_ClaveResp.Text = vbNullString
         txt_SearchResp.Text = vbNullString
         txt_Departamento.Text = vbNullString
@@ -975,15 +1115,20 @@ Partial Class MesaControl_Gestion
         div_Capas.InnerHtml = vbNullString
         div_Grafica.InnerHtml = vbNullString
         div_Rangos.InnerHtml = vbNullString
+
+        txt_Riesgo.Text = vbNullString
     End Sub
 
     Private Sub EdoControl(ByVal intOperacion As Integer)
         Select Case intOperacion
             Case Operacion.Consulta, Operacion.Anula
-                Master.mtx_Folio.Enabled = False
+                txt_FechaRegistro.Enabled = False
+
+                ddl_Año.enabled = False
+                txt_FolioNegocio.Enabled = False
                 gvd_Tablero.Enabled = False
-                Master.mtx_Oferta.Enabled = False
-                Master.mtx_BuscaFolio.Enabled = False
+                txt_Oferta.Enabled = False
+                btn_buscaFolio.Enabled = False
 
                 txt_NotaProceso.Enabled = False
                 txt_SearchAse.Enabled = False
@@ -1051,12 +1196,7 @@ Partial Class MesaControl_Gestion
                 LlenaGridDistribucionResumen(True, 0)
                 LlenaGridComisionResumen(True, 0)
 
-                txt_ObservacionesResumen.Text = vbNullString
-                txt_GarantiasPago.Text = vbNullString
-
-                txt_ClaveResp.Text = vbNullString
-                txt_SearchResp.Text = vbNullString
-                txt_Departamento.Text = vbNullString
+                txt_SearchResp.Enabled = False
 
                 ddl_Avance.Enabled = False
 
@@ -1073,13 +1213,17 @@ Partial Class MesaControl_Gestion
             Case Operacion.Nuevo, Operacion.Modifica
 
                 If EdoOperacion = Operacion.Nuevo Then
-                    Master.mtx_Folio.Text = vbNullString
+                    txt_FolioNegocio.Text = vbNullString
+                    txt_FechaRegistro.Enabled = True
+                Else
+                    txt_FechaRegistro.Enabled = True
                 End If
 
-                Master.mtx_Folio.Enabled = False
+                ddl_Año.enabled = False
+                txt_FolioNegocio.Enabled = False
                 gvd_Tablero.Enabled = True
-                Master.mtx_Oferta.Enabled = True
-                Master.mtx_BuscaFolio.Enabled = False
+                txt_Oferta.Enabled = True
+                btn_buscaFolio.Enabled = False
 
                 txt_NotaProceso.Enabled = True
                 txt_SearchAse.Enabled = True
@@ -1093,7 +1237,10 @@ Partial Class MesaControl_Gestion
                 txt_FecEmision.Enabled = True
                 btn_buscaPol.Enabled = True
 
-                txt_SearchResp.Enabled = True
+                If PermisosAsignacion.Contains(Master.cod_usuario) Then
+                    txt_SearchResp.Enabled = True
+                End If
+
 
                 txt_ClaveOfi.Enabled = True
                 txt_ClaveAge.Enabled = True
@@ -1132,7 +1279,7 @@ Partial Class MesaControl_Gestion
 
                 btn_AddReparto.Attributes.Remove("disabled")
                 btn_AddBroker.Attributes.Remove("disabled")
-                btn_AddCia.Attributes.Add("disabled", "true")
+                btn_AddCia.Attributes.Add("disabled", "True")
 
                 btn_RemoveGrupo.Attributes.Remove("disabled")
                 btn_RemoveReparto.Attributes.Remove("disabled")
@@ -1155,10 +1302,13 @@ Partial Class MesaControl_Gestion
 
                 Funciones.EjecutaFuncion("fn_AbrirModalSimple('#tablero_avance');", "Tablero")
             Case Operacion.Ninguna
-                Master.mtx_Folio.Enabled = True
+                txt_FechaRegistro.Enabled = False
+
+                ddl_Año.enabled = True
+                txt_FolioNegocio.Enabled = True
                 gvd_Tablero.Enabled = False
-                Master.mtx_Oferta.Enabled = True
-                Master.mtx_BuscaFolio.Enabled = True
+                txt_Oferta.Enabled = True
+                btn_buscaFolio.Enabled = True
 
                 txt_NotaProceso.Enabled = False
                 txt_SearchAse.Enabled = False
@@ -1244,6 +1394,7 @@ Partial Class MesaControl_Gestion
             EdoControl(EdoOperacion)
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_Nuevo_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -1258,7 +1409,7 @@ Partial Class MesaControl_Gestion
                     EdoOperacion = Operacion.Modifica
                     EdoControl(EdoOperacion)
                 Else
-                    Mensaje.MuestraMensaje("Mesa de Control", "El Negocio con Folio: " & Master.mtx_Folio.Text & " no existe", TipoMsg.Advertencia)
+                    Mensaje.MuestraMensaje("Mesa de Control", "El Negocio con Folio: " & txt_FolioNegocio.Text & " no existe", TipoMsg.Advertencia)
                 End If
             End If
         Catch ex As Exception
@@ -1266,6 +1417,7 @@ Partial Class MesaControl_Gestion
             EdoControl(EdoOperacion)
             Limpia_Control()
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_Modificar_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -1276,13 +1428,14 @@ Partial Class MesaControl_Gestion
                 EdoOperacion = Operacion.Consulta
                 EdoControl(EdoOperacion)
             Else
-                Mensaje.MuestraMensaje("Mesa de Control", "El Negocio con Folio: " & Master.mtx_Folio.Text & " no existe", TipoMsg.Advertencia)
+                Mensaje.MuestraMensaje("Mesa de Control", "El Negocio con Folio: " & txt_FolioNegocio.Text & " no existe", TipoMsg.Advertencia)
             End If
         Catch ex As Exception
             EdoOperacion = Operacion.Ninguna
             EdoControl(EdoOperacion)
             Limpia_Control()
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_Consultar_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -1293,13 +1446,14 @@ Partial Class MesaControl_Gestion
                 EdoOperacion = Operacion.Anula
                 EdoControl(EdoOperacion)
             Else
-                Mensaje.MuestraMensaje("Mesa de Control", "El Negocio con Folio: " & Master.mtx_Folio.Text & " no existe", TipoMsg.Advertencia)
+                Mensaje.MuestraMensaje("Mesa de Control", "El Negocio con Folio: " & txt_FolioNegocio.Text & " no existe", TipoMsg.Advertencia)
             End If
         Catch ex As Exception
             EdoOperacion = Operacion.Ninguna
             EdoControl(EdoOperacion)
             Limpia_Control()
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_Anular_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -1308,7 +1462,10 @@ Partial Class MesaControl_Gestion
             Select Case EdoOperacion
                 Case Operacion.Nuevo
                     If fn_ValidaCampoRequerido() Then
-                        fn_Inserta()
+                        If fn_Inserta() Then
+                            EdoOperacion = Operacion.Modifica
+                            EdoControl(Operacion.Modifica)
+                        End If
                     End If
                 Case Operacion.Modifica
                     If fn_ValidaCampoRequerido() Then
@@ -1320,6 +1477,7 @@ Partial Class MesaControl_Gestion
             'EdoControl(EdoOperacion)
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_Guardar_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -1330,6 +1488,7 @@ Partial Class MesaControl_Gestion
             Limpia_Control()
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_Cancelar_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -1451,6 +1610,8 @@ Partial Class MesaControl_Gestion
             Dim txt_PrcComFac As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_PrcComFac"), TextBox)
             Dim txt_ComFac As TextBox = CType(gvd_Riesgo.Rows(0).FindControl("txt_ComFac"), TextBox)
 
+            Dim lnk_Notas As LinkButton = CType(gvd_Riesgo.Rows(0).FindControl("lnk_Notas"), LinkButton)
+
             chk_Riesgo.Visible = False
             lbl_Inciso.Text = ""
             txt_SearchRamo.Enabled = False
@@ -1470,14 +1631,16 @@ Partial Class MesaControl_Gestion
             txt_PrimaCSC.Enabled = False
             txt_PrimaGRA.Enabled = False
 
-            txt_PrcComAge.Visible = False
+            txt_PrcComAge.Attributes.Add("style", "display:none")
             txt_ComAge.Enabled = False
-            txt_PrcComAdiAge.Visible = False
+            txt_PrcComAdiAge.Attributes.Add("style", "display:none")
             txt_ComAdiAge.Enabled = False
-            txt_PrcFeeGmx.Visible = False
+            txt_PrcFeeGmx.Attributes.Add("style", "display:none")
             txt_FeeGmx.Enabled = False
-            txt_PrcComFac.Visible = False
+            txt_PrcComFac.Attributes.Add("style", "display:none")
             txt_ComFac.Enabled = False
+
+            lnk_Notas.Visible = False
 
             txt_SearchRamo.Font.Bold = True
             txt_ValoresTotales.Font.Bold = True
@@ -1558,7 +1721,7 @@ Partial Class MesaControl_Gestion
                 TryCast(gvd_Riesgo.HeaderRow.FindControl("lbl_SearchCobertura"), Label).Width = 10
             End If
 
-            ValidaRamosRiesgo(gvd_Riesgo, 0, {11, 12, 13, 14, 15, 16})
+            ValidaRamosRiesgo(gvd_Riesgo, 0, {12, 13, 14, 15, 16, 17})
             'Else
             '    LlenaGridRiesgo(True)
         End If
@@ -1726,6 +1889,9 @@ Partial Class MesaControl_Gestion
                                   row("prima_fhm"), row("prima_tev"), row("prima_rc"), row("prima_casco"), row("prima_guerra"),
                                   row("prc_com_age"), row("com_agente"), row("prc_com_adi_age"), row("com_adi_agente"), row("cuota"),
                                   row("prc_FeeGMX"), row("mnt_FeeGMX"), row("prc_ComFac"), row("mnt_ComFac"))
+
+                txt_Riesgo.Text = txt_Riesgo.Text & row("cod_riesgo") & "~" & row("riesgo_desc") & "|"
+                txt_Cobertura.Text = txt_Cobertura.Text & row("cod_ind_cob") & "~" & row("cobertura_desc") & "|"
             Next
 
             fn_ConsultaRiesgos = True
@@ -2566,8 +2732,19 @@ Partial Class MesaControl_Gestion
 
 
             LlenaGridRiesgo(False)
+
+            txt_Riesgo.Text = vbNullString
+            txt_Cobertura.Text = vbNullString
+            For Each row In gvd_Riesgo.Rows
+                txt_Riesgo.Text = txt_Riesgo.Text & TryCast(row.FindControl("txt_ClaveSeccion"), TextBox).Text & "~" &
+                                                    TryCast(row.FindControl("txt_SearchSeccion"), TextBox).Text & "|"
+
+                txt_Cobertura.Text = txt_Cobertura.Text & TryCast(row.FindControl("txt_ClaveCobertura"), TextBox).Text & "~" &
+                                                          TryCast(row.FindControl("txt_SearchCobertura"), TextBox).Text & "|"
+            Next
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_AgregaFila_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -2588,12 +2765,24 @@ Partial Class MesaControl_Gestion
                 dtRiesgo.AcceptChanges()
 
                 LlenaGridRiesgo(False)
+
+                txt_Riesgo.Text = ""
+                txt_Cobertura.Text = ""
+                For Each row In gvd_Riesgo.Rows
+                    txt_Riesgo.Text = txt_Riesgo.Text & TryCast(row.FindControl("txt_ClaveSeccion"), TextBox).Text & "~" &
+                                                        TryCast(row.FindControl("txt_SearchSeccion"), TextBox).Text & "|"
+
+                    txt_Cobertura.Text = txt_Cobertura.Text & TryCast(row.FindControl("txt_ClaveCobertura"), TextBox).Text & "~" &
+                                                              TryCast(row.FindControl("txt_SearchCobertura"), TextBox).Text & "|"
+                Next
+
             Else
                 Mensaje.MuestraMensaje("Mesa de Control", "No se ha seleccionado ningun elemento", TipoMsg.Advertencia)
             End If
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_RemoveRiesgo_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -2674,6 +2863,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_RemoveGrupo_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -2977,9 +3167,9 @@ Partial Class MesaControl_Gestion
                 myRow(0)("prima_inc") = IIf(txt_PrimaINC.Text = vbNullString, 0, txt_PrimaINC.Text)
                 myRow(0)("prima_fhm") = IIf(txt_PrimaFHM.Text = vbNullString, 0, txt_PrimaFHM.Text)
                 myRow(0)("prima_tev") = IIf(txt_PrimaTEV.Text = vbNullString, 0, txt_PrimaTEV.Text)
-                myRow(0)("prima_rc") = IIf(txt_PrimaINC.Text = vbNullString, 0, txt_PrimaINC.Text)
-                myRow(0)("prima_casco") = IIf(txt_PrimaFHM.Text = vbNullString, 0, txt_PrimaFHM.Text)
-                myRow(0)("prima_guerra") = IIf(txt_PrimaTEV.Text = vbNullString, 0, txt_PrimaTEV.Text)
+                myRow(0)("prima_rc") = IIf(txt_PrimaRC.Text = vbNullString, 0, txt_PrimaRC.Text)
+                myRow(0)("prima_casco") = IIf(txt_PrimaCSC.Text = vbNullString, 0, txt_PrimaCSC.Text)
+                myRow(0)("prima_guerra") = IIf(txt_PrimaGRA.Text = vbNullString, 0, txt_PrimaGRA.Text)
             End If
         Next
 
@@ -3361,6 +3551,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "gvd_Riesgo_RowDataBound: " & ex.Message)
         End Try
     End Sub
 
@@ -3389,6 +3580,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "gvd_RamoSbr_RowCommand: " & ex.Message)
         End Try
     End Sub
 
@@ -3409,6 +3601,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "gvd_Seccion_RowCommand: " & ex.Message)
         End Try
     End Sub
 
@@ -3446,6 +3639,7 @@ Partial Class MesaControl_Gestion
             Next
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "AjusteTamaño: " & ex.Message)
         End Try
     End Sub
 
@@ -3541,7 +3735,7 @@ Partial Class MesaControl_Gestion
             LlenaGridCapas(False, gvd_Agrupacion.DataKeys(Indice)("cod_grupo"))
 
             If CType(gvd_Agrupacion.Rows(Indice).FindControl("chk_NoProporcional"), CheckBox).Checked = True Then
-                btn_Capas.Attributes.Remove("disabled")
+                'btn_Capas.Attributes.Remove("disabled")
                 LlenaListaRamosGrupo(CType(gvd_Agrupacion.Rows(Indice).FindControl("txt_Ramos"), TextBox).Text)
 
                 hid_IndiceCapa.Value = IIf(gvd_CapasColocacion.Rows.Count > 0, 0, -1)
@@ -3549,7 +3743,7 @@ Partial Class MesaControl_Gestion
                 EstadoColumnasAgrupacion()
                 ValidaRamosGrupo(CType(gvd_Agrupacion.Rows(Indice).FindControl("txt_Ramos"), TextBox).Text)
             Else
-                btn_Capas.Attributes.Add("disabled", "true")
+                'btn_Capas.Attributes.Add("disabled", "true")
                 LlenaListaRamosGrupo(vbNullString)
 
                 hid_IndiceCapa.Value = -1
@@ -3647,9 +3841,9 @@ Partial Class MesaControl_Gestion
         lbl_Reaseguradores.Text = vbNullString
         lbl_Reaseguradores.ToolTip = vbNullString
 
-        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Subjetividad');", "CierraSubjetividad")
-        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Comisiones')", "CierraComisiones")
-        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Pagos')", "CierraPagos")
+        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Subjetividad');", "CierraSubjetividad" & Indice)
+        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Comisiones')", "CierraComisiones" & Indice)
+        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Pagos')", "CierraPagos" & Indice)
 
         If Indice > -1 Then
 
@@ -3728,9 +3922,9 @@ Partial Class MesaControl_Gestion
                 lbl_Pagos.ToolTip = CType(gvd_Intermediario.Rows(Indice).FindControl("txt_Descripcion"), TextBox).Text
 
                 If hid_Pestaña.Value = 1 Then
-                    Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Subjetividad')", "Subjetividad")
-                    Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Comisiones')", "Comisiones")
-                    Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Pagos')", "Pagos")
+                    Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Subjetividad')", "Subjetividad" & Indice)
+                    Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Comisiones')", "Comisiones" & Indice)
+                    Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Pagos')", "Pagos" & Indice)
                 End If
             Else 'Si es Negocio Directo
                 If gvd_Reasegurador.Rows.Count > 0 Then
@@ -3765,19 +3959,19 @@ Partial Class MesaControl_Gestion
             End If
 
             'Actualiza Intermediario
-            Funciones.EjecutaFuncion("fn_CalculaIntermediario(-1, " & Indice & ", ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM']);", "Intermediario")
+            Funciones.EjecutaFuncion("fn_CalculaIntermediario(-1, " & Indice & ", ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC' , 'txt_PrimaCSC', 'txt_PrimaGRA']);", "Intermediario" & Indice)
 
             'Actualiza Reasegurador
-            Funciones.EjecutaFuncion("fn_CalculaReasegurador(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM']);", "Reasegurador")
+            Funciones.EjecutaFuncion("fn_CalculaReasegurador(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC' , 'txt_PrimaCSC', 'txt_PrimaGRA']);", "Reasegurador" & Indice)
         End If
 
     End Sub
 
     Private Sub SeleccionaReasegurador(ByVal IndiceAnterior As Integer, ByVal Indice As Integer)
 
-        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Subjetividad');", "CierraSubjetividad")
-        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Comisiones')", "CierraComisiones")
-        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Pagos')", "CierraPagos")
+        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Subjetividad');", "CierraSubjetividad" & Indice)
+        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Comisiones')", "CierraComisiones" & Indice)
+        Funciones.EjecutaFuncion("fn_CerrarModalSimple('#Pagos')", "CierraPagos" & Indice)
 
         If Indice > -1 Then
 
@@ -3819,9 +4013,9 @@ Partial Class MesaControl_Gestion
             CType(gvd_Reasegurador.Rows(Indice).FindControl("txt_Descripcion"), TextBox).BackColor = Drawing.ColorTranslator.FromHtml("#3B6882")
 
             If hid_Pestaña.Value = 1 Then
-                Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Subjetividad')", "Subjetividad")
-                Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Comisiones')", "Comisiones")
-                Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Pagos')", "Pagos")
+                Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Subjetividad')", "Subjetividad" & Indice)
+                Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Comisiones')", "Comisiones" & Indice)
+                Funciones.EjecutaFuncion("fn_AbrirModalSimple('#Pagos')", "Pagos" & Indice)
             End If
 
             If gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker") = 0 Then
@@ -3854,7 +4048,7 @@ Partial Class MesaControl_Gestion
             End If
 
             'Actualiza Reasegurador
-            Funciones.EjecutaFuncion("fn_CalculaReasegurador(-1, " & Indice & ", ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM']);", "Reasegurador")
+            Funciones.EjecutaFuncion("fn_CalculaReasegurador(-1, " & Indice & ", ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC' , 'txt_PrimaCSC', 'txt_PrimaGRA']);", "Reasegurador" & Indice)
         End If
     End Sub
 
@@ -3947,6 +4141,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "gvd_Agrupacion_RowCommand: " & ex.Message)
         End Try
     End Sub
 
@@ -4003,6 +4198,7 @@ Partial Class MesaControl_Gestion
         Catch ex As Exception
             Funciones.EjecutaFuncion("fn_CerrarModal('#EsperaModal');", "CerrarModal")
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_RemoveRiesgoGrupo_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4073,6 +4269,7 @@ Partial Class MesaControl_Gestion
         Catch ex As Exception
             Funciones.EjecutaFuncion("fn_CerrarModal('#EsperaModal');", "CerrarModal")
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_AddRiesgoGrupo_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4092,21 +4289,22 @@ Partial Class MesaControl_Gestion
 
     End Sub
 
-    Private Sub Agrega_Folio()
-        Dim Datos() As String
-        Dim Seleccionados As String = Master.mSeleccionados
+    'Private Sub Agrega_Folio()
+    '    Dim Datos() As String
+    '    Dim Seleccionados As String = Master.mSeleccionados
 
-        If Len(Seleccionados) > 0 Then
-            Datos = Split(Seleccionados.Substring(0, Seleccionados.Length - 1), "|")
-            Master.mtx_Folio.Text = Split(Datos(0), "~")(0)
-        End If
-
-    End Sub
+    '    If Len(Seleccionados) > 0 Then
+    '        Datos = Split(Seleccionados.Substring(0, Seleccionados.Length - 1), "|")
+    '        txt_FolioNegocio.Text = Replace(Replace(Split(Datos(0), "~")(0), ddl_Año.selectedvalue, ""), "REAS-", "")
+    '    End If
+    'End Sub
 
 
     Private Sub Agrega_Intermediario()
         Try
             Dim Capa As Integer = 0
+            Dim prcRestante As Double = 0
+            Dim prcTotal As Double = 0
 
             'Si existe agrupación activa
             If hid_IndiceGrupo.Value > -1 Then
@@ -4119,27 +4317,45 @@ Partial Class MesaControl_Gestion
                 Dim Datos() As String
                 Dim Seleccionados As String = Master.mSeleccionados
 
+
+
                 If Len(Seleccionados) > 0 Then
                     Datos = Split(Seleccionados.Substring(0, Seleccionados.Length - 1), "|")
+
+                    For Each row In gvd_Intermediario.Rows
+                        Dim txt_PrcPart As TextBox = TryCast(row.FindControl("txt_PrcPart"), TextBox)
+                        prcTotal = prcTotal + IIf(Len(txt_PrcPart.Text) = 0, 0, txt_PrcPart.Text)
+                    Next
+
+                    prcRestante = 100 - prcTotal
+
+                    prcRestante = prcRestante / Datos.Length
 
                     For Each dato In Datos
                         dtBroker.Rows.Add(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), Capa, ddl_RamoGrupo.SelectedValue,
                                           Split(dato, "~")(0), Split(dato, "~")(1),
-                                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "")
+                                          0, IIf(prcRestante > 0, prcRestante, 0), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "")
                     Next
 
                     LlenaGridBroker(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), Capa, ddl_RamoGrupo.SelectedValue)
-                    SeleccionaBroker(hid_IndiceBroker.Value, gvd_Intermediario.Rows.Count - 1)
+
+                    For i = Datos.Length To 1 Step -1
+                        SeleccionaBroker(hid_IndiceBroker.Value, gvd_Intermediario.Rows.Count - i)
+                    Next
+
                 End If
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "Agrega_Intermediario: " & ex.Message)
         End Try
     End Sub
 
     Private Sub Agrega_Reasegurador()
         Try
             Dim Capa As Integer = 0
+            Dim prcTotal As Double = 0
+            Dim prcRestante As Double = 0
 
             'Si existe agrupación activa
             If hid_IndiceBroker.Value > -1 Then
@@ -4153,25 +4369,42 @@ Partial Class MesaControl_Gestion
                 Dim Datos() As String
                 Dim Seleccionados As String = Master.mSeleccionados
 
+
+
+
+
                 If Len(Seleccionados) > 0 Then
                     Datos = Split(Seleccionados.Substring(0, Seleccionados.Length - 1), "|")
+
+                    For Each row In gvd_Reasegurador.Rows
+                        Dim txt_PrcPart As TextBox = TryCast(row.FindControl("txt_PrcPart"), TextBox)
+                        prcTotal = prcTotal + IIf(Len(txt_PrcPart.Text) = 0, 0, txt_PrcPart.Text)
+                    Next
+
+                    prcRestante = 100 - prcTotal
+
+                    prcRestante = prcRestante / Datos.Length
 
                     For Each dato In Datos
                         dtReasegurador.Rows.Add(gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"),
                                                 Capa, ddl_RamoGrupo.SelectedValue,
                                                 gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"),
                                                 Split(dato, "~")(0), Split(dato, "~")(1), Split(dato, "~")(2), Split(dato, "~")(3), Split(dato, "~")(4),
-                                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "")
+                                                0, IIf(prcRestante > 0, prcRestante, 0), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "")
                     Next
 
                     LlenaGridReasegurador(False, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_grupo"), Capa,
                                           ddl_RamoGrupo.SelectedValue, gvd_Intermediario.DataKeys(hid_IndiceBroker.Value)("cod_broker"))
 
-                    SeleccionaReasegurador(hid_IndiceReas.Value, gvd_Reasegurador.Rows.Count - 1)
+                    For i = Datos.Length To 1 Step -1
+                        SeleccionaReasegurador(hid_IndiceReas.Value, gvd_Reasegurador.Rows.Count - i)
+                    Next
+
                 End If
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "Agrega_Reasegurador: " & ex.Message)
         End Try
     End Sub
 
@@ -4239,6 +4472,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "Agrega_Subjetividad: " & ex.Message)
         End Try
     End Sub
 
@@ -4285,6 +4519,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "Agrega_Pago: " & ex.Message)
         End Try
     End Sub
 
@@ -4313,6 +4548,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "gvd_Intermediario_RowCommand: " & ex.Message)
         End Try
     End Sub
 
@@ -4321,6 +4557,7 @@ Partial Class MesaControl_Gestion
             Agrega_Subjetividad()
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_AddSubjetividad_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4329,6 +4566,7 @@ Partial Class MesaControl_Gestion
             Agrega_Pago()
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_AddPago_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4339,6 +4577,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "gvd_Reasegurador_RowCommand: " & ex.Message)
         End Try
     End Sub
 
@@ -4373,6 +4612,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_RemoveBroker_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4412,6 +4652,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_RemoveCia_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4452,6 +4693,7 @@ Partial Class MesaControl_Gestion
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_RemoveSubjetividad_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4503,6 +4745,7 @@ Partial Class MesaControl_Gestion
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_RemovePago_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4519,6 +4762,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_buscaPol_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4567,6 +4811,7 @@ Partial Class MesaControl_Gestion
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_AceptarPol_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4612,6 +4857,7 @@ Partial Class MesaControl_Gestion
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_InfoRiesgos_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4652,6 +4898,7 @@ Partial Class MesaControl_Gestion
         Catch ex As Exception
             Funciones.EjecutaFuncion("fn_CerrarModal('#EsperaModal');", "CerrarModal")
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_AceptarRie_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4662,6 +4909,7 @@ Partial Class MesaControl_Gestion
             Funciones.EjecutaFuncion("fn_CerrarModal('#PolizasAsegurado')", "Polizas")
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_CerraPol_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4673,6 +4921,7 @@ Partial Class MesaControl_Gestion
             Funciones.EjecutaFuncion("fn_CerrarModal('#RiesgosPoliza')", "Riesgos")
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_CerrarRie_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4691,6 +4940,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_RemoveReparto_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4722,6 +4972,7 @@ Partial Class MesaControl_Gestion
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "ddl_Ubicacion_SelectedIndexChanged: " & ex.Message)
         End Try
     End Sub
 
@@ -4779,6 +5030,7 @@ Partial Class MesaControl_Gestion
         Catch ex As Exception
             Funciones.EjecutaFuncion("fn_CerrarModal('#EsperaModal');", "CerrarModal")
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_ConfirmaGrupo_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -4819,6 +5071,7 @@ Partial Class MesaControl_Gestion
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "ddl_Estatus_SelectedIndexChanged: " & ex.Message)
         End Try
     End Sub
 
@@ -4869,6 +5122,9 @@ Partial Class MesaControl_Gestion
         Dim Height As Double = 0
         Dim Left As Double = 0
 
+        Dim intCapa As Integer
+        Dim ArrayCapas() As Integer = {0}
+
         If hid_IndiceGrupo.Value > -1 Then
             Quita_Capa(gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"), vbNullString)
             LlenaGridCapas(False, gvd_Agrupacion.DataKeys(hid_IndiceGrupo.Value)("cod_grupo"))
@@ -4886,151 +5142,183 @@ Partial Class MesaControl_Gestion
             Dim DiferenciaPrima As Double = 0
             Dim blnCapaDividida As Boolean
 
-            ValorTotal = (CType(gvd_ProgramaCapas.Rows(gvd_ProgramaCapas.Rows.Count - 1).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000) +
-                         (CType(gvd_ProgramaCapas.Rows(gvd_ProgramaCapas.Rows.Count - 1).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000)
+            ValorTotal = 0
+            For Each row In gvd_ProgramaCapas.Rows
+                If (CType(row.FindControl("txt_ValorCapaAux"), TextBox).Text / 1000 + CType(row.FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000) > ValorTotal Then
+                    ValorTotal = CType(row.FindControl("txt_ValorCapaAux"), TextBox).Text / 1000 + CType(row.FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+                End If
+            Next
+
+            'ValorTotal = (CType(gvd_ProgramaCapas.Rows(gvd_ProgramaCapas.Rows.Count - 1).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000) +
+            '             (CType(gvd_ProgramaCapas.Rows(gvd_ProgramaCapas.Rows.Count - 1).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000)
 
 
-            Dim ArrayRangos() As Double = {ValorTotal}
+            Dim ArrayRangos() As Double = {0, ValorTotal}
             Dim intRango As Integer = 0
 
             For Fila = gvd_ProgramaCapas.Rows.Count - 1 To 0 Step -1
-                ArrayLeft(Fila) = False
-
-                Capa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_Capa"), TextBox).Text
                 ValorCapa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
                 ExcesoCapa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
-                Prima = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_PrimaCapaAux"), TextBox).Text / 1000
-                prcPart = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_PrcPart"), TextBox).Text
 
-                Bottom = (ExcesoCapa * ValorEscala) / ValorTotal
-                Height = (ValorCapa * ValorEscala) / ValorTotal
-
-                Left = fn_PosicionCapa(Fila, ExcesoCapa + ValorCapa)
-
-                If Left = 0 Then
-                    ArrayLeft(Fila) = True
-                End If
-
-                CadenaHTMLGrafica = CadenaHTMLGrafica & "<div runat=""server"" ID=""div_capa_" & Capa & """ style=""width:" & prcPart & "%;height:" & Height & "px;bottom:" & Bottom & "px;Left:" & Left & "%;background-color:" & ArrayColor(Fila) & ";" & Estilo & """>" &
-                                                              "<label>CAPA " & Capa & " --> $" & String.Format("{0:#,#0.00}", CDbl(ValorCapa * 1000)) & " XS $" & String.Format("{0:#,#0.00}", CDbl(ExcesoCapa * 1000)) & "</label>" &
-                                                              "<div style=""position:absolute;bottom:0px;right:10px;"">" &
-                                                                    prcPart & "%" &
-                                                              "</div>" &
-                                                              "<div style=""position:absolute;left:0px;bottom:0px;color:blueviolet;"">" &
-                                                                    String.Format("{0:#,#0.00}", CDbl(Prima * 1000)) &
-                                                              "</div>" &
-                                                              "@Capa" & Capa &
-                                                        "</div>"
-
-
-                If Not ArrayRangos.Contains(ExcesoCapa) Then
+                If Not ArrayRangos.Contains(ValorCapa + ExcesoCapa) Then
                     intRango = intRango + 1
                     ReDim Preserve ArrayRangos(intRango)
-                    ArrayRangos(intRango) = ExcesoCapa
+                    ArrayRangos(intRango) = ValorCapa + ExcesoCapa
                 End If
 
                 PrimaTotal = PrimaTotal + Prima
             Next
-
             Array.Sort(ArrayRangos)
 
-            'Se toma el primer elemento
-            Bottom = (ArrayRangos(0) * ValorEscala) / ValorTotal
-            ExcesoCapa = ArrayRangos(0)
-            Capa = 1
+            intCapa = 0
+            For rango = 1 To UBound(ArrayRangos)
+                For Fila = 0 To gvd_ProgramaCapas.Rows.Count - 1
+                    Capa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_Capa"), TextBox).Text
+                    ValorCapa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
+                    ExcesoCapa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+                    prcPart = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_PrcPart"), TextBox).Text
 
-            ReDim ArrayPrimas(UBound(ArrayRangos))
-
-            For i = 1 To UBound(ArrayRangos)
-                Height = ((ArrayRangos(i) * ValorEscala) / ValorTotal) - Bottom
-                CadenaHTMLRangos = CadenaHTMLRangos & "<div style=""width:100%;height:" & Height & "px;bottom:" & Bottom & "px;" & EstiloRangos & """> $" & String.Format("{0:#,#0.00}", CDbl(ArrayRangos(i) * 1000)) & " </div>"
-                CadenaHTMLCapas = CadenaHTMLCapas & "<div style=""width:100%;height:" & Height & "px;bottom:" & Bottom & "px;" & EstiloRangos & """> CAPA " & Capa & " </div>"
-                Bottom = (ArrayRangos(i) * ValorEscala) / ValorTotal
-                ExcesoCapa = ArrayRangos(i)
-
-                VealorPrimaReal = 0
-
-                For Each row In gvd_ProgramaCapas.Rows
-                    CapaAux = CType(row.FindControl("txt_Capa"), TextBox).Text
-                    ValorCapa = CType(row.FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
-                    ExcesoCapa = CType(row.FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
-                    Prima = CType(row.FindControl("txt_PrimaCapaAux"), TextBox).Text / 1000
-
-                    If ArrayRangos(i) > ExcesoCapa And ArrayRangos(i) <= ExcesoCapa + ValorCapa Then
-
-                        If Val(Split(ArrayPrimas(i), "|")(0)) <> CapaAux Then
-                            ArrayPrimas(i) = CapaAux & "|" & Prima
-                        End If
-
-                        ValorSubCapa = (ValorCapa + ExcesoCapa) - ArrayRangos(i)
-                        ValorSubCapa = ValorCapa - ValorSubCapa
-
-                        blnCapaDividida = False
-                        For j = i - 1 To 0 Step -1
-                            If ValorCapa + ExcesoCapa >= ArrayRangos(j) And ExcesoCapa < ArrayRangos(j) Then
-                                ValorSubCapa = ValorSubCapa - ArrayRangos(j)
-                                blnCapaDividida = True
-                            End If
-                        Next
-
-                        If blnCapaDividida = True Then
-                            ValorSubCapa = ValorSubCapa + ExcesoCapa
-                        End If
-
-
-                        VealorPrimaReal = VealorPrimaReal + ((ValorSubCapa * Prima) / ValorCapa)
-                        DiferenciaPrima = Math.Round(CDbl(Split(ArrayPrimas(i), "|")(1)), 2) - Math.Round(((ValorSubCapa * Prima) / ValorCapa), 2)
-                        If DiferenciaPrima = 0 Then
-                            ArrayPrimas(i) = CapaAux & "|" & DiferenciaPrima
-                        Else
-                            ArrayPrimas(i) = CapaAux & "|" & 0
-                            If i < UBound(ArrayPrimas) Then
-                                ArrayPrimas(i + 1) = CapaAux & "|" & DiferenciaPrima
-                            End If
+                    If ExcesoCapa >= ArrayRangos(rango - 1) And ExcesoCapa <= ArrayRangos(rango) Then
+                        If Not ArrayCapas.Contains(Capa) Then
+                            ReDim Preserve ArrayCapas(intCapa)
+                            ArrayCapas(intCapa) = Capa
+                            intCapa = intCapa + 1
                         End If
                     End If
                 Next
-
-                Agrega_Capa((ArrayRangos(i) - ArrayRangos(i - 1)) * 1000, VealorPrimaReal * 1000, IIf(VealorPrimaReal = 0, 0, (VealorPrimaReal * 100) / PrimaTotal))
-                Capa = Capa + 1
             Next
 
-            For Each row In gvd_ProgramaCapas.Rows
-                Capa = CType(row.FindControl("txt_Capa"), TextBox).Text
-                ValorCapa = CType(row.FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
-                ExcesoCapa = CType(row.FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
-                Prima = CType(row.FindControl("txt_PrimaCapaAux"), TextBox).Text / 1000
 
-                intRango = 0
-                ArrayRangoPrimas(intRango) = ExcesoCapa
-                For i = 1 To UBound(ArrayRangos)
-                    If ArrayRangos(i) > ExcesoCapa And ArrayRangos(i) < ExcesoCapa + ValorCapa Then
-                        intRango = intRango + 1
-                        ReDim Preserve ArrayRangoPrimas(intRango)
-                        ArrayRangoPrimas(intRango) = ArrayRangos(i)
-                    End If
-                Next
-                ReDim Preserve ArrayRangoPrimas(intRango + 1)
-                ArrayRangoPrimas(intRango + 1) = ExcesoCapa + ValorCapa
-                CadenaHTMLSubCapa = vbNullString
+            'For Fila = 0 To gvd_ProgramaCapas.Rows.Count - 1
 
-                Height = (ValorCapa * ValorEscala) / ValorTotal
+            '    Capa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_Capa"), TextBox).Text
+            '    ValorCapa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
+            '    ExcesoCapa = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+            '    Prima = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_PrimaCapaAux"), TextBox).Text / 1000
+            '    prcPart = CType(gvd_ProgramaCapas.Rows(Fila).FindControl("txt_PrcPart"), TextBox).Text
 
-                For i = UBound(ArrayRangoPrimas) To 0 Step -1
-                    If (i - 1) >= 0 Then
-                        ValorSubCapa = ArrayRangoPrimas(i) - ArrayRangoPrimas(i - 1)
-                        VealorPrimaReal = ((ValorSubCapa * Prima) / ValorCapa)
+            '    Bottom = (ExcesoCapa * ValorEscala) / ValorTotal
+            '    Height = (ValorCapa * ValorEscala) / ValorTotal
 
-                        Top = (((ValorSubCapa * Height) / ArrayRangoPrimas(i))) - 20
+            '    Left = fn_PosicionCapa(Fila, ExcesoCapa)
 
-                        CadenaHTMLSubCapa = CadenaHTMLSubCapa & "<div style=""position:absolute;left:60%;top:" & Top & "px;color:blueviolet;background-color:yellow;"">" &
-                                                                    String.Format("{0:#,#0.00}", CDbl(VealorPrimaReal * 1000)) &
-                                                                "</div>"
-                    End If
-                Next
 
-                CadenaHTMLGrafica = Replace(CadenaHTMLGrafica, "@Capa" & Capa, CadenaHTMLSubCapa)
-            Next
+            '    CadenaHTMLGrafica = CadenaHTMLGrafica & "<div runat=""server"" ID=""div_capa_" & Capa & """ style=""width:" & prcPart & "%;height:" & Height & "px;bottom:" & Bottom & "px;Left:" & Left & "%;background-color:" & ArrayColor(Fila) & ";" & Estilo & """>" &
+            '                                                  "<label>CAPA " & Capa & " --> $" & String.Format("{0:#,#0.00}", CDbl(ValorCapa * 1000)) & " XS $" & String.Format("{0:#,#0.00}", CDbl(ExcesoCapa * 1000)) & "</label>" &
+            '                                                  "<div style=""position:absolute;bottom:0px;right:10px;"">" &
+            '                                                        prcPart & "%" &
+            '                                                  "</div>" &
+            '                                                  "<div style=""position:absolute;left:0px;bottom:0px;color:blueviolet;"">" &
+            '                                                        String.Format("{0:#,#0.00}", CDbl(Prima * 1000)) &
+            '                                                  "</div>" &
+            '                                                  "@Capa" & Capa &
+            '                                            "</div>"
+
+
+
+
+
+            'Next
+
+
+
+            ''Se toma el primer elemento
+            'Bottom = (ArrayRangos(0) * ValorEscala) / ValorTotal
+            'ExcesoCapa = ArrayRangos(0)
+            'Capa = 1
+
+            'ReDim ArrayPrimas(UBound(ArrayRangos))
+
+            'For i = 1 To UBound(ArrayRangos)
+            '    Height = ((ArrayRangos(i) * ValorEscala) / ValorTotal) - Bottom
+            '    CadenaHTMLRangos = CadenaHTMLRangos & "<div style=""width:100%;height:" & Height & "px;bottom:" & Bottom & "px;" & EstiloRangos & """> $" & String.Format("{0:#,#0.00}", CDbl(ArrayRangos(i) * 1000)) & " </div>"
+            '    CadenaHTMLCapas = CadenaHTMLCapas & "<div style=""width:100%;height:" & Height & "px;bottom:" & Bottom & "px;" & EstiloRangos & """> CAPA " & Capa & " </div>"
+            '    Bottom = (ArrayRangos(i) * ValorEscala) / ValorTotal
+            '    ExcesoCapa = ArrayRangos(i)
+
+            '    VealorPrimaReal = 0
+
+            '    For Each row In gvd_ProgramaCapas.Rows
+            '        CapaAux = CType(row.FindControl("txt_Capa"), TextBox).Text
+            '        ValorCapa = CType(row.FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
+            '        ExcesoCapa = CType(row.FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+            '        Prima = CType(row.FindControl("txt_PrimaCapaAux"), TextBox).Text / 1000
+
+            '        If ArrayRangos(i) > ExcesoCapa And ArrayRangos(i) <= ExcesoCapa + ValorCapa Then
+
+            '            If Val(Split(ArrayPrimas(i), "|")(0)) <> CapaAux Then
+            '                ArrayPrimas(i) = CapaAux & "|" & Prima
+            '            End If
+
+            '            ValorSubCapa = (ValorCapa + ExcesoCapa) - ArrayRangos(i)
+            '            ValorSubCapa = ValorCapa - ValorSubCapa
+
+            '            blnCapaDividida = False
+            '            For j = i - 1 To 0 Step -1
+            '                If ValorCapa + ExcesoCapa >= ArrayRangos(j) And ExcesoCapa < ArrayRangos(j) Then
+            '                    ValorSubCapa = ValorSubCapa - ArrayRangos(j)
+            '                    blnCapaDividida = True
+            '                End If
+            '            Next
+
+            '            If blnCapaDividida = True Then
+            '                ValorSubCapa = ValorSubCapa + ExcesoCapa
+            '            End If
+
+
+            '            VealorPrimaReal = VealorPrimaReal + ((ValorSubCapa * Prima) / ValorCapa)
+            '            DiferenciaPrima = Math.Round(CDbl(Split(ArrayPrimas(i), "|")(1)), 2) - Math.Round(((ValorSubCapa * Prima) / ValorCapa), 2)
+            '            If DiferenciaPrima = 0 Then
+            '                ArrayPrimas(i) = CapaAux & "|" & DiferenciaPrima
+            '            Else
+            '                ArrayPrimas(i) = CapaAux & "|" & 0
+            '                If i < UBound(ArrayPrimas) Then
+            '                    ArrayPrimas(i + 1) = CapaAux & "|" & DiferenciaPrima
+            '                End If
+            '            End If
+            '        End If
+            '    Next
+
+            '    Agrega_Capa((ArrayRangos(i) - ArrayRangos(i - 1)) * 1000, VealorPrimaReal * 1000, IIf(VealorPrimaReal = 0, 0, (VealorPrimaReal * 100) / PrimaTotal))
+            '    Capa = Capa + 1
+            'Next
+
+            'For Each row In gvd_ProgramaCapas.Rows
+            '    Capa = CType(row.FindControl("txt_Capa"), TextBox).Text
+            '    ValorCapa = CType(row.FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
+            '    ExcesoCapa = CType(row.FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+            '    Prima = CType(row.FindControl("txt_PrimaCapaAux"), TextBox).Text / 1000
+
+            '    intRango = 0
+            '    ArrayRangoPrimas(intRango) = ExcesoCapa
+            '    For i = 1 To UBound(ArrayRangos)
+            '        If ArrayRangos(i) > ExcesoCapa And ArrayRangos(i) < ExcesoCapa + ValorCapa Then
+            '            intRango = intRango + 1
+            '            ReDim Preserve ArrayRangoPrimas(intRango)
+            '            ArrayRangoPrimas(intRango) = ArrayRangos(i)
+            '        End If
+            '    Next
+            '    ReDim Preserve ArrayRangoPrimas(intRango + 1)
+            '    ArrayRangoPrimas(intRango + 1) = ExcesoCapa + ValorCapa
+            '    CadenaHTMLSubCapa = vbNullString
+
+            '    Height = (ValorCapa * ValorEscala) / ValorTotal
+
+            '    For i = UBound(ArrayRangoPrimas) To 0 Step -1
+            '        If (i - 1) >= 0 Then
+            '            ValorSubCapa = ArrayRangoPrimas(i) - ArrayRangoPrimas(i - 1)
+            '            VealorPrimaReal = ((ValorSubCapa * Prima) / ValorCapa)
+
+            '            Top = (((ValorSubCapa * Height) / ArrayRangoPrimas(i))) - 20
+
+            '            CadenaHTMLSubCapa = CadenaHTMLSubCapa & "<div style=""position:absolute;left:60%;top:" & Top & "px;color:blueviolet;background-color:yellow;"">" &
+            '                                                        String.Format("{0:#,#0.00}", CDbl(VealorPrimaReal * 1000)) &
+            '                                                    "</div>"
+            '        End If
+            '    Next
+
+            '    CadenaHTMLGrafica = Replace(CadenaHTMLGrafica, "@Capa" & Capa, CadenaHTMLSubCapa)
+            'Next
 
             div_Grafica.InnerHtml = CadenaHTMLGrafica
             div_Rangos.InnerHtml = CadenaHTMLRangos
@@ -5072,6 +5360,7 @@ Partial Class MesaControl_Gestion
 
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_ConfirmaPrograma_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -5081,21 +5370,16 @@ Partial Class MesaControl_Gestion
         Dim prcPart As Double = 0
         Dim blnLeft As Boolean = False
 
-        For i = Fila + 1 To gvd_ProgramaCapas.Rows.Count - 1
-            ValorCapa = CType(gvd_ProgramaCapas.Rows(i).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
-            ExcesoCapa = CType(gvd_ProgramaCapas.Rows(i).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
+        For i = 0 To gvd_ProgramaCapas.Rows.Count - 1
+            If Fila <> i Then
+                ValorCapa = CType(gvd_ProgramaCapas.Rows(i).FindControl("txt_ValorCapaAux"), TextBox).Text / 1000
+                ExcesoCapa = CType(gvd_ProgramaCapas.Rows(i).FindControl("txt_ExcesoCapaAux"), TextBox).Text / 1000
 
-            If RangoInicio > ExcesoCapa And RangoInicio <= (ExcesoCapa + ValorCapa) Then
-                prcPart = prcPart + CType(gvd_ProgramaCapas.Rows(i).FindControl("txt_PrcPart"), TextBox).Text
-                If ArrayLeft(i) = True Then
-                    blnLeft = True
+                If RangoInicio >= ExcesoCapa And RangoInicio <= (ExcesoCapa + ValorCapa) Then
+                    prcPart = prcPart + CType(gvd_ProgramaCapas.Rows(i).FindControl("txt_PrcPart"), TextBox).Text
                 End If
             End If
         Next
-
-        If blnLeft = False Then
-            prcPart = 0
-        End If
 
         Return prcPart
     End Function
@@ -5123,6 +5407,7 @@ Partial Class MesaControl_Gestion
             Agrega_ProgramaCapa()
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_AddCapaPrograma_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -5157,6 +5442,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_RemoveCapaPrograma_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -5176,6 +5462,7 @@ Partial Class MesaControl_Gestion
             Funciones.AbrirModal("#ProgramaCapas")
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "btn_Capas_Click: " & ex.Message)
         End Try
     End Sub
 
@@ -5271,13 +5558,14 @@ Partial Class MesaControl_Gestion
         Try
             If hid_IndiceGrupo.Value = sender.NamingContainer.rowIndex Then
                 If sender.checked = True Then
-                    btn_Capas.Attributes.Remove("disabled")
+                    'btn_Capas.Attributes.Remove("disabled")
                 Else
-                    btn_Capas.Attributes.Add("disabled", "true")
+                    'btn_Capas.Attributes.Add("disabled", "true")
                 End If
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "chk_NoProporcional_CheckedChanged: " & ex.Message)
         End Try
     End Sub
 
@@ -5288,6 +5576,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "gvd_CapasColocacion_RowCommand: " & ex.Message)
         End Try
     End Sub
 
@@ -5301,6 +5590,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "ddl_RamoGrupo_SelectedIndexChanged: " & ex.Message)
         End Try
     End Sub
 
@@ -5316,6 +5606,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "gvd_Tablero_RowDataBound: " & ex.Message)
         End Try
     End Sub
 
@@ -5328,6 +5619,7 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "gvd_Riesgo_RowCommand: " & ex.Message)
         End Try
     End Sub
 
@@ -5345,6 +5637,11 @@ Partial Class MesaControl_Gestion
             End If
         Catch ex As Exception
             Mensaje.MuestraMensaje("Mesa de Control", ex.Message, TipoMsg.Falla)
+            Funciones.InsertaExcepcion(16, 11, Master.cod_usuario, "ddl_Clausula_SelectedIndexChanged: " & ex.Message)
         End Try
+    End Sub
+
+    Private Sub btn_AgrupaRiesgo_Click(sender As Object, e As EventArgs) Handles btn_AgrupaRiesgo.Click
+
     End Sub
 End Class

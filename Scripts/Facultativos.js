@@ -357,3 +357,39 @@ $("body").on("click", ".VerResumen", function () {
     event.preventDefault ? event.preventDefault() : event.returnValue = false;
     fn_AbrirModalSimple('#Resumen');
 });
+
+//Descripción de Asegurado
+$("body").on("focusout", "[id$=txt_SearchAse]", function (e) {
+    fn_EvaluaAutoComplete('txt_ClaveAseg', 'txt_SearchAse');
+});
+
+//Asegurado
+$("body").on("keydown", "[id$=txt_SearchAse]", function (e) {
+    fn_Autocompletar("Ase", "txt_ClaveAseg", "txt_SearchAse", "", 3, e.which)
+});
+
+//Busqueda de Facultativo por Clave
+$("body").on("focusout", "[id*=gvd_Contrato] .Id_Contrato", function (e) {
+    var row = $(this).closest("tr");
+    var Id = $(this)[0].value;
+    Contrato = row.find('.Contrato');
+
+    if (Id == '') {
+        Contrato[0].value = '';
+    }
+    else {
+        $.ajax({
+            url: "../LocalServices/ConsultaBD.asmx/GetFacultativo",
+            data: "{ 'Id': '" + Id + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                Contrato[0].value = data.d;
+            },
+            error: function (response) {
+                fn_MuestraMensaje('JSON', response.responseText, 2);
+            },
+        });
+    }
+});
