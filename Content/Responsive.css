@@ -1,6 +1,6 @@
 ﻿@media only screen and (max-width: 1366px) and (min-width: 1280px){
     .zona-principal {
-        width:980px;
+        width:1000px;
     }
 
     .panel-seccion-fija{
@@ -9,13 +9,13 @@
         border-right-style:inset;
         border-color:rgba(0,0,0,.2);
         z-index:100;
-        width:980px;
+        width:1000px;
         /*background-color: rgb(255, 255, 255); 
         position:fixed;*/
     }
 
     .tab-content{
-        height:310px; 
+        height:240px; 
         overflow-y:scroll;
         overflow-x:hidden;
     }
@@ -34,7 +34,7 @@
 
 @media only screen and (max-width: 1600px) and (min-width: 1367px){
     .zona-principal {
-        width:1200px;
+        width:1220px;
     }
 
     .panel-seccion-fija{
@@ -43,13 +43,13 @@
         border-right-style:inset;
         border-color:rgba(0,0,0,.2);
         z-index:100;
-        width:1200px;
+        width:1220px;
         /*background-color: rgb(255, 255, 255);*/ 
         /*position:fixed;*/
     }
 
     .tab-content{
-        height:490px; 
+        height:400px; 
         overflow-y:scroll;
         overflow-x:hidden;
     }

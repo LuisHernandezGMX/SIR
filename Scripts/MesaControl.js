@@ -27,6 +27,8 @@
     fn_EstadoSeleccionGrid('gvd_RamoSbr', 'Ram');
     fn_EstadoSeleccionGrid('gvd_Seccion', 'Rie');
     fn_EstadoSeleccionGrid('gvd_Cobertura', 'Cob');
+
+    
 }
 
 $(document).ready(function () {
@@ -43,13 +45,13 @@ function gridviewScroll() {
         if ($(window).width() > 1366 && $(window).width() <= 1600) {
             $('[id$=gvd_Riesgo]').gridviewScroll({
                 freezesize: 6,
-                width: 1180
+                width: 1190
             });
         }
         else if ($(window).width() >= 1264 && $(window).width() <= 1366) {
             $('[id$=gvd_Riesgo]').gridviewScroll({
                 freezesize: 6,
-                width: 960
+                width: 980
             });
         }
     }
@@ -59,6 +61,10 @@ $("body").on("mouseup", "", function (e) {
     LeftClick = 0;
 });
 
+$("body").on("click", ".Folio", function (e) {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    fn_CargaCatalogo("Fol", " AND periodo = " + $('option:selected', $('.Periodo'))[0].value , "", "Unica", "txt_FolioNegocio|txt_SearchAse", "FOLIOS");
+});
 
 $("body").on("click", ".Generales", function (e) {
     if ($("input[id$='hid_Pestaña']")[0].value == 2) {
@@ -158,7 +164,7 @@ $("body").on("click", ".AgregaCia", function () {
     var strSel = fn_ElementosSeleccionados($("[id*=gvd_Reasegurador]"), $('[id*=lbl_ClaveCia]'), $('[id*=chk_Sel]'), false);
 
     //*************fn_CargaCatalogo(PrefijoCatalogo,Condicion,Seleccion,TipoSeleccion,IdGrid,Titulo)***************
-    fn_CargaCatalogo("Cia", "", strSel, "Multiple", "", "REASEGURADORES");
+    fn_CargaCatalogo("Cia", "", strSel, "Multiple", "", "REASEGURADORES", "block");
 });
 
 $("body").on("click", ".AgregaCoa", function () {
@@ -175,23 +181,6 @@ $("body").on("click", ".AgregaRiesgo", function () {
 
 
 //Funciones de Autocompletar----------------------------------------------------------------------------------------------
-//Asegurado
-$("body").on("keydown", "[id$=txt_SearchAse]", function (e) {
-    fn_Autocompletar("Ase", "txt_ClaveAseg", "txt_SearchAse", "", 3, e.which)
-});
-
-
-//Suscriptor
-$("body").on("keydown", "[id$=txt_SearchResp]", function (e) {
-    fn_Autocompletar("Usu", "txt_ClaveResp", "txt_SearchResp", "", 0, e.which)
-});
-
-$("body").on("focusout", "[id$=txt_SearchResp]", function () {
-    if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveResp']")[0].value = ''
-    }
-    fn_EvaluaAutoComplete('txt_ClaveResp', 'txt_SearchResp');
-});
 
 $("body").on("focus", "[id$=txt_SearchResp]", function () {
     fn_Autocompletar("Usu", "txt_ClaveResp", "txt_SearchResp", "", 0, -1)
@@ -199,23 +188,6 @@ $("body").on("focus", "[id$=txt_SearchResp]", function () {
         type: "keydown",
         which: 46
     });
-});
-
-
-//Oficina
-$("body").on("keydown", "[id$=txt_SearchOfi]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_ClaveTag']").focus();
-        return false;
-    }
-    fn_Autocompletar("Suc", "txt_ClaveOfi", "txt_SearchOfi", "", 0, e.which)
-});
-
-$("body").on("focusout", "[id$=txt_SearchOfi]", function () {
-    if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveOfi']")[0].value = ''
-    }
-    fn_EvaluaAutoComplete('txt_ClaveOfi', 'txt_SearchOfi');
 });
 
 $("body").on("focus", "[id$=txt_SearchOfi]", function () {
@@ -226,81 +198,12 @@ $("body").on("focus", "[id$=txt_SearchOfi]", function () {
     });
 });
 
-
-
-//Tipo Agente
-$("body").on("keydown", "[id$=txt_SearchTag]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_ClaveAge']").focus();
-        return false;
-    }
-    fn_Autocompletar("Tag", "txt_ClaveTag", "txt_SearchTag", "", 0, e.which)
-});
-
-$("body").on("focusout", "[id$=txt_SearchTag]", function () {
-    var blnClear = 0;
-
-    if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveTag']")[0].value = ''
-        blnClear = 1
-    }
-    else if ($("input[id$='txt_ClaveTag']")[0].value != $("input[id$='txt_ClaveTagAux']")[0].value) {
-        $("input[id$='txt_ClaveTagAux']")[0].value = $("input[id$='txt_ClaveTag']")[0].value;
-        blnClear = 1;
-    }
-
-    if (blnClear == 1) {
-        $("input[id$='txt_ClaveAge']")[0].value = '';
-        $("input[id$='txt_SearchAge']")[0].value = '';
-    }
-
-    fn_EvaluaAutoComplete('txt_ClaveTag', 'txt_SearchTag');
-});
-
 $("body").on("focus", "[id$=txt_SearchTag]", function () {
     fn_Autocompletar("Tag", "txt_ClaveTag", "txt_SearchTag", "", 0, -1)
     $(this).trigger({
         type: "keydown",
         which: 46
     });
-});
-
-
-//Agente
-$("body").on("keydown", "[id$=txt_SearchAge]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_SearchSusc']").focus();
-        return false;
-    }
-
-    if ($("input[id$='txt_ClaveTag']")[0].value != '') {
-        fn_Autocompletar("Age", "txt_ClaveAge", "txt_SearchAge", " AND cod_tipo_agente = " + $("input[id$='txt_ClaveTag']")[0].value, 2, e.which)
-    }
-});
-
-$("body").on("focusout", "[id$=txt_SearchAge]", function () {
-    if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveAge']")[0].value = ''
-    }
-    fn_EvaluaAutoComplete('txt_ClaveAge', 'txt_SearchAge');
-
-});
-
-
-//Suscriptor
-$("body").on("keydown", "[id$=txt_SearchSusc]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_SearchGre']").focus();
-        return false;
-    }
-    fn_Autocompletar("Usu", "txt_ClaveSusc", "txt_SearchSusc", "", 0, e.which)
-});
-
-$("body").on("focusout", "[id$=txt_SearchSusc]", function () {
-    if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveSusc']")[0].value = ''
-    }
-    fn_EvaluaAutoComplete('txt_ClaveSusc', 'txt_SearchSusc');
 });
 
 $("body").on("focus", "[id$=txt_SearchSusc]", function () {
@@ -311,21 +214,6 @@ $("body").on("focus", "[id$=txt_SearchSusc]", function () {
     });
 });
 
-//Sucursal de Poliza
-$("body").on("keydown", "[id$=txt_SearchSuc]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_ClaveRam']").focus();
-        return false;
-    }
-    fn_Autocompletar("Suc", "txt_ClaveSuc", "txt_SearchSuc", "", 0, e.which)
-});
-
-$("body").on("focusout", "[id$=txt_SearchSuc]", function () {
-    if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveSuc']")[0].value = ''
-    }
-});
-
 $("body").on("focus", "[id$=txt_SearchSuc]", function () {
     fn_Autocompletar("Suc", "txt_ClaveSuc", "txt_SearchSuc", "", 0, -1)
     $(this).trigger({
@@ -334,20 +222,12 @@ $("body").on("focus", "[id$=txt_SearchSuc]", function () {
     });
 });
 
-
-//Ramo de Poliza
-$("body").on("keydown", "[id$=txt_SearchRam]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_NroPoliza']").focus();
-        return false;
-    }
-    fn_Autocompletar("Pro", "txt_ClaveRam", "txt_SearchRam", "", 0, e.which)
-});
-
-$("body").on("focusout", "[id$=txt_SearchRam]", function () {
+$("body").on("focusout", "[id$=txt_SearchAge]", function () {
     if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveRam']")[0].value = ''
+        $("input[id$='txt_ClaveAge']")[0].value = ''
     }
+    fn_EvaluaAutoComplete('txt_ClaveAge', 'txt_SearchAge');
+
 });
 
 $("body").on("focus", "[id$=txt_SearchRam]", function () {
@@ -358,53 +238,12 @@ $("body").on("focus", "[id$=txt_SearchRam]", function () {
     });
 });
 
-
-//Grupo de Endoso
-$("body").on("keydown", "[id$=txt_SearchGre]", function (e) {
-    fn_Autocompletar("Gre", "txt_ClaveGre", "txt_SearchGre", "", 0, e.which)
-});
-
-$("body").on("focusout", "[id$=txt_SearchGre]", function () {
-    var blnClear = 0;
-
-    if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveGre']")[0].value = ''
-        blnClear = 1
-    }
-    else if ($("input[id$='txt_ClaveGre']")[0].value != $("input[id$='txt_ClaveGreAux']")[0].value) {
-        $("input[id$='txt_ClaveGreAux']")[0].value = $("input[id$='txt_ClaveGre']")[0].value;
-        blnClear = 1;
-    }
-
-    if (blnClear == 1) {
-        $("input[id$='txt_ClaveTte']")[0].value = '';
-        $("input[id$='txt_SearchTte']")[0].value = '';
-    }
-
-    fn_EvaluaAutoComplete('txt_ClaveGre', 'txt_SearchGre');
-});
-
 $("body").on("focus", "[id$=txt_SearchGre]", function () {
     fn_Autocompletar("Gre", "txt_ClaveGre", "txt_SearchGre", "", 0, -1)
     $(this).trigger({
         type: "keydown",
         which: 46
     });
-});
-
-
-//Tipo de Endoso
-$("body").on("keydown", "[id$=txt_SearchTte]", function (e) {
-    if ($("input[id$='txt_ClaveGre']")[0].value != '') {
-        fn_Autocompletar("Tte", "txt_ClaveTte", "txt_SearchTte", " AND cod_grupo_endo = " + $("input[id$='txt_ClaveGre']")[0].value, 0, e.which)
-    }
-});
-
-$("body").on("focusout", "[id$=txt_SearchTte]", function () {
-    if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveTte']")[0].value = ''
-    }
-    fn_EvaluaAutoComplete('txt_ClaveTte', 'txt_SearchTte');
 });
 
 $("body").on("focus", "[id$=txt_SearchTte]", function () {
@@ -415,19 +254,20 @@ $("body").on("focus", "[id$=txt_SearchTte]", function () {
     });
 });
 
-//Giro
-$("body").on("keydown", "[id$=txt_SearchGiro]", function (e) {
-    var cod_ramo = $("input[id$='txt_ClaveRam']")[0].value;
-
-    if(cod_ramo == ''){
-        cod_ramo = 0;
-    }
-
-    fn_Autocompletar("Gro", "txt_ClaveGiro", "txt_SearchGiro", ' AND cod_ramo = ' + cod_ramo, 2, e.which)
-});
-
-
 //----------------------------------------------------------------AUTOCOMPLETE DENTRO DE GRID------------------------------------------------------------------
+//$("body").on("mouseover", "[id*=gvd_Riesgo] .Negocio", function (e) {
+//    var row = $(this).closest("tr");
+//    if (row[0].rowIndex - 1 > 0) {
+//        var Ramo = row.find('.Ramo');
+//        var Subramo = row.find('.Subramo');
+//        var Riesgo = row.find('.Riesgo');
+//        var Cobertura = row.find('.Cobertura');
+
+//        var Negocio = 'Riesgo: \nRamo: ' + Ramo[0].value + ' \nSubramo: ' + Subramo[0].value + ' \nSección: ' + Riesgo[0].value + ' \nCobertura: ' + Cobertura[0].value;
+//        $(this).attr('title', Negocio);
+//    }
+//});
+
 //Ramo del Inciso
 $("body").on("mouseover", "[id*=gvd_Riesgo] .Ramo", function (e) {
     $(this).attr('title', $(this)[0].value);
@@ -566,23 +406,31 @@ $("body").on("keydown", "[id*=gvd_Riesgo] .Riesgo", function (e) {
     var row = $(this).closest("tr");
     var ClaveRamo = row.find('.ClaveRamo');
     var ClaveRiesgo = row.find('.ClaveRiesgo');
+    var Riesgo = row.find('.Riesgo');
 
-    fn_AutocompletarGrid('Rie', ClaveRiesgo, 'txt_SearchSeccion', ' AND cod_ramo = ' + $(ClaveRamo)[0].value, e.which)
+    fn_AutocompletarGrid('Rie', ClaveRiesgo, 'txt_SearchSeccion', ' AND cod_ramo = ' + $(ClaveRamo)[0].value, e.which, Riesgo)
 });
 
 $("body").on("focusout", "[id*=gvd_Riesgo] .Riesgo", function () {
     var row = $(this).closest("tr");
     var ClaveRiesgo = row.find('.ClaveRiesgo');
+    var Riesgo = row.find('.Riesgo');
 
     if ($(this)[0].value == '') {
-        $(ClaveRiesgo)[0].value = ''
+        $(ClaveRiesgo)[0].value = '';
     }
+
+    fn_ActualizaRiesgos(row[0].rowIndex - 1, 'txt_Riesgo', $(ClaveRiesgo)[0].value, $(Riesgo)[0].value);
 });
 
-$("body").on("focus", "[id*=gvd_Riesgo] .Riesgo", function () {
-    fn_AutocompletarGrid('Rie', undefined, 'txt_SearchSeccion', ' AND cod_ramo = 0', -1)
+$("body").on("focus", "[id*=gvd_Riesgo] .Riesgo", function (e) {
     var row = $(this).closest("tr");
     var ClaveRamo = row.find('.ClaveRamo');
+    var ClaveRiesgo = row.find('.ClaveRiesgo');
+   
+
+    fn_AutocompletarGrid('Rie', undefined, 'txt_SearchSeccion', ' AND cod_ramo = 0', -1)
+    
 
     if ($(ClaveRamo)[0].value != '') {
         $(this).trigger({
@@ -615,10 +463,13 @@ $("body").on("keydown", "[id*=gvd_Riesgo] .Cobertura", function (e) {
 $("body").on("focusout", "[id*=gvd_Riesgo] .Cobertura", function () {
     var row = $(this).closest("tr");
     var ClaveCobertura = row.find('.ClaveCobertura');
+    var Cobertura = row.find('.Cobertura');
 
     if ($(this)[0].value == '') {
         $(ClaveCobertura)[0].value = ''
     }
+
+    fn_ActualizaRiesgos(row[0].rowIndex - 1, 'txt_Cobertura', $(ClaveCobertura)[0].value, $(Cobertura)[0].value);
 });
 
 $("body").on("focus", "[id*=gvd_Riesgo] .Cobertura", function () {
@@ -639,12 +490,13 @@ $("body").on("focus", "[id*=gvd_Riesgo] .Cobertura", function () {
 });
 
 
-function fn_AutocompletarGrid(Catalogo, ControlClave, ControlBusqueda, Dependencia, caracter) {
+function fn_AutocompletarGrid(Catalogo, ControlClave, ControlBusqueda , Dependencia, caracter) {
     if (caracter != 13 && caracter != 9 && caracter != -1 && caracter != 37 && caracter != 38 && caracter != 39 && caracter != 40 && caracter != 46) {
         $(ControlClave)[0].value = '';
     }
 
-    $("[id*=" + ControlBusqueda + "]").autocomplete({
+
+    $('[id*=' + ControlBusqueda + ']').autocomplete({
         minLength: 0,
         source: function (request, response) {
             $.ajax({
@@ -807,17 +659,12 @@ function fn_CalculaMonto(row, Clase, ControlMonto) {
 
 
 //Calcula el Porcentaje a partir de un Monto
-function fn_CalculaPorcentaje(row, Clase, ControlMonto) {
-    var ControlResultado = row.find('.Prc' + Clase);
-    var ControlMonto = row.find('[id*=' + ControlMonto + ']');
-    var ControlAux = row.find('[id*=txt_' + Clase + 'Aux]');
-
+function fn_CalculaPorcentaje(ControlPrc, ControlAux, ControlMonto) {
     var Prc = 0;
-    if ($(ControlMonto)[0].value != 0) {
-        Prc = ($(ControlAux)[0].value / $(ControlMonto)[0].value) * 100;
+    if (ControlMonto.value != 0) {
+        Prc = (ControlAux.value / ControlMonto.value) * 100;
     }
-
-    ControlResultado[0].value = fn_FormatoMonto(parseFloat(Prc), 4, 1);
+    ControlPrc.value = fn_FormatoMonto(parseFloat(Prc), 4, 1);
 }
 
 
@@ -899,11 +746,14 @@ function fn_ActualizaGrupo(Grupo, inciso, ArrayClase, ArrayControl, AST) {
 $("body").on("click", "[id*=gvd_Riesgo] [id*=opt_Adicional] input:checked", function (e) {
     var row = $(this).closest("tr").parents('tr');
     fn_SumaTotales('gvd_Riesgo', ['SumaAsegurada'], ['txt_LimRespAux'], 1, [0], 0);
-    fn_ActualizaGrupo(0,$('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['SumaAsegurada'], ['txt_LimRespAux'], 1)
-    fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
-    fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
-    fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
-    fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+
+    if ($("input[id$='hid_IndiceGrupo']")[0].value > -1) {
+        fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['SumaAsegurada'], ['txt_LimRespAux'], 1)
+        fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+        fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+        fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+        fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+    }
 });
 
 $("body").on("focusout", "[id*=gvd_Riesgo] .ValoresTotales", function (e) {
@@ -917,25 +767,27 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .SumaAsegurada", function (e) {
     var row = $(this).closest("tr");
 
     //Solo si el valor cambia
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_LimRespAux]')[row[0].rowIndex - 1].value) {
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != $('[id*=txt_LimRespAux]')[row[0].rowIndex - 1].value) {
         $('[id*=txt_LimRespAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
         fn_SumaTotales('gvd_Riesgo', ['SumaAsegurada'], ['txt_LimRespAux'], 1, [0], 0);
         fn_CalculaCuota(row);
-        fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['SumaAsegurada'], ['txt_LimRespAux'], 1);
-        fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
-        fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
-        fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
-        fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+
+        if ($("input[id$='hid_IndiceGrupo']")[0].value > -1) {
+            fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['SumaAsegurada'], ['txt_LimRespAux'], 1);
+            fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+            fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+            fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+            fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['SumaAsegurada'], ['txt_LimResp']);
+        }
     }
-    
 });
 
 $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaNeta", function (e) {
     var row = $(this).closest("tr");
 
     //Solo si el valor cambia
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_PrimaNetaAux]')[row[0].rowIndex - 1].value) {
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != $('[id*=txt_PrimaNetaAux]')[row[0].rowIndex - 1].value) {
 
         $('[id*=txt_PrimaNetaAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
@@ -944,16 +796,18 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaNeta", function (e) {
         fn_CalculaMonto(row, 'ComAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'ComAdiAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'FeeGMX', 'txt_PrimaNetaAux');
-        fn_CalculaMonto(row, 'ComFac', 'txt_PrimaNetaAux');
+        fn_CalculaComFac(row)
 
         //Actualiza la Suma de todas las Primas
         fn_SumaTotales('gvd_Riesgo', ['PrimaNeta', 'ComAge', 'ComAdiAge', 'FeeGMX', 'ComFac'], ['txt_PrimaNetaAux', 'txt_ComAgeAux', 'txt_ComAdiAgeAux', 'txt_FeeGMXAux', 'txt_ComFacAux'], 0, [0], 0);
         
-        fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta'], ['txt_PrimaNetaAux'], 0)
-        fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta'], ['txt_PrimaNeta']);
-        fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta'], ['txt_PrimaNeta']);
-        fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta'], ['txt_PrimaNeta']);
-        fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta'], ['txt_PrimaNeta']);
+        if ($("input[id$='hid_IndiceGrupo']")[0].value > -1) {
+            fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta'], ['txt_PrimaNetaAux'], 0)
+            fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta'], ['txt_PrimaNeta']);
+            fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta'], ['txt_PrimaNeta']);
+            fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta'], ['txt_PrimaNeta']);
+            fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta'], ['txt_PrimaNeta']);
+        }
     }
 });
 
@@ -961,7 +815,7 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaINC", function (e) {
     var row = $(this).closest("tr");
 
     //Solo si el valor cambia
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_PrimaINCAux]')[row[0].rowIndex - 1].value) {
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != $('[id*=txt_PrimaINCAux]')[row[0].rowIndex - 1].value) {
 
         $('[id*=txt_PrimaINCAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
@@ -973,16 +827,18 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaINC", function (e) {
         fn_CalculaMonto(row, 'ComAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'ComAdiAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'FeeGMX', 'txt_PrimaNetaAux');
-        fn_CalculaMonto(row, 'ComFac', 'txt_PrimaNetaAux');
+        fn_CalculaComFac(row)
 
         //Actualiza la Suma de todas las Primas
         fn_SumaTotales('gvd_Riesgo', ['PrimaNeta', 'PrimaINC', 'ComAge', 'ComAdiAge', 'FeeGMX', 'ComFac'], ['txt_PrimaNetaAux', 'txt_PrimaINCAux', 'txt_ComAgeAux', 'txt_ComAdiAgeAux', 'txt_FeeGMXAux', 'txt_ComFacAux'], 0, [0], 0);
         
-        fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNetaAux', 'txt_PrimaINCAux'], 0);
-        fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNeta', 'txt_PrimaINC']);
-        fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNeta', 'txt_PrimaINC']);
-        fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNeta', 'txt_PrimaINC']);
-        fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNeta', 'txt_PrimaINC']);
+        if ($("input[id$='hid_IndiceGrupo']")[0].value > -1) {
+            fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNetaAux', 'txt_PrimaINCAux'], 0);
+            fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNeta', 'txt_PrimaINC']);
+            fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNeta', 'txt_PrimaINC']);
+            fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNeta', 'txt_PrimaINC']);
+            fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaINC'], ['txt_PrimaNeta', 'txt_PrimaINC']);
+        } 
     }
 });
 
@@ -990,7 +846,7 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaTEV", function (e) {
     var row = $(this).closest("tr");
 
     //Solo si el valor cambia
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_PrimaTEVAux]')[row[0].rowIndex - 1].value) {
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != $('[id*=txt_PrimaTEVAux]')[row[0].rowIndex - 1].value) {
 
         $('[id*=txt_PrimaTEVAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
@@ -1002,16 +858,19 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaTEV", function (e) {
         fn_CalculaMonto(row, 'ComAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'ComAdiAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'FeeGMX', 'txt_PrimaNetaAux');
-        fn_CalculaMonto(row, 'ComFac', 'txt_PrimaNetaAux');
+        fn_CalculaComFac(row)
 
         //Actualiza la Suma de todas las Primas
         fn_SumaTotales('gvd_Riesgo', ['PrimaNeta', 'PrimaTEV', 'ComAge', 'ComAdiAge', 'FeeGMX', 'ComFac'], ['txt_PrimaNetaAux', 'txt_PrimaTEVAux', 'txt_ComAgeAux', 'txt_ComAdiAgeAux', 'txt_FeeGMXAux', 'txt_ComFacAux'], 0, [0], 0);
 
-        fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaTEV'], ['txt_PrimaNetaAux', 'txt_PrimaTEVAux'], 0)
-        fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaTEV'], ['txt_PrimaNeta', 'txt_PrimaTEV']);
-        fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaTEV'], ['txt_PrimaNeta', 'txt_PrimaTEV']);
-        fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta','PrimaTEV'], ['txt_PrimaNeta', 'txt_PrimaTEV']);
-        fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta','PrimaTEV'], ['txt_PrimaNeta', 'txt_PrimaTEV']);
+        if ($("input[id$='hid_IndiceGrupo']")[0].value > -1) {
+            fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaTEV'], ['txt_PrimaNetaAux', 'txt_PrimaTEVAux'], 0)
+            fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaTEV'], ['txt_PrimaNeta', 'txt_PrimaTEV']);
+            fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaTEV'], ['txt_PrimaNeta', 'txt_PrimaTEV']);
+            fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaTEV'], ['txt_PrimaNeta', 'txt_PrimaTEV']);
+            fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaTEV'], ['txt_PrimaNeta', 'txt_PrimaTEV']);
+        }
+       
     }
 });
 
@@ -1019,7 +878,7 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaFHM", function (e) {
     var row = $(this).closest("tr");
 
     //Solo si el valor cambia
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_PrimaFHMAux]')[row[0].rowIndex - 1].value) {
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != $('[id*=txt_PrimaFHMAux]')[row[0].rowIndex - 1].value) {
 
         $('[id*=txt_PrimaFHMAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
@@ -1031,16 +890,19 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaFHM", function (e) {
         fn_CalculaMonto(row, 'ComAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'ComAdiAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'FeeGMX', 'txt_PrimaNetaAux');
-        fn_CalculaMonto(row, 'ComFac', 'txt_PrimaNetaAux');
+        fn_CalculaComFac(row)
 
         //Actualiza la Suma de todas las Primas
         fn_SumaTotales('gvd_Riesgo', ['PrimaNeta', 'PrimaFHM', 'ComAge', 'ComAdiAge', 'FeeGMX', 'ComFac'], ['txt_PrimaNetaAux', 'txt_PrimaFHMAux', 'txt_ComAgeAux', 'txt_ComAdiAgeAux', 'txt_FeeGMXAux', 'txt_ComFacAux'], 0, [0], 0);
 
-        fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaFHM'], ['PrimaNeta', 'txt_PrimaFHMAux'], 0);
-        fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaFHM'], ['txt_PrimaNeta', 'txt_PrimaFHM']);
-        fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaFHM'], ['txt_PrimaNeta', 'txt_PrimaFHM']);
-        fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaFHM'], ['txt_PrimaNeta', 'txt_PrimaFHM']);
-        fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaFHM'], ['txt_PrimaNeta', 'txt_PrimaFHM']);
+        if ($("input[id$='hid_IndiceGrupo']")[0].value > -1) {
+            fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaFHM'], ['PrimaNeta', 'txt_PrimaFHMAux'], 0);
+            fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaFHM'], ['txt_PrimaNeta', 'txt_PrimaFHM']);
+            fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaFHM'], ['txt_PrimaNeta', 'txt_PrimaFHM']);
+            fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaFHM'], ['txt_PrimaNeta', 'txt_PrimaFHM']);
+            fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaFHM'], ['txt_PrimaNeta', 'txt_PrimaFHM']);
+        }
+        
     }
 });
 
@@ -1048,7 +910,7 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaRC", function (e) {
     var row = $(this).closest("tr");
 
     //Solo si el valor cambia
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_PrimaRCAux]')[row[0].rowIndex - 1].value) {
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != $('[id*=txt_PrimaRCAux]')[row[0].rowIndex - 1].value) {
 
         $('[id*=txt_PrimaRCAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
@@ -1060,16 +922,18 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaRC", function (e) {
         fn_CalculaMonto(row, 'ComAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'ComAdiAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'FeeGMX', 'txt_PrimaNetaAux');
-        fn_CalculaMonto(row, 'ComFac', 'txt_PrimaNetaAux');
+        fn_CalculaComFac(row)
 
         //Actualiza la Suma de todas las Primas
         fn_SumaTotales('gvd_Riesgo', ['PrimaNeta', 'PrimaRC', 'ComAge', 'ComAdiAge', 'FeeGMX', 'ComFac'], ['txt_PrimaNetaAux', 'txt_PrimaRCAux', 'txt_ComAgeAux', 'txt_ComAdiAgeAux', 'txt_FeeGMXAux', 'txt_ComFacAux'], 0, [0], 0);
 
-        fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNetaAux', 'txt_PrimaRCAux'], 0);
-        fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNeta', 'txt_PrimaRCAux']);
-        fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNeta', 'txt_PrimaRCAux']);
-        fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNeta', 'txt_PrimaRCAux']);
-        fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNeta', 'txt_PrimaRCAux']);
+        if ($("input[id$='hid_IndiceGrupo']")[0].value > -1) {
+            fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNetaAux', 'txt_PrimaRCAux'], 0);
+            fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNeta', 'txt_PrimaRCAux']);
+            fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNeta', 'txt_PrimaRCAux']);
+            fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNeta', 'txt_PrimaRCAux']);
+            fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaRC'], ['txt_PrimaNeta', 'txt_PrimaRCAux']);
+        }
     }
 });
 
@@ -1077,28 +941,31 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaCSC", function (e) {
     var row = $(this).closest("tr");
 
     //Solo si el valor cambia
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_PrimaCSCAux]')[row[0].rowIndex - 1].value) {
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != $('[id*=txt_PrimaCSCAux]')[row[0].rowIndex - 1].value) {
 
         $('[id*=txt_PrimaCSCAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
 
         //Consolida la Prima Neta en base al Desglose de Primas
-        fn_SumaHorizontal(row, ['txt_PrimaCSCAux'], 'PrimaNeta', 'txt_PrimaNetaAux');
+        fn_SumaHorizontal(row, ['txt_PrimaCSCAux', 'txt_PrimaGRAAux'], 'PrimaNeta', 'txt_PrimaNetaAux');
 
         fn_CalculaCuota(row);
         fn_CalculaMonto(row, 'ComAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'ComAdiAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'FeeGMX', 'txt_PrimaNetaAux');
-        fn_CalculaMonto(row, 'ComFac', 'txt_PrimaNetaAux');
+        fn_CalculaComFac(row)
 
         //Actualiza la Suma de todas las Primas
         fn_SumaTotales('gvd_Riesgo', ['PrimaNeta', 'PrimaCSC', 'ComAge', 'ComAdiAge', 'FeeGMX', 'ComFac'], ['txt_PrimaNetaAux', 'txt_PrimaCSCAux', 'txt_ComAgeAux', 'txt_ComAdiAgeAux', 'txt_FeeGMXAux', 'txt_ComFacAux'], 0, [0], 0);
 
-        fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNetaAux', 'txt_PrimaCSCAux'], 0);
-        fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNeta', 'txt_PrimaCSCAux']);
-        fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNeta', 'txt_PrimaCSCAux']);
-        fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNeta', 'txt_PrimaCSCAux']);
-        fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNeta', 'txt_PrimaCSCAux']);
+        if ($("input[id$='hid_IndiceGrupo']")[0].value > -1) {
+            fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNetaAux', 'txt_PrimaCSCAux'], 0);
+            fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNeta', 'txt_PrimaCSCAux']);
+            fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNeta', 'txt_PrimaCSCAux']);
+            fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNeta', 'txt_PrimaCSCAux']);
+            fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaCSC'], ['txt_PrimaNeta', 'txt_PrimaCSCAux']);
+        }
+        
     }
 });
 
@@ -1106,28 +973,31 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaGRA", function (e) {
     var row = $(this).closest("tr");
 
     //Solo si el valor cambia
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_PrimaGRAAux]')[row[0].rowIndex - 1].value) {
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != $('[id*=txt_PrimaGRAAux]')[row[0].rowIndex - 1].value) {
 
         $('[id*=txt_PrimaGRAAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
 
         //Consolida la Prima Neta en base al Desglose de Primas
-        fn_SumaHorizontal(row, ['txt_PrimaGRAAux'], 'PrimaNeta', 'txt_PrimaNetaAux');
+        fn_SumaHorizontal(row, ['txt_PrimaCSCAux', 'txt_PrimaGRAAux'], 'PrimaNeta', 'txt_PrimaNetaAux');
 
         fn_CalculaCuota(row);
         fn_CalculaMonto(row, 'ComAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'ComAdiAge', 'txt_PrimaNetaAux');
         fn_CalculaMonto(row, 'FeeGMX', 'txt_PrimaNetaAux');
-        fn_CalculaMonto(row, 'ComFac', 'txt_PrimaNetaAux');
+        fn_CalculaComFac(row)
 
         //Actualiza la Suma de todas las Primas
         fn_SumaTotales('gvd_Riesgo', ['PrimaNeta', 'PrimaGRA', 'ComAge', 'ComAdiAge', 'FeeGMX', 'ComFac'], ['txt_PrimaNetaAux', 'txt_PrimaGRAAux', 'txt_ComAgeAux', 'txt_ComAdiAgeAux', 'txt_FeeGMXAux', 'txt_ComFacAux'], 0, [0], 0);
 
-        fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNetaAux', 'txt_PrimaGRAAux'], 0);
-        fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaGRAAux']);
-        fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaGRAAux']);
-        fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaGRAAux']);
-        fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaGRAAux']);
+        if ($("input[id$='hid_IndiceGrupo']")[0].value > -1) {
+            fn_ActualizaGrupo(0, $('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNetaAux', 'txt_PrimaGRAAux'], 0);
+            fn_CalculaReparto($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaGRAAux']);
+            fn_CalculaDistribucionGMX($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaGRAAux']);
+            fn_CalculaIntermediario($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaGRAAux']);
+            fn_CalculaReasegurador($('[id*=txt_Inciso]')[row[0].rowIndex - 1].value, -1, ['PrimaNeta', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaGRAAux']);
+        }
+        
     }
 });
 
@@ -1135,85 +1005,110 @@ $("body").on("focusout", "[id*=gvd_Riesgo] .PrimaGRA", function (e) {
 $("body").on("focusout", "[id*=gvd_Riesgo] .PrcComAge", function (e) {
     fn_CalculaMonto($(this).closest("tr"), 'ComAge', 'txt_PrimaNetaAux');
     fn_SumaTotales('gvd_Riesgo', ['ComAge'], ['txt_ComAgeAux'], 0, [0], 0);
+    fn_CalculaComFac($(this).closest("tr"));
 });
 
 $("body").on("focusout", "[id*=gvd_Riesgo] .PrcComAdiAge", function (e) {
     fn_CalculaMonto($(this).closest("tr"), 'ComAdiAge', 'txt_PrimaNetaAux');
     fn_SumaTotales('gvd_Riesgo', ['ComAdiAge'], ['txt_ComAdiAgeAux'], 0, [0], 0);
+    fn_CalculaComFac($(this).closest("tr"));
 });
 
 $("body").on("focusout", "[id*=gvd_Riesgo] .PrcFeeGMX", function (e) {
     fn_CalculaMonto($(this).closest("tr"), 'FeeGMX', 'txt_PrimaNetaAux');
     fn_SumaTotales('gvd_Riesgo', ['FeeGMX'], ['txt_FeeGMXAux'], 0, [0], 0);
+    fn_CalculaComFac($(this).closest("tr"));
 });
 
-$("body").on("focusout", "[id*=gvd_Riesgo] .PrcComFac", function (e) {
-    fn_CalculaMonto($(this).closest("tr"), 'ComFac', 'txt_PrimaNetaAux');
-    fn_SumaTotales('gvd_Riesgo', ['ComFac'], ['txt_ComFacAux'], 0, [0], 0);
-});
 
 $("body").on("focusout", "[id*=gvd_Riesgo] .ComAge", function (e) {
     var row = $(this).closest("tr");
 
     //Solo si el valor cambia
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_ComAgeAux]')[row[0].rowIndex - 1].value) {
+    if ($(this)[0].value != fn_FormatoMonto(parseFloat($('[id*=txt_ComAgeAux]')[row[0].rowIndex - 1].value), 2)) {
         $('[id*=txt_ComAgeAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
-        fn_CalculaPorcentaje(row, 'ComAge', 'txt_PrimaNetaAux');
+
+        fn_CalculaPorcentaje(row.find('.PrcComAge')[0],
+                             row.find('[id*=txt_ComAgeAux]')[0],
+                             row.find('[id*=txt_PrimaNetaAux]')[0]);
         fn_SumaTotales('gvd_Riesgo', ['ComAge'], ['txt_ComAgeAux'], 0, [0], 0);
+        fn_CalculaComFac(row);
     }
 });
 
 $("body").on("focusout", "[id*=gvd_Riesgo] .ComAdiAge", function (e) {
     var row = $(this).closest("tr");
 
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_ComAdiAgeAux]')[row[0].rowIndex - 1].value) {
+    if ($(this)[0].value != fn_FormatoMonto(parseFloat($('[id*=txt_ComAdiAgeAux]')[row[0].rowIndex - 1].value), 2)) {
         $('[id*=txt_ComAdiAgeAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4);
-        fn_CalculaPorcentaje(row, 'ComAdiAge', 'txt_PrimaNetaAux');
+
+        fn_CalculaPorcentaje(row.find('.PrcComAdiAge')[0],
+                             row.find('[id*=txt_ComAdiAgeAux]')[0],
+                             row.find('[id*=txt_PrimaNetaAux]')[0]);
         fn_SumaTotales('gvd_Riesgo', ['ComAdiAge'], ['txt_ComAdiAgeAux'], 0, [0], 0);
+        fn_CalculaComFac(row);
     }
 });
 
 $("body").on("focusout", "[id*=gvd_Riesgo] .FeeGMX", function (e) {
     var row = $(this).closest("tr");
 
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_FeeGMXAux]')[row[0].rowIndex - 1].value) {
+    if ($(this)[0].value != fn_FormatoMonto(parseFloat($('[id*=txt_FeeGMXAux]')[row[0].rowIndex - 1].value), 2)) {
         $('[id*=txt_FeeGMXAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
-        fn_CalculaPorcentaje(row, 'FeeGMX', 'txt_PrimaNetaAux');
+
+        fn_CalculaPorcentaje(row.find('.PrcFeeGMX')[0],
+                             row.find('[id*=txt_FeeGMXAux]')[0],
+                             row.find('[id*=txt_PrimaNetaAux]')[0]);
         fn_SumaTotales('gvd_Riesgo', ['FeeGMX'], ['txt_FeeGMXAux'], 0, [0], 0);
+        fn_CalculaComFac(row);
     }
-    
 });
 
-$("body").on("focusout", "[id*=gvd_Riesgo] .ComFac", function (e) {
-    var row = $(this).closest("tr");
-
-    if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_ComFacAux]')[row[0].rowIndex - 1].value) {
-        $('[id*=txt_ComFacAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
-        $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
-        fn_CalculaPorcentaje(row, 'ComFac', 'txt_PrimaNetaAux');
-        fn_SumaTotales('gvd_Riesgo', ['ComFac'], ['txt_ComFacAux'], 0, [0], 0);
-    }
-    
-});
-
-
-//Reparto
+//Reparto por Porcentaje
 $("body").on("focusout", "[id*=gvd_Reparto] .PrcPart", function (e) {
     var row = $(this).closest("tr");
 
-    //Aplica para la Distribución GMX y Coaseguradores
-    fn_CalculaReparto(-1, row[0].rowIndex - 1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
-    fn_CalculaDistribucionGMX(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
-    fn_CalculaIntermediario(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
-    fn_CalculaReasegurador(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != parseFloat(row.find('[id*=txt_PrcPartAux]')[0].value)) {
 
-    $('[id*=txt_PrcPartAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
-    $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4, 1);
+        row.find("[id*=txt_PrcPartAux]")[0].value = $(this)[0].value.replace(/,/g, "");
+        $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4, 1);
 
-    fn_SumaTotales('gvd_Reparto', ['PrcPart'], ['txt_PrcPartAux'], 0, [0], 0 , 100);
+        //Aplica para la Distribución GMX y Coaseguradores
+        fn_CalculaReparto(-1, row[0].rowIndex - 1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+        fn_CalculaDistribucionGMX(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+        fn_CalculaIntermediario(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+        fn_CalculaReasegurador(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+
+        fn_SumaTotales('gvd_Reparto', ['PrcPart'], ['txt_PrcPartAux'], 0, [0], 0, 100);
+    }
+});
+
+//Reparto por Monto
+$("body").on("focusout", "[id*=gvd_Reparto] .SumaAsegurada", function (e) {
+    var row = $(this).closest("tr");
+
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != parseFloat(row.find("[id*=txt_LimRespAux]")[0].value)) {
+        row.find("[id*=txt_LimRespAux]")[0].value = $(this)[0].value.replace(/,/g, "");
+        $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value), 2);
+
+        fn_CalculaPorcentaje(row.find('.PrcPart')[0],
+                             row.find("[id*=txt_LimRespAux]")[0],
+                             $("[id*=gvd_Agrupacion]").find("[id*=txt_LimRespAux]")[$("input[id$='hid_IndiceGrupo']")[0].value]);
+
+        row.find("[id*=txt_PrcPartAux]")[0].value = row.find('.PrcPart')[0].value;
+
+        //Aplica para la Distribución GMX y Coaseguradores
+        fn_CalculaReparto(-1, row[0].rowIndex - 1, ['PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+        fn_CalculaDistribucionGMX(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+        fn_CalculaIntermediario(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+        fn_CalculaReasegurador(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+
+        fn_SumaTotales('gvd_Reparto', ['PrcPart'], ['txt_PrcPartAux'], 0, [0], 0, 100);
+    }
+    
 });
 
 
@@ -1241,6 +1136,8 @@ $("body").on("focusout", "[id*=gvd_Distribucion] .PrcPartGMX", function (e) {
     var row = $(this).closest("tr");
 
     fn_CalculaDistribucionGMX(-1, row[0].rowIndex - 1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+    fn_CalculaIntermediario(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+    fn_CalculaReasegurador(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
 
     $('[id*=txt_PrcPartGMXAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
     $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4, 1);
@@ -1248,6 +1145,51 @@ $("body").on("focusout", "[id*=gvd_Distribucion] .PrcPartGMX", function (e) {
     fn_SumaTotales('gvd_Distribucion', ['PrcPartGMX'], ['txt_PrcPartGMXAux'], 0, [0], 0, 100);
 });
 
+
+$("body").on("focusout", "[id*=gvd_Distribucion] .SumaAsegurada", function (e) {
+    var row = $(this).closest("tr");
+
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != parseFloat(row.find("[id*=txt_LimRespAux]")[0].value)) {
+        row.find("[id*=txt_LimRespAux]")[0].value = $(this)[0].value.replace(/,/g, "");
+        $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value), 2);
+
+        //Validar No Proporcional
+        var chk_NoProporcional = $("[id*=gvd_Agrupacion] .chk_NoProporcional")[$("input[id$='hid_IndiceGrupo']")[0].value];
+        if ($(chk_NoProporcional)[0].childNodes[0].checked == true) {
+            var Monto =  $("[id*=gvd_CapasColocacion").find("[id*=txt_LimRespAux]")[$("input[id$='hid_IndiceCapa']")[0].value];
+        }
+        else {
+            var Monto =  $("[id*=gvd_Reparto").find("[id*=txt_LimRespAux]")[1];
+        }
+
+        fn_CalculaPorcentaje(row.find('.PrcPartGMX')[0],
+                             row.find("[id*=txt_LimRespAux]")[0],
+                             Monto);
+
+        row.find("[id*=txt_PrcPartGMXAux]")[0].value = row.find('.PrcPartGMX')[0].value;
+
+        fn_CalculaDistribucionGMX(-1, row[0].rowIndex - 1, ['PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+        fn_CalculaIntermediario(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+        fn_CalculaReasegurador(-1, -1, ['SumaAsegurada', 'PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_LimResp', 'txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+
+        fn_SumaTotales('gvd_Distribucion', ['PrcPartGMX'], ['txt_PrcPartGMXAux'], 0, [0], 0, 100);
+    }
+});
+
+//Calculo de la Comisión de Facultativo
+function fn_CalculaComFac(row) {
+    row.find('[id*=txt_PrcComFac]')[0].value = parseFloat(row.find('[id*=txt_PrcComAge]')[0].value) +
+                                               parseFloat(row.find('[id*=txt_PrcComAdiAge]')[0].value) +
+                                               parseFloat(row.find('[id*=txt_PrcFeeGMX]')[0].value);
+
+    row.find('[id*=txt_ComFacAux]')[0].value = parseFloat(row.find('[id*=txt_ComAgeAux]')[0].value) +
+                                               parseFloat(row.find('[id*=txt_ComAdiAgeAux]')[0].value) +
+                                               parseFloat(row.find('[id*=txt_FeeGMXAux]')[0].value);
+
+    row.find('[id*=txt_ComFac]')[0].value = fn_FormatoMonto(parseFloat(row.find('[id*=txt_ComFacAux]')[0].value.replace(/,/g, "")), 2);
+
+    fn_SumaTotales('gvd_Riesgo', ['ComFac'], ['txt_ComFacAux'], 0, [0], 0);
+}
 
 //Calculo de la DIstribución General con Coaseguro
 function fn_CalculaReparto(Inciso, Posicion, ArrayClase, ArrayControl) {
@@ -1534,14 +1476,16 @@ $("body").on("focusout", ".PnrGRA", function (e) {
 //Porcentaje
 $("body").on("focusout", "[id*=gvd_Pagos] .Prc", function (e) {
     var row = $(this).closest("tr");
-    fn_CalculoPago('prc', row[0].rowIndex - 1);
+    fn_CalculoPago($(".PnrNeta")[0].value.replace(/,/g, ""), 'prc', row[0].rowIndex - 1);
+    row.find('[id*=txt_ImporteAux]')[0].value = row.find('[id*=txt_Importe]')[0].value
 });
 
 
 //Importe
 $("body").on("focusout", "[id*=gvd_Pagos] .Importe", function (e) {
     var row = $(this).closest("tr");
-    fn_CalculoPago('mnt', row[0].rowIndex - 1);
+    fn_CalculoPago($(".PnrNeta")[0].value.replace(/,/g, ""), 'mnt', row[0].rowIndex - 1);
+    row.find('[id*=txt_ImporteAux]')[0].value = row.find('[id*=txt_Importe]')[0].value
 });
 
 
@@ -1553,6 +1497,24 @@ $("body").on("focusout", "[id*=gvd_Intermediario] .PrcPart", function (e) {
     $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4, 1);
 });
 
+$("body").on("focusout", "[id*=gvd_Intermediario] .SumaAsegurada", function (e) {
+    var row = $(this).closest("tr");
+
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != parseFloat(row.find("[id*=txt_LimRespAux]")[0].value)) {
+        row.find("[id*=txt_LimRespAux]")[0].value = $(this)[0].value.replace(/,/g, "");
+        $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value), 2);
+
+        fn_CalculaPorcentaje(row.find('.PrcPart')[0],
+                             row.find("[id*=txt_LimRespAux]")[0],
+                             $("[id*=gvd_Distribucion]").find("[id*=txt_LimRespAux]")[5]);
+
+      
+        fn_CalculaIntermediario(-1, row[0].rowIndex - 1, ['PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+        fn_CalculaReasegurador(-1, -1, ['PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+    }
+});
+
+
 //Porcentaje de Participación Reaseguradores
 $("body").on("focusout", "[id*=gvd_Reasegurador] .PrcPart", function (e) {
     var row = $(this).closest("tr");
@@ -1560,6 +1522,21 @@ $("body").on("focusout", "[id*=gvd_Reasegurador] .PrcPart", function (e) {
     $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 4, 1);
 });
 
+
+$("body").on("focusout", "[id*=gvd_Reasegurador] .SumaAsegurada", function (e) {
+    var row = $(this).closest("tr");
+
+    if (parseFloat($(this)[0].value.replace(/,/g, "")) != parseFloat(row.find("[id*=txt_LimRespAux]")[0].value)) {
+        row.find("[id*=txt_LimRespAux]")[0].value = $(this)[0].value.replace(/,/g, "");
+        $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value), 2);
+
+        fn_CalculaPorcentaje(row.find('.PrcPart')[0],
+                             row.find("[id*=txt_LimRespAux]")[0],
+                             $("[id*=gvd_Intermediario]").find("[id*=txt_LimRespAux]")[$("input[id$='hid_IndiceBroker']")[0].value]);
+
+        fn_CalculaReasegurador(-1, row[0].rowIndex - 1, ['PrimaNeta', 'PrimaINC', 'PrimaTEV', 'PrimaFHM', 'PrimaRC', 'PrimaCSC', 'PrimaGRA'], ['txt_PrimaNeta', 'txt_PrimaINC', 'txt_PrimaTEV', 'txt_PrimaFHM', 'txt_PrimaRC', 'txt_PrimaCSC', 'txt_PrimaGRA']);
+    }
+});
 
 $("body").on("focusout", "[id*=gvd_Intermediario] .PrcCorretaje", function (e) {
     var row = $(this).closest("tr");
@@ -1574,7 +1551,10 @@ $("body").on("focusout", "[id*=gvd_Intermediario] .Corretaje", function (e) {
     if ($(this)[0].value.replace(/,/g, "") != $('[id*=txt_CorretajeAux]')[row[0].rowIndex - 1].value) {
         $('[id*=txt_CorretajeAux]')[row[0].rowIndex - 1].value = $(this)[0].value.replace(/,/g, "");
         $(this)[0].value = fn_FormatoMonto(parseFloat($(this)[0].value.replace(/,/g, "")), 2);
-        fn_CalculaPorcentaje(row, 'Corretaje', 'txt_PrimaNetaAux');
+
+        fn_CalculaPorcentaje(row.find('.PrcCorretaje')[0],
+                             row.find('[id*=txt_CorretajeAux]')[0],
+                             row.find('[id*=txt_PrimaNetaAux]')[0]);
     }
 });
 
@@ -1634,6 +1614,14 @@ function fn_CalculoComision(Factor, ArrayTipo) {
                 }
             }
 
+
+            $("[id*=gvd_Pagos] .Prc").each(function (e) {
+                var row = $(this).closest("tr");
+                fn_CalculoPago(PNR, 'prc', row[0].rowIndex - 1);
+                fn_CalculoPago(PNR, 'mtn', row[0].rowIndex - 1);
+                row.find('[id*=txt_ImporteAux]')[0].value = row.find('[id*=txt_Importe]')[0].value.replace(/,/g, "");
+            });
+
             //Si se desglosa por Cobertura de Prima
             if (bln_Deglose == true) {
                 $(".PrcComNeta")[0].value = fn_FormatoMonto(fn_TotalesComision('PrcCom', ['INC', 'TEV', 'FHM', 'RC', 'CSC', 'GRA']), 4, 1);
@@ -1667,9 +1655,8 @@ function fn_CalculaCorretaje(Posicion, Prc) {
     }
 }
 
-function fn_CalculoPago(Factor,Posicion) {
+function fn_CalculoPago(PNR,Factor,Posicion) {
     var Index = $("input[id$='hid_IndiceBroker']")[0].value;
-    var PNR = $(".PnrNeta")[0].value.replace(/,/g, "");
 
     if (Index > -1) {
         var Prc = $("[id*=gvd_Pagos] .Prc")[Posicion];
@@ -1678,8 +1665,10 @@ function fn_CalculoPago(Factor,Posicion) {
         switch (Factor) {
             case 'prc':
                 Importe.value = fn_FormatoMonto(parseFloat(PNR * (Prc.value / 100)), 2);
+                break;
             case 'mnt':
                 Prc.value = fn_FormatoMonto(parseFloat((Importe.value / PNR) * 100), 4, 1);
+                break;
         }
     }
 }
@@ -1714,7 +1703,7 @@ function fn_CalculaIntermediario(Inciso, Posicion, ArrayClase , ArrayControl) {
                 var Prc = $("[id*=gvd_Intermediario] .PrcPart")[Posicion].value
 
                 for (i = 0; i < ArrayClase.length; i++) {
-                    Monto = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[i] + "Aux]")[0];
+                    Monto = $("[id*=gvd_Distribucion]").find("[id*=" + ArrayControl[i] + "Aux]")[5];
 
                     if (Monto != undefined) {
                         Control = $("[id*=gvd_Intermediario]").find("[id*=" + ArrayControl[i] + "Aux]")[Posicion];
@@ -1733,9 +1722,10 @@ function fn_CalculaIntermediario(Inciso, Posicion, ArrayClase , ArrayControl) {
                 var chk_NoProporcional = $("[id*=gvd_Agrupacion] .chk_NoProporcional")[Index];
                 if ($(chk_NoProporcional)[0].childNodes[0].checked == false) {
                     //Calcula el porcentaje sobre Coaseguro
-                    Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
+                    //Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
+                    Monto = $("[id*=gvd_Distribucion]").find("[id*=txt_LimRespAux]")[0];
                     if (Monto != undefined) {
-                        Control = $("[id*=gvd_Intermediario]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
+                        Control = $("[id*=gvd_Intermediario]").find("[id*=txt_LimRespAux]")[Posicion];
                         $("[id*=gvd_Intermediario] .PrcPartCoas")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
                     }
                 }
@@ -1799,9 +1789,9 @@ function fn_CalculaReasegurador(Inciso, Posicion, ArrayClase, ArrayControl) {
                 var chk_NoProporcional = $("[id*=gvd_Agrupacion] .chk_NoProporcional")[Index];
                 if ($(chk_NoProporcional)[0].childNodes[0].checked == false) {
                     //Calcula el porcentaje sobre Coaseguro
-                    Monto = $("[id*=gvd_Reparto]").find("[id*=" + ArrayControl[0] + "Aux]")[0]
+                    Monto = $("[id*=gvd_Reparto]").find("[id*=txt_LimRespAux]")[0]
                     if (Monto != undefined) {
-                        Control = $("[id*=gvd_Reasegurador]").find("[id*=" + ArrayControl[0] + "Aux]")[Posicion];
+                        Control = $("[id*=gvd_Reasegurador]").find("[id*=txt_LimRespAux]")[Posicion];
                         $("[id*=gvd_Reasegurador] .PrcPart100")[Posicion].value = fn_FormatoMonto(parseFloat((Control.value / Monto.value) * 100), 4);
                     }
                 }
@@ -1824,7 +1814,110 @@ $("body").on("focus", ".Seleccion", function (e) {
 });
 //---------------------------------------------------------------
 
+
+
+
 //-----------------------------------------------------EVENTOS FOCUSOUT-------------------------------------------
+//Descripción de Responsable
+$("body").on("focusout", "[id$=txt_SearchResp]", function () {
+    if ($(this)[0].value == '') {
+        $("input[id$='txt_ClaveResp']")[0].value = ''
+    }
+    fn_EvaluaAutoComplete('txt_ClaveResp', 'txt_SearchResp');
+});
+
+//Descripción de Regional
+$("body").on("focusout", "[id$=txt_SearchOfi]", function () {
+    if ($(this)[0].value == '') {
+        $("input[id$='txt_ClaveOfi']")[0].value = ''
+    }
+    fn_EvaluaAutoComplete('txt_ClaveOfi', 'txt_SearchOfi');
+});
+
+//Descripción de Asegurado
+$("body").on("focusout", "[id$=txt_SearchAse]", function (e) {
+    fn_EvaluaAutoComplete('txt_ClaveAseg', 'txt_SearchAse');
+    $("input[id$='lbl_Asegurado']")[0].value = $(this)[0].value;
+});
+
+//Descripción de Tipo de Agente
+$("body").on("focusout", "[id$=txt_SearchTag]", function () {
+    var blnClear = 0;
+
+    if ($(this)[0].value == '') {
+        $("input[id$='txt_ClaveTag']")[0].value = ''
+        blnClear = 1
+    }
+    else if ($("input[id$='txt_ClaveTag']")[0].value != $("input[id$='txt_ClaveTagAux']")[0].value) {
+        $("input[id$='txt_ClaveTagAux']")[0].value = $("input[id$='txt_ClaveTag']")[0].value;
+        blnClear = 1;
+    }
+
+    if (blnClear == 1) {
+        $("input[id$='txt_ClaveAge']")[0].value = '';
+        $("input[id$='txt_SearchAge']")[0].value = '';
+    }
+
+    fn_EvaluaAutoComplete('txt_ClaveTag', 'txt_SearchTag');
+});
+
+//Descripción de Suscriptor
+$("body").on("focusout", "[id$=txt_SearchSusc]", function () {
+    if ($(this)[0].value == '') {
+        $("input[id$='txt_ClaveSusc']")[0].value = ''
+    }
+    fn_EvaluaAutoComplete('txt_ClaveSusc', 'txt_SearchSusc');
+});
+
+//Descripción de Sucursal Poliza
+$("body").on("focusout", "[id$=txt_SearchSuc]", function () {
+    if ($(this)[0].value == '') {
+        $("input[id$='txt_ClaveSuc']")[0].value = ''
+    }
+});
+
+//Descripción de Producto
+$("body").on("focusout", "[id$=txt_SearchRam]", function () {
+    if ($(this)[0].value == '') {
+        $("input[id$='txt_ClaveRam']")[0].value = ''
+    }
+});
+
+//Descripción de Tipo de Endoso
+$("body").on("focusout", "[id$=txt_SearchGre]", function () {
+    var blnClear = 0;
+
+    if ($(this)[0].value == '') {
+        $("input[id$='txt_ClaveGre']")[0].value = ''
+        blnClear = 1
+    }
+    else if ($("input[id$='txt_ClaveGre']")[0].value != $("input[id$='txt_ClaveGreAux']")[0].value) {
+        $("input[id$='txt_ClaveGreAux']")[0].value = $("input[id$='txt_ClaveGre']")[0].value;
+        blnClear = 1;
+    }
+
+    if (blnClear == 1) {
+        $("input[id$='txt_ClaveTte']")[0].value = '';
+        $("input[id$='txt_SearchTte']")[0].value = '';
+    }
+
+    fn_EvaluaAutoComplete('txt_ClaveGre', 'txt_SearchGre');
+});
+
+//Descripción de Endoso
+$("body").on("focusout", "[id$=txt_SearchTte]", function () {
+    if ($(this)[0].value == '') {
+        $("input[id$='txt_ClaveTte']")[0].value = ''
+    }
+    fn_EvaluaAutoComplete('txt_ClaveTte', 'txt_SearchTte');
+});
+
+//Descripcion de Giro
+$("body").on("focusout", "[id$=txt_SearchGiro]", function (e) {
+    fn_EvaluaAutoComplete('txt_ClaveGiro', 'txt_SearchGiro');
+});
+
+
 //Busqueda de Sucursal por Clave
 $("body").on("focusout", "[id$=txt_ClaveOfi]", function (e) {
     var Id = $(this)[0].value;
@@ -1845,13 +1938,6 @@ $("body").on("focusout", "[id$=txt_ClaveOfi]", function (e) {
                 fn_MuestraMensaje('JSON', response.responseText, 2);
             },
         });
-    }
-});
-
-$("body").on("keydown", "[id$=txt_ClaveOfi]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_SearchSusc']").focus();
-        return false;
     }
 });
 
@@ -1880,13 +1966,6 @@ $("body").on("focusout", "[id$=txt_ClaveAge]", function (e) {
     }
 });
 
-$("body").on("keydown", "[id$=txt_ClaveAge]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_ClaveSuc']").focus();
-        return false;
-    }
-});
-
 //Busqueda de Sucursal por Clave
 $("body").on("focusout", "[id$=txt_ClaveSuc]", function (e) {
     var Id = $(this)[0].value;
@@ -1910,17 +1989,10 @@ $("body").on("focusout", "[id$=txt_ClaveSuc]", function (e) {
     }
 });
 
-$("body").on("keydown", "[id$=txt_ClaveSuc]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_ClaveRam']").focus();
-        return false;
-    }
-});
-
 //Busqueda de Producto por Clave
 $("body").on("focusout", "[id$=txt_ClaveRam]", function (e) {
     var Id = $(this)[0].value;
-    if (Id=='') {
+    if (Id == '') {
         $("input[id$='txt_SearchRam']")[0].value = '';
     }
     else {
@@ -1940,48 +2012,200 @@ $("body").on("focusout", "[id$=txt_ClaveRam]", function (e) {
     }
 });
 
+
+$("body").on("focusout", ".Moneda", function (e) {
+    $("input[id$='txt_Moneda']")[0].value = $('option:selected', $(this)).text()
+});
+
+//Todas las fechas
+$("body").on("focusout", ".Fecha", function (e) {
+    $(this).datepicker('hide');
+});
+
+
+//---------------------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------EVENTOS KEYDOWN-------------------------------------------
+//Folio de Negocio
+$("body").on("keydown", "[id$=txt_FolioNegocio]", function (e) {
+    fn_MovimientoFlechas(e.which, undefined, 'txt_Oferta');
+});
+
+$("body").on("keydown", "[id$=txt_Oferta]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_FolioNegocio', 'txt_SearchResp', 'txt_SearchAse');
+});
+
+//REsponsable
+$("body").on("keydown", "[id$=txt_SearchResp]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_Oferta', 'txt_SearchAse') == 0) {
+        fn_Autocompletar("Usu", "txt_ClaveResp", "txt_SearchResp", "", 0, e.which);
+    }
+});
+
+//Asegurado
+$("body").on("keydown", "[id$=txt_SearchAse]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_SearchResp', 'txt_RFC') == 0) {
+        fn_Autocompletar("Ase", "txt_ClaveAseg", "txt_SearchAse", "", 3, e.which)
+    }
+});
+
+//RFC
+$("body").on("keydown", "[id$=txt_RFC]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_SearchAse', 'txt_DomicilioFiscal', 'txt_DomicilioRiesgo', 'txt_SearchResp');
+});
+
+//Domicilio Fiscal
+$("body").on("keydown", "[id$=txt_DomicilioFiscal]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_RFC', 'txt_DomicilioRiesgo', 'ddl_Moneda', 'txt_SearchAse');
+});
+
+//Domicilio Riesgo
+$("body").on("keydown", "[id$=txt_DomicilioRiesgo]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_DomicilioFiscal', 'ddl_Moneda', 'txt_VigFin', 'txt_RFC');
+});
+
+//Moneda
+$("body").on("keydown", "[id$=ddl_Moneda]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_DomicilioRiesgo', 'txt_VigIni');
+});
+
+//Inicio Vigencia
+$("body").on("keydown", "[id$=txt_VigIni]", function (e) {
+    fn_MovimientoFlechas(e.which, 'ddl_Moneda', 'txt_VigFin', 'txt_SearchTag', 'txt_DomicilioFiscal');
+});
+
+//Fin Vigencia
+$("body").on("keydown", "[id$=txt_VigFin]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_VigIni', 'txt_FecEmision', 'txt_SearchTag', 'txt_DomicilioRiesgo');
+});
+
+//Emision
+$("body").on("keydown", "[id$=txt_FecEmision]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_VigFin', 'txt_SearchOfi', 'txt_SearchAge', 'txt_DomicilioRiesgo');
+});
+
+//Clave Regional
+$("body").on("keydown", "[id$=txt_ClaveOfi]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_FecEmision', 'txt_SearchOfi', 'txt_SearchSusc', 'ddl_Moneda');
+});
+
+//Regional
+$("body").on("keydown", "[id$=txt_SearchOfi]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_ClaveOfi', 'txt_SearchTag') == 0) {
+        fn_Autocompletar("Suc", "txt_ClaveOfi", "txt_SearchOfi", "", 0, e.which);
+    }
+});
+
+//Tipo Agente
+$("body").on("keydown", "[id$=txt_SearchTag]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_SearchOfi', 'txt_ClaveAge') == 0) {
+        fn_Autocompletar("Tag", "txt_ClaveTag", "txt_SearchTag", "", 0, e.which);
+    }
+});
+
+//Clave del Agente
+$("body").on("keydown", "[id$=txt_ClaveAge]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_SearchTag', 'txt_SearchAge');
+});
+
+//Agente
+$("body").on("keydown", "[id$=txt_SearchAge]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_ClaveAge', 'txt_SearchSusc') == 0) {
+        if ($("input[id$='txt_ClaveTag']")[0].value != '') {
+            fn_Autocompletar("Age", "txt_ClaveAge", "txt_SearchAge", " AND cod_tipo_agente = " + $("input[id$='txt_ClaveTag']")[0].value, 2, e.which)
+        }
+    }
+});
+
+//Suscriptor
+$("body").on("keydown", "[id$=txt_SearchSusc]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_SearchAge', 'txt_SearchGre') == 0) {
+        fn_Autocompletar("Usu", "txt_ClaveSusc", "txt_SearchSusc", "", 0, e.which);
+    }
+});
+
+//Grupo de Endoso
+$("body").on("keydown", "[id$=txt_SearchGre]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_SearchSusc', 'txt_SearchTte') == 0) {
+        fn_Autocompletar("Gre", "txt_ClaveGre", "txt_SearchGre", "", 0, e.which);
+    }
+});
+
+//Tipo de Endoso
+$("body").on("keydown", "[id$=txt_SearchTte]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_SearchGre', 'txt_ClaveSuc') == 0) {
+        if ($("input[id$='txt_ClaveGre']")[0].value != '') {
+            fn_Autocompletar("Tte", "txt_ClaveTte", "txt_SearchTte", " AND cod_grupo_endo = " + $("input[id$='txt_ClaveGre']")[0].value, 0, e.which);
+        }
+    }
+});
+
+//Clave de Sucursal
+$("body").on("keydown", "[id$=txt_ClaveSuc]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_SearchTte', 'txt_SearchSuc', 'txt_ClaveRam', 'txt_SearchSusc');
+});
+
+//Sucursal de Poliza
+$("body").on("keydown", "[id$=txt_SearchSuc]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_ClaveSuc', 'txt_ClaveRam') == 0) {
+        fn_Autocompletar("Suc", "txt_ClaveSuc", "txt_SearchSuc", "", 0, e.which);
+    }
+});
+
 $("body").on("keydown", "[id$=txt_ClaveRam]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_NroPoliza']").focus();
-        return false;
+    fn_MovimientoFlechas(e.which, 'txt_SearchSuc', 'txt_SearchRam', 'txt_NroPoliza', 'txt_ClaveSuc');
+});
+
+//Ramo de Poliza
+$("body").on("keydown", "[id$=txt_SearchRam]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_ClaveRam', 'txt_NroPoliza') == 0) {
+        fn_Autocompletar("Pro", "txt_ClaveRam", "txt_SearchRam", "", 0, e.which);
     }
 });
 
 $("body").on("keydown", "[id$=txt_NroPoliza]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_Sufijo']").focus();
-        return false;
-    }
+    fn_MovimientoFlechas(e.which, 'txt_SearchRam', 'txt_Sufijo', '', 'txt_ClaveRam');
 });
 
 $("body").on("keydown", "[id$=txt_Sufijo]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_Endoso']").focus();
-        return false;
-    }
+    fn_MovimientoFlechas(e.which, 'txt_NroPoliza', 'txt_Endoso', '', 'txt_SearchRam');
 });
 
 $("body").on("keydown", "[id$=txt_Endoso]", function (e) {
-    if (e.which == 9) {
-        $("input[id$='txt_SearchGiro']").focus();
-        return false;
+    fn_MovimientoFlechas(e.which, 'txt_Sufijo', 'txt_SearchGiro', '', 'txt_SearchRam');
+});
+
+//Giro 
+$("body").on("keydown", "[id$=txt_SearchGiro]", function (e) {
+    if (fn_MovimientoFlechas(e.which, 'txt_Endoso', 'txt_GiroAsegurado') == 0) {
+        var cod_ramo = $("input[id$='txt_ClaveRam']")[0].value;
+
+        if (cod_ramo == '') {
+            cod_ramo = 0;
+        }
+
+        fn_Autocompletar("Gro", "txt_ClaveGiro", "txt_SearchGiro", ' AND cod_ramo = ' + cod_ramo, 2, e.which)
     }
 });
 
-$("body").on("focusout", "[id$=txt_SearchAse]", function (e) {
-    fn_EvaluaAutoComplete('txt_ClaveAseg', 'txt_SearchAse');
-    $("input[id$='lbl_Asegurado']")[0].value = $(this)[0].value;
+//Giro Especifico
+$("body").on("keydown", "[id$=txt_GiroAsegurado]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_SearchGiro', 'txt_Notas', 'txt_Notas', 'txt_SearchGiro');
 });
 
-$("body").on("focusout", ".Moneda", function (e) {
-   
-    $("input[id$='txt_Moneda']")[0].value = $('option:selected', $(this)).text()
+//Observaciones
+$("body").on("keydown", "[id$=txt_Notas]", function (e) {
+    fn_MovimientoFlechas(e.which, 'txt_GiroAsegurado', undefined, undefined, 'txt_GiroAsegurado');
 });
+//--------------------------------------------------------------------------------------------------------------
 
-$("body").on("focusout", "[id$=txt_SearchGiro]", function (e) {
-    fn_EvaluaAutoComplete('txt_ClaveGiro', 'txt_SearchGiro');
-});
 
+
+
+
+
+//-----------------------------------------------------EVENTOS CHANGE-------------------------------------------
 $("body").on("change", "[id$=txt_VigIni]", function (e) {
     $("input[id$='txt_VigenciaIni']")[0].value = $(this)[0].value;
 });
@@ -1994,33 +2218,19 @@ $("body").on("change", "[id$=txt_FecEmision]", function (e) {
     $("input[id$='txt_FechaEmision']")[0].value = $(this)[0].value;
 });
 
-
-
-$("body").on("click", "[id*=gvd_Monitor] .Folio", function () {
-    event.preventDefault ? event.preventDefault() : event.returnValue = false;
-    var row = $(this).closest("tr");
-    var Folio = row.find('.Folio');
-
-    if (Folio[0].text != '0') {
-        window.open("Gestion.aspx?Folio=" + Folio[0].text);
-    }
-});
-
-
-
 $("body").on("change", "[id*=gvd_Tablero] .FecFin", function () {
     var row = $(this).closest("tr");
     var FecIni = row.find('.FecIni');
     var Lapso = row.find('.Lapso');
     var LapsoAux = row.find('.LapsoAux');
-    
+
     if (fn_IsDate($(this)[0].value) == true && fn_IsDate($(FecIni)[0].value) == true) {
         $(Lapso)[0].innerText = fn_DateDiff($(FecIni)[0].value, $(this)[0].value, 'day')
     }
     else {
         $(Lapso)[0].innerText = '0';
     }
-    
+
     $(LapsoAux)[0].value = $(Lapso)[0].innerText;
 });
 
@@ -2037,9 +2247,29 @@ $("body").on("change", "[id*=gvd_Tablero] .FecIni", function () {
     else {
         $(Lapso)[0].innerText = '0';
     }
-    
+
     $(LapsoAux)[0].value = $(Lapso)[0].innerText;
 });
+//--------------------------------------------------------------------------------------------------------------
+
+
+
+
+$("body").on("click", "[id*=gvd_Monitor] .Folio", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+    var Folio = row.find('.Folio');
+
+    if (Folio[0].text != '0') {
+        window.open("Gestion.aspx?Folio=" + Folio[0].text);
+    }
+});
+
+
+
+
+
+
 
 
 $("body").on("click", "[id*=gvd_Tablero] .Proceso", function () {
@@ -2271,6 +2501,81 @@ $("body").on("focusout", "[id*=gvd_ProgramaCapas] .PrcPart", function (e) {
 
 
 
+function fn_ActualizaRiesgos(Index,Control,Clave,Descripcion) {
+
+    var Datos = $('[id*=' + Control + ']')[0].value.split('|');
+    Datos[Index] = Clave + '~' + Descripcion;
+   
+    $('[id*=' + Control + ']')[0].value = '';
+
+    for (i = 0; i <= Datos.length - 2; i++) {
+        $('[id*=' + Control + ']')[0].value = $('[id*=' + Control + ']')[0].value + Datos[i] + '|'
+    }
+}
+
+
+$("body").on("keydown", ".Desplazamiento", function (e) {
+    var row = $(this).closest("tr");
+    var indice = row[0].rowIndex - 1
+
+    var gread = $(this)[0].name.split('$')[2];
+    var clase = $(this)[0].classList[4];
+
+    if (e.which == 40) {
+        indice = indice + 1;
+
+        var control = $("[id*=" + gread + "]").find("." + clase)[indice];
+        if (control != undefined) {
+
+            if (control.outerHTML.indexOf("display: none") > -1) {
+                indice = indice + 1;
+                for (i = indice; i < $("[id*=" + gread + "]").find("." + clase).length ; i++) {
+                    var control = $("[id*=" + gread + "]").find("." + clase)[i];
+                    if (control != undefined) {
+                        if (control.outerHTML.indexOf("display: none") == -1) {
+                            control.focus();
+                            break;
+                        }
+                    }
+                }
+            }
+            else {
+                control.focus();
+            }
+            
+        }
+    }
+    else if (e.which == 38) {
+        indice = indice - 1;
+
+        var control = $("[id*=" + gread + "]").find("." + clase)[indice];
+        if (indice > 0 && control != undefined) {
+
+            if (control.outerHTML.indexOf("display: none") > -1) {
+                indice = indice - 1;
+                for (i = indice; i > 0 ; i--) {
+                    var control = $("[id*=" + gread + "]").find("." + clase)[i];
+                    if (control != undefined) {
+                        if (control.outerHTML.indexOf("display: none") == -1) {
+                            control.focus();
+                            break;
+                        }
+                    }
+                }
+            }
+            else {
+                control.focus();
+            }
+        }
+    }
+});
+
+
+
+//$("body").on("keydown", "[id*=gvd_Riesgo] .ValoresTotales", function (e) {
+//    var row = $(this).closest("tr");
+//    fn_MovimientoFlechasGrid(e.which, undefined, row.find('.SumaAsegurada'));
+//});
 
 
 

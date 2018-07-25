@@ -6,6 +6,23 @@
     fn_EstadoSeleccionGrid('gvd_Cobertura', 'Cob');
 }
 
+////////////////////////////////////////////////////////////////////EVENTO EXPANDIR-CONTRAER/////////////////////////////////////
+
+//Colapsar Ventana
+$("body").on("click", ".contraer", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var id = this.id.replace('coVentana', '');
+    fn_CambiaEstado(id, "1");
+});
+
+//Expandir Ventana
+$("body").on("click", ".expandir", function () {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var id = this.id.replace('exVentana', '');
+    fn_CambiaEstado(id, "0");
+});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 $("body").on("mouseup", "", function (e) {
     LeftClick = 0;
@@ -289,7 +306,7 @@ $("body").on("focus", "[id$=txt_SearchRam]", function () {
 
 //Grupo de Endoso
 $("body").on("keydown", "[id$=txt_SearchGre]", function (e) {
-    fn_Autocompletar("Gre", "txt_ClaveGre", "txt_SearchGre", "", 0, e.which)
+    fn_Autocompletar("Gre", "txt_ClaveGre", "txt_SearchGre", "2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26", 0, e.which)
 });
 
 $("body").on("focusout", "[id$=txt_SearchGre]", function () {
@@ -304,16 +321,16 @@ $("body").on("focusout", "[id$=txt_SearchGre]", function () {
         blnClear = 1;
     }
 
-    if (blnClear == 1) {
-        $("input[id$='txt_ClaveTte']")[0].value = '';
-        $("input[id$='txt_SearchTte']")[0].value = '';
-    }
+    //if (blnClear == 1) {
+    //    $("input[id$='txt_ClaveTte']")[0].value = '';
+    //    $("input[id$='txt_SearchTte']")[0].value = '';
+    //}
 
     fn_EvaluaAutoComplete('txt_ClaveGre', 'txt_SearchGre');
 });
 
 $("body").on("focus", "[id$=txt_SearchGre]", function () {
-    fn_Autocompletar("Gre", "txt_ClaveGre", "txt_SearchGre", "", 0, -1)
+    fn_Autocompletar("Gre", "txt_ClaveGre", "txt_SearchGre", "2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26", 0, -1)
     $(this).trigger({
         type: "keydown",
         which: 46
@@ -330,7 +347,7 @@ $("body").on("keydown", "[id$=txt_SearchTte]", function (e) {
 
 $("body").on("focusout", "[id$=txt_SearchTte]", function () {
     if ($(this)[0].value == '') {
-        $("input[id$='txt_ClaveTte']")[0].value = ''
+        $("input[id$='txt_ClaveTte']")[0].value = '';
     }
     fn_EvaluaAutoComplete('txt_ClaveTte', 'txt_SearchTte');
 });
@@ -390,3 +407,150 @@ $("body").on("focusout", "[id$=txt_ClaveRam]", function (e) {
         });
     }
 });
+
+
+$("body").on("dblclick", "[id*=gvd_Ubicaciones] .Detalle", function (e) {
+    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+    var row = $(this).closest("tr");
+
+    var cod_item = row.find('.cod_item');
+    var cod_aseg = row.find('.cod_aseg');
+    var asegurado = row.find('.asegurado');
+    var calle = row.find('.calle');
+    var nro_exterior = row.find('.nro_exterior');
+    var nro_interior = row.find('.nro_interior');
+    var cod_ciudad = row.find('.cod_ciudad');
+    var cod_municipio = row.find('.cod_municipio');
+    var cod_colonia = row.find('.cod_colonia');
+    var cod_pais = row.find('.cod_pais');
+    var cod_dpto = row.find('.cod_dpto');
+    var cod_postal = row.find('.cod_postal');
+    var cod_giro_negocio = row.find('.cod_giro_negocio');
+    var giro_negocio = row.find('.giro_negocio');
+    var cod_sgiro = row.find('.cod_sgiro');
+    var subgiro = row.find('.subgiro');
+
+
+    $("input[id$='txt_cod_item']")[0].value = cod_item[0].innerText;
+    $("input[id$='txt_ClaveAsegurado']")[0].value = cod_aseg[0].value;
+    $("input[id$='txt_Asegurado']")[0].value = asegurado[0].value;
+    $("input[id$='txt_Calle']")[0].value = calle[0].value;
+    $("input[id$='txt_NroExt']")[0].value = nro_exterior[0].value;
+    $("input[id$='txt_NroInt']")[0].value = nro_interior[0].value;
+
+    $('.Ciudad')[0].value = cod_ciudad[0].value;
+    $('.Municipio')[0].value = cod_municipio[0].value;
+    $('.Colonia')[0].value = cod_colonia[0].value;
+    $('.Pais')[0].value = cod_pais[0].value;
+    $('.Estado')[0].value = cod_dpto[0].value;
+
+    $("input[id$='txt_CP']")[0].value = cod_postal[0].value;
+    $("input[id$='txt_ClaveGiro']")[0].value = cod_giro_negocio[0].value;
+    $("input[id$='txt_Giro']")[0].value = giro_negocio[0].value;
+    $("input[id$='txt_ClaveSubgiro']")[0].value = cod_sgiro[0].value;
+    $("input[id$='txt_Subgiro']")[0].value = subgiro[0].value;
+
+    fn_AbrirModal('#Direccion');
+});
+
+//Asegurado
+$("body").on("keydown", "[id$=txt_Asegurado]", function (e) {
+    fn_Autocompletar("Ase", "txt_ClaveAsegurado", "txt_Asegurado", "", 3, e.which)
+});
+
+//Giro
+$("body").on("keydown", "[id$=txt_Giro]", function (e) {
+    var cod_ramo = $("input[id$='txt_ClaveRam']")[0].value;
+
+    if (cod_ramo == '') {
+        cod_ramo = 0;
+    }
+
+    fn_Autocompletar("Gro", "txt_ClaveGiro", "txt_Giro", ' AND cod_ramo = ' + cod_ramo, 2, e.which)
+});
+
+
+//SubGiro
+$("body").on("keydown", "[id$=txt_Subgiro]", function (e) {
+    var cod_ramo = $("input[id$='txt_ClaveRam']")[0].value;
+    var cod_giro_negocio = $("input[id$='txt_ClaveGiro']")[0].value;
+
+    if (cod_ramo == '') {
+        cod_ramo = 0;
+    }
+
+    if (cod_giro_negocio == '') {
+        cod_giro_negocio = 0;
+    }
+
+    fn_Autocompletar("Sgr", "txt_ClaveSubgiro", "txt_Subgiro", ' AND cod_ramo = ' + cod_ramo + ' AND cod_giro_negocio = ' + cod_giro_negocio, 2, e.which)
+});
+
+
+//Sumatorias Totales
+function fn_SumaTotales(Grid, ArrayClase, ArrayControl, AST, ArrayNoSumar, Posicion, LimiteMayor) {
+    var Control = undefined;
+    var Clase = undefined;
+
+    var ArraySuma = [0];
+    ArraySuma.length = ArrayClase.length;
+
+
+    for (i = 0; i < ArrayClase.length; i++) {
+        ArraySuma[i] = 0;
+    }
+
+    //Recorre todo el Grid
+    $("[id*=" + Grid + "] ." + ArrayClase[0]).each(function (e) {
+        var row = $(this).closest("tr");
+
+        for (i = 0; i < ArrayClase.length; i++) {
+            if (ArrayNoSumar.indexOf(row[0].rowIndex - 1) == -1) {
+
+                elemento = 0;
+
+                //Obtiene Referencia de Control que se sumará
+                Control = $("[id*=" + Grid + "]").find('[id*=' + ArrayControl[i] + ']')[row[0].rowIndex - 1];
+                if (Control != undefined) {
+                    elemento = parseFloat(Control.value);
+
+                    //Valida la Acumulación
+                    if (AST == 1 && ArrayClase[i] == 'SumaAsegurada') {
+                        if ($("[id*=" + Grid + "]").find("[id*=opt_Adicional] input:checked")[row[0].rowIndex - 2].value == 0) {
+                            elemento = 0;
+                        }
+                    }
+                }
+                ArraySuma[i] = ArraySuma[i] + elemento;
+            }
+            else {
+                i = ArrayClase.length;  //Break For
+                break;
+            }
+        }
+
+        //Coloca los Resultados finales en la posición correspondiente
+        for (i = 0; i < ArrayClase.length; i++) {
+            //Resultado en Control
+            Control = $("[id*=" + Grid + "]").find("[id*=" + ArrayControl[i] + "]")[Posicion];
+            if (Control != undefined) {
+                Control.value = ArraySuma[i];
+            }
+
+            //Resultado en Clase
+            Clase = $("[id*=" + Grid + "] ." + ArrayClase[i])[Posicion];
+            if (Clase != undefined) {
+                Clase.value = fn_FormatoMonto(parseFloat(ArraySuma[i]), 2);
+
+                if (LimiteMayor != undefined) {
+                    if (parseFloat(ArraySuma[i]) > LimiteMayor) {
+                        $("[id*=" + Grid + "] ." + ArrayClase[i])[Posicion].style.color = "red";
+                    }
+                    else {
+                        $("[id*=" + Grid + "] ." + ArrayClase[i])[Posicion].style.color = "#555";
+                    }
+                }
+            }
+        }
+    });
+}

@@ -19,14 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://siigmxapp02/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://gmxwebservice01/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="OrdenPago.xsd" MetadataType="Schema" ID="2976431f-34a6-44d1-a1de-b86f47594907" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?xsd=xsd1" />
-    <MetadataFile FileName="OrdenPago.wsdl" MetadataType="Wsdl" ID="6ea5acc1-83eb-455e-a43b-07e69e9ce99a" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?wsdl" />
-    <MetadataFile FileName="OrdenPago1.xsd" MetadataType="Schema" ID="e3f86382-781d-4765-a3f4-110f6da56846" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?xsd=xsd2" />
-    <MetadataFile FileName="OrdenPago2.xsd" MetadataType="Schema" ID="79e5a496-e194-4364-b13a-97f1afb58a0d" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?xsd=xsd0" />
-    <MetadataFile FileName="OrdenPago.disco" MetadataType="Disco" ID="87252d4b-018f-4ae4-87ca-99dcd9508904" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?disco" />
+    <MetadataFile FileName="OrdenPago3.xsd" MetadataType="Schema" ID="eace0c02-e27d-4a68-a71f-19087bf2623b" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?xsd=xsd0" />
+    <MetadataFile FileName="OrdenPago1.disco" MetadataType="Disco" ID="a575b790-8fca-47b5-bb01-c0abc5a7729c" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?disco" />
+    <MetadataFile FileName="OrdenPago32.xsd" MetadataType="Schema" ID="840a697f-f6f8-4636-8e20-34eec4658ee2" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?xsd=xsd1" />
+    <MetadataFile FileName="OrdenPago1.wsdl" MetadataType="Wsdl" ID="53e333c0-8806-4b8a-861e-8fb96a422f5c" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?wsdl" />
+    <MetadataFile FileName="OrdenPago33.xsd" MetadataType="Schema" ID="585f2d41-3aac-4512-89e9-adb86780cf16" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/OrdenPago/OrdenPago.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

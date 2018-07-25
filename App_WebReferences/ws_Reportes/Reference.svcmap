@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="9b0d820e-10cf-4de8-a16f-aac0acb064a3" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://gmxwebservice01/WS_GMX/Reaseguro/Reportes/Bordereaux.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Bordereaux3.xsd" MetadataType="Schema" ID="aa60af0c-5d1e-4a0f-b020-d4b7d1f75278" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reportes/Bordereaux.svc?xsd=xsd1" />
+    <MetadataFile FileName="Bordereaux1.wsdl" MetadataType="Wsdl" ID="174998d2-27fd-4418-9b1a-e2d2668030dd" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reportes/Bordereaux.svc?wsdl" />
+    <MetadataFile FileName="Bordereaux1.disco" MetadataType="Disco" ID="f6195557-1b45-4d3b-a22c-9cb55c1e6b4f" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reportes/Bordereaux.svc?disco" />
+    <MetadataFile FileName="Bordereaux32.xsd" MetadataType="Schema" ID="b91a20ac-addd-45d3-84a3-a8b1b52bbe2d" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reportes/Bordereaux.svc?xsd=xsd2" />
+    <MetadataFile FileName="Bordereaux33.xsd" MetadataType="Schema" ID="aaeab7d6-a5ff-4643-b849-a27b1fa37066" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reportes/Bordereaux.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

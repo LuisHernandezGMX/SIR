@@ -204,9 +204,9 @@
         <div id="Mensajes" style="width:400px; height:185px"  class="modal-mensaje">
              <asp:UpdatePanel runat="server" ID="upMensajes">
                     <ContentTemplate>
-                        <div class="cuadro-titulo" style="height:30px">
-                            <asp:label ID="lbl_TituloMensaje" runat="server" Text="TITULO" CssClass="titulo-modal" Height="30px"></asp:label>
-                            <button type="button" style="color:white;" class="close"  data-dismiss="modal">&times;</button>
+                        <div class="cuadro-titulo-flotante" style="height:30px">
+                            <asp:label ID="lbl_TituloMensaje" runat="server" Text="TITULO"  Height="30px"></asp:label>
+                            <button type="button" class="close"  data-dismiss="modal">&times;</button>
                             <asp:HiddenField runat="server" ID="hid_ControlASP" Value="" />
                         </div>
                         <div class="modal-body" style="height:155px">
@@ -239,9 +239,9 @@
         
         <!-- Modal -->
         <div id="Catalogo" style="width:350px; height:470px" class="modal-catalogo" >
-            <div class="cuadro-titulo" style="height:30px">
-                <button type="button" id="btn_Cerrar_Cat" style="color:white;" class="close">&times;</button>
-                <div class="titulo-modal"><label id="lbl_Catalogo">Catálogo</label></div>
+            <div class="cuadro-titulo-flotante" style="height:30px">
+                <button type="button" id="btn_Cerrar_Cat" class="close">&times;</button>
+                <div><label id="lbl_Catalogo">Catálogo</label></div>
             </div>
 
             <div class="modal-body" style="height:450px">
@@ -280,9 +280,9 @@
         
         
         <div id="Poliza" style="width:1300px; height:650px"  class="modal-poliza">
-               <div class="cuadro-titulo" style="height:30px">
+               <div class="cuadro-titulo-flotante" style="height:30px">
                     <button type="button" style="color:white;" class="close"  data-dismiss="modal">&times;</button>
-                    <div class="titulo-modal"><label id="lblPoliza">Pólizas</label></div>
+                    <div><label id="lblPoliza">Pólizas</label></div>
                </div>
 
             
@@ -523,12 +523,12 @@
     <div id="CobranzasModal" style="width:1300px; height:650px"  class="modal-poliza">
       <asp:UpdatePanel runat="server" ID="upCobranzas">
         <ContentTemplate>
-            <div class="cuadro-titulo" style="height:30px">
+            <div class="cuadro-titulo-flotante" style="height:30px">
                 <button type="button" style="color:white;" class="close"  data-dismiss="modal">&times;</button>
                 <asp:HiddenField runat="server" ID="hid_Poliza" />
                 <table>
                     <tr>
-                        <td><div class="titulo-modal"><asp:Label id="lbl_PolizaCobranzas" runat="server">Pólizas:</asp:Label></div></td>
+                        <td><div><asp:Label id="lbl_PolizaCobranzas" runat="server">Pólizas:</asp:Label></div></td>
                         <td><asp:DropDownList runat="server" ID="ddl_Endoso" AutoPostBack="true" CssClass="estandar-control" Width="60px" Height="24px"></asp:DropDownList></td>
                     </tr>
                 </table>
@@ -814,9 +814,9 @@
     <div id="AclaracionesModal" style="width:1300px; height:650px"  class="modal-poliza">
         <asp:UpdatePanel runat="server" ID="upAclaraciones" >
          <ContentTemplate>
-            <div class="cuadro-titulo" style="height:30px">
+            <div class="cuadro-titulo-flotante" style="height:30px">
                 <button type="button" class="close"  data-dismiss="modal">&times;</button>
-                <div class="titulo-modal"><label>Aclaraciones</label></div>
+                <div><label>Aclaraciones</label></div>
             </div>
 
             <div class="modal-body" style="height:600px">
@@ -840,9 +840,9 @@
     <div id="Autorizacion" class="modal-catalogo">
        <asp:UpdatePanel runat="server" ID="upAutoriza" >
          <ContentTemplate>
-             <div class="cuadro-titulo" style="height:30px">
+             <div class="cuadro-titulo-flotante" style="height:30px">
                 <button type="button" class="close"  data-dismiss="modal">&times;</button>
-                <div class="titulo-modal"><label>AUTORIZACIÓN DE USUARIO</label></div>
+                <div><label>AUTORIZACIÓN DE USUARIO</label></div>
              </div>
 
              <div class="clear padding10"></div>

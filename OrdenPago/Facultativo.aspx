@@ -6,7 +6,7 @@
 
     <asp:HiddenField runat="server" ID="hid_Ventanas" Value="1|1|1|1|" />
     <%-----------------------------------Sección 1----------------------------------------------------------------------------------------------------%>
-        <div style="width:1000px; min-width:1000px; overflow-x:hidden">
+        <div class="zona-principal" style="overflow-x:hidden;overflow-y:hidden">
             <div class="cuadro-titulo panel-encabezado">
                 <input type="image" src="../Images/contraer_mini_inv.png" id="coVentana0" class="contraer"  />
                 <input type="image" src="../Images/expander_mini_inv.png"   id="exVentana0" class="expandir"  />
@@ -130,7 +130,7 @@
                         </div>
                         <div class="panel-subcontenido">
                             <asp:UpdatePanel runat="server" ID="upFechas">
-                            <ContentTemplate>
+                                <ContentTemplate>
 
                                     <table>
                                         <tr>

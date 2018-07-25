@@ -19,15 +19,15 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://siigmxapp02/WS_GMX/Generales/Generales.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://gmxwebservice01/WS_GMX/Generales/Generales.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Generales3.xsd" MetadataType="Schema" ID="bba9c715-b30d-43f0-a619-337b5addce05" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?xsd=xsd3" />
-    <MetadataFile FileName="Generales.wsdl" MetadataType="Wsdl" ID="70931420-61a6-4190-984a-439cfdc7d6c9" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?wsdl" />
-    <MetadataFile FileName="Generales.xsd" MetadataType="Schema" ID="fcd9b57d-0b44-4107-8596-6c13bfabddb0" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?xsd=xsd1" />
-    <MetadataFile FileName="Generales1.xsd" MetadataType="Schema" ID="de6c4bbf-52ac-46eb-9f0d-2e35faf55290" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?xsd=xsd0" />
-    <MetadataFile FileName="Generales2.xsd" MetadataType="Schema" ID="25ec6f3b-8ad9-4db1-84de-26c917a21d57" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?xsd=xsd2" />
-    <MetadataFile FileName="Generales.disco" MetadataType="Disco" ID="3311cd87-87ad-4edd-a5ed-8235605b394f" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Generales/Generales.svc?disco" />
+    <MetadataFile FileName="Generales1.wsdl" MetadataType="Wsdl" ID="8c9a77fe-3fd2-45e6-a71e-095b72442297" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Generales/Generales.svc?wsdl" />
+    <MetadataFile FileName="Generales1.disco" MetadataType="Disco" ID="a660df99-4e66-4835-8bb4-4b1691ab3ead" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Generales/Generales.svc?disco" />
+    <MetadataFile FileName="Generales4.xsd" MetadataType="Schema" ID="ea593a4e-ec21-4468-8af1-5d64d670fc35" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Generales/Generales.svc?xsd=xsd0" />
+    <MetadataFile FileName="Generales42.xsd" MetadataType="Schema" ID="801e83ed-3286-420f-8662-12eba5e8c050" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Generales/Generales.svc?xsd=xsd1" />
+    <MetadataFile FileName="Generales43.xsd" MetadataType="Schema" ID="321b7da6-984b-4893-9e17-8b23f73d48a8" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Generales/Generales.svc?xsd=xsd2" />
+    <MetadataFile FileName="Generales44.xsd" MetadataType="Schema" ID="1a817545-cdd0-403b-8d46-96d415f54eac" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Generales/Generales.svc?xsd=xsd3" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

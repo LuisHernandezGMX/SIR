@@ -80,40 +80,21 @@ Partial Class Pages_SiteMaster
         End Set
     End Property
 
+    Public Property email() As String
+        Get
+            Return hid_mail.Value
+        End Get
+        Set(ByVal value As String)
+            hid_mail.Value = value
+        End Set
+    End Property
+
     Public Property Titulo() As String
         Get
             Return lbl_TituloSeccion.Text
         End Get
         Set(ByVal value As String)
             lbl_TituloSeccion.Text = value
-        End Set
-    End Property
-
-
-    Public Property mtx_Folio() As TextBox
-        Get
-            Return txt_Folio
-        End Get
-        Set(ByVal value As TextBox)
-            txt_Folio = value
-        End Set
-    End Property
-
-    Public Property mtx_Oferta() As TextBox
-        Get
-            Return txt_Oferta
-        End Get
-        Set(ByVal value As TextBox)
-            txt_Oferta = value
-        End Set
-    End Property
-
-    Public Property mtx_BuscaFolio() As ImageButton
-        Get
-            Return btn_buscaFolio
-        End Get
-        Set(ByVal value As ImageButton)
-            btn_buscaFolio = value
         End Set
     End Property
 
@@ -126,12 +107,6 @@ Partial Class Pages_SiteMaster
     Public WriteOnly Property Clase_Form() As String
         Set(ByVal value As String)
             div_Form.Attributes("class") = value
-        End Set
-    End Property
-
-    Public WriteOnly Property tablero_visible() As Boolean
-        Set(ByVal value As Boolean)
-            cuadro_tablero.Visible = value
         End Set
     End Property
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="VUycOzjm+nzQBXqhTMsLw9vzGZ8=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="/VO6MUx7i//UBYN7FueWlioLn3c=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_IGenerales">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_IGenerales" contract="ws_Generales.IGenerales" bindingType="basicHttpBinding" address="http://siigmxapp02/WS_GMX/Generales/Generales.svc" bindingConfiguration="BasicHttpBinding_IGenerales">
+    <endpoint name="BasicHttpBinding_IGenerales" contract="ws_Generales.IGenerales" bindingType="basicHttpBinding" address="http://gmxwebservice01/WS_GMX/Generales/Generales.svc" bindingConfiguration="BasicHttpBinding_IGenerales">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://siigmxapp02/WS_GMX/Generales/Generales.svc</serializedValue>
+          <serializedValue>http://gmxwebservice01/WS_GMX/Generales/Generales.svc</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

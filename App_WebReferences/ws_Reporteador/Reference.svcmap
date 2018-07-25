@@ -19,15 +19,15 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://gmxwebservice01/WS_GMX/Reaseguro/Reporteador/Reporteador.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Reporteador.xsd" MetadataType="Schema" ID="0a4ea5af-9779-4acc-84ca-f9deac70b043" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd2" />
-    <MetadataFile FileName="Reporteador.wsdl" MetadataType="Wsdl" ID="61ded593-c5cc-466a-b32a-4fc39ffb6bba" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?wsdl" />
-    <MetadataFile FileName="Reporteador.disco" MetadataType="Disco" ID="75196d16-e036-4469-8f92-c9e2619f7cc2" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?disco" />
-    <MetadataFile FileName="Reporteador2.xsd" MetadataType="Schema" ID="10cbe0e7-7055-4a9a-9635-d5dd50aad2f2" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd1" />
-    <MetadataFile FileName="Reporteador3.xsd" MetadataType="Schema" ID="867e1d6c-dc08-4362-9548-8f8ac374a979" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd3" />
-    <MetadataFile FileName="Reporteador1.xsd" MetadataType="Schema" ID="418fa123-51a8-4e1c-8381-7fe58fd1321d" SourceId="1" SourceUrl="http://siigmxapp02/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd0" />
+    <MetadataFile FileName="Reporteador4.xsd" MetadataType="Schema" ID="1d433a36-947f-4e07-9755-a4981b214ea4" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd0" />
+    <MetadataFile FileName="Reporteador42.xsd" MetadataType="Schema" ID="5f5bf1e8-bdd5-4815-b72d-f6ac77d10b0a" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd2" />
+    <MetadataFile FileName="Reporteador43.xsd" MetadataType="Schema" ID="39b6dab5-2629-419e-8131-0b300b37c89a" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd1" />
+    <MetadataFile FileName="Reporteador1.wsdl" MetadataType="Wsdl" ID="2721e3e5-79c6-4acb-a677-21359a0d7021" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?wsdl" />
+    <MetadataFile FileName="Reporteador44.xsd" MetadataType="Schema" ID="99575612-ddd5-411d-a891-7cfb391547e4" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?xsd=xsd3" />
+    <MetadataFile FileName="Reporteador1.disco" MetadataType="Disco" ID="8e82800d-a846-42db-a92f-34ef14970994" SourceId="1" SourceUrl="http://gmxwebservice01/WS_GMX/Reaseguro/Reporteador/Reporteador.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
