@@ -450,7 +450,7 @@ function fn_CambiaEstado(IdControl, Colapsado) {
 
 //Funciones Estado-------------------------------------------------------------------------------------------------------------------------------------
 function fn_EstadoVentanas() {
-    var Ventana = $("input[id$='hid_Ventanas']")[0].value;
+    var Ventana = $("input[id?='hid_Ventanas']")[0].value;
     var Estado = Ventana.split("|");
 
     for (i = 0; i < Estado.length - 1; i++) {

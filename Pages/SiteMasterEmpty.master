@@ -51,7 +51,9 @@
 			        </div>
 
                     <div id="titulo" >
-                        <asp:Label runat="server" ID="lbl_Titulo" Text="REASEGURO" CssClass="titulo-pagina"></asp:Label>
+                        <%--<asp:Label runat="server" ID="lbl_Titulo" Text="REASEGURO" CssClass="titulo-pagina"></asp:Label>--%>
+                        <!-- Título temporal para Emisión -->
+                        <asp:Label runat="server" ID="lbl_Titulo" Text="EMISIÓN" CssClass="titulo-pagina"></asp:Label>
                     </div>
 
                     <div id="menu_superior" class="etiqueta-control">

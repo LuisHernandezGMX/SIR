@@ -13,23 +13,26 @@ Partial Class Pages_Login
                                        "</div>" &
                                 "</li>"
 
-        Dim separador As String = "<li> <img Class=""separador"" /></li>"
+        ' Menú temporal para Emisión
+        Menu = Menu & "<li><img class=""separador"" /></li><li><a href=""CoaseguroLider.aspx"">Coaseguro Líder</a></li><li><img class=""separador"" /></li>"
+        Menu = Menu & "<li><a href=""CoaseguroSeguidor.aspx"">Coaseguro Seguidor</a></li>"
+        'Dim separador As String = "<li> <img Class=""separador"" /></li>"
 
-        Dim myRow() As Data.DataRow
-        myRow = dtMenu.Select("nivel ='" & 0 & "'")
+        'Dim myRow() As Data.DataRow
+        'myRow = dtMenu.Select("nivel ='" & 0 & "'")
 
-        For Each item In myRow
-            Menu = Menu & separador & "<li>"
+        'For Each item In myRow
+        '    Menu = Menu & separador & "<li>"
 
-            If len(item("ubicacion")) > 0 Then
-                Menu = Menu & "<a href=""" & item("ubicacion") & """>" & item("descripcion") & "</a>"
-            Else
-                Menu = Menu & item("descripcion") & "<ul>"
-                Menu = Menu & ArmaSubMenus(dtMenu, item("cod_submodulo_web"))
-                Menu = Menu & "</ul>"
-            End If
-            Menu = Menu & "</li>"
-        Next
+        '    If len(item("ubicacion")) > 0 Then
+        '        Menu = Menu & "<a href=""" & item("ubicacion") & """>" & item("descripcion") & "</a>"
+        '    Else
+        '        Menu = Menu & item("descripcion") & "<ul>"
+        '        Menu = Menu & ArmaSubMenus(dtMenu, item("cod_submodulo_web"))
+        '        Menu = Menu & "</ul>"
+        '    End If
+        '    Menu = Menu & "</li>"
+        'Next
         Menu = Menu & "</ul>"
 
         Return Menu
@@ -86,7 +89,9 @@ Partial Class Pages_Login
                     If Len(Request.QueryString("ReturnUrl")) > 0 Then
                         Response.Redirect(FormsAuthentication.GetRedirectUrl(dtUsuario.Rows(0)("cod_usuario") & "|" & dtUsuario.Rows(0)("usuario"), False))
                     Else
-                        Response.Redirect("Inicio.aspx", False)
+                        'Response.Redirect("Inicio.aspx", False)
+                        ' Redirección temporal para Emisión
+                        Response.Redirect("~/Emision/CoaseguroLider.aspx")
                     End If
 
                 Else

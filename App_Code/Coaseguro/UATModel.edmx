@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="UATModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="mcia">
+          <Key>
+            <PropertyRef Name="cod_cia" />
+          </Key>
+          <Property Name="cod_cia" Type="numeric" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="txt_nom_cia" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="cod_tipo_dir" Type="numeric" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="txt_direccion" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="nro_cod_postal" Type="numeric" Precision="5" Scale="0" />
+          <Property Name="cod_zona_dir" Type="numeric" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="cod_colonia" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="cod_municipio" Type="numeric" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="cod_dpto" Type="numeric" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="cod_pais" Type="numeric" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="cod_tipo_telef" Type="numeric" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="txt_telefono" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="cod_tipo_iva" Type="numeric" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="nro_nit" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="imp_gasto_pilotaje" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="cnt_anos_min_ing_vida" Type="numeric" Precision="2" Scale="0" />
+          <Property Name="cnt_anos_max_ing_vida" Type="numeric" Precision="2" Scale="0" />
+          <Property Name="cnt_anos_max_perman_vida" Type="numeric" Precision="2" Scale="0" />
+          <Property Name="txt_nom_redu" Type="varchar" MaxLength="100" />
+          <Property Name="cod_tipo_agente" Type="tinyint" />
+          <Property Name="cod_agente" Type="int" />
+          <Property Name="tipo_cia" Type="varchar" MaxLength="1" />
+          <Property Name="cod_wins" Type="varchar" MaxLength="10" />
+          <Property Name="cod_ciudad" Type="int" />
+          <Property Name="nro_ext" Type="varchar" MaxLength="10" />
+          <Property Name="nro_int" Type="varchar" MaxLength="10" />
+          <Property Name="cod_region" Type="numeric" Precision="2" Scale="0" />
+          <Property Name="id_persona" Type="int" />
+          <Property Name="txt_cheque_a_nom" Type="varchar" MaxLength="120" />
+          <Property Name="sn_inverfas" Type="numeric" Precision="1" Scale="0" />
+          <Property Name="sn_transferencia" Type="numeric" Precision="1" Scale="0" />
+        </EntityType>
+        <EntityContainer Name="UATModelStoreContainer">
+          <EntitySet Name="mcia" EntityType="Self.mcia" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="UATModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="mcia">
+          <Key>
+            <PropertyRef Name="cod_cia" />
+          </Key>
+          <Property Name="cod_cia" Type="Decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="txt_nom_cia" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cod_tipo_dir" Type="Decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="txt_direccion" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nro_cod_postal" Type="Decimal" Precision="5" Scale="0" />
+          <Property Name="cod_zona_dir" Type="Decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="cod_colonia" Type="Decimal" Precision="5" Scale="0" Nullable="false" />
+          <Property Name="cod_municipio" Type="Decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="cod_dpto" Type="Decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="cod_pais" Type="Decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="cod_tipo_telef" Type="Decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="txt_telefono" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cod_tipo_iva" Type="Decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="nro_nit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="imp_gasto_pilotaje" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="cnt_anos_min_ing_vida" Type="Decimal" Precision="2" Scale="0" />
+          <Property Name="cnt_anos_max_ing_vida" Type="Decimal" Precision="2" Scale="0" />
+          <Property Name="cnt_anos_max_perman_vida" Type="Decimal" Precision="2" Scale="0" />
+          <Property Name="txt_nom_redu" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cod_tipo_agente" Type="Byte" />
+          <Property Name="cod_agente" Type="Int32" />
+          <Property Name="tipo_cia" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="cod_wins" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="cod_ciudad" Type="Int32" />
+          <Property Name="nro_ext" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="nro_int" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="cod_region" Type="Decimal" Precision="2" Scale="0" />
+          <Property Name="id_persona" Type="Int32" />
+          <Property Name="txt_cheque_a_nom" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="sn_inverfas" Type="Decimal" Precision="1" Scale="0" />
+          <Property Name="sn_transferencia" Type="Decimal" Precision="1" Scale="0" />
+        </EntityType>
+        <EntityContainer Name="UATEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="mcia" EntityType="Self.mcia" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="UATModelStoreContainer" CdmEntityContainer="UATEntities">
+          <EntitySetMapping Name="mcia">
+            <EntityTypeMapping TypeName="UATModel.mcia">
+              <MappingFragment StoreEntitySet="mcia">
+                <ScalarProperty Name="cod_cia" ColumnName="cod_cia" />
+                <ScalarProperty Name="txt_nom_cia" ColumnName="txt_nom_cia" />
+                <ScalarProperty Name="cod_tipo_dir" ColumnName="cod_tipo_dir" />
+                <ScalarProperty Name="txt_direccion" ColumnName="txt_direccion" />
+                <ScalarProperty Name="nro_cod_postal" ColumnName="nro_cod_postal" />
+                <ScalarProperty Name="cod_zona_dir" ColumnName="cod_zona_dir" />
+                <ScalarProperty Name="cod_colonia" ColumnName="cod_colonia" />
+                <ScalarProperty Name="cod_municipio" ColumnName="cod_municipio" />
+                <ScalarProperty Name="cod_dpto" ColumnName="cod_dpto" />
+                <ScalarProperty Name="cod_pais" ColumnName="cod_pais" />
+                <ScalarProperty Name="cod_tipo_telef" ColumnName="cod_tipo_telef" />
+                <ScalarProperty Name="txt_telefono" ColumnName="txt_telefono" />
+                <ScalarProperty Name="cod_tipo_iva" ColumnName="cod_tipo_iva" />
+                <ScalarProperty Name="nro_nit" ColumnName="nro_nit" />
+                <ScalarProperty Name="imp_gasto_pilotaje" ColumnName="imp_gasto_pilotaje" />
+                <ScalarProperty Name="cnt_anos_min_ing_vida" ColumnName="cnt_anos_min_ing_vida" />
+                <ScalarProperty Name="cnt_anos_max_ing_vida" ColumnName="cnt_anos_max_ing_vida" />
+                <ScalarProperty Name="cnt_anos_max_perman_vida" ColumnName="cnt_anos_max_perman_vida" />
+                <ScalarProperty Name="txt_nom_redu" ColumnName="txt_nom_redu" />
+                <ScalarProperty Name="cod_tipo_agente" ColumnName="cod_tipo_agente" />
+                <ScalarProperty Name="cod_agente" ColumnName="cod_agente" />
+                <ScalarProperty Name="tipo_cia" ColumnName="tipo_cia" />
+                <ScalarProperty Name="cod_wins" ColumnName="cod_wins" />
+                <ScalarProperty Name="cod_ciudad" ColumnName="cod_ciudad" />
+                <ScalarProperty Name="nro_ext" ColumnName="nro_ext" />
+                <ScalarProperty Name="nro_int" ColumnName="nro_int" />
+                <ScalarProperty Name="cod_region" ColumnName="cod_region" />
+                <ScalarProperty Name="id_persona" ColumnName="id_persona" />
+                <ScalarProperty Name="txt_cheque_a_nom" ColumnName="txt_cheque_a_nom" />
+                <ScalarProperty Name="sn_inverfas" ColumnName="sn_inverfas" />
+                <ScalarProperty Name="sn_transferencia" ColumnName="sn_transferencia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
